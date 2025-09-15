@@ -1,0 +1,55 @@
+[
+  {
+    "title": "Inicio",
+    "path": "/",
+
+    "external": false,
+    "disabled": false,
+    "order": 1
+  },
+  {
+    "title": "Sobre Nosotros",
+    "path": "/sobre-nosotros",
+    "submenu": [
+      {
+        "title": "Sobre Nosotros",
+        "path": "/sobre-nosotros"
+      },
+      {
+        "title": "Contacto",
+        "path": "/contacto"
+      }
+    ],
+    "external": false,
+    "disabled": false,
+    "order": 2
+  },
+  {
+    "title": "Productos",
+    "path": "/productos",
+    "external": false,
+    "disabled": false,
+    "order": 3
+  },
+  {
+    "title": "Servicios",
+    "path": "/servicios",
+    "external": false,
+    "disabled": false,
+    "order": 4
+  },
+  {
+    "title": "Multimedia",
+    "path": "/multimedia",
+    "external": false,
+    "disabled": false,
+    "order": 5
+  },
+  {
+    "title": "Noticias",
+    "path": "/noticias",
+    "external": false,
+    "disabled": false,
+    "order": 6
+  }
+]
