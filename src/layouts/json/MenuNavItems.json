@@ -34,6 +34,36 @@
   {
     "title": "Servicios",
     "path": "/servicios",
+    "submenu": [
+      {
+        "title": "Wisensor",
+        "path": "/wisensor"
+      },
+      {
+        "title": "Seguridad",
+        "path": "/seguridad"
+      },
+      {
+        "title": "Datacenter",
+        "path": "/datacenter"
+      },
+      {
+        "title": "Energía renovable",
+        "path": "/energia-renovable"
+      },
+      {
+        "title": "Satelital",
+        "path": "/satelital"
+      },
+      {
+        "title": "Wireless",
+        "path": "/wireless"
+      },
+      {
+        "title": "Wisensor IA",
+        "path": "/wisensor-ia"
+      }
+    ],
     "external": false,
     "disabled": false,
     "order": 4
