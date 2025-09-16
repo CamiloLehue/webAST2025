@@ -7,7 +7,7 @@ const SLIDER_CONFIG = {
   slideSpacing: 20,
   offsetPosition: 300,
   transitionDuration: 500,
-  padding: 5,
+  padding: 0,
   backgroundColor: "transparent",
   buttonSize: "w-6 h-6",
   indicatorSize: "w-3 h-3",
