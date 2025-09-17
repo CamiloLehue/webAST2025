@@ -2,21 +2,28 @@ import { useState } from "react";
 
 // Slider Configuration Parameters
 const SLIDER_CONFIG = {
-  slideWidth: 800,
-  slideHeight: 500,
-  slideSpacing: 20,
-  offsetPosition: 300,
+  // Layout percentages
+  centerSlideWidth: 70, // 60% for center slide
+  sideSlideWidth: 20, // 20% for side slides
+  centerSlideHeight: 100, // 100% height for center slide
+  sideSlideHeight: 70, // 70% height for side slides
+  // Visual settings
+  slideSpacing: 2, // Gap between slides (in rem/tailwind units)
   transitionDuration: 500,
-  padding: 0,
+  padding: 1,
   backgroundColor: "transparent",
-  buttonSize: "w-6 h-6",
+  buttonSize: "w-8 h-8",
   indicatorSize: "w-3 h-3",
   zIndexActive: "z-10",
   zIndexInactive: "z-0",
-  titleSizeActive: "text-lg",
+  titleSizeActive: "text-5xl",
+  subtitleSizeActive: "text-2xl",
   titleSizeInactive: "text-sm",
-  descriptionSizeActive: "text-sm",
+  descriptionSizeActive: "text-lg",
   descriptionSizeInactive: "text-xs",
+
+  // Container height
+  containerHeight: 550, // Base height in pixels
 };
 
 function Slider() {
@@ -25,27 +32,33 @@ function Slider() {
   const SLIDER_ITEMS = [
     {
       image: "public/slider/slider01.JPG",
-      title: "Innovación Tecnológica",
-      description: "Liderando el futuro con soluciones avanzadas",
+      title: "Soluciones Tecnológicas a tu Medida",
+      subtitle: "Servicios",
+      description:
+        "Ofrecemos soluciones en conectividad, seguridad, monitoreo y datacenter, potenciadas con inteligencia artificial para optimizar procesos y mejorar la eficiencia de tu operación en Chile y Latinoamérica.",
     },
     {
       image: "public/slider/slider01.JPG",
       title: "Sostenibilidad",
+      subtitle: "AST - Soluciones de vanguardia",
       description: "Comprometidos con el medio ambiente",
     },
     {
       image: "public/slider/slider01.JPG",
       title: "Excelencia",
+      subtitle: "AST - Soluciones de vanguardia",
       description: "Calidad garantizada en cada proyecto",
     },
     {
       image: "public/slider/slider01.JPG",
       title: "Equipo Profesional",
+      subtitle: "AST - Soluciones de vanguardia",
       description: "Expertos dedicados a tu éxito",
     },
     {
       image: "public/slider/slider01.JPG",
       title: "Resultados",
+      subtitle: "AST - Soluciones de vanguardia",
       description: "Entregando valor real a nuestros clientes",
     },
   ];
@@ -66,11 +79,13 @@ function Slider() {
   };
 
   return (
-    <div className={`relative w-full p-${SLIDER_CONFIG.padding} ${SLIDER_CONFIG.backgroundColor}`}>
+    <div
+      className={`relative w-full p-${SLIDER_CONFIG.padding} ${SLIDER_CONFIG.backgroundColor}`}
+    >
       {/* Navigation buttons */}
       <button
         onClick={prevSlide}
-        className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition-all"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
       >
         <svg
           className={SLIDER_CONFIG.buttonSize}
@@ -89,7 +104,7 @@ function Slider() {
 
       <button
         onClick={nextSlide}
-        className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 rounded-full p-2 shadow-lg transition-all"
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
       >
         <svg
           className={SLIDER_CONFIG.buttonSize}
@@ -108,65 +123,95 @@ function Slider() {
 
       <div
         className="relative w-full overflow-hidden"
-        style={{ margin: "0 auto" }}
+        style={{ height: `${SLIDER_CONFIG.containerHeight}px` }}
       >
-        <div
-          className={`flex items-center space-x-${SLIDER_CONFIG.slideSpacing} transition-transform duration-${SLIDER_CONFIG.transitionDuration} ease-in-out`}
-          style={{
-            transform: `translateX(calc(-${currentIndex * SLIDER_CONFIG.slideWidth}px - ${SLIDER_CONFIG.offsetPosition}px))`,
-            width: `${SLIDER_ITEMS.length * SLIDER_CONFIG.slideWidth}px`,
-          }}
-        >
-          {SLIDER_ITEMS.map((item, index) => {
-            const isCenter = index === currentIndex;
+        <div className="flex items-center justify-center gap-4 h-full px-16">
+          <div
+            className="flex-shrink-0 cursor-pointer transition-all duration-300 opacity-60 hover:opacity-80"
+            style={{
+              width: `${SLIDER_CONFIG.sideSlideWidth}%`,
+              height: `${SLIDER_CONFIG.sideSlideHeight}%`,
+            }}
+            onClick={prevSlide}
+          >
+            <img
+              src={
+                SLIDER_ITEMS[
+                  (currentIndex - 1 + SLIDER_ITEMS.length) % SLIDER_ITEMS.length
+                ].image
+              }
+              alt={
+                SLIDER_ITEMS[
+                  (currentIndex - 1 + SLIDER_ITEMS.length) % SLIDER_ITEMS.length
+                ].title
+              }
+              className="w-full h-full object-cover rounded-2xl shadow-md"
+            />
+          </div>
 
-            return (
-              <div
-                key={index}
-                onClick={() => scrollToSlide(index)}
-                className={`relative cursor-pointer transition-all  duration-300 ${
-                  isCenter ? SLIDER_CONFIG.zIndexActive : SLIDER_CONFIG.zIndexInactive
-                }`}
-                style={{
-                  width: `${SLIDER_CONFIG.slideWidth}px`,
-                  height: `${SLIDER_CONFIG.slideHeight}px`,
-                  flexShrink: 0,
-                }}
-              >
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover rounded-lg shadow-lg"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent rounded-b-lg">
-                  <h3
-                    className={`font-bold text-white ${
-                      isCenter ? SLIDER_CONFIG.titleSizeActive : SLIDER_CONFIG.titleSizeInactive
-                    }`}
+          <div
+            className={`flex-shrink-0 cursor-pointer transition-all duration-300 ${SLIDER_CONFIG.zIndexActive}`}
+            style={{
+              width: `${SLIDER_CONFIG.centerSlideWidth}%`,
+              height: `${SLIDER_CONFIG.centerSlideHeight}%`,
+            }}
+          >
+            <div className="relative h-full">
+              <img
+                src={SLIDER_ITEMS[currentIndex].image}
+                alt={SLIDER_ITEMS[currentIndex].title}
+                className="w-full h-full object-cover rounded-2xl shadow-lg"
+              />
+              <div className="absolute max-w-3xl bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
+                <div className="relative bottom-10 left-10 flex flex-col gap-2">
+                  <h2
+                    className={`font-bold text-white mb-1 ${SLIDER_CONFIG.subtitleSizeActive}`}
                   >
-                    {item.title}
-                  </h3>
+                    {SLIDER_ITEMS[currentIndex].subtitle}
+                  </h2>
+                  <h1
+                    className={`font-bold max-w-xl  text-white ${SLIDER_CONFIG.titleSizeActive}`}
+                  >
+                    {SLIDER_ITEMS[currentIndex].title}
+                  </h1>
                   <p
-                    className={`text-white ${isCenter ? SLIDER_CONFIG.descriptionSizeActive : SLIDER_CONFIG.descriptionSizeInactive}`}
+                    className={`text-white ${SLIDER_CONFIG.descriptionSizeActive}`}
                   >
-                    {item.description}
+                    {SLIDER_ITEMS[currentIndex].description}
                   </p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          </div>
+
+          <div
+            className="flex-shrink-0 cursor-pointer transition-all duration-300 opacity-60 hover:opacity-80"
+            style={{
+              width: `${SLIDER_CONFIG.sideSlideWidth}%`,
+              height: `${SLIDER_CONFIG.sideSlideHeight}%`,
+            }}
+            onClick={nextSlide}
+          >
+            <img
+              src={SLIDER_ITEMS[(currentIndex + 1) % SLIDER_ITEMS.length].image}
+              alt={SLIDER_ITEMS[(currentIndex + 1) % SLIDER_ITEMS.length].title}
+              className="w-full h-full object-cover rounded-2xl shadow-md"
+            />
+          </div>
         </div>
       </div>
 
       {/* Indicators */}
-      <div className="flex justify-center mt-4 gap-2">
+      <div className="relative flex justify-center -mt-6 z-55 gap-2">
         {SLIDER_ITEMS.map((_, index) => (
           <button
             key={index}
             onClick={() => scrollToSlide(index)}
-            className={`${SLIDER_CONFIG.indicatorSize} rounded-full transition-all ${
+            className={`${
+              SLIDER_CONFIG.indicatorSize
+            } rounded-full transition-all ${
               index === currentIndex
-                ? "bg-blue-600"
+                ? "bg-primary-100 w-20"
                 : "bg-gray-300 hover:bg-gray-400"
             }`}
           />
