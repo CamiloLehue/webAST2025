@@ -31,11 +31,11 @@ function Slider() {
 
   const SLIDER_ITEMS = [
     {
-      image: "public/slider/slider01.JPG",
-      title: "Soluciones Tecnológicas a tu Medida",
-      subtitle: "Servicios",
+      image: "public/slider/slider04.JPG",
+      title: "Te damos la bienvenida a AST Networks",
+      subtitle: "Bienvenido",
       description:
-        "Ofrecemos soluciones en conectividad, seguridad, monitoreo y datacenter, potenciadas con inteligencia artificial para optimizar procesos y mejorar la eficiencia de tu operación en Chile y Latinoamérica.",
+        "Conectamos tecnología e innovación para transformar sectores productivos clave en Chile y Latinoamérica.",
     },
     {
       image: "public/slider/slider01.JPG",
@@ -45,9 +45,10 @@ function Slider() {
     },
     {
       image: "public/slider/slider01.JPG",
-      title: "Excelencia",
-      subtitle: "AST - Soluciones de vanguardia",
-      description: "Calidad garantizada en cada proyecto",
+      title: "Soluciones Tecnológicas a tu Medida",
+      subtitle: "Servicios",
+      description:
+        "Ofrecemos soluciones en conectividad, seguridad, monitoreo y datacenter, potenciadas con inteligencia artificial para optimizar procesos y mejorar la eficiencia de tu operación en Chile y Latinoamérica.",
     },
     {
       image: "public/slider/slider01.JPG",
@@ -85,7 +86,7 @@ function Slider() {
       {/* Navigation buttons */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
       >
         <svg
           className={SLIDER_CONFIG.buttonSize}
@@ -162,15 +163,15 @@ function Slider() {
                 alt={SLIDER_ITEMS[currentIndex].title}
                 className="w-full h-full object-cover rounded-2xl shadow-lg"
               />
-              <div className="absolute max-w-3xl bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
-                <div className="relative bottom-10 left-10 flex flex-col gap-2">
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
+                <div className="relative bottom-10 left-10 flex flex-col gap-2 max-w-2xl">
                   <h2
                     className={`font-bold text-white mb-1 ${SLIDER_CONFIG.subtitleSizeActive}`}
                   >
                     {SLIDER_ITEMS[currentIndex].subtitle}
                   </h2>
                   <h1
-                    className={`font-bold max-w-xl  text-white ${SLIDER_CONFIG.titleSizeActive}`}
+                    className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
                   >
                     {SLIDER_ITEMS[currentIndex].title}
                   </h1>
@@ -202,7 +203,7 @@ function Slider() {
       </div>
 
       {/* Indicators */}
-      <div className="relative flex justify-center -mt-6 z-55 gap-2">
+      <div className="relative flex justify-center -mt-6 z-10 gap-2">
         {SLIDER_ITEMS.map((_, index) => (
           <button
             key={index}
