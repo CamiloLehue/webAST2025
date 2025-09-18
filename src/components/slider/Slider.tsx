@@ -1,14 +1,11 @@
 import { useState } from "react";
 
-// Slider Configuration Parameters
 const SLIDER_CONFIG = {
-  // Layout percentages
-  centerSlideWidth: 70, // 60% for center slide
-  sideSlideWidth: 20, // 20% for side slides
-  centerSlideHeight: 100, // 100% height for center slide
-  sideSlideHeight: 70, // 70% height for side slides
-  // Visual settings
-  slideSpacing: 2, // Gap between slides (in rem/tailwind units)
+  centerSlideWidth: 70,
+  sideSlideWidth: 20, 
+  centerSlideHeight: 100, 
+  sideSlideHeight: 70,
+  slideSpacing: 2,
   transitionDuration: 500,
   padding: 1,
   backgroundColor: "transparent",
@@ -23,7 +20,7 @@ const SLIDER_CONFIG = {
   descriptionSizeInactive: "text-xs",
 
   // Container height
-  containerHeight: 550, // Base height in pixels
+  containerHeight: 580, // Base height in pixels
 };
 
 function Slider() {

@@ -31,13 +31,13 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: NavMenuItem[] }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <ul className="flex justify-end items-center">
+    <ul className="flex justify-end items-center gap-10">
       {menuItems
         .filter((item) => !item.disabled)
         .map((item, index) => (
           <li
             key={item.order}
-            className="relative px-7 py-8 border-t-4 border-t-transparent hover:border-t-primary-100 transition-colors duration-300"
+            className="relative  py-8 border-t-4 border-t-transparent hover:border-t-primary-100 transition-colors duration-300"
             onMouseEnter={() => setOpenIndex(index)}
             onMouseLeave={() => setOpenIndex(null)}
           >
@@ -59,20 +59,20 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: NavMenuItem[] }) => {
               <AnimatePresence>
                 {openIndex === index && (
                   <motion.ul
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: 50 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute top-full left-0 flex flex-col bg-bg-200 rounded-b shadow-lg min-w-50 z-10"
+                    exit={{ opacity: 0, y: 50 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute top-15 -left-0 flex flex-col bg-bg-200 rounded-2xl overflow-hidden shadow-lg min-w-50 z-10"
                   >
                     {item.submenu.map((subItem, subIndex) => (
                       <motion.li
                         key={subItem.path}
-                        className="py-3 px-5 w-full hover:bg-bg-100 transition-all duration-300 hover:text-primary-100"
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.2, delay: 0.05 * subIndex }}
+                        className="py-5 px-8 w-full hover:bg-bg-400 transition-all duration-300 hover:text-primary-100"
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 0 }}
+                        transition={{ duration: 0.2, delay: 0.04 * subIndex }}
                       >
                         <NavLink
                           className="block text-sm font-light w-full"

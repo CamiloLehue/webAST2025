@@ -3,7 +3,7 @@ import TopHeader from "./TopHeader";
 
 function Header() {
   return (
-    <header className="relative z-20 flex flex-col bg-bg-100  text-white-100 ">
+    <header className="relative w-full z-20 flex flex-col bg-bg-100  text-white-100 ">
       <div className="bg-bg-200 w-full">
         <TopHeader />
       </div>

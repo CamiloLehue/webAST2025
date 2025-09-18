@@ -10,7 +10,7 @@ function TopHeader() {
   const TELEPHONE = "+56 9 1234 5678";
   const EMAIL = "contacto@ast.cl";
   return (
-    <div className=" max-w-5xl mx-auto flex justify-between items-center px-5 h-8">
+    <div className=" max-w-7xl mx-auto flex justify-between items-center px-5 h-8">
       <div className="flex justify-center items-center gap-5">
         <article className="flex justify-center items-center gap-2">
           <TbPhone className="text-primary-100 text-xs" />
