@@ -1,4 +1,4 @@
-import type { CustomPage, ContentSection, PageTemplate } from '../types/page.types';
+import type { CustomPage, ContentSection, PageTemplate } from '../types/pageTypes';
 
 export class PageService {
   private static readonly STORAGE_KEY = 'ast_custom_pages';
