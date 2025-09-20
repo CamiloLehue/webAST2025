@@ -1,7 +1,8 @@
-import { TbMail, TbMailFilled, TbPhoneFilled } from "react-icons/tb";
+import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import Slider from "../../../components/slider/Slider";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
+import ClientsCarousel from "../../about/components/ClientsCarousel";
 import CardNav from "../components/CardNav";
 
 function Home() {
@@ -28,7 +29,7 @@ function Home() {
       </section>
       <section id="cardNav" className="relative h-20 ">
         <div
-          className="absolute left-0 -top-20  w-full h-90  bg-white "
+          className="absolute left-0 -top-20  w-full h-90  bg-white-100 "
           style={{
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
@@ -105,33 +106,7 @@ function Home() {
           </article>
         </div>
       </section>
-      <section id="partner">
-        <div className="max-w-7xl mx-auto py-10 flex flex-col justify-center items-center gap-10">
-          <h2 className="text-5xl font-bold text-primary-100 mb-5 border-b-4  border-primary-100">
-            Nuestros Clientes
-          </h2> 
-          <div className="grid grid-cols-6 gap-10">
-            <div className="flex justify-center items-center">
-              <img src="partners/mikrotik.png" alt="Mikrotik" />
-            </div>
-            <div className="flex justify-center items-center">
-              <img src="partners/fortinet.png" alt="Fortinet" />
-            </div>
-            <div className="flex justify-center items-center">
-              <img src="partners/cisco.png" alt="Cisco" />
-            </div>
-            <div className="flex justify-center items-center">
-              <img src="partners/paloalto.png" alt="Palo Alto" />
-            </div>
-            <div className="flex justify-center items-center">
-              <img src="partners/fortinet.png" alt="Fortinet" />
-            </div>
-            <div className="flex justify-center items-center">
-              <img src="partners/cisco.png" alt="Cisco" />
-            </div>
-          </div>
-        </div>
-      </section>
+      <ClientsCarousel />
     </div>
   );
 }

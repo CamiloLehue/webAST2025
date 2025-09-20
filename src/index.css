@@ -1,28 +1,28 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary-100: #FF3030;
-  --color-white-100: #F5F5F5;
+  --color-primary-100: #ff3030;
+  --color-white-100: #f5f5f5;
   --color-accent-100: #1f59fa;
   --color-accent-200: #0049a1;
   --text-base-100: #ffffff;
   --text-base-200: #e0e0e0;
   --color-bg-100: #272727;
-  --color-bg-200: #3B3B3B;
-  --color-bg-300: #4B4B4B;
+  --color-bg-200: #3b3b3b;
+  --color-bg-300: #4b4b4b;
   --color-bg-400: #181a1f;
 }
 
 @theme {
-  --color-primary-100: #FF3030;
-  --color-white-100: #F5F5F5;
+  --color-primary-100: #ff3030;
+  --color-white-100: #f5f5f5;
   --color-accent-100: #1f59fa;
   --color-accent-200: #0049a1;
   --text-base-100: #ffffff;
   --text-base-200: #e0e0e0;
   --color-bg-100: #272727;
-  --color-bg-200: #3B3B3B;
-  --color-bg-300: #4B4B4B;
+  --color-bg-200: #3b3b3b;
+  --color-bg-300: #4b4b4b;
   --color-bg-400: #181a1f;
 }
 
@@ -225,4 +225,36 @@ body {
 /* Thumb al pasar el mouse */
 ::-webkit-scrollbar-thumb:hover {
   background: #e9ff47;
+}
+
+/* Animación para carrusel infinito */
+@keyframes infinite-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes infinite-scroll-seamless {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+
+.animate-infinite-scroll {
+  animation: infinite-scroll 30s linear infinite;
+}
+
+.animate-infinite-scroll-seamless {
+  animation: infinite-scroll-seamless 60s linear infinite;
+}
+
+.animate-infinite-scroll:hover,
+.animate-infinite-scroll-seamless:hover {
+  animation-play-state: paused;
 }
