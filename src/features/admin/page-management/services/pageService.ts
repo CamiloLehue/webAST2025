@@ -1,104 +1,131 @@
-import type { CustomPage, ContentSection, PageTemplate } from '../types/pageTypes';
+import type { CustomPage, ContentSection, PageTemplate, PageFilters, PageStats } from '../types/pageTypes';
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export class PageService {
-  private static readonly STORAGE_KEY = 'ast_custom_pages';
-  private static readonly TEMPLATES_KEY = 'ast_page_templates';
-
   // Pages CRUD Operations
-  static getCustomPages(): CustomPage[] {
-    try {
-      const pages = localStorage.getItem(this.STORAGE_KEY);
-      return pages ? JSON.parse(pages) : [];
-    } catch (error) {
-      console.error('Error loading custom pages:', error);
-      return [];
+  static async getCustomPages(): Promise<CustomPage[]> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
     }
+
+    const response = await fetch(`${API_URL}/paginas`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch pages from API: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const pages: CustomPage[] = await response.json();
+    return pages;
   }
 
-  static getCustomPageById(id: string): CustomPage | undefined {
-    const pages = this.getCustomPages();
+  static async getCustomPageById(id: string): Promise<CustomPage | undefined> {
+    const pages = await this.getCustomPages();
     return pages.find(page => page.id === id);
   }
 
-  static getCustomPageBySlug(slug: string): CustomPage | undefined {
-    const pages = this.getCustomPages();
+  static async getCustomPageBySlug(slug: string): Promise<CustomPage | undefined> {
+    const pages = await this.getCustomPages();
     return pages.find(page => page.slug === slug);
   }
 
-  static createCustomPage(pageData: Omit<CustomPage, 'id' | 'createdAt' | 'updatedAt'>): CustomPage {
-    const pages = this.getCustomPages();
-    
-    // Validate slug uniqueness
-    if (pages.some(page => page.slug === pageData.slug)) {
-      throw new Error('Ya existe una página con este slug');
+  static async createCustomPage(
+    pageData: Omit<CustomPage, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<CustomPage> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
     }
 
+    const now = new Date().toISOString();
     const newPage: CustomPage = {
       ...pageData,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      id: `page-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      createdAt: now,
+      updatedAt: now,
     };
 
-    pages.push(newPage);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(pages));
-    
-    return newPage;
+    const response = await fetch(`${API_URL}/paginas`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPage),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to create page via API: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const createdPage: CustomPage = await response.json();
+    return createdPage;
   }
 
-  static updateCustomPage(updatedPage: CustomPage): void {
-    const pages = this.getCustomPages();
-    const index = pages.findIndex(page => page.id === updatedPage.id);
-    
-    if (index === -1) {
-      throw new Error('Página no encontrada');
+  static async updateCustomPage(updatedPage: CustomPage): Promise<void> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
     }
 
-    // Validate slug uniqueness (excluding current page)
-    if (pages.some(page => page.slug === updatedPage.slug && page.id !== updatedPage.id)) {
-      throw new Error('Ya existe una página con este slug');
-    }
-
-    pages[index] = {
+    const pageWithTimestamp = {
       ...updatedPage,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(pages));
+    const response = await fetch(`${API_URL}/paginas/${updatedPage.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pageWithTimestamp),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to update page via API: ${response.status} ${response.statusText}`
+      );
+    }
   }
 
-  static deleteCustomPage(id: string): void {
-    const pages = this.getCustomPages();
-    const filteredPages = pages.filter(page => page.id !== id);
-    
-    if (filteredPages.length === pages.length) {
-      throw new Error('Página no encontrada');
+  static async deleteCustomPage(id: string): Promise<void> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
     }
 
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(filteredPages));
+    const response = await fetch(`${API_URL}/paginas/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to delete page via API: ${response.status} ${response.statusText}`
+      );
+    }
   }
 
   // Content Sections Management
-  static addSection(pageId: string, section: Omit<ContentSection, 'id' | 'order'>): CustomPage {
-    const page = this.getCustomPageById(pageId);
+  static async addSection(pageId: string, section: Omit<ContentSection, 'id' | 'order'>): Promise<CustomPage> {
+    const page = await this.getCustomPageById(pageId);
     if (!page) {
       throw new Error('Página no encontrada');
     }
 
     const newSection: ContentSection = {
       ...section,
-      id: crypto.randomUUID(),
+      id: `section-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       order: page.content.length
     };
 
     page.content.push(newSection);
-    this.updateCustomPage(page);
+    await this.updateCustomPage(page);
     
     return page;
   }
 
-  static updateSection(pageId: string, sectionId: string, sectionData: Partial<ContentSection>): CustomPage {
-    const page = this.getCustomPageById(pageId);
+  static async updateSection(pageId: string, sectionId: string, sectionData: Partial<ContentSection>): Promise<CustomPage> {
+    const page = await this.getCustomPageById(pageId);
     if (!page) {
       throw new Error('Página no encontrada');
     }
@@ -113,12 +140,12 @@ export class PageService {
       ...sectionData
     };
 
-    this.updateCustomPage(page);
+    await this.updateCustomPage(page);
     return page;
   }
 
-  static deleteSection(pageId: string, sectionId: string): CustomPage {
-    const page = this.getCustomPageById(pageId);
+  static async deleteSection(pageId: string, sectionId: string): Promise<CustomPage> {
+    const page = await this.getCustomPageById(pageId);
     if (!page) {
       throw new Error('Página no encontrada');
     }
@@ -130,12 +157,12 @@ export class PageService {
       section.order = index;
     });
 
-    this.updateCustomPage(page);
+    await this.updateCustomPage(page);
     return page;
   }
 
-  static reorderSections(pageId: string, sectionIds: string[]): CustomPage {
-    const page = this.getCustomPageById(pageId);
+  static async reorderSections(pageId: string, sectionIds: string[]): Promise<CustomPage> {
+    const page = await this.getCustomPageById(pageId);
     if (!page) {
       throw new Error('Página no encontrada');
     }
@@ -153,24 +180,35 @@ export class PageService {
     });
 
     page.content = reorderedContent;
-    this.updateCustomPage(page);
+    await this.updateCustomPage(page);
     
     return page;
   }
 
   // Templates Management
-  static getPageTemplates(): PageTemplate[] {
+  static async getPageTemplates(): Promise<PageTemplate[]> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
     try {
-      const templates = localStorage.getItem(this.TEMPLATES_KEY);
-      return templates ? JSON.parse(templates) : this.getDefaultTemplates();
+      const response = await fetch(`${API_URL}/page-templates`);
+      
+      if (!response.ok) {
+        // If templates endpoint doesn't exist, return default templates
+        return this.getDefaultTemplates();
+      }
+      
+      const templates: PageTemplate[] = await response.json();
+      return templates.length > 0 ? templates : this.getDefaultTemplates();
     } catch (error) {
-      console.error('Error loading page templates:', error);
+      console.error('Error loading page templates from API:', error);
       return this.getDefaultTemplates();
     }
   }
 
-  static createPageFromTemplate(templateId: string, pageData: { title: string; slug: string }): CustomPage {
-    const templates = this.getPageTemplates();
+  static async createPageFromTemplate(templateId: string, pageData: { title: string; slug: string }): Promise<CustomPage> {
+    const templates = await this.getPageTemplates();
     const template = templates.find(t => t.id === templateId);
     
     if (!template) {
@@ -179,11 +217,11 @@ export class PageService {
 
     const sections: ContentSection[] = template.sections.map((section, index) => ({
       ...section,
-      id: crypto.randomUUID(),
+      id: `section-${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${index}`,
       order: index
     }));
 
-    return this.createCustomPage({
+    return await this.createCustomPage({
       title: pageData.title,
       slug: pageData.slug,
       content: sections,
@@ -192,8 +230,8 @@ export class PageService {
   }
 
   // Utility Methods
-  static validateSlug(slug: string, excludeId?: string): boolean {
-    const pages = this.getCustomPages();
+  static async validateSlug(slug: string, excludeId?: string): Promise<boolean> {
+    const pages = await this.getCustomPages();
     return !pages.some(page => page.slug === slug && page.id !== excludeId);
   }
 
@@ -208,8 +246,8 @@ export class PageService {
       .replace(/-+/g, '-');
   }
 
-  static searchPages(query: string): CustomPage[] {
-    const pages = this.getCustomPages();
+  static async searchPages(query: string): Promise<CustomPage[]> {
+    const pages = await this.getCustomPages();
     const searchTerm = query.toLowerCase();
 
     return pages.filter(page =>
@@ -219,10 +257,71 @@ export class PageService {
     );
   }
 
-  static getPublishedPages(): CustomPage[] {
-    return this.getCustomPages()
+  static async getPublishedPages(): Promise<CustomPage[]> {
+    const pages = await this.getCustomPages();
+    return pages
       .filter(page => page.isPublished)
       .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
+  }
+
+  // Statistics and filters
+  static async getPageStats(): Promise<PageStats> {
+    const pages = await this.getCustomPages();
+    return {
+      totalPages: pages.length,
+      publishedPages: pages.filter(page => page.isPublished).length,
+      draftPages: pages.filter(page => !page.isPublished).length,
+    };
+  }
+
+  static async getFilteredPages(filters: PageFilters): Promise<CustomPage[]> {
+    let pages = await this.getCustomPages();
+
+    // Apply search filter
+    if (filters.search) {
+      const searchTerm = filters.search.toLowerCase();
+      pages = pages.filter(page =>
+        page.title.toLowerCase().includes(searchTerm) ||
+        page.slug.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Apply status filter
+    if (filters.status && filters.status !== 'all') {
+      pages = pages.filter(page => 
+        filters.status === 'published' ? page.isPublished : !page.isPublished
+      );
+    }
+
+    // Apply sorting
+    if (filters.sortBy) {
+      pages.sort((a, b) => {
+        let valueA: string | Date;
+        let valueB: string | Date;
+
+        switch (filters.sortBy) {
+          case 'title':
+            valueA = a.title.toLowerCase();
+            valueB = b.title.toLowerCase();
+            break;
+          case 'created':
+            valueA = new Date(a.createdAt);
+            valueB = new Date(b.createdAt);
+            break;
+          case 'updated':
+          default:
+            valueA = new Date(a.updatedAt);
+            valueB = new Date(b.updatedAt);
+            break;
+        }
+
+        if (valueA < valueB) return filters.sortOrder === 'asc' ? -1 : 1;
+        if (valueA > valueB) return filters.sortOrder === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return pages;
   }
 
   // Default Templates

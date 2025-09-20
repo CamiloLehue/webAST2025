@@ -1,1 +1,1 @@
-// Hooks para page management - por implementar
+export { usePageManagement } from './usePageManagement';

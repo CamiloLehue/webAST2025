@@ -1,24 +1,46 @@
-import React, { useState } from 'react';
-import { useContent } from '../../../hooks/useContent';
-import { FiEdit2, FiTrash2, FiPlus, FiCopy } from 'react-icons/fi';
+import React, { useState, useEffect } from 'react';
+import { usePageManagement } from '../page-management/hooks/usePageManagement';
+import { FiEdit2, FiTrash2, FiPlus, FiCopy, FiLoader } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const PageManagement: React.FC = () => {
-  const { pages, deletePage } = useContent();
+  const { 
+    customPages: pages, 
+    loading, 
+    error, 
+    deleteCustomPage,
+    filterPages 
+  } = usePageManagement();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
+  const [filteredPages, setFilteredPages] = useState(pages);
 
-  const filteredPages = pages.filter(page => {
-    const matchesSearch = page.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || 
-                         (statusFilter === 'published' && page.isPublished) ||
-                         (statusFilter === 'draft' && !page.isPublished);
-    return matchesSearch && matchesStatus;
-  });
+  useEffect(() => {
+    const applyFilters = async () => {
+      if (searchTerm || statusFilter !== 'all') {
+        const filtered = await filterPages({
+          search: searchTerm || undefined,
+          status: statusFilter,
+          sortBy: 'updated',
+          sortOrder: 'desc'
+        });
+        setFilteredPages(filtered);
+      } else {
+        setFilteredPages(pages);
+      }
+    };
 
-  const handleDeletePage = (id: string) => {
+    applyFilters();
+  }, [searchTerm, statusFilter, pages, filterPages]);
+
+  const handleDeletePage = async (id: string) => {
     if (confirm('¿Estás seguro de que quieres eliminar esta página?')) {
-      deletePage(id);
+      try {
+        await deleteCustomPage(id);
+      } catch (err) {
+        console.error('Error al eliminar la página:', err);
+      }
     }
   };
 
@@ -29,6 +51,36 @@ const PageManagement: React.FC = () => {
       day: 'numeric'
     });
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="flex items-center space-x-2">
+          <FiLoader className="animate-spin h-5 w-5 text-indigo-600" />
+          <span className="text-gray-600">Cargando páginas...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <div className="flex">
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-red-800">
+              Error al cargar las páginas
+            </h3>
+            <div className="mt-2 text-sm text-red-700">
+              <p>{error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -137,7 +189,7 @@ const PageManagement: React.FC = () => {
                     {page.content.length} bloques de contenido
                   </p>
                   <p className="text-xs text-gray-500">
-                    Autor: {page.author}
+                    Creado el {formatDate(page.createdAt)}
                   </p>
                 </div>
 
@@ -179,7 +231,7 @@ const PageManagement: React.FC = () => {
         <h3 className="text-lg font-medium text-gray-900 mb-4">Plantillas Rápidas</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
-            to="/admin/pages/new?template=landing"
+            to="/admin/pages/new?template=landing-page"
             className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
             <h4 className="font-medium text-gray-900">Página de Aterrizaje</h4>
@@ -188,7 +240,7 @@ const PageManagement: React.FC = () => {
             </p>
           </Link>
           <Link
-            to="/admin/pages/new?template=about"
+            to="/admin/pages/new?template=about-page"
             className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
             <h4 className="font-medium text-gray-900">Sobre Nosotros</h4>
@@ -197,7 +249,7 @@ const PageManagement: React.FC = () => {
             </p>
           </Link>
           <Link
-            to="/admin/pages/new?template=contact"
+            to="/admin/pages/new?template=contact-page"
             className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
             <h4 className="font-medium text-gray-900">Contacto</h4>
