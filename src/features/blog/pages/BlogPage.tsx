@@ -1,12 +1,13 @@
 import React from "react";
-import { useContent } from "../../../hooks/useContent";
+import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { Link } from "react-router-dom";
 import { FiCalendar, FiUser, FiArrowRight } from "react-icons/fi";
 
 const BlogPage: React.FC = () => {
-  const { blogPosts } = useContent();
+  const { blogPosts, loading, error } = useBlogManagement();
 
-  const publishedPosts = blogPosts
+  // Proteger contra arrays undefined y filtrar posts publicados
+  const publishedPosts = (blogPosts || [])
     .filter((post) => post.isPublished)
     .sort(
       (a, b) =>
@@ -25,6 +26,43 @@ const BlogPage: React.FC = () => {
   const categories = [
     ...new Set(publishedPosts.map((post) => post.category)),
   ].filter(Boolean);
+
+  // Manejo de estados de carga y error
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen bg-bg-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-1/3 mb-4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="bg-white rounded-lg p-6">
+                  <div className="h-48 bg-gray-300 rounded mb-4"></div>
+                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full min-h-screen bg-bg-400">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="bg-red-50 border border-red-200 rounded-md p-4">
+            <div className="text-red-600">
+              <h3 className="text-lg font-medium">Error al cargar el blog</h3>
+              <p className="text-sm mt-1">{error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen ">

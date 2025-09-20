@@ -1,63 +1,31 @@
 import type { BlogPost, BlogCategory } from "../types/blogTypes";
-// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 export class BlogService {
-  private static POSTS_STORAGE_KEY = "ast_blog_posts";
-  private static CATEGORIES_STORAGE_KEY = "ast_blog_categories";
-
-  // Blog Posts Methods
-  static getBlogPosts(): BlogPost[] {
-    try {
-      const stored = localStorage.getItem(this.POSTS_STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
-      }
-      return this.getInitialBlogPosts();
-    } catch (error) {
-      console.error("Error loading blog posts:", error);
-      return this.getInitialBlogPosts();
+  static async getBlogPosts(): Promise<BlogPost[]> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
     }
+
+    const response = await fetch(`${API_URL}/noticias`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch blog posts from API: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const posts: BlogPost[] = await response.json();
+    return posts;
   }
 
-  // static async getBlogPosts(): Promise<BlogPost[]> {
-  // try {
-  //   if (!API_URL) throw new Error("API_URL not defined");
-
-  //   const response = await fetch(`${API_URL}/posts`);
-  //   if (!response.ok) {
-  //     throw new Error("Failed to fetch blog posts from API");
-  //   }
-
-  //   const menu: BlogPost[] = await response.json();
-  //   return menu;
-  // } catch (error) {
-  //   console.warn("API error, loading fallback JSON", error);
-  // }
-  // try {
-  //   const stored = localStorage.getItem(this.POSTS_STORAGE_KEY);
-  //   if (stored) {
-  //     return JSON.parse(stored);
-  //   }
-  //   return this.getInitialBlogPosts();
-  // } catch (error) {
-  //   console.error("Error loading blog posts:", error);
-  //   return this.getInitialBlogPosts();
-  // }
-  // return this.getInitialBlogPosts();
-  // }
-
-  static saveBlogPosts(posts: BlogPost[]): void {
-    try {
-      localStorage.setItem(this.POSTS_STORAGE_KEY, JSON.stringify(posts));
-    } catch (error) {
-      console.error("Error saving blog posts:", error);
-      throw new Error("Error al guardar los posts del blog");
-    }
-  }
-
-  static createBlogPost(
+  static async createBlogPost(
     postData: Omit<BlogPost, "id" | "createdAt" | "updatedAt">
-  ): BlogPost {
+  ): Promise<BlogPost> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
     const now = new Date().toISOString();
     const newPost: BlogPost = {
       ...postData,
@@ -67,38 +35,71 @@ export class BlogService {
       publishedAt: postData.isPublished ? now : undefined,
     };
 
-    const posts = this.getBlogPosts();
-    const updatedPosts = [...posts, newPost];
-    this.saveBlogPosts(updatedPosts);
+    const response = await fetch(`${API_URL}/noticias`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPost),
+    });
 
-    return newPost;
+    if (!response.ok) {
+      throw new Error(
+        `Failed to create blog post via API: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const createdPost: BlogPost = await response.json();
+    return createdPost;
   }
 
-  static updateBlogPost(updatedPost: BlogPost): void {
-    const posts = this.getBlogPosts();
-    const updatedPosts = posts.map((post) =>
-      post.id === updatedPost.id
-        ? {
-            ...updatedPost,
-            updatedAt: new Date().toISOString(),
-            publishedAt:
-              updatedPost.isPublished && !post.isPublished
-                ? new Date().toISOString()
-                : updatedPost.publishedAt,
-          }
-        : post
-    );
-    this.saveBlogPosts(updatedPosts);
+  static async updateBlogPost(updatedPost: BlogPost): Promise<void> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
+    const postWithTimestamp = {
+      ...updatedPost,
+      updatedAt: new Date().toISOString(),
+      publishedAt:
+        updatedPost.isPublished && !updatedPost.publishedAt
+          ? new Date().toISOString()
+          : updatedPost.publishedAt,
+    };
+
+    const response = await fetch(`${API_URL}/noticias/${updatedPost.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postWithTimestamp),
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to update blog post via API: ${response.status} ${response.statusText}`
+      );
+    }
   }
 
-  static deleteBlogPost(id: string): void {
-    const posts = this.getBlogPosts();
-    const updatedPosts = posts.filter((post) => post.id !== id);
-    this.saveBlogPosts(updatedPosts);
+  static async deleteBlogPost(id: string): Promise<void> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
+    const response = await fetch(`${API_URL}/noticias/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to delete blog post via API: ${response.status} ${response.statusText}`
+      );
+    }
   }
 
-  static getBlogPostBySlug(slug: string): BlogPost | undefined {
-    const posts = this.getBlogPosts();
+  static async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {
+    const posts = await this.getBlogPosts();
     return posts.find((post) => post.slug === slug);
   }
 
@@ -111,80 +112,73 @@ export class BlogService {
       .trim();
   }
 
-  static validateSlug(slug: string, excludeId?: string): boolean {
-    const posts = this.getBlogPosts();
+  static async validateSlug(
+    slug: string,
+    excludeId?: string
+  ): Promise<boolean> {
+    const posts = await this.getBlogPosts();
     return !posts.some((post) => post.slug === slug && post.id !== excludeId);
   }
 
-  // Blog Categories Methods
-  static getBlogCategories(): BlogCategory[] {
-    try {
-      const stored = localStorage.getItem(this.CATEGORIES_STORAGE_KEY);
-      if (stored) {
-        return JSON.parse(stored);
+  // Blog Categories Methods (extracted from posts)
+  static async getBlogCategories(): Promise<BlogCategory[]> {
+    const posts = await this.getBlogPosts();
+
+    // Extraer categorías únicas de las noticias
+    const categoriesMap = new Map<string, BlogCategory>();
+
+    posts.forEach((post) => {
+      if (post.category && !categoriesMap.has(post.category)) {
+        categoriesMap.set(post.category, {
+          id: `category-${this.generateSlug(post.category)}`,
+          name: post.category,
+          slug: this.generateSlug(post.category),
+          description: `Categoría: ${post.category}`,
+          color: this.generateCategoryColor(post.category),
+        });
       }
-      return this.getInitialCategories();
-    } catch (error) {
-      console.error("Error loading blog categories:", error);
-      return this.getInitialCategories();
+    });
+
+    return Array.from(categoriesMap.values());
+  }
+
+  // Generar color basado en el nombre de la categoría
+  private static generateCategoryColor(categoryName: string): string {
+    const colors = [
+      "#3B82F6", // blue
+      "#10B981", // green
+      "#F59E0B", // amber
+      "#EF4444", // red
+      "#8B5CF6", // violet
+      "#F97316", // orange
+      "#06B6D4", // cyan
+      "#84CC16", // lime
+      "#EC4899", // pink
+      "#6B7280", // gray
+    ];
+
+    // Generar un índice basado en el hash del nombre
+    let hash = 0;
+    for (let i = 0; i < categoryName.length; i++) {
+      hash = categoryName.charCodeAt(i) + ((hash << 5) - hash);
     }
-  }
 
-  static saveBlogCategories(categories: BlogCategory[]): void {
-    try {
-      localStorage.setItem(
-        this.CATEGORIES_STORAGE_KEY,
-        JSON.stringify(categories)
-      );
-    } catch (error) {
-      console.error("Error saving blog categories:", error);
-      throw new Error("Error al guardar las categorías del blog");
-    }
-  }
-
-  static createBlogCategory(
-    categoryData: Omit<BlogCategory, "id">
-  ): BlogCategory {
-    const newCategory: BlogCategory = {
-      ...categoryData,
-      id: `category-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-      slug: this.generateSlug(categoryData.name),
-    };
-
-    const categories = this.getBlogCategories();
-    const updatedCategories = [...categories, newCategory];
-    this.saveBlogCategories(updatedCategories);
-
-    return newCategory;
-  }
-
-  static updateBlogCategory(updatedCategory: BlogCategory): void {
-    const categories = this.getBlogCategories();
-    const updatedCategories = categories.map((category) =>
-      category.id === updatedCategory.id ? updatedCategory : category
-    );
-    this.saveBlogCategories(updatedCategories);
-  }
-
-  static deleteBlogCategory(id: string): void {
-    const categories = this.getBlogCategories();
-    const updatedCategories = categories.filter(
-      (category) => category.id !== id
-    );
-    this.saveBlogCategories(updatedCategories);
+    return colors[Math.abs(hash) % colors.length];
   }
 
   // Utility Methods
-  static getPostsByCategory(categorySlug: string): BlogPost[] {
-    const posts = this.getBlogPosts();
+  static async getPostsByCategory(categorySlug: string): Promise<BlogPost[]> {
+    const posts = await this.getBlogPosts();
     return posts.filter(
       (post) =>
         post.category.toLowerCase().replace(/\s+/g, "-") === categorySlug
     );
   }
 
-  static getPopularTags(limit = 10): Array<{ tag: string; count: number }> {
-    const posts = this.getBlogPosts();
+  static async getPopularTags(
+    limit = 10
+  ): Promise<Array<{ tag: string; count: number }>> {
+    const posts = await this.getBlogPosts();
     const tagCounts: Record<string, number> = {};
 
     posts.forEach((post) => {
@@ -199,8 +193,8 @@ export class BlogService {
       .slice(0, limit);
   }
 
-  static searchPosts(query: string): BlogPost[] {
-    const posts = this.getBlogPosts();
+  static async searchPosts(query: string): Promise<BlogPost[]> {
+    const posts = await this.getBlogPosts();
     const searchTerm = query.toLowerCase();
 
     return posts.filter(
@@ -210,65 +204,5 @@ export class BlogService {
         post.excerpt.toLowerCase().includes(searchTerm) ||
         post.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
     );
-  }
-
-  // Initial Data
-  private static getInitialBlogPosts(): BlogPost[] {
-    return [
-      {
-        id: "post-1",
-        title: "Bienvenidos a nuestro blog",
-        slug: "bienvenidos-a-nuestro-blog",
-        excerpt:
-          "Este es el primer post de nuestro blog corporativo donde compartiremos noticias y novedades.",
-        content: `# Bienvenidos a nuestro blog
-
-Este es el primer post de nuestro blog corporativo donde compartiremos noticias, novedades y artículos de interés sobre nuestra industria.
-
-## ¿Qué encontrarás aquí?
-
-- Noticias de la empresa
-- Novedades del sector
-- Tutoriales y guías
-- Casos de éxito
-
-Esperamos que este contenido sea de tu interés y te invitamos a suscribirte para recibir las últimas actualizaciones.`,
-        featuredImage:
-          "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop",
-        category: "Noticias",
-        tags: ["bienvenida", "blog", "empresa"],
-        isPublished: true,
-        publishedAt: "2025-09-15T10:00:00Z",
-        createdAt: "2025-09-15T10:00:00Z",
-        updatedAt: "2025-09-15T10:00:00Z",
-        author: "Admin",
-      },
-    ];
-  }
-
-  private static getInitialCategories(): BlogCategory[] {
-    return [
-      {
-        id: "cat-1",
-        name: "Noticias",
-        slug: "noticias",
-        description: "Últimas noticias de la empresa",
-        color: "#3B82F6",
-      },
-      {
-        id: "cat-2",
-        name: "Tecnología",
-        slug: "tecnologia",
-        description: "Artículos sobre tecnología e innovación",
-        color: "#10B981",
-      },
-      {
-        id: "cat-3",
-        name: "Casos de Éxito",
-        slug: "casos-de-exito",
-        description: "Historias de éxito de nuestros clientes",
-        color: "#F59E0B",
-      },
-    ];
   }
 }

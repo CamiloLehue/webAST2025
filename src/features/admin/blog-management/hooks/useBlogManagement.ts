@@ -1,6 +1,11 @@
-import { useState, useEffect } from 'react';
-import type { BlogPost, BlogCategory, BlogFilters, BlogStats } from '../types/blogTypes';
-import { BlogService } from '../services/blogService';
+import { useState, useEffect } from "react";
+import type {
+  BlogPost,
+  BlogCategory,
+  BlogFilters,
+  BlogStats,
+} from "../types/blogTypes";
+import { BlogService } from "../services/blogService";
 
 export const useBlogManagement = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
@@ -16,26 +21,32 @@ export const useBlogManagement = () => {
     try {
       setLoading(true);
       setError(null);
-      const posts = BlogService.getBlogPosts();
-      const cats = BlogService.getBlogCategories();
+      const posts = await BlogService.getBlogPosts();
+      const cats = await BlogService.getBlogCategories();
       setBlogPosts(posts);
       setCategories(cats);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al cargar los datos del blog');
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Error al cargar los datos del blog"
+      );
     } finally {
       setLoading(false);
     }
   };
 
   // Blog Posts Methods
-  const createBlogPost = async (postData: Omit<BlogPost, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const createBlogPost = async (
+    postData: Omit<BlogPost, "id" | "createdAt" | "updatedAt">
+  ) => {
     try {
       setError(null);
-      const newPost = BlogService.createBlogPost(postData);
-      setBlogPosts(prev => [...prev, newPost]);
+      const newPost = await BlogService.createBlogPost(postData);
+      setBlogPosts((prev) => [...prev, newPost]);
       return newPost;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear el post');
+      setError(err instanceof Error ? err.message : "Error al crear el post");
       throw err;
     }
   };
@@ -43,12 +54,14 @@ export const useBlogManagement = () => {
   const updateBlogPost = async (updatedPost: BlogPost) => {
     try {
       setError(null);
-      BlogService.updateBlogPost(updatedPost);
-      setBlogPosts(prev => prev.map(post => 
-        post.id === updatedPost.id ? updatedPost : post
-      ));
+      await BlogService.updateBlogPost(updatedPost);
+      setBlogPosts((prev) =>
+        prev.map((post) => (post.id === updatedPost.id ? updatedPost : post))
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar el post');
+      setError(
+        err instanceof Error ? err.message : "Error al actualizar el post"
+      );
       throw err;
     }
   };
@@ -56,58 +69,25 @@ export const useBlogManagement = () => {
   const deleteBlogPost = async (id: string) => {
     try {
       setError(null);
-      BlogService.deleteBlogPost(id);
-      setBlogPosts(prev => prev.filter(post => post.id !== id));
+      await BlogService.deleteBlogPost(id);
+      setBlogPosts((prev) => prev.filter((post) => post.id !== id));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al eliminar el post');
+      setError(
+        err instanceof Error ? err.message : "Error al eliminar el post"
+      );
       throw err;
     }
   };
 
   const getBlogPostBySlug = (slug: string): BlogPost | undefined => {
-    return blogPosts.find(post => post.slug === slug);
+    return blogPosts.find((post) => post.slug === slug);
   };
 
   const getBlogPostById = (id: string): BlogPost | undefined => {
-    return blogPosts.find(post => post.id === id);
+    return blogPosts.find((post) => post.id === id);
   };
 
-  // Categories Methods
-  const createBlogCategory = async (categoryData: Omit<BlogCategory, 'id'>) => {
-    try {
-      setError(null);
-      const newCategory = BlogService.createBlogCategory(categoryData);
-      setCategories(prev => [...prev, newCategory]);
-      return newCategory;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear la categoría');
-      throw err;
-    }
-  };
-
-  const updateBlogCategory = async (updatedCategory: BlogCategory) => {
-    try {
-      setError(null);
-      BlogService.updateBlogCategory(updatedCategory);
-      setCategories(prev => prev.map(category => 
-        category.id === updatedCategory.id ? updatedCategory : category
-      ));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar la categoría');
-      throw err;
-    }
-  };
-
-  const deleteBlogCategory = async (id: string) => {
-    try {
-      setError(null);
-      BlogService.deleteBlogCategory(id);
-      setCategories(prev => prev.filter(category => category.id !== id));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al eliminar la categoría');
-      throw err;
-    }
-  };
+  // Categories are now extracted from posts, no CRUD operations needed
 
   // Utility Methods
   const filterPosts = (filters: Partial<BlogFilters>): BlogPost[] => {
@@ -115,23 +95,25 @@ export const useBlogManagement = () => {
 
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
-      filteredPosts = filteredPosts.filter(post =>
-        post.title.toLowerCase().includes(searchTerm) ||
-        post.content.toLowerCase().includes(searchTerm) ||
-        post.excerpt.toLowerCase().includes(searchTerm)
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          post.title.toLowerCase().includes(searchTerm) ||
+          post.content.toLowerCase().includes(searchTerm) ||
+          post.excerpt.toLowerCase().includes(searchTerm)
       );
     }
 
-    if (filters.status && filters.status !== 'all') {
-      filteredPosts = filteredPosts.filter(post =>
-        (filters.status === 'published' && post.isPublished) ||
-        (filters.status === 'draft' && !post.isPublished)
+    if (filters.status && filters.status !== "all") {
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          (filters.status === "published" && post.isPublished) ||
+          (filters.status === "draft" && !post.isPublished)
       );
     }
 
     if (filters.category) {
-      filteredPosts = filteredPosts.filter(post =>
-        post.category === filters.category
+      filteredPosts = filteredPosts.filter(
+        (post) => post.category === filters.category
       );
     }
 
@@ -139,20 +121,21 @@ export const useBlogManagement = () => {
     if (filters.sortBy) {
       filteredPosts.sort((a, b) => {
         let comparison = 0;
-        
+
         switch (filters.sortBy) {
-          case 'date':
-            comparison = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          case "date":
+            comparison =
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             break;
-          case 'title':
+          case "title":
             comparison = a.title.localeCompare(b.title);
             break;
-          case 'author':
+          case "author":
             comparison = a.author.localeCompare(b.author);
             break;
         }
-        
-        return filters.sortOrder === 'desc' ? comparison : -comparison;
+
+        return filters.sortOrder === "desc" ? comparison : -comparison;
       });
     }
 
@@ -161,25 +144,31 @@ export const useBlogManagement = () => {
 
   const getPublishedPosts = (): BlogPost[] => {
     return blogPosts
-      .filter(post => post.isPublished)
-      .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime());
+      .filter((post) => post.isPublished)
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt || b.createdAt).getTime() -
+          new Date(a.publishedAt || a.createdAt).getTime()
+      );
   };
 
-  const getPostsByCategory = (categorySlug: string): BlogPost[] => {
-    return BlogService.getPostsByCategory(categorySlug);
+  const getPostsByCategory = async (
+    categorySlug: string
+  ): Promise<BlogPost[]> => {
+    return await BlogService.getPostsByCategory(categorySlug);
   };
 
-  const getPopularTags = (limit = 10) => {
-    return BlogService.getPopularTags(limit);
+  const getPopularTags = async (limit = 10) => {
+    return await BlogService.getPopularTags(limit);
   };
 
-  const searchPosts = (query: string): BlogPost[] => {
-    return BlogService.searchPosts(query);
+  const searchPosts = async (query: string): Promise<BlogPost[]> => {
+    return await BlogService.searchPosts(query);
   };
 
   const getBlogStats = (): BlogStats => {
     const totalPosts = blogPosts.length;
-    const publishedPosts = blogPosts.filter(post => post.isPublished).length;
+    const publishedPosts = blogPosts.filter((post) => post.isPublished).length;
     const draftPosts = totalPosts - publishedPosts;
     const totalCategories = categories.length;
 
@@ -187,12 +176,15 @@ export const useBlogManagement = () => {
       totalPosts,
       publishedPosts,
       draftPosts,
-      totalCategories
+      totalCategories,
     };
   };
 
-  const validateSlug = (slug: string, excludeId?: string): boolean => {
-    return BlogService.validateSlug(slug, excludeId);
+  const validateSlug = async (
+    slug: string,
+    excludeId?: string
+  ): Promise<boolean> => {
+    return await BlogService.validateSlug(slug, excludeId);
   };
 
   const generateSlug = (title: string): string => {
@@ -205,19 +197,16 @@ export const useBlogManagement = () => {
     categories,
     loading,
     error,
-    
+
     // Blog Posts Methods
     createBlogPost,
     updateBlogPost,
     deleteBlogPost,
     getBlogPostBySlug,
     getBlogPostById,
-    
-    // Categories Methods
-    createBlogCategory,
-    updateBlogCategory,
-    deleteBlogCategory,
-    
+
+    // Categories are read-only (extracted from posts)
+
     // Utility Methods
     filterPosts,
     getPublishedPosts,
@@ -227,8 +216,8 @@ export const useBlogManagement = () => {
     getBlogStats,
     validateSlug,
     generateSlug,
-    
+
     // Actions
-    refresh: loadData
+    refresh: loadData,
   };
 };

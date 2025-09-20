@@ -1,13 +1,54 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { useContent } from "../../../hooks/useContent";
+import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { FiCalendar, FiUser, FiArrowLeft } from "react-icons/fi";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { blogPosts } = useContent();
+  const { blogPosts, loading, error } = useBlogManagement();
 
-  const post = blogPosts.find((p) => p.slug === slug && p.isPublished);
+  // Proteger contra arrays undefined
+  const post = (blogPosts || []).find((p) => p.slug === slug && p.isPublished);
+
+  // Manejo de estados de carga
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-3/4 mb-4"></div>
+            <div className="h-6 bg-gray-300 rounded w-1/2 mb-8"></div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-300 rounded"></div>
+              <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+              <div className="h-4 bg-gray-300 rounded w-4/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Manejo de errores
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Error al cargar el post
+          </h1>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <Link
+            to="/blog"
+            className="inline-flex items-center text-primary-600 hover:text-primary-700"
+          >
+            <FiArrowLeft className="mr-2 h-4 w-4" />
+            Volver al blog
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   if (!post) {
     return (

@@ -1,30 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useContent } from '../../../hooks/useContent';
-import { useAuth } from '../../../hooks/useAuth';
-import { FiSave, FiEye, FiArrowLeft } from 'react-icons/fi';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
+import { FiSave, FiEye, FiArrowLeft } from "react-icons/fi";
+import { useBlogManagement } from "../blog-management";
 
 const BlogEditor: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();
-  const { blogPosts, createBlogPost, updateBlogPost } = useContent();
-  
+  const { blogPosts, createBlogPost, updateBlogPost } = useBlogManagement();
+
   const isEditing = !!id;
-  const existingPost = isEditing ? blogPosts.find(post => post.id === id) : null;
+  const existingPost = isEditing
+    ? blogPosts.find((post) => post.id === id)
+    : null;
 
   const [formData, setFormData] = useState({
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    featuredImage: '',
-    category: '',
+    title: "",
+    slug: "",
+    excerpt: "",
+    content: "",
+    featuredImage: "",
+    category: "",
     tags: [] as string[],
-    isPublished: false
+    isPublished: false,
   });
 
-  const [tagInput, setTagInput] = useState('');
+  const [tagInput, setTagInput] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -34,10 +36,10 @@ const BlogEditor: React.FC = () => {
         slug: existingPost.slug,
         excerpt: existingPost.excerpt,
         content: existingPost.content,
-        featuredImage: existingPost.featuredImage || '',
+        featuredImage: existingPost.featuredImage || "",
         category: existingPost.category,
         tags: existingPost.tags,
-        isPublished: existingPost.isPublished
+        isPublished: existingPost.isPublished,
       });
     }
   }, [existingPost]);
@@ -45,39 +47,39 @@ const BlogEditor: React.FC = () => {
   const generateSlug = (title: string) => {
     return title
       .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
+      .replace(/[^a-z0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
       .trim();
   };
 
   const handleTitleChange = (title: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       title,
-      slug: !isEditing ? generateSlug(title) : prev.slug
+      slug: !isEditing ? generateSlug(title) : prev.slug,
     }));
   };
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        tags: [...prev.tags, tagInput.trim()]
+        tags: [...prev.tags, tagInput.trim()],
       }));
-      setTagInput('');
+      setTagInput("");
     }
   };
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
       handleAddTag();
     }
@@ -85,7 +87,7 @@ const BlogEditor: React.FC = () => {
 
   const handleSave = async (publish = false) => {
     if (!formData.title.trim() || !formData.content.trim()) {
-      alert('El título y el contenido son obligatorios');
+      alert("El título y el contenido son obligatorios");
       return;
     }
 
@@ -94,24 +96,26 @@ const BlogEditor: React.FC = () => {
     const postData = {
       ...formData,
       isPublished: publish,
-      publishedAt: publish ? new Date().toISOString() : existingPost?.publishedAt,
-      author: user?.name || 'Admin'
+      publishedAt: publish
+        ? new Date().toISOString()
+        : existingPost?.publishedAt,
+      author: user?.name || "Admin",
     };
 
     try {
       if (isEditing && existingPost) {
         updateBlogPost({
           ...existingPost,
-          ...postData
+          ...postData,
         });
       } else {
         createBlogPost(postData);
       }
 
-      navigate('/admin/blog');
+      navigate("/admin/blog");
     } catch (error) {
-      console.error('Error saving post:', error);
-      alert('Error al guardar el post');
+      console.error("Error saving post:", error);
+      alert("Error al guardar el post");
     } finally {
       setIsSaving(false);
     }
@@ -123,21 +127,23 @@ const BlogEditor: React.FC = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
-            onClick={() => navigate('/admin/blog')}
+            onClick={() => navigate("/admin/blog")}
             className="p-2 text-gray-400 hover:text-gray-600"
           >
             <FiArrowLeft className="h-5 w-5" />
           </button>
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              {isEditing ? 'Editar Post' : 'Nuevo Post'}
+              {isEditing ? "Editar Post" : "Nuevo Post"}
             </h2>
             <p className="text-gray-600">
-              {isEditing ? 'Modifica tu post existente' : 'Crea un nuevo artículo para el blog'}
+              {isEditing
+                ? "Modifica tu post existente"
+                : "Crea un nuevo artículo para el blog"}
             </p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-3">
           <button
             onClick={() => handleSave(false)}
@@ -153,7 +159,7 @@ const BlogEditor: React.FC = () => {
             className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50"
           >
             <FiEye className="mr-2 h-4 w-4" />
-            {formData.isPublished ? 'Actualizar' : 'Publicar'}
+            {formData.isPublished ? "Actualizar" : "Publicar"}
           </button>
         </div>
       </div>
@@ -187,7 +193,9 @@ const BlogEditor: React.FC = () => {
               <input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, slug: e.target.value }))
+                }
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="url-del-post"
               />
@@ -201,7 +209,9 @@ const BlogEditor: React.FC = () => {
             </label>
             <textarea
               value={formData.excerpt}
-              onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, excerpt: e.target.value }))
+              }
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Escribe un breve resumen del post..."
@@ -215,7 +225,9 @@ const BlogEditor: React.FC = () => {
             </label>
             <textarea
               value={formData.content}
-              onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, content: e.target.value }))
+              }
               rows={20}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Escribe el contenido de tu post..."
@@ -236,7 +248,12 @@ const BlogEditor: React.FC = () => {
             <input
               type="url"
               value={formData.featuredImage}
-              onChange={(e) => setFormData(prev => ({ ...prev, featuredImage: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  featuredImage: e.target.value,
+                }))
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="https://ejemplo.com/imagen.jpg"
             />
@@ -247,7 +264,7 @@ const BlogEditor: React.FC = () => {
                   alt="Vista previa"
                   className="w-full h-32 object-cover rounded-md"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
+                    (e.target as HTMLImageElement).style.display = "none";
                   }}
                 />
               </div>
@@ -262,7 +279,9 @@ const BlogEditor: React.FC = () => {
             <input
               type="text"
               value={formData.category}
-              onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, category: e.target.value }))
+              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Tecnología, Noticias, etc."
             />
@@ -313,20 +332,29 @@ const BlogEditor: React.FC = () => {
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-700 mb-3">Estado</h3>
             <div className="space-y-2">
-              <div className={`p-3 rounded-md ${
-                formData.isPublished ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200'
-              }`}>
+              <div
+                className={`p-3 rounded-md ${
+                  formData.isPublished
+                    ? "bg-green-50 border border-green-200"
+                    : "bg-yellow-50 border border-yellow-200"
+                }`}
+              >
                 <div className="flex items-center">
-                  <div className={`w-2 h-2 rounded-full mr-2 ${
-                    formData.isPublished ? 'bg-green-400' : 'bg-yellow-400'
-                  }`} />
+                  <div
+                    className={`w-2 h-2 rounded-full mr-2 ${
+                      formData.isPublished ? "bg-green-400" : "bg-yellow-400"
+                    }`}
+                  />
                   <span className="text-sm font-medium">
-                    {formData.isPublished ? 'Publicado' : 'Borrador'}
+                    {formData.isPublished ? "Publicado" : "Borrador"}
                   </span>
                 </div>
                 {existingPost?.publishedAt && (
                   <p className="text-xs text-gray-500 mt-1">
-                    Publicado el {new Date(existingPost.publishedAt).toLocaleDateString('es-ES')}
+                    Publicado el{" "}
+                    {new Date(existingPost.publishedAt).toLocaleDateString(
+                      "es-ES"
+                    )}
                   </p>
                 )}
               </div>
