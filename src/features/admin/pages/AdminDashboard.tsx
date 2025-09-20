@@ -1,103 +1,101 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  FiMenu, 
-  FiFileText, 
-  FiUsers, 
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  FiMenu,
+  FiFileText,
+  FiUsers,
   FiEye,
   FiGrid,
-  FiTrendingUp
-} from 'react-icons/fi';
+  FiTrendingUp,
+} from "react-icons/fi";
 
 const AdminDashboard: React.FC = () => {
   const stats = [
     {
-      label: 'Páginas Activas',
-      value: '12',
+      label: "Páginas Activas",
+      value: "12",
       icon: FiGrid,
-      color: 'bg-blue-500'
+      color: "bg-blue-500",
     },
     {
-      label: 'Posts del Blog',
-      value: '8',
+      label: "Posts del Blog",
+      value: "8",
       icon: FiFileText,
-      color: 'bg-green-500'
+      color: "bg-green-500",
     },
     {
-      label: 'Items del Menú',
-      value: '6',
+      label: "Items del Menú",
+      value: "6",
       icon: FiMenu,
-      color: 'bg-purple-500'
+      color: "bg-purple-500",
     },
     {
-      label: 'Usuarios Admin',
-      value: '2',
+      label: "Usuarios Admin",
+      value: "2",
       icon: FiUsers,
-      color: 'bg-orange-500'
-    }
+      color: "bg-orange-500",
+    },
   ];
 
   const quickActions = [
     {
-      title: 'Gestionar Menú',
-      description: 'Agregar, editar o eliminar elementos del menú principal',
+      title: "Gestionar Menú",
+      description: "Agregar, editar o eliminar elementos del menú principal",
       icon: FiMenu,
-      link: '/admin/menu',
-      color: 'bg-indigo-600'
+      link: "/admin/menu",
+      color: "bg-indigo-600",
     },
     {
-      title: 'Crear Página',
-      description: 'Crear una nueva página personalizada',
+      title: "Crear Página",
+      description: "Crear una nueva página personalizada",
       icon: FiGrid,
-      link: '/admin/pages/new',
-      color: 'bg-blue-600'
+      link: "/admin/pages/new",
+      color: "bg-blue-600",
     },
     {
-      title: 'Nuevo Post',
-      description: 'Escribir un nuevo artículo para el blog',
+      title: "Nuevo Post",
+      description: "Escribir un nuevo artículo para el blog",
       icon: FiFileText,
-      link: '/admin/blog/new',
-      color: 'bg-green-600'
+      link: "/admin/blog/new",
+      color: "bg-green-600",
     },
     {
-      title: 'Ver Sitio Web',
-      description: 'Revisar el sitio web público',
+      title: "Ver Sitio Web",
+      description: "Revisar el sitio web público",
       icon: FiEye,
-      link: '/',
-      color: 'bg-gray-600',
-      external: true
-    }
+      link: "/",
+      color: "bg-gray-600",
+      external: true,
+    },
   ];
 
   const recentActivity = [
     {
       action: 'Página "Nuevos Servicios" creada',
-      time: 'Hace 2 horas',
-      user: 'Admin'
+      time: "Hace 2 horas",
+      user: "Admin",
     },
     {
       action: 'Post "Últimas novedades" publicado',
-      time: 'Hace 1 día',
-      user: 'Editor'
+      time: "Hace 1 día",
+      user: "Editor",
     },
     {
-      action: 'Menú actualizado',
-      time: 'Hace 2 días',
-      user: 'Admin'
-    }
+      action: "Menú actualizado",
+      time: "Hace 2 días",
+      user: "Admin",
+    },
   ];
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
+        <h2 className="text-3xl font-bold text-bg-100">Dashboard</h2>
         <p className="mt-2 text-gray-600">
           Gestiona el contenido de tu sitio web desde aquí
         </p>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
           <div key={index} className="bg-white rounded-lg shadow p-6">
@@ -106,7 +104,9 @@ const AdminDashboard: React.FC = () => {
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
+                <p className="text-2xl font-semibold text-bg-100">
+                  {stat.value}
+                </p>
                 <p className="text-gray-600">{stat.label}</p>
               </div>
             </div>
@@ -114,39 +114,49 @@ const AdminDashboard: React.FC = () => {
         ))}
       </div>
 
-      {/* Quick Actions */}
       <div>
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Acciones Rápidas</h3>
+        <h3 className="text-lg font-medium text-bg-100 mb-4">
+          Acciones Rápidas
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickActions.map((action, index) => (
             <Link
               key={index}
               to={action.link}
-              target={action.external ? '_blank' : undefined}
+              target={action.external ? "_blank" : undefined}
               className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow"
             >
-              <div className={`${action.color} rounded-lg p-3 w-12 h-12 flex items-center justify-center mb-4`}>
+              <div
+                className={`${action.color} rounded-lg p-3 w-12 h-12 flex items-center justify-center mb-4`}
+              >
                 <action.icon className="h-6 w-6 text-white" />
               </div>
-              <h4 className="text-lg font-medium text-gray-900 mb-2">{action.title}</h4>
+              <h4 className="text-lg font-medium text-bg-100 mb-2">
+                {action.title}
+              </h4>
               <p className="text-gray-600 text-sm">{action.description}</p>
             </Link>
           ))}
         </div>
       </div>
-
-      {/* Recent Activity */}
       <div className="bg-white rounded-lg shadow">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900">Actividad Reciente</h3>
+          <h3 className="text-lg font-medium text-bg-100">
+            Actividad Reciente
+          </h3>
         </div>
         <div className="divide-y divide-gray-200">
           {recentActivity.map((activity, index) => (
-            <div key={index} className="px-6 py-4 flex items-center justify-between">
+            <div
+              key={index}
+              className="px-6 py-4 flex items-center justify-between"
+            >
               <div className="flex items-center">
                 <FiTrendingUp className="h-5 w-5 text-gray-400 mr-3" />
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                  <p className="text-sm font-medium text-bg-100">
+                    {activity.action}
+                  </p>
                   <p className="text-sm text-gray-500">por {activity.user}</p>
                 </div>
               </div>

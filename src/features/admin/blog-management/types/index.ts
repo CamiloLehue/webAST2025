@@ -3,4 +3,4 @@ export type {
   BlogCategory,
   BlogFilters,
   BlogStats
-} from './blog.types';
+} from './blogTypes';

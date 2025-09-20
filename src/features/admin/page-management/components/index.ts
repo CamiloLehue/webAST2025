@@ -1,0 +1,1 @@
+// Componentes para page management - por implementar

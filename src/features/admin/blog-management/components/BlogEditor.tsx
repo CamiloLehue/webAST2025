@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FiSave, FiEye, FiX, FiImage, FiTag } from 'react-icons/fi';
-import type { BlogPost, BlogCategory } from '../types/blog.types';
+import type { BlogPost, BlogCategory } from '../types/blogTypes';
 
 interface BlogEditorProps {
   post?: BlogPost;

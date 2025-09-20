@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiSearch, FiFilter, FiX } from 'react-icons/fi';
-import type { BlogFilters, BlogCategory } from '../types/blog.types';
+import type { BlogFilters, BlogCategory } from '../types/blogTypes';
 
 interface BlogFiltersProps {
   filters: Partial<BlogFilters>;

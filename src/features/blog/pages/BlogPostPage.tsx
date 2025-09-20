@@ -1,21 +1,25 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { useContent } from '../../../hooks/useContent';
-import { FiCalendar, FiUser, FiArrowLeft } from 'react-icons/fi';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import { useContent } from "../../../hooks/useContent";
+import { FiCalendar, FiUser, FiArrowLeft } from "react-icons/fi";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { blogPosts } = useContent();
 
-  const post = blogPosts.find(p => p.slug === slug && p.isPublished);
+  const post = blogPosts.find((p) => p.slug === slug && p.isPublished);
 
   if (!post) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Post no encontrado</h1>
-          <p className="text-gray-600 mb-6">El artículo que buscas no existe o no está publicado.</p>
-          <Link 
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            Post no encontrado
+          </h1>
+          <p className="text-gray-600 mb-6">
+            El artículo que buscas no existe o no está publicado.
+          </p>
+          <Link
             to="/blog"
             className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium"
           >
@@ -28,31 +32,31 @@ const BlogPostPage: React.FC = () => {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-50">
+    <div className="w-full min-h-screen bg-white-100">
       {/* Back to blog */}
-      <div className="bg-white border-b">
+      <div className=" ">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link 
+          <Link
             to="/blog"
-            className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium"
+            className="inline-flex items-center text-primary-100 hover:text-bg-400 font-medium bg-bg-300/10 px-5 rounded-full py-1 transition-colors duration-300"
           >
             <FiArrowLeft className="mr-2 h-4 w-4" />
-            Volver al blog
+            Volver a Noticias
           </Link>
         </div>
       </div>
 
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-5 bg-white rounded-2xl">
         {/* Featured Image */}
         {post.featuredImage && (
           <div className="aspect-video overflow-hidden rounded-lg mb-8">
@@ -95,9 +99,9 @@ const BlogPostPage: React.FC = () => {
 
         {/* Post Content */}
         <div className="prose prose-lg max-w-none">
-          {post.content.split('\n').map((paragraph, index) => {
-            if (paragraph.trim() === '') return <br key={index} />;
-            
+          {post.content.split("\n").map((paragraph, index) => {
+            if (paragraph.trim() === "") return <br key={index} />;
+
             return (
               <p key={index} className="mb-4 text-gray-700 leading-relaxed">
                 {paragraph}
@@ -108,8 +112,10 @@ const BlogPostPage: React.FC = () => {
 
         {/* Tags */}
         {post.tags.length > 0 && (
-          <div className="mt-12 pt-8 border-t border-gray-200">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Etiquetas:</h3>
+          <div className="mt-12 pt-8 border-t border-white-100">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">
+              Etiquetas:
+            </h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <span
@@ -124,7 +130,7 @@ const BlogPostPage: React.FC = () => {
         )}
 
         {/* Post Footer */}
-        <footer className="mt-12 pt-8 border-t border-gray-200">
+        <footer className="mt-12 pt-8 border-t border-white-100">
           <div className="bg-gray-50 rounded-lg p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
@@ -136,23 +142,21 @@ const BlogPostPage: React.FC = () => {
                 <h4 className="text-lg font-medium text-gray-900">
                   {post.author}
                 </h4>
-                <p className="text-gray-600">
-                  Autor de este artículo
-                </p>
+                <p className="text-gray-600">Autor de este artículo</p>
               </div>
             </div>
           </div>
         </footer>
 
         {/* Navigation to other posts */}
-        <nav className="mt-12 pt-8 border-t border-gray-200">
+        <nav className="mt-12 pt-8 border-t border-white-100">
           <div className="flex justify-between items-center">
             <div className="text-center">
               <Link
                 to="/blog"
-                className="inline-flex items-center px-6 py-3 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                className="inline-flex items-center px-6 py-3 border border-bg-300/20 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-primary-100/10 transition-colors"
               >
-                Ver todos los posts
+                Ver todos las noticias
               </Link>
             </div>
           </div>

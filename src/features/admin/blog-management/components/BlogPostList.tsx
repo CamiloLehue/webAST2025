@@ -1,6 +1,6 @@
 import React from 'react';
 import { FiEdit2, FiTrash2, FiEye, FiCalendar, FiUser, FiTag, FiImage } from 'react-icons/fi';
-import type { BlogPost, BlogCategory } from '../types/blog.types';
+import type { BlogPost, BlogCategory } from '../types/blogTypes';
 
 interface BlogPostListProps {
   posts: BlogPost[];

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { BlogPost, BlogCategory, BlogFilters, BlogStats } from '../types/blog.types';
-import { BlogService } from '../services/blog.service';
+import type { BlogPost, BlogCategory, BlogFilters, BlogStats } from '../types/blogTypes';
+import { BlogService } from '../services/blogService';
 
 export const useBlogManagement = () => {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);

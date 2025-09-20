@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { MenuItem } from '../types/menu.types';
-import { MenuService } from '../services/menu.service';
+import type { MenuItem } from '../types/menuTypes';
+import { MenuService } from '../services/menuService';
 
 export const useMenuManagement = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
