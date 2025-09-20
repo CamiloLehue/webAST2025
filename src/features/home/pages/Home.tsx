@@ -1,3 +1,4 @@
+import { TbMail, TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import Slider from "../../../components/slider/Slider";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
@@ -8,6 +9,7 @@ function Home() {
   return (
     <div className="relative overflow-hidden">
       <section
+        id="slider"
         className={`relative flex justify-start items-start  w-full  bg-bg-400
         ${isSmallDevice ? "h-auto" : "py-12 pb-54"}
         `}
@@ -24,19 +26,18 @@ function Home() {
           </>
         )}
       </section>
-
-      <div className="relative h-20 ">
-        <section
+      <section id="cardNav" className="relative h-20 ">
+        <div
           className="absolute left-0 -top-20  w-full h-90  bg-white "
           style={{
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
-        ></section>
+        ></div>
         <div className="relative  -top-33">
           <CardNav />
         </div>
-      </div>
-      <section className="relative w-full space-y-9 py-10">
+      </section>
+      <section id="aboutUs" className="relative w-full space-y-9 py-10">
         <div className="max-w-7xl mx-auto grid grid-cols-2 gap-10  border border-dashed border-bg-300/10 rounded-2xl  ">
           <div className="min-h-100">
             <img
@@ -70,8 +71,66 @@ function Home() {
           <div className="w-full h-120 bg-black rounded-2xl"></div>
         </div>
       </section>
-      <section className="relative w-full py-15 bg-primary-100">
+      <section id="lastNews" className="relative w-full py-15 bg-primary-100">
         <Lastnews />
+      </section>
+      <section id="contact">
+        <div className="grid grid-cols-2 gap-10 max-w-7xl mx-auto py-10">
+          <article className=" bg-white h-80 border border-dashed border-bg-300/10 rounded-2xl mb-4 flex flex-col justify-center items-center gap-5">
+            <TbPhoneFilled className="text-8xl text-primary-100" />
+
+            <p className="text-center text-xl max-w-lg">
+              Llámenos al{" "}
+              <span className="text-primary-100 font-semibold">
+                +56 2 3366 3478
+              </span>{" "}
+              ||{" "}
+              <span className="text-primary-100 font-semibold">
+                +56 2 3366 3478
+              </span>{" "}
+              . Nuestros expertos están a su disposición 09:30 - 19:30 de lunes
+              a viernes.
+            </p>
+          </article>
+          <article className=" bg-white h-80 border border-dashed border-bg-300/10 rounded-2lg mb-4 flex flex-col justify-center items-center gap-5">
+            <TbMailFilled className="text-8xl text-primary-100" />
+            <p className="text-center text-xl max-w-xl">
+              Puede contactarse con nosotros en nuestro email{" "}
+              <span className="text-primary-100 font-semibold">
+                ventas@ast.cl.
+              </span>
+              Nuestros expertos están a su disposición 09:30 - 19:30 de lunes a
+              viernes.
+            </p>
+          </article>
+        </div>
+      </section>
+      <section id="partner">
+        <div className="max-w-7xl mx-auto py-10 flex flex-col justify-center items-center gap-10">
+          <h2 className="text-5xl font-bold text-primary-100 mb-5 border-b-4  border-primary-100">
+            Nuestros Clientes
+          </h2> 
+          <div className="grid grid-cols-6 gap-10">
+            <div className="flex justify-center items-center">
+              <img src="partners/mikrotik.png" alt="Mikrotik" />
+            </div>
+            <div className="flex justify-center items-center">
+              <img src="partners/fortinet.png" alt="Fortinet" />
+            </div>
+            <div className="flex justify-center items-center">
+              <img src="partners/cisco.png" alt="Cisco" />
+            </div>
+            <div className="flex justify-center items-center">
+              <img src="partners/paloalto.png" alt="Palo Alto" />
+            </div>
+            <div className="flex justify-center items-center">
+              <img src="partners/fortinet.png" alt="Fortinet" />
+            </div>
+            <div className="flex justify-center items-center">
+              <img src="partners/cisco.png" alt="Cisco" />
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
