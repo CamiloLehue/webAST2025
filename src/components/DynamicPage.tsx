@@ -142,38 +142,50 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   const buttonLink = data.buttonLink as string;
   const alignment = data.alignment as string;
 
+  // Debug logs
+  console.log("Hero Section Data:", data);
+  console.log("Background Image URL:", backgroundImage);
+  console.log("Background Color:", backgroundColor);
+
   const alignmentClasses = {
     left: "text-left",
     center: "text-center",
     right: "text-right",
   };
 
+  const backgroundImageStyle =
+    backgroundImage && backgroundImage.trim() !== ""
+      ? `url("${backgroundImage}")`
+      : undefined;
+
   return (
     <section
-      className={`relative py-24 px-6 sm:py-32 lg:px-8 ${
-        backgroundColor ? "" : "bg-white-100"
+      className={`relative py-24 px-6 sm:py-32 lg:px-8 min-h-[650px] ${
+        backgroundColor || backgroundImage ? "" : "bg-gray-100"
       }`}
       style={{
-        backgroundImage: backgroundImage
-          ? `url(${backgroundImage})`
-          : undefined,
-        backgroundColor: backgroundColor || undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundImage: backgroundImageStyle,
+        backgroundColor:
+          backgroundColor && backgroundColor.trim() !== ""
+            ? backgroundColor
+            : undefined,
+        backgroundSize: backgroundImage ? "cover" : undefined,
+        backgroundPosition: backgroundImage ? "center" : undefined,
+        backgroundRepeat: backgroundImage ? "no-repeat" : undefined,
       }}
     >
       {backgroundImage && (
-        <div className="absolute inset-0 bg-white-100 bg-opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent " />
       )}
       <div
-        className={`relative mx-auto max-w-2xl ${
+        className={`relative mx-auto max-w-7xl ${
           alignmentClasses[alignment as keyof typeof alignmentClasses] ||
           "text-center"
         }`}
       >
         {title && (
           <h1
-            className="text-4xl font-bold tracking-tight sm:text-6xl"
+            className="font-bold tracking-tight text-3xl max-w-2xl"
             style={{
               color:
                 textColor ||
@@ -185,7 +197,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {subtitle && (
           <p
-            className="mt-6 text-lg leading-8"
+            className=" text-lg leading-8 max-w-2xl mt-5"
             style={{
               color:
                 textColor ||
@@ -199,7 +211,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
           <div className="mt-10">
             <a
               href={buttonLink}
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="text-sm font-semibold text-white shadow-sm hover:bg-primary-100"
             >
               {buttonText}
             </a>

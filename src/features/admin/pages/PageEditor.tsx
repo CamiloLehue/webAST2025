@@ -477,6 +477,9 @@ const getDefaultSectionData = (type: ContentSectionType): ContentSection["data"]
         alignment: "center" as const,
         buttonText: "Call to Action",
         buttonLink: "#",
+        backgroundImage: "",
+        backgroundColor: "",
+        textColor: "",
       };
     case "text":
       return {
@@ -706,6 +709,42 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               onChange={(e) => updateField("subtitle", e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
               placeholder="Subtítulo del hero"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Imagen de Fondo
+            </label>
+            <input
+              type="text"
+              value={data.backgroundImage || ""}
+              onChange={(e) => updateField("backgroundImage", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="URL de la imagen de fondo"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Color de Fondo
+            </label>
+            <input
+              type="text"
+              value={data.backgroundColor || ""}
+              onChange={(e) => updateField("backgroundColor", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Color de fondo (ej: #ff0000, red)"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Color del Texto
+            </label>
+            <input
+              type="text"
+              value={data.textColor || ""}
+              onChange={(e) => updateField("textColor", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Color del texto (ej: #ffffff, white)"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
