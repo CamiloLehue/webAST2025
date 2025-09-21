@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type {
   CustomPage,
   ContentSection,
@@ -240,7 +240,7 @@ export const usePageManagement = () => {
     }
   };
 
-  const validateSlug = async (
+  const validateSlug = useCallback(async (
     slug: string,
     excludeId?: string
   ): Promise<boolean> => {
@@ -252,11 +252,11 @@ export const usePageManagement = () => {
       );
       return false;
     }
-  };
+  }, []);
 
-  const generateSlug = (title: string): string => {
+  const generateSlug = useCallback((title: string): string => {
     return PageService.generateSlug(title);
-  };
+  }, []);
 
   return {
     // Data

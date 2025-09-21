@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { usePageManagement } from '../page-management/hooks/usePageManagement';
-import { FiEdit2, FiTrash2, FiPlus, FiCopy, FiLoader } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { usePageManagement } from "../page-management/hooks/usePageManagement";
+import { FiEdit2, FiTrash2, FiPlus, FiCopy, FiLoader } from "react-icons/fi";
+import { Link } from "react-router-dom";
 
 const PageManagement: React.FC = () => {
-  const { 
-    customPages: pages, 
-    loading, 
-    error, 
+  const {
+    customPages: pages,
+    loading,
+    error,
     deleteCustomPage,
-    filterPages 
+    filterPages,
   } = usePageManagement();
-  
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "published" | "draft"
+  >("all");
   const [filteredPages, setFilteredPages] = useState(pages);
 
   useEffect(() => {
     const applyFilters = async () => {
-      if (searchTerm || statusFilter !== 'all') {
+      if (searchTerm || statusFilter !== "all") {
         const filtered = await filterPages({
           search: searchTerm || undefined,
           status: statusFilter,
-          sortBy: 'updated',
-          sortOrder: 'desc'
+          sortBy: "updated",
+          sortOrder: "desc",
         });
         setFilteredPages(filtered);
       } else {
@@ -35,20 +37,20 @@ const PageManagement: React.FC = () => {
   }, [searchTerm, statusFilter, pages, filterPages]);
 
   const handleDeletePage = async (id: string) => {
-    if (confirm('¿Estás seguro de que quieres eliminar esta página?')) {
+    if (confirm("¿Estás seguro de que quieres eliminar esta página?")) {
       try {
         await deleteCustomPage(id);
       } catch (err) {
-        console.error('Error al eliminar la página:', err);
+        console.error("Error al eliminar la página:", err);
       }
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -87,7 +89,9 @@ const PageManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Gestión de Páginas</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            Gestión de Páginas
+          </h2>
           <p className="mt-1 text-gray-600">
             Administra las páginas personalizadas del sitio web
           </p>
@@ -115,7 +119,9 @@ const PageManagement: React.FC = () => {
         <div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as 'all' | 'published' | 'draft')}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as "all" | "published" | "draft")
+            }
             className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           >
             <option value="all">Todas las páginas</option>
@@ -130,10 +136,10 @@ const PageManagement: React.FC = () => {
         {filteredPages.length === 0 ? (
           <div className="col-span-full">
             <div className="text-center py-12">
-              <div className="mx-auto h-12 w-12 text-gray-400">
-                📄
-              </div>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">No hay páginas</h3>
+              <div className="mx-auto h-12 w-12 text-gray-400">📄</div>
+              <h3 className="mt-2 text-sm font-medium text-gray-900">
+                No hay páginas
+              </h3>
               <p className="mt-1 text-sm text-gray-500">
                 Comienza creando tu primera página personalizada.
               </p>
@@ -150,7 +156,10 @@ const PageManagement: React.FC = () => {
           </div>
         ) : (
           filteredPages.map((page) => (
-            <div key={page.id} className="bg-white rounded-lg shadow overflow-hidden">
+            <div
+              key={page.id}
+              className="bg-white rounded-lg shadow overflow-hidden"
+            >
               {/* Page Preview */}
               <div className="aspect-video bg-gray-100 flex items-center justify-center">
                 <div className="text-center">
@@ -165,19 +174,20 @@ const PageManagement: React.FC = () => {
                   <h3 className="text-lg font-medium text-gray-900 truncate">
                     {page.title}
                   </h3>
-                  <span className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
-                    page.isPublished 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {page.isPublished ? 'Publicado' : 'Borrador'}
+                  <span
+                    className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
+                      page.isPublished
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {page.isPublished ? "Publicado" : "Borrador"}
                   </span>
                 </div>
 
                 <div className="mb-4">
                   <p className="text-sm text-gray-600 flex items-center">
-                    <FiCopy className="mr-1 h-3 w-3" />
-                    /{page.slug}
+                    <FiCopy className="mr-1 h-3 w-3" />/{page.slug}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
                     Actualizado el {formatDate(page.updatedAt)}
@@ -202,7 +212,7 @@ const PageManagement: React.FC = () => {
                   >
                     Ver página
                   </Link>
-                  
+
                   <div className="flex items-center space-x-2">
                     <Link
                       to={`/admin/pages/edit/${page.id}`}
@@ -228,7 +238,9 @@ const PageManagement: React.FC = () => {
 
       {/* Quick Templates */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Plantillas Rápidas</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">
+          Plantillas Rápidas
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/admin/pages/new?template=landing-page"

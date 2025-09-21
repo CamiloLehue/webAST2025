@@ -192,17 +192,46 @@ export class PageService {
     }
 
     try {
-      const response = await fetch(`${API_URL}/page-templates`);
+      // Use AbortController to timeout quickly and avoid excessive console errors
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout
+      
+      const response = await fetch(`${API_URL}/page-templates`, {
+        signal: controller.signal,
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      
+      clearTimeout(timeoutId);
       
       if (!response.ok) {
-        // If templates endpoint doesn't exist, return default templates
-        return this.getDefaultTemplates();
+        // Specifically handle 404 without logging as an error
+        if (response.status === 404) {
+          // Silently fall back to default templates for 404
+          return this.getDefaultTemplates();
+        }
+        
+        // For other errors, throw to be caught below
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const templates: PageTemplate[] = await response.json();
       return templates.length > 0 ? templates : this.getDefaultTemplates();
     } catch (error) {
-      console.error('Error loading page templates from API:', error);
+      // Check if it's an abort error (timeout) or fetch error (network issue)
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          // Timeout - likely no backend running
+          console.info('Backend API not responding, using default page templates');
+        } else if (error.message.includes('fetch')) {
+          // Network error - likely no backend running
+          console.info('Backend API not available, using default page templates');
+        } else if (!error.message.includes('404')) {
+          // Other errors that aren't 404
+          console.warn('Page templates API error, using defaults:', error.message);
+        }
+      }
       return this.getDefaultTemplates();
     }
   }

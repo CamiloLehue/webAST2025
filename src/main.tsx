@@ -55,9 +55,9 @@ createRoot(document.getElementById("root")!).render(
               {/* Public Routes */}
               <Route element={<LayoutTemplate />}>
                 <Route path="/" element={<Home />} />
-                <Route path="/sobre-nosotros" element={<About />} />
-                <Route path="/productos" element={<Products />} />
-                <Route path="/servicios" element={<Services />} />
+                {/* <Route path="/sobre-nosotros" element={<About />} /> */}
+                {/* <Route path="/productos" element={<Products />} /> */}
+                {/* <Route path="/servicios" element={<Services />} /> */}
                 <Route path="/multimedia" element={<Multimedia />} />
                 <Route path="/noticias" element={<News />} />
                 <Route path="/blog" element={<BlogPage />} />
