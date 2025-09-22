@@ -910,6 +910,18 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </select>
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Color de Fondo
+            </label>
+            <input
+              type="text"
+              value={data.backgroundColor || ""}
+              onChange={(e) => updateField("backgroundColor", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Color de fondo (ej: #f5f5f5, transparent)"
+            />
+          </div>
         </div>
       );
 
@@ -1067,6 +1079,435 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               <option value="center">Centro</option>
               <option value="right">Derecha</option>
             </select>
+          </div>
+        </div>
+      );
+
+    case "video":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              URL del Video
+            </label>
+            <input
+              type="url"
+              value={data.src || ""}
+              onChange={(e) => updateField("src", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="https://ejemplo.com/video.mp4"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Título (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Título del video"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Descripción (Opcional)
+            </label>
+            <textarea
+              rows={3}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Descripción del video"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Tamaño
+              </label>
+              <select
+                value={data.width || "medium"}
+                onChange={(e) => updateField("width", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="small">Pequeño</option>
+                <option value="medium">Mediano</option>
+                <option value="large">Grande</option>
+                <option value="full">Ancho completo</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center">
+                <input
+                  id="autoplay"
+                  type="checkbox"
+                  checked={data.autoplay || false}
+                  onChange={(e) => updateField("autoplay", e.target.checked)}
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label htmlFor="autoplay" className="ml-2 block text-sm text-gray-900">
+                  Reproducción automática
+                </label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  id="controls"
+                  type="checkbox"
+                  checked={data.controls !== false}
+                  onChange={(e) => updateField("controls", e.target.checked)}
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                />
+                <label htmlFor="controls" className="ml-2 block text-sm text-gray-900">
+                  Mostrar controles
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "gallery":
+      return (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Columnas
+              </label>
+              <select
+                value={data.columns || 3}
+                onChange={(e) => updateField("columns", parseInt(e.target.value))}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value={2}>2 columnas</option>
+                <option value={3}>3 columnas</option>
+                <option value={4}>4 columnas</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Espaciado
+              </label>
+              <select
+                value={data.spacing || "medium"}
+                onChange={(e) => updateField("spacing", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="small">Pequeño</option>
+                <option value="medium">Mediano</option>
+                <option value="large">Grande</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Imágenes
+            </label>
+            <div className="mt-2 space-y-2">
+              {(data.images || []).map((image: any, index: number) => (
+                <div key={index} className="flex space-x-2 items-center p-3 border border-gray-200 rounded-md">
+                  <input
+                    type="url"
+                    value={image.src || ""}
+                    onChange={(e) => {
+                      const newImages = [...(data.images || [])];
+                      newImages[index] = { ...image, src: e.target.value };
+                      updateField("images", newImages);
+                    }}
+                    className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
+                    placeholder="URL de la imagen"
+                  />
+                  <input
+                    type="text"
+                    value={image.alt || ""}
+                    onChange={(e) => {
+                      const newImages = [...(data.images || [])];
+                      newImages[index] = { ...image, alt: e.target.value };
+                      updateField("images", newImages);
+                    }}
+                    className="w-32 px-2 py-1 text-sm border border-gray-300 rounded"
+                    placeholder="Alt text"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImages = (data.images || []).filter((_: any, i: number) => i !== index);
+                      updateField("images", newImages);
+                    }}
+                    className="px-2 py-1 text-sm text-red-600 hover:text-red-800"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newImages = [...(data.images || []), { src: "", alt: "", caption: "" }];
+                  updateField("images", newImages);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-gray-400"
+              >
+                + Agregar imagen
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "contact-form":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Título
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Título del formulario"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Descripción
+            </label>
+            <textarea
+              rows={3}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Descripción del formulario"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Texto del Botón
+            </label>
+            <input
+              type="text"
+              value={data.submitButtonText || ""}
+              onChange={(e) => updateField("submitButtonText", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Enviar"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Campos del formulario
+            </label>
+            <div className="mt-2 space-y-2">
+              {(data.fields || []).map((field: any, index: number) => (
+                <div key={index} className="p-3 border border-gray-200 rounded-md">
+                  <div className="grid grid-cols-3 gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={field.label || ""}
+                      onChange={(e) => {
+                        const newFields = [...(data.fields || [])];
+                        newFields[index] = { ...field, label: e.target.value };
+                        updateField("fields", newFields);
+                      }}
+                      className="px-2 py-1 text-sm border border-gray-300 rounded"
+                      placeholder="Etiqueta"
+                    />
+                    <select
+                      value={field.type || "text"}
+                      onChange={(e) => {
+                        const newFields = [...(data.fields || [])];
+                        newFields[index] = { ...field, type: e.target.value };
+                        updateField("fields", newFields);
+                      }}
+                      className="px-2 py-1 text-sm border border-gray-300 rounded"
+                    >
+                      <option value="text">Texto</option>
+                      <option value="email">Email</option>
+                      <option value="tel">Teléfono</option>
+                      <option value="textarea">Área de texto</option>
+                      <option value="select">Selección</option>
+                    </select>
+                    <div className="flex items-center space-x-2">
+                      <label className="flex items-center text-sm">
+                        <input
+                          type="checkbox"
+                          checked={field.required || false}
+                          onChange={(e) => {
+                            const newFields = [...(data.fields || [])];
+                            newFields[index] = { ...field, required: e.target.checked };
+                            updateField("fields", newFields);
+                          }}
+                          className="h-3 w-3 text-indigo-600"
+                        />
+                        <span className="ml-1">Requerido</span>
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newFields = (data.fields || []).filter((_: any, i: number) => i !== index);
+                          updateField("fields", newFields);
+                        }}
+                        className="text-red-600 hover:text-red-800 text-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newFields = [...(data.fields || []), { 
+                    id: `field-${Date.now()}`, 
+                    type: "text", 
+                    label: "", 
+                    required: false 
+                  }];
+                  updateField("fields", newFields);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-gray-400"
+              >
+                + Agregar campo
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "testimonials":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Título
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Título de la sección"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Layout
+            </label>
+            <select
+              value={data.layout || "grid"}
+              onChange={(e) => updateField("layout", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <option value="grid">Grid</option>
+              <option value="carousel">Carousel</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Testimonios
+            </label>
+            <p className="text-sm text-gray-500 mb-2">
+              Gestión avanzada de testimonios disponible próximamente
+            </p>
+            <textarea
+              rows={6}
+              value={JSON.stringify(data.testimonials || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const testimonials = JSON.parse(e.target.value);
+                  updateField("testimonials", testimonials);
+                } catch {
+                  // Invalid JSON, ignore
+                }
+              }}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
+              placeholder="Array de testimonios en formato JSON"
+            />
+          </div>
+        </div>
+      );
+
+    case "features":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Título
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Título de la sección"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Descripción
+            </label>
+            <textarea
+              rows={3}
+              value={data.description || ""}
+              onChange={(e) => updateField("description", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Descripción de la sección"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Layout
+              </label>
+              <select
+                value={data.layout || "grid"}
+                onChange={(e) => updateField("layout", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value="grid">Grid</option>
+                <option value="list">Lista</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Columnas
+              </label>
+              <select
+                value={data.columns || 3}
+                onChange={(e) => updateField("columns", parseInt(e.target.value))}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              >
+                <option value={2}>2 columnas</option>
+                <option value={3}>3 columnas</option>
+                <option value={4}>4 columnas</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Características
+            </label>
+            <p className="text-sm text-gray-500 mb-2">
+              Gestión avanzada de características disponible próximamente
+            </p>
+            <textarea
+              rows={6}
+              value={JSON.stringify(data.features || [], null, 2)}
+              onChange={(e) => {
+                try {
+                  const features = JSON.parse(e.target.value);
+                  updateField("features", features);
+                } catch {
+                  // Invalid JSON, ignore
+                }
+              }}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
+              placeholder="Array de características en formato JSON"
+            />
           </div>
         </div>
       );
