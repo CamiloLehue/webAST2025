@@ -15,6 +15,7 @@ export interface ContentSection {
   type: ContentSectionType;
   data: HeroSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection;
   order: number;
+  gridWidth?: number; // Ancho en el sistema de grid (1-12), por defecto 12
 }
 
 export type ContentSectionType = 

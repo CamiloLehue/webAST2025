@@ -89,12 +89,89 @@ const DynamicPage: React.FC = () => {
       {/* SEO Meta Tags (estas se pueden manejar con un hook o biblioteca como React Helmet) */}
       <title>{page.metaTitle || page.title}</title>
 
-      {page.content
-        .sort((a, b) => a.order - b.order)
-        .map((section) => (
-          <ContentSectionRenderer key={section.id} section={section} />
-        ))}
+      <GridLayoutRenderer
+        sections={page.content.sort((a, b) => a.order - b.order)}
+      />
     </div>
+  );
+};
+
+// Grid Layout Renderer Component
+interface GridLayoutRendererProps {
+  sections: ContentSection[];
+}
+
+const GridLayoutRenderer: React.FC<GridLayoutRendererProps> = ({
+  sections,
+}) => {
+  // Agrupar secciones en filas según su ancho de grid
+  const groupSectionsIntoRows = (sections: ContentSection[]) => {
+    const rows: ContentSection[][] = [];
+    let currentRow: ContentSection[] = [];
+    let currentRowWidth = 0;
+
+    sections.forEach((section) => {
+      // Obtener el ancho de grid de la sección (por defecto 12 = ancho completo)
+      const sectionWidth = (section as any).gridWidth || 12;
+
+      // Si la sección no cabe en la fila actual, crear nueva fila
+      if (currentRowWidth + sectionWidth > 12) {
+        if (currentRow.length > 0) {
+          rows.push(currentRow);
+        }
+        currentRow = [section];
+        currentRowWidth = sectionWidth;
+      } else {
+        // La sección cabe en la fila actual
+        currentRow.push(section);
+        currentRowWidth += sectionWidth;
+      }
+    });
+
+    // Agregar la última fila si tiene contenido
+    if (currentRow.length > 0) {
+      rows.push(currentRow);
+    }
+
+    return rows;
+  };
+
+  const rows = groupSectionsIntoRows(sections);
+
+  return (
+    <>
+      {rows.map((row, rowIndex) => (
+        <div key={`row-${rowIndex}`} className="grid grid-cols-12 w-full">
+          {row.map((section) => {
+            const gridWidth = (section as any).gridWidth || 12;
+
+            // Mapear los anchos a clases CSS específicas para asegurar que Tailwind las incluya
+            const colSpanClasses: Record<number, string> = {
+              1: "col-span-1",
+              2: "col-span-2",
+              3: "col-span-3",
+              4: "col-span-4",
+              5: "col-span-5",
+              6: "col-span-6",
+              7: "col-span-7",
+              8: "col-span-8",
+              9: "col-span-9",
+              10: "col-span-10",
+              11: "col-span-11",
+              12: "col-span-12",
+            };
+
+            const colSpanClass = colSpanClasses[gridWidth] || "col-span-12";
+
+            return (
+              <div key={section.id} className={colSpanClass}>
+                <ContentSectionRenderer section={section} />
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </>
   );
 };
 
@@ -327,7 +404,9 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
           <img
             src={src}
             alt={alt || ""}
-            className={`w-full shadow-lg ${rounded ? "rounded-lg" : ""}`}
+            className={`w-full rounded-2xl min-h-90 object-cover shadow-lg ${
+              rounded ? "rounded-lg" : ""
+            }`}
           />
           {caption && (
             <figcaption className="mt-4 text-center text-gray-600 text-sm">

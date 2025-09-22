@@ -97,6 +97,7 @@ const PageEditor: React.FC = () => {
       type,
       data: getDefaultSectionData(type),
       order: formData.content.length,
+      gridWidth: 12, // Por defecto ocupa todo el ancho
     };
 
     setFormData((prev) => ({
@@ -110,6 +111,15 @@ const PageEditor: React.FC = () => {
       ...prev,
       content: prev.content.map((section) =>
         section.id === sectionId ? { ...section, data } : section
+      ),
+    }));
+  };
+
+  const updateFullContentSection = (sectionId: string, updatedSection: Partial<ContentSection>) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: prev.content.map((section) =>
+        section.id === sectionId ? { ...section, ...updatedSection } : section
       ),
     }));
   };
@@ -439,7 +449,15 @@ const PageEditor: React.FC = () => {
                     section={section}
                     index={index}
                     totalSections={formData.content.length}
-                    onUpdate={(data) => updateContentSection(section.id, data)}
+                    onUpdate={(dataOrSection) => {
+                      // Si es una sección completa (tiene id), actualizar toda la sección
+                      if (typeof dataOrSection === 'object' && dataOrSection && 'id' in dataOrSection) {
+                        updateFullContentSection(section.id, dataOrSection as Partial<ContentSection>);
+                      } else {
+                        // Si son solo datos, actualizar solo los datos
+                        updateContentSection(section.id, dataOrSection as ContentSection["data"]);
+                      }
+                    }}
                     onRemove={() => removeContentSection(section.id)}
                     onMove={(direction) => moveSection(section.id, direction)}
                   />
@@ -594,7 +612,7 @@ interface ContentSectionEditorProps {
   section: ContentSection;
   index: number;
   totalSections: number;
-  onUpdate: (data: any) => void;
+  onUpdate: (dataOrSection: ContentSection["data"] | Partial<ContentSection>) => void;
   onRemove: () => void;
   onMove: (direction: "up" | "down") => void;
 }
@@ -656,7 +674,38 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 space-y-4">
+        {/* Grid Width Control */}
+        <div className="border-b border-gray-100 pb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Ancho en Grid (columnas de 12)
+          </label>
+          <select
+            value={section.gridWidth || 12}
+            onChange={(e) => {
+              const updatedSection = {
+                ...section,
+                gridWidth: parseInt(e.target.value)
+              };
+              // Necesitamos actualizar toda la sección, no solo los datos
+              if (onUpdate) {
+                onUpdate(updatedSection);
+              }
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          >
+            <option value={12}>12 columnas (ancho completo)</option>
+            <option value={6}>6 columnas (mitad)</option>
+            <option value={4}>4 columnas (tercio)</option>
+            <option value={3}>3 columnas (cuarto)</option>
+            <option value={8}>8 columnas (dos tercios)</option>
+            <option value={9}>9 columnas (tres cuartos)</option>
+          </select>
+          <p className="mt-1 text-xs text-gray-500">
+            Controla cuánto espacio horizontal ocupa esta sección. Las secciones se agruparán en filas automáticamente.
+          </p>
+        </div>
+
         <ContentSectionForm
           type={section.type}
           data={section.data}
