@@ -4,7 +4,7 @@ import Footer from "./footer/Footer";
 
 function LayoutTemplate() {
   return (
-    <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center">
+    <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
       <Header />
       <Outlet />
       <Footer />

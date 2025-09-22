@@ -4,47 +4,47 @@ function CardNav() {
   const menuItems = [
     {
       title: "Satelital",
-      icon: "🛰️",
+      icon: "/svg/inicio/navHome/Satelital.svg",
     },
     {
       title: "Drones",
-      icon: "🛸",
+      icon: "svg/inicio/navHome/Drone.svg",
     },
     {
       title: "RoIP",
-      icon: "📡",
+      icon: "svg/inicio/navHome/cell_tower.svg",
     },
     {
       title: "Network IP",
-      icon: "🌐",
+      icon: "svg/inicio/navHome/Network.svg",
     },
     {
       title: "Wisensor",
-      icon: "WISENSOR",
+      icon: "svg/inicio/navHome/Wisensor.svg",
     },
     {
       title: "Seguridad",
-      icon: "📶",
+      icon: "svg/inicio/navHome/Seguridad.svg",
     },
     {
       title: "Datacenter",
-      icon: "🖥️",
+      icon: "svg/inicio/navHome/Data center.svg",
     },
     {
       title: "Energía Renovable",
-      icon: "🌱",
+      icon: "svg/inicio/navHome/renovable.svg",
     },
     {
       title: "Wisensor IA",
-      icon: "🤖",
+      icon: "svg/inicio/navHome/WisensorIA.svg",
     },
     {
       title: "Software",
-      icon: "💻",
+      icon: "svg/inicio/navHome/code_blocks.svg",
     },
     {
       title: "IoT",
-      icon: "📶",
+      icon: "svg/inicio/navHome/captive_portal.svg",
     },
   ];
 
@@ -59,7 +59,7 @@ function CardNav() {
         className={` ${
           isSmallDevice
             ? "grid grid-cols-3 gap-2"
-            : "flex justify-center items-center  gap-10"
+            : "flex justify-center items-center  gap-9"
         }`}
       >
         {menuItems.map((item, index) => (
@@ -74,12 +74,12 @@ function CardNav() {
               className={` bg-primary-100  font-bold text-white
                  ${
                    !isSmallDevice
-                     ? "relative w-25 h-25 rounded-2xl flex justify-center items-center "
+                     ? "relative w-25 h-25 rounded-2xl flex justify-center items-center p-3 "
                      : " w-full h-40"
                  }
                 `}
             >
-              {item.icon}
+              <img src={item.icon} alt={item.title} className="w-full h-full object-cover" />
             </div>
             <p className="text-nowrap font-bold">{item.title}</p>
           </article>

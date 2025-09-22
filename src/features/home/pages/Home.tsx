@@ -34,21 +34,21 @@ function Home() {
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
         ></div>
-        <div className="relative  -top-33">
+        <div className="relative  -top-35">
           <CardNav />
         </div>
       </section>
       <section id="aboutUs" className="relative w-full space-y-9 py-10">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-10  border border-dashed border-bg-300/10 rounded-2xl  ">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 gap-15  border border-dashed border-bg-300/10 rounded-2xl  ">
           <div className="min-h-100">
             <img
-              src="slider/slider01.JPG"
+              src="img/inicio/ia-wisensor.jpg"
               alt=""
               className="rounded-2xl hover:shadow-lg transition-shadow duration-300"
             />
           </div>
           <div className="flex flex-col justify-start pt-10 gap-4">
-            <h3 className="font-bold text-primary-100 text-3xl">
+            <h3 className="font-bold text-primary-100 text-4xl">
               Implementamos IA
             </h3>
             <p className="text-2xl">
@@ -58,7 +58,7 @@ function Home() {
               optimizar procesos y entregar decisiones más inteligentes en
               tiempo real.
             </p>
-            <button className="bg-primary-100 hover:bg-primary-100/80 text-white px-6 py-3 rounded-full w-40 hover:bg-primary-200 transition">
+            <button className="bg-primary-100 hover:bg-primary-100/80 mt-5 text-white px-6 py-3 rounded-full w-40 hover:bg-primary-200 transition">
               Ver más
             </button>
           </div>
@@ -69,7 +69,15 @@ function Home() {
               Puedes ver más sobre nosotros aquí
             </h3>
           </div>
-          <div className="w-full h-120 bg-black rounded-2xl"></div>
+          <div className="w-full h-120 bg-black rounded-2xl overflow-hidden">
+            <iframe
+              width="100%"
+              height="100%"
+              src="https://www.youtube.com/embed/fI-tzs7NnNE?si=HCiO3OqtZgFZsa4r"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            ></iframe>
+          </div>
         </div>
       </section>
       <section id="lastNews" className="relative w-full py-15 bg-primary-100">
