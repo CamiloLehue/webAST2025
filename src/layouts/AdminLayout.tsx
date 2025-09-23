@@ -1,15 +1,7 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import {
-  FiHome,
-  FiMenu,
-  FiFileText,
-  FiUsers,
-  FiSettings,
-  FiLogOut,
-  FiGrid,
-} from "react-icons/fi";
+import { FiHome, FiMenu, FiFileText, FiLogOut, FiGrid } from "react-icons/fi";
 
 const AdminLayout: React.FC = () => {
   const { user, logout } = useAuth();
@@ -36,16 +28,16 @@ const AdminLayout: React.FC = () => {
       icon: FiFileText,
       label: "Blog",
     },
-    {
-      to: "/admin/users",
-      icon: FiUsers,
-      label: "Usuarios",
-    },
-    {
-      to: "/admin/settings",
-      icon: FiSettings,
-      label: "Configuración",
-    },
+    // {
+    //   to: "/admin/users",
+    //   icon: FiUsers,
+    //   label: "Usuarios",
+    // },
+    // {
+    //   to: "/admin/settings",
+    //   icon: FiSettings,
+    //   label: "Configuración",
+    // },
   ];
 
   const handleLogout = () => {
@@ -104,9 +96,7 @@ const AdminLayout: React.FC = () => {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top bar */}
         <header className="bg-bg-400 shadow-sm ">
           <div className="px-6 py-4">
             <h1 className="text-2xl font-semibold text-white-100">
@@ -115,7 +105,6 @@ const AdminLayout: React.FC = () => {
           </div>
         </header>
 
-        {/* Content */}
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>

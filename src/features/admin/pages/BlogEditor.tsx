@@ -128,15 +128,15 @@ const BlogEditor: React.FC = () => {
         <div className="flex items-center space-x-4">
           <button
             onClick={() => navigate("/admin/blog")}
-            className="p-2 text-gray-400 hover:text-gray-600"
+            className="p-2 text-gray-400 hover:text-bg-200"
           >
             <FiArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
+            <h2 className="text-2xl font-bold text-bg-100">
               {isEditing ? "Editar Post" : "Nuevo Post"}
             </h2>
-            <p className="text-gray-600">
+            <p className="text-bg-200">
               {isEditing
                 ? "Modifica tu post existente"
                 : "Crea un nuevo artículo para el blog"}
@@ -148,7 +148,7 @@ const BlogEditor: React.FC = () => {
           <button
             onClick={() => handleSave(false)}
             disabled={isSaving}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-bg-300 bg-white hover:bg-gray-50 disabled:opacity-50"
           >
             <FiSave className="mr-2 h-4 w-4" />
             Guardar Borrador
@@ -156,7 +156,7 @@ const BlogEditor: React.FC = () => {
           <button
             onClick={() => handleSave(true)}
             disabled={isSaving}
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200 disabled:opacity-50"
           >
             <FiEye className="mr-2 h-4 w-4" />
             {formData.isPublished ? "Actualizar" : "Publicar"}
@@ -169,21 +169,21 @@ const BlogEditor: React.FC = () => {
         <div className="lg:col-span-2 space-y-6">
           {/* Title */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Título del Post
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Escribe el título de tu post..."
             />
           </div>
 
           {/* Slug */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Slug (URL)
             </label>
             <div className="flex">
@@ -196,7 +196,7 @@ const BlogEditor: React.FC = () => {
                 onChange={(e) =>
                   setFormData((prev) => ({ ...prev, slug: e.target.value }))
                 }
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="url-del-post"
               />
             </div>
@@ -204,7 +204,7 @@ const BlogEditor: React.FC = () => {
 
           {/* Excerpt */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Resumen
             </label>
             <textarea
@@ -213,14 +213,14 @@ const BlogEditor: React.FC = () => {
                 setFormData((prev) => ({ ...prev, excerpt: e.target.value }))
               }
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Escribe un breve resumen del post..."
             />
           </div>
 
           {/* Content */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Contenido
             </label>
             <textarea
@@ -229,7 +229,7 @@ const BlogEditor: React.FC = () => {
                 setFormData((prev) => ({ ...prev, content: e.target.value }))
               }
               rows={20}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Escribe el contenido de tu post..."
             />
             <p className="mt-2 text-sm text-gray-500">
@@ -242,7 +242,7 @@ const BlogEditor: React.FC = () => {
         <div className="space-y-6">
           {/* Featured Image */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Imagen Destacada
             </label>
             <input
@@ -254,7 +254,7 @@ const BlogEditor: React.FC = () => {
                   featuredImage: e.target.value,
                 }))
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="https://ejemplo.com/imagen.jpg"
             />
             {formData.featuredImage && (
@@ -273,7 +273,7 @@ const BlogEditor: React.FC = () => {
 
           {/* Category */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Categoría
             </label>
             <input
@@ -282,14 +282,14 @@ const BlogEditor: React.FC = () => {
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, category: e.target.value }))
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Tecnología, Noticias, etc."
             />
           </div>
 
           {/* Tags */}
           <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Etiquetas
             </label>
             <div className="flex">
@@ -298,12 +298,12 @@ const BlogEditor: React.FC = () => {
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="Agregar etiqueta"
               />
               <button
                 onClick={handleAddTag}
-                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-r-md hover:bg-indigo-700"
+                className="px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-r-md hover:bg-accent-200"
               >
                 +
               </button>
@@ -330,7 +330,7 @@ const BlogEditor: React.FC = () => {
 
           {/* Publication Status */}
           <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Estado</h3>
+            <h3 className="text-sm font-medium text-bg-300 mb-3">Estado</h3>
             <div className="space-y-2">
               <div
                 className={`p-3 rounded-md ${

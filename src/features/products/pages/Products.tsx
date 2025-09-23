@@ -19,15 +19,15 @@ function Products() {
           <div className="max-w-6xl mx-auto grid grid-cols-3 gap-10 px-5">
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <div key={item} className="bg-white p-5 rounded-2xl shadow-md ">
-                <div className="w-full h-60 mb-4 bg-gray-200 rounded-xl flex justify-center items-center">
+                <div className="w-full h-60 mb-4 bg-white-100 rounded-xl flex justify-center items-center">
                   <img src={`/src/`} alt={`Producto ${item}`} />
                 </div>
                 <small>Marca</small>
                 <h2 className="text-xl font-semibold mb-2">Producto {item}</h2>
-                <p className="text-gray-600 line-through">
+                <p className="text-bg-200 line-through">
                   ${(item * 120).toFixed(3)}
                 </p>
-                <h3 className="text-gray-600 text-3xl font-bold">
+                <h3 className="text-bg-200 text-3xl font-bold">
                   ${(item * 100).toFixed(3)}{" "}
                   <span className="text-xl">+ iva</span>
                 </h3>

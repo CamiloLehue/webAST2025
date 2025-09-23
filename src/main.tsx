@@ -9,7 +9,7 @@ import About from "./features/about/pages/About";
 import Products from "./features/products/pages/Products";
 import Services from "./features/services/pages/Services";
 import Multimedia from "./features/multimedia/pages/Multimedia";
-import News from "./features/news/pages/News";
+// import News from "./features/news/pages/News";
 import BlogPage from "./features/blog/pages/BlogPage";
 import BlogPostPage from "./features/blog/pages/BlogPostPage";
 import DynamicPage from "./components/DynamicPage";
@@ -32,7 +32,6 @@ createRoot(document.getElementById("root")!).render(
         <BreakpointProvider>
           <BrowserRouter>
             <Routes>
-              {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
                 path="/admin/*"
@@ -52,16 +51,15 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="pages/edit/:id" element={<PageEditor />} />
               </Route>
 
-              {/* Public Routes */}
               <Route element={<LayoutTemplate />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
-                {/* <Route path="/servicios" element={<Services />} /> */}
+                <Route path="/servicios" element={<Services />} />
                 <Route path="/multimedia" element={<Multimedia />} />
-                <Route path="/noticias" element={<News />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
+                {/* <Route path="/noticias" element={<News />} /> */}
+                <Route path="/noticias" element={<BlogPage />} />
+                <Route path="/noticias/:slug" element={<BlogPostPage />} />
                 {/* Dynamic pages route - this should be last to catch all other routes */}
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>

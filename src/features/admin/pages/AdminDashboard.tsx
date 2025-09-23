@@ -43,7 +43,7 @@ const AdminDashboard: React.FC = () => {
       description: "Agregar, editar o eliminar elementos del menú principal",
       icon: FiMenu,
       link: "/admin/menu",
-      color: "bg-indigo-600",
+      color: "bg-accent-100",
     },
     {
       title: "Crear Página",
@@ -64,7 +64,7 @@ const AdminDashboard: React.FC = () => {
       description: "Revisar el sitio web público",
       icon: FiEye,
       link: "/",
-      color: "bg-gray-600",
+      color: "bg-bg-200",
       external: true,
     },
   ];
@@ -91,7 +91,7 @@ const AdminDashboard: React.FC = () => {
     <div className="space-y-6">
       <div>
         <h2 className="text-3xl font-bold text-bg-100">Dashboard</h2>
-        <p className="mt-2 text-gray-600">
+        <p className="mt-2 text-bg-200">
           Gestiona el contenido de tu sitio web desde aquí
         </p>
       </div>
@@ -107,7 +107,7 @@ const AdminDashboard: React.FC = () => {
                 <p className="text-2xl font-semibold text-bg-100">
                   {stat.value}
                 </p>
-                <p className="text-gray-600">{stat.label}</p>
+                <p className="text-bg-200">{stat.label}</p>
               </div>
             </div>
           </div>
@@ -134,18 +134,18 @@ const AdminDashboard: React.FC = () => {
               <h4 className="text-lg font-medium text-bg-100 mb-2">
                 {action.title}
               </h4>
-              <p className="text-gray-600 text-sm">{action.description}</p>
+              <p className="text-bg-200 text-sm">{action.description}</p>
             </Link>
           ))}
         </div>
       </div>
       <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-white-100">
           <h3 className="text-lg font-medium text-bg-100">
             Actividad Reciente
           </h3>
         </div>
-        <div className="divide-y divide-gray-200">
+        <div className="divide-y divide-white-100">
           {recentActivity.map((activity, index) => (
             <div
               key={index}

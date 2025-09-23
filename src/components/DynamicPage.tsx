@@ -51,8 +51,8 @@ const DynamicPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando página...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-100 mx-auto mb-4"></div>
+          <p className="text-bg-200">Cargando página...</p>
         </div>
       </div>
     );
@@ -63,7 +63,7 @@ const DynamicPage: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-bg-400 mb-4">Error</h1>
-          <p className="text-gray-600">{error}</p>
+          <p className="text-bg-200">{error}</p>
         </div>
       </div>
     );
@@ -76,7 +76,7 @@ const DynamicPage: React.FC = () => {
           <h1 className="text-2xl font-bold text-bg-400 mb-4">
             Página no encontrada
           </h1>
-          <p className="text-gray-600">
+          <p className="text-bg-200">
             La página que buscas no existe o no está publicada.
           </p>
         </div>
@@ -238,7 +238,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   return (
     <section
       className={`relative py-24 px-6 sm:py-32 lg:px-8 min-h-[650px] ${
-        backgroundColor || backgroundImage ? "" : "bg-gray-100"
+        backgroundColor || backgroundImage ? "" : "bg-white"
       }`}
       style={{
         backgroundImage: backgroundImageStyle,
@@ -347,7 +347,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
           </h2>
         )}
         <div
-          className={`prose prose-lg mx-auto text-gray-700 ${
+          className={`prose prose-lg mx-auto text-bg-300 ${
             fontSizeClasses[fontSize as keyof typeof fontSizeClasses] ||
             "text-base"
           } ${
@@ -409,7 +409,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
             }`}
           />
           {caption && (
-            <figcaption className="mt-4 text-center text-gray-600 text-sm">
+            <figcaption className="mt-4 text-center text-bg-200 text-sm">
               {caption}
             </figcaption>
           )}
@@ -470,7 +470,7 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
                 className="w-full h-64 object-cover rounded-lg shadow"
               />
               {image.caption && (
-                <figcaption className="mt-2 text-center text-gray-600 text-sm">
+                <figcaption className="mt-2 text-center text-bg-200 text-sm">
                   {image.caption}
                 </figcaption>
               )}
@@ -511,7 +511,7 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-gray-600 mb-8">{description}</p>
+          <p className="text-center text-bg-200 mb-8">{description}</p>
         )}
         <div className="relative rounded-lg overflow-hidden shadow-lg">
           <video
@@ -550,13 +550,13 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-gray-600 mb-8">{description}</p>
+          <p className="text-center text-bg-200 mb-8">{description}</p>
         )}
         <div className="bg-white rounded-lg shadow p-8">
           <form className="space-y-4">
             {fields.map((field) => (
               <div key={field.id}>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-bg-300 mb-1">
                   {field.label}
                   {field.required && (
                     <span className="text-red-500 ml-1">*</span>
@@ -566,10 +566,10 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
                   <textarea
                     placeholder={field.placeholder}
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-100"
                   />
                 ) : field.type === "select" ? (
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-100">
                     <option value="">Selecciona una opción</option>
                     {field.options?.map((option, index) => (
                       <option key={index} value={option}>
@@ -581,14 +581,14 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
                   <input
                     type={field.type}
                     placeholder={field.placeholder}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-100"
                   />
                 )}
               </div>
             ))}
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors"
+              className="w-full bg-accent-100 text-white py-2 px-4 rounded-md hover:bg-accent-200 transition-colors"
             >
               {submitButtonText || "Enviar"}
             </button>
@@ -655,14 +655,14 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                 <div>
                   <h4 className="font-semibold">{testimonial.name}</h4>
                   {testimonial.role && (
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-bg-200 text-sm">
                       {testimonial.role}
                       {testimonial.company && ` at ${testimonial.company}`}
                     </p>
                   )}
                 </div>
               </div>
-              <p className="text-gray-700 mb-4">"{testimonial.content}"</p>
+              <p className="text-bg-300 mb-4">"{testimonial.content}"</p>
               {testimonial.rating && (
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
@@ -727,7 +727,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-gray-600 mb-12">{description}</p>
+          <p className="text-center text-bg-200 mb-12">{description}</p>
         )}
         <div
           className={`${
@@ -764,7 +764,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               )}
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <p className="text-bg-200">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -815,7 +815,7 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
         {buttonText && buttonLink && (
           <a
             href={buttonLink}
-            className="inline-block bg-indigo-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-indigo-700 transition-colors"
+            className="inline-block bg-accent-100 text-white px-8 py-3 rounded-md font-semibold hover:bg-accent-200 transition-colors"
           >
             {buttonText}
           </a>

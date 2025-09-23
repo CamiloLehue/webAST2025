@@ -59,8 +59,8 @@ const PageManagement: React.FC = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="flex items-center space-x-2">
-          <FiLoader className="animate-spin h-5 w-5 text-indigo-600" />
-          <span className="text-gray-600">Cargando páginas...</span>
+          <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
+          <span className="text-bg-200">Cargando páginas...</span>
         </div>
       </div>
     );
@@ -89,16 +89,16 @@ const PageManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-2xl font-bold text-bg-100">
             Gestión de Páginas
           </h2>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-bg-200">
             Administra las páginas personalizadas del sitio web
           </p>
         </div>
         <Link
           to="/admin/pages/new"
-          className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
+          className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
         >
           <FiPlus className="mr-2 h-4 w-4" />
           Nueva Página
@@ -113,7 +113,7 @@ const PageManagement: React.FC = () => {
             placeholder="Buscar páginas..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           />
         </div>
         <div>
@@ -122,7 +122,7 @@ const PageManagement: React.FC = () => {
             onChange={(e) =>
               setStatusFilter(e.target.value as "all" | "published" | "draft")
             }
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           >
             <option value="all">Todas las páginas</option>
             <option value="published">Publicadas</option>
@@ -137,7 +137,7 @@ const PageManagement: React.FC = () => {
           <div className="col-span-full">
             <div className="text-center py-12">
               <div className="mx-auto h-12 w-12 text-gray-400">📄</div>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
+              <h3 className="mt-2 text-sm font-medium text-bg-100">
                 No hay páginas
               </h3>
               <p className="mt-1 text-sm text-gray-500">
@@ -146,7 +146,7 @@ const PageManagement: React.FC = () => {
               <div className="mt-6">
                 <Link
                   to="/admin/pages/new"
-                  className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
+                  className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
                 >
                   <FiPlus className="mr-2 h-4 w-4" />
                   Nueva Página
@@ -161,7 +161,7 @@ const PageManagement: React.FC = () => {
               className="bg-white rounded-lg shadow overflow-hidden"
             >
               {/* Page Preview */}
-              <div className="aspect-video bg-gray-100 flex items-center justify-center">
+              <div className="aspect-video bg-white flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-4xl mb-2">📄</div>
                   <p className="text-sm text-gray-500">Vista previa</p>
@@ -171,7 +171,7 @@ const PageManagement: React.FC = () => {
               {/* Page Info */}
               <div className="p-6">
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-medium text-gray-900 truncate">
+                  <h3 className="text-lg font-medium text-bg-100 truncate">
                     {page.title}
                   </h3>
                   <span
@@ -186,7 +186,7 @@ const PageManagement: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600 flex items-center">
+                  <p className="text-sm text-bg-200 flex items-center">
                     <FiCopy className="mr-1 h-3 w-3" />/{page.slug}
                   </p>
                   <p className="text-xs text-gray-500 mt-1">
@@ -195,7 +195,7 @@ const PageManagement: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-bg-200">
                     {page.content.length} bloques de contenido
                   </p>
                   <p className="text-xs text-gray-500">
@@ -208,7 +208,7 @@ const PageManagement: React.FC = () => {
                   <Link
                     to={`/${page.slug}`}
                     target="_blank"
-                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                    className="text-accent-100 hover:text-accent-200 text-sm font-medium"
                   >
                     Ver página
                   </Link>
@@ -216,7 +216,7 @@ const PageManagement: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Link
                       to={`/admin/pages/edit/${page.id}`}
-                      className="p-2 text-gray-400 hover:text-gray-600"
+                      className="p-2 text-gray-400 hover:text-bg-200"
                       title="Editar página"
                     >
                       <FiEdit2 className="h-4 w-4" />
@@ -238,34 +238,34 @@ const PageManagement: React.FC = () => {
 
       {/* Quick Templates */}
       <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <h3 className="text-lg font-medium text-bg-100 mb-4">
           Plantillas Rápidas
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/admin/pages/new?template=landing-page"
-            className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
-            <h4 className="font-medium text-gray-900">Página de Aterrizaje</h4>
-            <p className="text-sm text-gray-600 mt-1">
+            <h4 className="font-medium text-bg-100">Página de Aterrizaje</h4>
+            <p className="text-sm text-bg-200 mt-1">
               Hero, características y call-to-action
             </p>
           </Link>
           <Link
             to="/admin/pages/new?template=about-page"
-            className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
-            <h4 className="font-medium text-gray-900">Sobre Nosotros</h4>
-            <p className="text-sm text-gray-600 mt-1">
+            <h4 className="font-medium text-bg-100">Sobre Nosotros</h4>
+            <p className="text-sm text-bg-200 mt-1">
               Historia, equipo y valores
             </p>
           </Link>
           <Link
             to="/admin/pages/new?template=contact-page"
-            className="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
           >
-            <h4 className="font-medium text-gray-900">Contacto</h4>
-            <p className="text-sm text-gray-600 mt-1">
+            <h4 className="font-medium text-bg-100">Contacto</h4>
+            <p className="text-sm text-bg-200 mt-1">
               Formulario y información de contacto
             </p>
           </Link>

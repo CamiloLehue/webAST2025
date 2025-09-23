@@ -49,14 +49,14 @@ const BlogManagement: React.FC = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Gestión de Blog</h2>
-          <p className="mt-1 text-gray-600">
+          <h2 className="text-2xl font-bold text-bg-100">Gestión de Blog</h2>
+          <p className="mt-1 text-bg-200">
             Administra los posts y contenido del blog
           </p>
         </div>
         <Link
           to="/admin/blog/new"
-          className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
+          className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
         >
           <FiPlus className="mr-2 h-4 w-4" />
           Nuevo Post
@@ -78,11 +78,11 @@ const BlogManagement: React.FC = () => {
       {loading ? (
         <div className="bg-white rounded-lg shadow p-6">
           <div className="animate-pulse">
-            <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-white-100 rounded w-1/4 mb-4"></div>
             <div className="space-y-3">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-              <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              <div className="h-4 bg-white-100 rounded"></div>
+              <div className="h-4 bg-white-100 rounded w-5/6"></div>
+              <div className="h-4 bg-white-100 rounded w-4/6"></div>
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@ const BlogManagement: React.FC = () => {
                 placeholder="Buscar posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               />
             </div>
             <div>
@@ -107,7 +107,7 @@ const BlogManagement: React.FC = () => {
                     e.target.value as "all" | "published" | "draft"
                   )
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="all">Todos los posts</option>
                 <option value="published">Publicados</option>
@@ -121,7 +121,7 @@ const BlogManagement: React.FC = () => {
             {filteredPosts.length === 0 ? (
               <div className="p-12 text-center">
                 <FiFileText className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-gray-900">
+                <h3 className="mt-2 text-sm font-medium text-bg-100">
                   No hay posts
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
@@ -130,7 +130,7 @@ const BlogManagement: React.FC = () => {
                 <div className="mt-6">
                   <Link
                     to="/admin/blog/new"
-                    className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-md hover:bg-indigo-700"
+                    className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
                   >
                     <FiPlus className="mr-2 h-4 w-4" />
                     Nuevo Post
@@ -138,13 +138,13 @@ const BlogManagement: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="divide-y divide-gray-200">
+              <div className="divide-y divide-white-100">
                 {filteredPosts.map((post) => (
                   <div key={post.id} className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="text-lg font-medium text-gray-900">
+                          <h3 className="text-lg font-medium text-bg-100">
                             {post.title}
                           </h3>
                           <span
@@ -158,7 +158,7 @@ const BlogManagement: React.FC = () => {
                           </span>
                         </div>
 
-                        <p className="text-gray-600 mb-3 line-clamp-2">
+                        <p className="text-bg-200 mb-3 line-clamp-2">
                           {post.excerpt}
                         </p>
 
@@ -171,7 +171,7 @@ const BlogManagement: React.FC = () => {
                             <FiCalendar className="mr-1 h-4 w-4" />
                             {formatDate(post.createdAt)}
                           </div>
-                          <span className="px-2 py-1 bg-gray-100 text-gray-800 rounded">
+                          <span className="px-2 py-1 bg-white text-gray-800 rounded">
                             {post.category}
                           </span>
                         </div>
@@ -194,14 +194,14 @@ const BlogManagement: React.FC = () => {
                         <Link
                           to={`/blog/${post.slug}`}
                           target="_blank"
-                          className="p-2 text-gray-400 hover:text-gray-600"
+                          className="p-2 text-gray-400 hover:text-bg-200"
                           title="Ver post"
                         >
                           <FiEye className="h-4 w-4" />
                         </Link>
                         <Link
                           to={`/admin/blog/edit/${post.id}`}
-                          className="p-2 text-gray-400 hover:text-gray-600"
+                          className="p-2 text-gray-400 hover:text-bg-200"
                           title="Editar post"
                         >
                           <FiEdit2 className="h-4 w-4" />
