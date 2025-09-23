@@ -155,7 +155,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
           <h2 className="text-xl font-semibold">Vista Previa</h2>
           <button
             onClick={() => setIsPreview(false)}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-bg-300"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -173,7 +173,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
             
             <h1>{formData.title}</h1>
             
-            <div className="text-sm text-gray-600 mb-4">
+            <div className="text-sm text-bg-200 mb-4">
               Por {formData.author} • {formData.category}
             </div>
             
@@ -190,7 +190,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
               </div>
             )}
             
-            <div className="text-lg text-gray-700 mb-6 italic">
+            <div className="text-lg text-bg-300 mb-6 italic">
               {formData.excerpt}
             </div>
             
@@ -239,7 +239,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
           
           <button
             onClick={onCancel}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-bg-300"
           >
             <FiX className="w-5 h-5" />
           </button>
@@ -249,7 +249,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
       <div className="p-6 space-y-6">
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             Título *
           </label>
           <input
@@ -268,7 +268,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
         {/* Slug */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             Slug *
           </label>
           <input
@@ -288,7 +288,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         {/* Author and Category */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Autor *
             </label>
             <input
@@ -306,7 +306,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-bg-300 mb-2">
               Categoría *
             </label>
             <select
@@ -331,7 +331,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
         {/* Featured Image */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             <FiImage className="inline w-4 h-4 mr-1" />
             Imagen Destacada
           </label>
@@ -346,7 +346,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
         {/* Tags */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             <FiTag className="inline w-4 h-4 mr-1" />
             Etiquetas
           </label>
@@ -362,7 +362,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
             <button
               type="button"
               onClick={addTag}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+              className="px-4 py-2 bg-white text-bg-300 rounded-lg hover:bg-white-100"
             >
               Agregar
             </button>
@@ -389,7 +389,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
         {/* Excerpt */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             Resumen *
           </label>
           <textarea
@@ -408,7 +408,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
         {/* Content */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             Contenido *
           </label>
           <textarea

@@ -215,8 +215,8 @@ const PageEditor: React.FC = () => {
     return (
       <div className="flex justify-center items-center h-64">
         <div className="flex items-center space-x-2">
-          <FiLoader className="animate-spin h-5 w-5 text-indigo-600" />
-          <span className="text-gray-600">Cargando...</span>
+          <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
+          <span className="text-bg-200">Cargando...</span>
         </div>
       </div>
     );
@@ -244,16 +244,16 @@ const PageEditor: React.FC = () => {
         <div className="flex items-center space-x-4">
           <button
             onClick={() => navigate("/admin/pages")}
-            className="p-2 text-gray-400 hover:text-gray-600"
+            className="p-2 text-gray-400 hover:text-bg-200"
           >
             <FiArrowLeft className="h-5 w-5" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-bg-100">
               {isEditing ? "Editar Página" : "Nueva Página"}
             </h1>
             {template && (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-bg-200">
                 Usando plantilla: {template}
               </p>
             )}
@@ -264,7 +264,7 @@ const PageEditor: React.FC = () => {
           <button
             onClick={handlePreview}
             disabled={!formData.slug}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 rounded-md disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-bg-300 bg-white hover:bg-gray-50 rounded-md disabled:opacity-50"
           >
             <FiEye className="mr-2 h-4 w-4" />
             Vista Previa
@@ -273,7 +273,7 @@ const PageEditor: React.FC = () => {
           <button
             onClick={handleSave}
             disabled={isSaving || !!slugError}
-            className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50"
+            className="inline-flex items-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50"
           >
             {isSaving ? (
               <FiLoader className="animate-spin mr-2 h-4 w-4" />
@@ -292,7 +292,7 @@ const PageEditor: React.FC = () => {
           <div>
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-bg-300"
             >
               Título *
             </label>
@@ -301,7 +301,7 @@ const PageEditor: React.FC = () => {
               id="title"
               value={formData.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Ingresa el título de la página"
             />
           </div>
@@ -309,7 +309,7 @@ const PageEditor: React.FC = () => {
           <div>
             <label
               htmlFor="slug"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-bg-300"
             >
               Slug (URL) *
             </label>
@@ -322,7 +322,7 @@ const PageEditor: React.FC = () => {
                 id="slug"
                 value={formData.slug}
                 onChange={(e) => handleSlugChange(e.target.value)}
-                className={`flex-1 block w-full px-3 py-2 border rounded-none rounded-r-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 ${
+                className={`flex-1 block w-full px-3 py-2 border rounded-none rounded-r-md focus:outline-none focus:ring-accent-100 focus:border-accent-100 ${
                   slugError ? "border-red-300" : "border-gray-300"
                 }`}
                 placeholder="url-de-la-pagina"
@@ -336,7 +336,7 @@ const PageEditor: React.FC = () => {
           <div>
             <label
               htmlFor="metaTitle"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-bg-300"
             >
               Meta Título (SEO)
             </label>
@@ -347,7 +347,7 @@ const PageEditor: React.FC = () => {
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, metaTitle: e.target.value }))
               }
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título para SEO (opcional)"
             />
           </div>
@@ -355,7 +355,7 @@ const PageEditor: React.FC = () => {
           <div>
             <label
               htmlFor="metaDescription"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-bg-300"
             >
               Meta Descripción (SEO)
             </label>
@@ -369,7 +369,7 @@ const PageEditor: React.FC = () => {
                   metaDescription: e.target.value,
                 }))
               }
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción para SEO (opcional)"
             />
           </div>
@@ -385,11 +385,11 @@ const PageEditor: React.FC = () => {
                   isPublished: e.target.checked,
                 }))
               }
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
             />
             <label
               htmlFor="isPublished"
-              className="ml-2 block text-sm text-gray-900"
+              className="ml-2 block text-sm text-bg-100"
             >
               Publicar página
             </label>
@@ -399,7 +399,7 @@ const PageEditor: React.FC = () => {
         {/* Content Sections */}
         <div className="border-t pt-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-bg-100">
               Contenido de la Página
             </h3>
             <div className="text-sm text-gray-500">
@@ -409,7 +409,7 @@ const PageEditor: React.FC = () => {
 
           {/* Add Content Section Buttons */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium text-gray-700 mb-3">
+            <h4 className="text-sm font-medium text-bg-300 mb-3">
               Agregar Sección
             </h4>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
@@ -432,7 +432,7 @@ const PageEditor: React.FC = () => {
           {formData.content.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
               <div className="mx-auto h-12 w-12 text-gray-400 text-4xl">📄</div>
-              <h3 className="mt-2 text-sm font-medium text-gray-900">
+              <h3 className="mt-2 text-sm font-medium text-bg-100">
                 No hay contenido
               </h3>
               <p className="mt-1 text-sm text-gray-500">
@@ -639,10 +639,10 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
   };
 
   return (
-    <div className="border border-gray-200 rounded-lg">
-      <div className="flex items-center justify-between p-4 bg-gray-50 border-b border-gray-200">
+    <div className="border border-white-100 rounded-lg">
+      <div className="flex items-center justify-between p-4 bg-gray-50 border-b border-white-100">
         <div className="flex items-center space-x-3">
-          <span className="font-medium text-gray-900">
+          <span className="font-medium text-bg-100">
             Sección {index + 1}:{" "}
             {sectionTypeNames[section.type] || section.type}
           </span>
@@ -651,7 +651,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
           <button
             onClick={() => onMove("up")}
             disabled={index === 0}
-            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-50"
+            className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-50"
             title="Mover arriba"
           >
             <FiMove className="h-4 w-4 transform rotate-180" />
@@ -659,7 +659,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
           <button
             onClick={() => onMove("down")}
             disabled={index === totalSections - 1}
-            className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-50"
+            className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-50"
             title="Mover abajo"
           >
             <FiMove className="h-4 w-4" />
@@ -676,8 +676,8 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
 
       <div className="p-4 space-y-4">
         {/* Grid Width Control */}
-        <div className="border-b border-gray-100 pb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+        <div className="border-b border-white pb-4">
+          <label className="block text-sm font-medium text-bg-300 mb-2">
             Ancho en Grid (columnas de 12)
           </label>
           <select
@@ -692,7 +692,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
                 onUpdate(updatedSection);
               }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           >
             <option value={12}>12 columnas (ancho completo)</option>
             <option value={6}>6 columnas (mitad)</option>
@@ -737,99 +737,99 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título del hero"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Subtítulo
             </label>
             <textarea
               rows={2}
               value={data.subtitle || ""}
               onChange={(e) => updateField("subtitle", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Subtítulo del hero"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Imagen de Fondo
             </label>
             <input
               type="text"
               value={data.backgroundImage || ""}
               onChange={(e) => updateField("backgroundImage", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="URL de la imagen de fondo"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Color de Fondo
             </label>
             <input
               type="text"
               value={data.backgroundColor || ""}
               onChange={(e) => updateField("backgroundColor", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Color de fondo (ej: #ff0000, red)"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Color del Texto
             </label>
             <input
               type="text"
               value={data.textColor || ""}
               onChange={(e) => updateField("textColor", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Color del texto (ej: #ffffff, white)"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Texto del Botón
               </label>
               <input
                 type="text"
                 value={data.buttonText || ""}
                 onChange={(e) => updateField("buttonText", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="Texto del botón"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Enlace del Botón
               </label>
               <input
                 type="text"
                 value={data.buttonLink || ""}
                 onChange={(e) => updateField("buttonLink", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="/ruta-del-enlace"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Alineación
             </label>
             <select
               value={data.alignment || "center"}
               onChange={(e) => updateField("alignment", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             >
               <option value="left">Izquierda</option>
               <option value="center">Centro</option>
@@ -843,38 +843,38 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título (Opcional)
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título de la sección"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Contenido
             </label>
             <textarea
               rows={6}
               value={data.content || ""}
               onChange={(e) => updateField("content", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Escribe el contenido aquí..."
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Alineación
               </label>
               <select
                 value={data.alignment || "left"}
                 onChange={(e) => updateField("alignment", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="left">Izquierda</option>
                 <option value="center">Centro</option>
@@ -882,13 +882,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Tamaño de Fuente
               </label>
               <select
                 value={data.fontSize || "medium"}
                 onChange={(e) => updateField("fontSize", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="small">Pequeño</option>
                 <option value="medium">Mediano</option>
@@ -896,13 +896,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Espaciado
               </label>
               <select
                 value={data.padding || "medium"}
                 onChange={(e) => updateField("padding", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="small">Pequeño</option>
                 <option value="medium">Mediano</option>
@@ -911,14 +911,14 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Color de Fondo
             </label>
             <input
               type="text"
               value={data.backgroundColor || ""}
               onChange={(e) => updateField("backgroundColor", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Color de fondo (ej: #f5f5f5, transparent)"
             />
           </div>
@@ -929,50 +929,50 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               URL de la Imagen
             </label>
             <input
               type="url"
               value={data.src || ""}
               onChange={(e) => updateField("src", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="https://ejemplo.com/imagen.jpg"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Texto Alternativo
             </label>
             <input
               type="text"
               value={data.alt || ""}
               onChange={(e) => updateField("alt", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción de la imagen"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Pie de Imagen (Opcional)
             </label>
             <input
               type="text"
               value={data.caption || ""}
               onChange={(e) => updateField("caption", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Pie de imagen"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Tamaño
               </label>
               <select
                 value={data.width || "medium"}
                 onChange={(e) => updateField("width", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="small">Pequeño</option>
                 <option value="medium">Mediano</option>
@@ -981,13 +981,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Alineación
               </label>
               <select
                 value={data.alignment || "center"}
                 onChange={(e) => updateField("alignment", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="left">Izquierda</option>
                 <option value="center">Centro</option>
@@ -1001,11 +1001,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               type="checkbox"
               checked={data.rounded || false}
               onChange={(e) => updateField("rounded", e.target.checked)}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
             />
             <label
               htmlFor={`rounded-${data.id}`}
-              className="ml-2 block text-sm text-gray-900"
+              className="ml-2 block text-sm text-bg-100"
             >
               Bordes redondeados
             </label>
@@ -1017,63 +1017,63 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título del call to action"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
             <textarea
               rows={3}
               value={data.description || ""}
               onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción del call to action"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Texto del Botón
               </label>
               <input
                 type="text"
                 value={data.buttonText || ""}
                 onChange={(e) => updateField("buttonText", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="Texto del botón"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Enlace del Botón
               </label>
               <input
                 type="text"
                 value={data.buttonLink || ""}
                 onChange={(e) => updateField("buttonLink", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="/ruta-del-enlace"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Alineación
             </label>
             <select
               value={data.alignment || "center"}
               onChange={(e) => updateField("alignment", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             >
               <option value="left">Izquierda</option>
               <option value="center">Centro</option>
@@ -1087,50 +1087,50 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               URL del Video
             </label>
             <input
               type="url"
               value={data.src || ""}
               onChange={(e) => updateField("src", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="https://ejemplo.com/video.mp4"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título (Opcional)
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título del video"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Descripción (Opcional)
             </label>
             <textarea
               rows={3}
               value={data.description || ""}
               onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción del video"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Tamaño
               </label>
               <select
                 value={data.width || "medium"}
                 onChange={(e) => updateField("width", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="small">Pequeño</option>
                 <option value="medium">Mediano</option>
@@ -1145,9 +1145,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   type="checkbox"
                   checked={data.autoplay || false}
                   onChange={(e) => updateField("autoplay", e.target.checked)}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
                 />
-                <label htmlFor="autoplay" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="autoplay" className="ml-2 block text-sm text-bg-100">
                   Reproducción automática
                 </label>
               </div>
@@ -1157,9 +1157,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   type="checkbox"
                   checked={data.controls !== false}
                   onChange={(e) => updateField("controls", e.target.checked)}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
                 />
-                <label htmlFor="controls" className="ml-2 block text-sm text-gray-900">
+                <label htmlFor="controls" className="ml-2 block text-sm text-bg-100">
                   Mostrar controles
                 </label>
               </div>
@@ -1173,13 +1173,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Columnas
               </label>
               <select
                 value={data.columns || 3}
                 onChange={(e) => updateField("columns", parseInt(e.target.value))}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value={2}>2 columnas</option>
                 <option value={3}>3 columnas</option>
@@ -1187,13 +1187,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Espaciado
               </label>
               <select
                 value={data.spacing || "medium"}
                 onChange={(e) => updateField("spacing", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="small">Pequeño</option>
                 <option value="medium">Mediano</option>
@@ -1202,12 +1202,12 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Imágenes
             </label>
             <div className="mt-2 space-y-2">
               {(data.images || []).map((image: any, index: number) => (
-                <div key={index} className="flex space-x-2 items-center p-3 border border-gray-200 rounded-md">
+                <div key={index} className="flex space-x-2 items-center p-3 border border-white-100 rounded-md">
                   <input
                     type="url"
                     value={image.src || ""}
@@ -1248,7 +1248,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   const newImages = [...(data.images || []), { src: "", alt: "", caption: "" }];
                   updateField("images", newImages);
                 }}
-                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-gray-400"
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
               >
                 + Agregar imagen
               </button>
@@ -1261,48 +1261,48 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título del formulario"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
             <textarea
               rows={3}
               value={data.description || ""}
               onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción del formulario"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Texto del Botón
             </label>
             <input
               type="text"
               value={data.submitButtonText || ""}
               onChange={(e) => updateField("submitButtonText", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Enviar"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Campos del formulario
             </label>
             <div className="mt-2 space-y-2">
               {(data.fields || []).map((field: any, index: number) => (
-                <div key={index} className="p-3 border border-gray-200 rounded-md">
+                <div key={index} className="p-3 border border-white-100 rounded-md">
                   <div className="grid grid-cols-3 gap-2 mb-2">
                     <input
                       type="text"
@@ -1340,7 +1340,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                             newFields[index] = { ...field, required: e.target.checked };
                             updateField("fields", newFields);
                           }}
-                          className="h-3 w-3 text-indigo-600"
+                          className="h-3 w-3 text-accent-100"
                         />
                         <span className="ml-1">Requerido</span>
                       </label>
@@ -1369,7 +1369,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   }];
                   updateField("fields", newFields);
                 }}
-                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-gray-600 hover:border-gray-400"
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
               >
                 + Agregar campo
               </button>
@@ -1382,32 +1382,32 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título de la sección"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Layout
             </label>
             <select
               value={data.layout || "grid"}
               onChange={(e) => updateField("layout", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             >
               <option value="grid">Grid</option>
               <option value="carousel">Carousel</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Testimonios
             </label>
             <p className="text-sm text-gray-500 mb-2">
@@ -1435,51 +1435,51 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Título
             </label>
             <input
               type="text"
               value={data.title || ""}
               onChange={(e) => updateField("title", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título de la sección"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
             <textarea
               rows={3}
               value={data.description || ""}
               onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Descripción de la sección"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Layout
               </label>
               <select
                 value={data.layout || "grid"}
                 onChange={(e) => updateField("layout", e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="grid">Grid</option>
                 <option value="list">Lista</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-bg-300">
                 Columnas
               </label>
               <select
                 value={data.columns || 3}
                 onChange={(e) => updateField("columns", parseInt(e.target.value))}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value={2}>2 columnas</option>
                 <option value={3}>3 columnas</option>
@@ -1488,7 +1488,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Características
             </label>
             <p className="text-sm text-gray-500 mb-2">
@@ -1516,13 +1516,13 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
       return (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-bg-300">
               Altura del Espaciador
             </label>
             <select
               value={data.height || "medium"}
               onChange={(e) => updateField("height", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             >
               <option value="small">Pequeño (2rem)</option>
               <option value="medium">Mediano (4rem)</option>

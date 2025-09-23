@@ -34,16 +34,16 @@ const BlogPostPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl font-bold text-bg-100 mb-4">
             Error al cargar el post
           </h1>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <p className="text-bg-200 mb-6">{error}</p>
           <Link
-            to="/blog"
+            to="/noticias"
             className="inline-flex items-center text-primary-600 hover:text-primary-700"
           >
             <FiArrowLeft className="mr-2 h-4 w-4" />
-            Volver al blog
+            Volver a las noticias
           </Link>
         </div>
       </div>
@@ -54,18 +54,18 @@ const BlogPostPage: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+          <h1 className="text-2xl font-bold text-bg-100 mb-4">
             Post no encontrado
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-bg-200 mb-6">
             El artículo que buscas no existe o no está publicado.
           </p>
           <Link
-            to="/blog"
-            className="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium"
+            to="/noticias"
+            className="inline-flex items-center text-accent-100 hover:text-accent-200 font-medium"
           >
             <FiArrowLeft className="mr-2 h-4 w-4" />
-            Volver al blog
+            Volver a las noticias
           </Link>
         </div>
       </div>
@@ -84,15 +84,15 @@ const BlogPostPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-white-100">
-      {/* Back to blog */}
+      {/* Back to noticias */}
       <div className=" ">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="max-w-4xl mx-auto  py-4">
           <Link
-            to="/blog"
-            className="inline-flex items-center text-primary-100 hover:text-bg-400 font-medium bg-bg-300/10 px-5 rounded-full py-1 transition-colors duration-300"
+            to="/noticias"
+            className="inline-flex items-center text-sm text-primary-100 border border-white font-medium bg-white hover:border-primary-100 px-2 rounded py-1 transition-colors duration-300"
           >
             <FiArrowLeft className="mr-2 h-4 w-4" />
-            Volver a Noticias
+            Volver
           </Link>
         </div>
       </div>
@@ -121,18 +121,16 @@ const BlogPostPage: React.FC = () => {
               {post.author}
             </div>
             {post.category && (
-              <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-medium">
+              <span className="px-3 py-1 bg-white text-accent-200 rounded-full text-xs font-medium">
                 {post.category}
               </span>
             )}
           </div>
 
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {post.title}
-          </h1>
+          <h1 className="text-4xl font-bold text-bg-100 mb-4">{post.title}</h1>
 
           {post.excerpt && (
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-xl text-bg-200 leading-relaxed">
               {post.excerpt}
             </p>
           )}
@@ -144,7 +142,7 @@ const BlogPostPage: React.FC = () => {
             if (paragraph.trim() === "") return <br key={index} />;
 
             return (
-              <p key={index} className="mb-4 text-gray-700 leading-relaxed">
+              <p key={index} className="mb-4 text-bg-300 leading-relaxed">
                 {paragraph}
               </p>
             );
@@ -153,15 +151,13 @@ const BlogPostPage: React.FC = () => {
 
         {/* Tags */}
         {post.tags.length > 0 && (
-          <div className="mt-12 pt-8 border-t border-white-100">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">
-              Etiquetas:
-            </h3>
+          <div className="mt-12 pt-8 border-t border-bg-300/10">
+            <h3 className="text-sm font-medium text-bg-300 mb-3">Etiquetas:</h3>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-block px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                  className="inline-block px-3 py-1 text-sm bg-white-100 text-bg-300 rounded"
                 >
                   #{tag}
                 </span>
@@ -171,19 +167,19 @@ const BlogPostPage: React.FC = () => {
         )}
 
         {/* Post Footer */}
-        <footer className="mt-12 pt-8 border-t border-white-100">
-          <div className="bg-gray-50 rounded-lg p-6">
+        <footer className="mt-12 pt-8 border-t border-bg-300/10">
+          <div className="bg-white-100 rounded-lg p-6">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                  <FiUser className="h-6 w-6 text-indigo-600" />
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                  <FiUser className="h-6 w-6 text-primary-100" />
                 </div>
               </div>
               <div className="ml-4">
-                <h4 className="text-lg font-medium text-gray-900">
+                <h4 className="text-lg font-medium text-bg-100">
                   {post.author}
                 </h4>
-                <p className="text-gray-600">Autor de este artículo</p>
+                <p className="text-bg-200">Autor de este artículo</p>
               </div>
             </div>
           </div>
@@ -194,10 +190,10 @@ const BlogPostPage: React.FC = () => {
           <div className="flex justify-between items-center">
             <div className="text-center">
               <Link
-                to="/blog"
-                className="inline-flex items-center px-6 py-3 border border-bg-300/20 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-primary-100/10 transition-colors"
+                to="/noticias"
+                className="inline-flex items-center text-xs px-3 py-3 hover:text-primary-100 hover:border-bg-300/10 border border-bg-300/20  font-medium rounded-md text-bg-300 bg-white  transition-colors"
               >
-                Ver todos las noticias
+                Ver todas las noticias
               </Link>
             </div>
           </div>

@@ -45,12 +45,12 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
           <div key={index} className="bg-white rounded-lg shadow-sm p-6 animate-pulse">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-                <div className="h-20 bg-gray-200 rounded w-full"></div>
+                <div className="h-6 bg-white-100 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-white-100 rounded w-1/2 mb-4"></div>
+                <div className="h-20 bg-white-100 rounded w-full"></div>
               </div>
               <div className="ml-4">
-                <div className="h-20 w-32 bg-gray-200 rounded"></div>
+                <div className="h-20 w-32 bg-white-100 rounded"></div>
               </div>
             </div>
           </div>
@@ -63,7 +63,7 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
     return (
       <div className="text-center py-12">
         <div className="text-gray-400 text-6xl mb-4">📝</div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No hay posts disponibles</h3>
+        <h3 className="text-lg font-medium text-bg-100 mb-2">No hay posts disponibles</h3>
         <p className="text-gray-500">Comienza creando tu primer post del blog.</p>
       </div>
     );
@@ -95,12 +95,12 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
                 </div>
 
                 {/* Title */}
-                <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+                <h3 className="text-xl font-semibold text-bg-100 mb-2 line-clamp-2">
                   {post.title}
                 </h3>
 
                 {/* Excerpt */}
-                <p className="text-gray-600 mb-4 line-clamp-3">
+                <p className="text-bg-200 mb-4 line-clamp-3">
                   {post.excerpt}
                 </p>
 
@@ -137,7 +137,7 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
                       </span>
                     ))}
                     {post.tags.length > 4 && (
-                      <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+                      <span className="px-2 py-1 bg-white text-bg-200 text-xs rounded-full">
                         +{post.tags.length - 4} más
                       </span>
                     )}
@@ -158,7 +158,7 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
                   
                   <button
                     onClick={() => onEdit(post)}
-                    className="inline-flex items-center text-sm text-gray-600 hover:text-gray-800"
+                    className="inline-flex items-center text-sm text-bg-200 hover:text-gray-800"
                   >
                     <FiEdit2 className="w-4 h-4 mr-1" />
                     Editar
@@ -177,7 +177,7 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
               {/* Featured Image */}
               {post.featuredImage && (
                 <div className="ml-6 flex-shrink-0">
-                  <div className="w-32 h-24 rounded-lg overflow-hidden bg-gray-100">
+                  <div className="w-32 h-24 rounded-lg overflow-hidden bg-white">
                     <img
                       src={post.featuredImage}
                       alt={post.title}
@@ -193,7 +193,7 @@ export const BlogPostList: React.FC<BlogPostListProps> = ({
               
               {!post.featuredImage && (
                 <div className="ml-6 flex-shrink-0">
-                  <div className="w-32 h-24 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <div className="w-32 h-24 rounded-lg bg-white flex items-center justify-center">
                     <FiImage className="w-8 h-8 text-gray-400" />
                   </div>
                 </div>

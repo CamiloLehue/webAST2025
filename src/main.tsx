@@ -9,7 +9,7 @@ import About from "./features/about/pages/About";
 import Products from "./features/products/pages/Products";
 import Services from "./features/services/pages/Services";
 import Multimedia from "./features/multimedia/pages/Multimedia";
-import News from "./features/news/pages/News";
+// import News from "./features/news/pages/News";
 import BlogPage from "./features/blog/pages/BlogPage";
 import BlogPostPage from "./features/blog/pages/BlogPostPage";
 import DynamicPage from "./components/DynamicPage";
@@ -24,6 +24,13 @@ import PageEditor from "./features/admin/pages/PageEditor";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
+import Wisensor from "./features/services/pages/Wisensor";
+import Datacenter from "./features/services/pages/Datacenter";
+import Seguridad from "./features/services/pages/Seguridad";
+import EnergiaRenovable from "./features/services/pages/EnergiaRenovable";
+import Satelital from "./features/services/pages/Satelital";
+import Wireless from "./features/services/pages/Wireless";
+import WisensorIa from "./features/services/pages/WisensorIa";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -32,7 +39,6 @@ createRoot(document.getElementById("root")!).render(
         <BreakpointProvider>
           <BrowserRouter>
             <Routes>
-              {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
                 path="/admin/*"
@@ -52,16 +58,26 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="pages/edit/:id" element={<PageEditor />} />
               </Route>
 
-              {/* Public Routes */}
               <Route element={<LayoutTemplate />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
-                {/* <Route path="/servicios" element={<Services />} /> */}
+                <Route path="/datacenter" element={<Datacenter />} />
+                <Route
+                  path="/energia-renovable"
+                  element={<EnergiaRenovable />}
+                />
+                <Route path="/satelital" element={<Satelital />} />
+                <Route path="/seguridad" element={<Seguridad />} />
+                <Route path="/servicios" element={<Services />} />
+                <Route path="/wireless" element={<Wireless />} />
+                <Route path="/wisensor" element={<Wisensor />} />
+                <Route path="/wisensor-ia" element={<WisensorIa />} />
                 <Route path="/multimedia" element={<Multimedia />} />
-                <Route path="/noticias" element={<News />} />
-                <Route path="/blog" element={<BlogPage />} />
-                <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+                {/* <Route path="/noticias" element={<News />} /> */}
+                <Route path="/noticias" element={<BlogPage />} />
+                <Route path="/noticias/:slug" element={<BlogPostPage />} />
                 {/* Dynamic pages route - this should be last to catch all other routes */}
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>
