@@ -24,6 +24,7 @@ import PageEditor from "./features/admin/pages/PageEditor";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
+import Wisensor from "./features/services/pages/Wisensor";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -56,6 +57,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
                 <Route path="/servicios" element={<Services />} />
+                <Route path="/wisensor" element={<Wisensor />} />
                 <Route path="/multimedia" element={<Multimedia />} />
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
