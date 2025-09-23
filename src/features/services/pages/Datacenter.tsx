@@ -2,7 +2,7 @@ import { FiArrowRight } from "react-icons/fi";
 import { TbChevronDown, TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import { Link } from "react-router";
 
-function Wisensor() {
+function Datacenter() {
   return (
     <div className="w-full min-h-screen">
       <section className=" bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100 ">
@@ -10,7 +10,7 @@ function Wisensor() {
           <div className="col-span-2 w-full h-full flex justify-center  items-center">
             <article className="flex flex-col items-end justify-center w-full">
               <div className="max-w-2xl h-full flex flex-col gap-5">
-                <h2 className="text-white text-5xl font-bold">Wisensor</h2>
+                <h2 className="text-white text-5xl font-bold">Datacenter</h2>
                 <p className="text-white-100 text-lg">
                   Wisensor es una plataforma desarrollada por AST con el
                   objetivo de integrar diversos datos relevantes de la industria
@@ -331,4 +331,4 @@ function Wisensor() {
   );
 }
 
-export default Wisensor;
+export default Datacenter;

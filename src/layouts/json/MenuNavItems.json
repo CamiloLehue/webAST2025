@@ -28,7 +28,7 @@
     "title": "Productos",
     "path": "/productos",
     "external": false,
-    "disabled": false,
+    "disabled": true,
     "order": 3
   },
   {
