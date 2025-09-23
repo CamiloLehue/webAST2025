@@ -60,6 +60,10 @@
         "path": "/wireless"
       },
       {
+        "title": "Wisensor",
+        "path": "/wisensor"
+      },
+      {
         "title": "Wisensor IA",
         "path": "/wisensor-ia"
       }

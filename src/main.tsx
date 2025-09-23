@@ -26,6 +26,11 @@ import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
 import Wisensor from "./features/services/pages/Wisensor";
 import Datacenter from "./features/services/pages/Datacenter";
+import Seguridad from "./features/services/pages/Seguridad";
+import EnergiaRenovable from "./features/services/pages/EnergiaRenovable";
+import Satelital from "./features/services/pages/Satelital";
+import Wireless from "./features/services/pages/Wireless";
+import WisensorIa from "./features/services/pages/WisensorIa";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -57,10 +62,19 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/" element={<Home />} />
                 <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
-                <Route path="/servicios" element={<Services />} />
-                <Route path="/wisensor" element={<Wisensor />} />
                 <Route path="/datacenter" element={<Datacenter />} />
+                <Route
+                  path="/energia-renovable"
+                  element={<EnergiaRenovable />}
+                />
+                <Route path="/satelital" element={<Satelital />} />
+                <Route path="/seguridad" element={<Seguridad />} />
+                <Route path="/servicios" element={<Services />} />
+                <Route path="/wireless" element={<Wireless />} />
+                <Route path="/wisensor" element={<Wisensor />} />
+                <Route path="/wisensor-ia" element={<WisensorIa />} />
                 <Route path="/multimedia" element={<Multimedia />} />
+
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
                 <Route path="/noticias/:slug" element={<BlogPostPage />} />
