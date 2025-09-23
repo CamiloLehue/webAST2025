@@ -131,7 +131,7 @@ function Services() {
             </ul>
           </nav>
         </div>
-        <div className="w-full max-w-7xl mx-auto pb-10">
+        <div className="w-full max-w-7xl mx-auto pb-10 h-120">
           <div className="grid grid-cols-2 gap-8">
             <div className="flex flex-col justify-center p-5">
               <h3 className="text-4xl font-bold transition-all duration-500">
