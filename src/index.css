@@ -201,6 +201,7 @@ body {
   /* font-family: 'Titillium Web', sans-serif; */
   /* font-family: 'Noto Sans Bengali Variable', sans-serif; */
   /* font-family: 'Lexend Deca Variable', sans-serif; */
+  scroll-behavior: smooth;
 }
 
 /* Estilo general para el scroll */
