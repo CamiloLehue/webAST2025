@@ -75,7 +75,7 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: NavMenuItem[] }) => {
                         transition={{ duration: 0.2, delay: 0.04 * subIndex }}
                       >
                         <NavLink
-                          className="block text-sm font-light w-full"
+                          className="block text-sm font-light w-full text-nowrap"
                           to={subItem.path}
                         >
                           {subItem.title}

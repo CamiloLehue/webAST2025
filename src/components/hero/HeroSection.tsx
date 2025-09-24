@@ -26,7 +26,7 @@ function HeroSection({
   useEffect(() => {
     if (images.length > 1) {
       const interval = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => 
+        setCurrentImageIndex((prevIndex) =>
           prevIndex === images.length - 1 ? 0 : prevIndex + 1
         );
       }, 5000);
@@ -82,7 +82,7 @@ function HeroSection({
             className="w-full object-cover"
           />
           <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
-          
+
           {images.length > 1 && (
             <>
               <button
@@ -97,14 +97,16 @@ function HeroSection({
               >
                 <FiChevronRight className="w-6 h-6" />
               </button>
-              
-              <div className="absolute bottom-4 right-4 flex space-x-2">
+
+              <div className="absolute bottom-4 right-4 flex space-x-2 z-20">
                 {images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
                     className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                      index === currentImageIndex ? 'bg-primary-100' : 'bg-white/50'
+                      index === currentImageIndex
+                        ? "bg-primary-100"
+                        : "bg-white/50"
                     }`}
                   />
                 ))}

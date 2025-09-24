@@ -1,288 +1,134 @@
-import { FiArrowRight } from "react-icons/fi";
-import { TbChevronDown, TbMailFilled, TbPhoneFilled } from "react-icons/tb";
-import { Link } from "react-router";
+import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
+import HeroSection from "../../../components/hero/HeroSection";
+import ContentSection from "../../../components/content/ContentSection";
 
 function Datacenter() {
   return (
     <div className="w-full min-h-screen">
-      <section className=" bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100 ">
-        <div className="grid grid-cols-4 gap-5 w-full">
-          <div className="col-span-2 w-full h-full flex justify-center  items-center">
-            <article className="flex flex-col items-end justify-center w-full">
-              <div className="max-w-2xl h-full flex flex-col gap-5">
-                <h2 className="text-white text-5xl font-bold">Datacenter</h2>
-                <p className="text-white-100 text-lg">
-                  Wisensor es una plataforma desarrollada por AST con el
-                  objetivo de integrar diversos datos relevantes de la industria
-                  salmonera en Chile, ofreciendo una vista unificada y
-                  optimizada para mejorar la gestión y operación de los centros
-                  de cultivo. A través de esta plataforma, se visualizan y
-                  gestionan datos importantes relacionados con las condiciones
-                  ambientales y operativas de las jaulas balsas, mallas de
-                  contención y otros factores clave.
-                </p>
-              </div>
-              <div className="w-full max-w-sm mt-5 mx-auto ">
-                <Link
-                  to={`#`}
-                  className="inline-flex items-center text-primary-100 hover:text-white-100 transition-colors duration-300 font-medium border px-4  py-1 w-max"
-                >
-                  Ver video
-                  <FiArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          </div>
-          <div className="relative col-span-2 w-full h-full overflow-hidden">
-            <img
-              draggable={false}
-              src={"img/services/wisensor/hero.jpg"}
-              alt={"Servicios"}
-              className="w-full object-cover  "
-            />
-            <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="Datacenter"
+        description="Nuestro servicio de Datacenter ofrece infraestructura tecnológica de alta disponibilidad, seguridad y escalabilidad para alojar y gestionar los datos críticos de tu empresa. Contamos con sistemas avanzados de respaldo, monitoreo 24/7, control de acceso y redundancia eléctrica, garantizando la continuidad operativa y la protección de tu información. Nuestro equipo de expertos te acompaña en la migración, administración y optimización de tus recursos, permitiendo que tu negocio crezca con total confianza y eficiencia."
+        buttonText="Ver video"
+        buttonLink="#"
+        images={[
+          "img/services/datacenter/hero.jpg",
+          "img/services/datacenter/image01.png",
+          "img/services/datacenter/image02.png",
+          "img/services/datacenter/image03.png",
+        ]}
+        altText="Datacenter"
+        onButtonClick={() => {
+          console.log("Ver video clicked");
+        }}
+      />
       <section className="w-full bg-primary-100 py-2 h-28 flex justify-center items-center">
         <div className=" flex justify-center items-center">
           <img src="AST-Logo-white.png" alt="AST Logo" className="h-20" />
           <div className="h-10 w-0.5 bg-white mx-10"></div>
           <h4 className="font-black text-3xl">
-            <span className="text-white">WI</span>SENSOR
+            <span className="text-white">DATA</span>CENTER
           </h4>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto w-full py-10 ">
-        <div className="flex flex-col justify-center items-center w-full ">
-          <h2 className="text-3xl font-bold text-primary-100">
-            Los principales objetivos de la plataforma incluyen:
-          </h2>
-          <div className="grid grid-cols-2 gap-8 mt-10 h-full">
-            <div className="flex flex-col justify-center items-center gap-5">
-              <p className="text-lg font-semibold leading-6">
-                <span className="text-primary-100">
-                  Integración de Datos de Sensores:
+      <section className="max-w-7xl mx-auto w-full py-10">
+        <div className="flex flex-col gap-10 justify-center items-center w-full">
+          <ContentSection
+            title="Equipamiento"
+            description={
+              <>
+                El equipamiento de nuestros Datacenter ha sido cuidadosamente
+                seleccionado para ofrecer un{" "}
+                <span className="text-red-500 font-bold">
+                  rendimiento de vanguardia{" "}
                 </span>{" "}
-                Wisensor permite la integración de datos de diversos sensores
-                instalados en los centros de cultivo, como los pasadores de
-                carga y correntómetros, que proporcionan información crítica
-                sobre la fuerza recibida por las jaulas y las corrientes
-                marinas.
-              </p>
-              <p className="text-lg font-semibold leading-6">
-                <span className="text-primary-100">
-                  Monitoreo del Estado de las Jaulas y Mallas:
-                </span>{" "}
-                La plataforma ofrece una visualización en tiempo real del estado
-                de las mallas loberas y de contención, junto con la
-                geolocalización y los detalles específicos de los eventos
-                observados, como cortes o daños en las mallas y la presencia de
-                mortalidad en las jaulas.
-              </p>
-            </div>
-            <div className="w-full h-full">
+                y garantizar una alta disponibilidad de los servicios,
+                manteniendo un{" "}
+                <span className="text-red-500 font-bold">
+                  consumo energético eficiente
+                </span>
+                . Utilizamos servidores Mac y Dell PowerEdge R740xd , que
+                optimizan tanto el rendimiento como el consumo de energía,
+                alojando no solo la información, sino también los diversos
+                servicios digitales de la empresa, como sitios web. Además,
+                incorporamos{" "}
+                <span className="text-red-500 font-bold">GPU Tesla V100</span>{" "}
+                para procesar grandes volúmenes de datos y realizar tareas de
+                <span className="text-red-500 font-bold">
+                  {" "}
+                  inteligencia artificial (IA)
+                </span>
+                . Nuestros sistemas de enfriamiento por agua ambiental
+                aprovechan las condiciones climáticas locales, maximizando la
+                eficiencia energética y reduciendo el consumo durante el proceso
+                de refrigeración.
+              </>
+            }
+            images={["img/services/datacenter/image01.png"]}
+            altText="Equipamiento"
+            layout="text-left"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
+
+          <div className=" w-full h-40 grid grid-cols-12 gap-5 text-white">
+            <article className="col-span-2 h-38  rounded-2xl flex flex-col justify-center items-center ">
               <img
-                draggable={false}
-                src={"img/services/wisensor/hero.jpg"}
-                alt={"Servicios"}
-                className="w-full h-90 object-cover aspect-square rounded-2xl  "
-              />
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-3 gap-5 mt-10">
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img src="/public/svg/services/wisensor/nubes.svg" alt="" />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Monitoreo continuo
-              </h3>
-              <p className="text-lg">de condiciones ambientales.</p>
-            </div>
-          </article>
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img
-                src="/public/svg/services/wisensor/Tecnologias IoT.svg"
+                src="svg/services/datacenter/Datacenter.svg"
                 alt=""
+                className="w-full h-full"
               />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Tecnología IoT
-              </h3>
-              <p className="text-lg">para datos en tiempo real.</p>
-            </div>
-          </article>
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img src="/public/svg/services/wisensor/Pez.svg" alt="" />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Gestión eficiente
-              </h3>
-              <p className="text-lg">de la biomasa acuática.</p>
-            </div>
-          </article>
-        </div>
-        <div className="grid grid-cols-2 gap-8 mt-10 h-full">
-          <div className="w-full h-full overflow-hidden rounded-2xl">
-            <img
-              draggable={false}
-              src={"img/services/wisensor/wisensor-app2.png"}
-              alt={"Servicios"}
-              className="w-full h-90 object-cover aspect-square rounded-2xl scale-110 "
-            />
+            </article>
+            <article className="col-span-2 h-35 bg-primary-100 rounded-2xl flex flex-col justify-center items-center">
+              <h4 className="text-6xl font-black">12TB</h4>
+              <p className="text-xl">de RAM</p>
+            </article>
+            <article className="col-span-3 h-35 bg-primary-100 rounded-2xl flex flex-col justify-center items-center">
+              <h4 className="text-6xl font-black">1200TB</h4>
+              <p className="text-xl">de Almacenamiento</p>
+            </article>
+            <article className="col-span-5 h-35 bg-primary-100 rounded-2xl flex flex-col justify-center items-center">
+              <h4 className="text-6xl font-black">500Ghz</h4>
+              <p className="text-xl">de poder de procesamiento</p>
+            </article>
           </div>
-          <div className="flex flex-col justify-center items-center gap-5">
-            <p className="text-lg font-semibold leading-6">
-              <span className="text-primary-100">Streaming de Video:</span>{" "}
-              Wisensor permite la visualización en tiempo real y posterior de
-              los datos de video de drones submarinos, brindando una herramienta
-              completa para monitorear el estado de las estructuras en el fondo
-              marino.
-            </p>
-            <p className="text-lg font-semibold leading-6">
-              <span className="text-primary-100">Alertas y Alarmas:</span> A
-              través de la plataforma, se generan alarmas basadas en los
-              parámetros sensados, lo que permite a los operadores identificar
-              rápidamente situaciones críticas, como sobrecargas en las jaulas o
-              condiciones peligrosas en el entorno acuático.
-            </p>
+
+          <ContentSection
+            title="IA"
+            description="La inteligencia artificial (IA) está integrada en todos los aspectos de la operación de nuestro Datacenter, permitiendo una gestión eficiente y precisa de los recursos. Gracias a la IA, podemos optimizar dinámicamente el uso de los recursos, garantizando que los servidores y sistemas operen con máxima eficiencia y mínimo consumo de energía. Además, la IA predice posibles fallos o sobrecargas en el sistema, lo que nos permite tomar medidas preventivas antes de que ocurra un problema. La automatización y el control inteligente ajustan en tiempo real las condiciones operativas del Datacenter y el software operativo en esta, gestionando aspectos como temperatura, uso de energía y distribución de cargas de trabajo."
+            images={["img/services/datacenter/image02.png"]}
+            altText="IA"
+            layout="text-right"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
+
+          <div className=" w-full h-40 grid grid-cols-12 gap-5 text-white">
+            <article className="col-span-5 h-35 bg-primary-100 rounded-2xl flex flex-col justify-center items-center">
+              <h4 className="text-6xl font-black">112 TFLOPS</h4>
+              <p className="text-xl">Poder de cálculo en IA</p>
+            </article>
+            <article className="col-span-5 h-35 bg-primary-100 rounded-2xl flex flex-col justify-center items-center">
+              <h4 className="text-6xl font-black">32x Más rápido</h4>
+              <p className="text-xl">En entrenamiento que una CPU</p>
+            </article>
+            <article className="col-span-2 h-38  rounded-2xl flex flex-col justify-center items-center ">
+              <img
+                src="svg/services/datacenter/brillos.svg"
+                alt=""
+                className="w-full h-full"
+              />
+            </article>
           </div>
-        </div>
-        <div className="grid grid-cols-3 gap-5 mt-10">
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img src="/public/svg/services/wisensor/tren.svg" alt="" />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Gestión optimizada
-              </h3>
-              <p className="text-lg">del transporte logístico.</p>
-            </div>
-          </article>
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img src="/public/svg/services/wisensor/escudo.svg" alt="" />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Protección
-              </h3>
-              <p className="text-lg">y vigilancia avanzada.</p>
-            </div>
-          </article>
-          <article className="h-25 rounded-2xl flex justify-between gap-2 ps-10 items-center bg-primary-100">
-            <div className="w-20 h-20 flex justify-center items-center">
-              <img src="/public/svg/services/wisensor/Jaula.svg" alt="" />
-            </div>
-            <div className="flex-1 flex flex-col w-full text-white ">
-              <h3 className="text-2xl text-nowrap font-bold leading-4 ">
-                Jaulas automatizadas
-              </h3>
-              <p className="text-lg">para monitoreo constante.</p>
-            </div>
-          </article>
-        </div>
-        <div className="grid grid-cols-2 gap-8 mt-10 h-full">
-          <div className="flex flex-col justify-center items-center gap-5">
-            <p className="text-lg font-semibold leading-6">
-              <span className="text-primary-100">
-                Integración de Datos de Sensores:
-              </span>{" "}
-              Wisensor permite la integración de datos de diversos sensores
-              instalados en los centros de cultivo, como los pasadores de carga
-              y correntómetros, que proporcionan información crítica sobre la
-              fuerza recibida por las jaulas y las corrientes marinas.
-            </p>
-            <p className="text-lg font-semibold leading-6">
-              <span className="text-primary-100">
-                Monitoreo del Estado de las Jaulas y Mallas:
-              </span>{" "}
-              La plataforma ofrece una visualización en tiempo real del estado
-              de las mallas loberas y de contención, junto con la
-              geolocalización y los detalles específicos de los eventos
-              observados, como cortes o daños en las mallas y la presencia de
-              mortalidad en las jaulas.
-            </p>
-          </div>
-          <div className="w-full h-full rounded-2xl overflow-hidden">
-            <img
-              draggable={false}
-              src={"img/services/wisensor/wisensor-app.png"}
-              alt={"Servicios"}
-              className="w-full h-90 object-cover aspect-square rounded-2xl scale-110"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col justify-center items-center mt-20">
-          <div className=" border-t-2 border-bg-300/10 px-10 py-5 rounded-t-2xl  flex justify-center items-center gap-1 ">
-            <TbChevronDown
-              className="text-primary-100 text-2xl animate-bounce"
-              style={{
-                animationDuration: "1.5s",
-              }}
-            />
-            <h3 className="text-2xl font-bold text-primary-100">
-              Puedes ver un video demostrativo aquí
-            </h3>
-            <TbChevronDown
-              className="text-primary-100 text-2xl animate-bounce"
-              style={{
-                animationDuration: "1.5s",
-              }}
-            />
-          </div>
-          <div className="w-full h-120 bg-black rounded-2xl overflow-hidden">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/fI-tzs7NnNE?si=HCiO3OqtZgFZsa4r"
-              title="YouTube video player"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            ></iframe>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-8 mt-10 h-full">
-          <div className="relative w-full h-full">
-            <img
-              draggable={false}
-              src={"img/services/wisensor/aplicaciones.png"}
-              alt={"Servicios"}
-              className="w-full h-90 object-cover aspect-square rounded-2xl  "
-            />
-            <img
-              draggable={false}
-              src={"img/services/wisensor/Wisensor.png"}
-              alt={"Servicios"}
-              className="relative w-[50%] mx-auto -top-8  "
-            />
-          </div>
-          <div className="flex flex-col justify-center items-center gap-5">
-            <p className="text-lg font-semibold leading-6">
-              <span className="text-primary-100">Wisensor </span> es la
-              herramienta ideal para la industria salmonera chilena, pues
-              permite centralizar los datos clave de las operaciones en una sola
-              interfaz, facilitando el monitoreo continuo y mejorando la
-              eficiencia y sostenibilidad de la producción.
-            </p>
-          </div>
-        </div>
-        <div className="w-full flex justify-center items-center gap-8 mt-10 h-full">
-          <div className="relative w-full h-full">
-            <img
-              draggable={false}
-              src={"img/services/wisensor/Artboard.png"}
-              alt={"Servicios"}
-              className="w-full h-full object-cover rounded-2xl  "
-            />
-          </div>
+
+          <ContentSection
+            title="INFRAESTRUCTURA"
+            description="La infraestructura de nuestros Datacenter ha sido cuidadosamente diseñada para garantizar la seguridad, fiabilidad y eficiencia operativa. Están ubicados en terrenos elevados y de fácil acceso, lo que protege nuestras instalaciones de riesgos climáticos y desastres naturales. La estructura en hormigón reforzado asegura estabilidad y resistencia, mientras que los sistemas de seguridad avanzada, como cerco eléctrico, cámaras de videovigilancia, acceso biométrico y protección contra incendios, resguardan la integridad de los datos. Además, contamos con un diseño térmico optimizado que utiliza sistemas de enfriamiento avanzado para maximizar la eficiencia energética y minimizar el consumo, contribuyendo a la sostenibilidad de las operaciones."
+            images={["img/services/datacenter/image03.png"]}
+            altText="Infraestructura"
+            layout="text-top"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
         </div>
       </section>
       <section className="relative h-130">
