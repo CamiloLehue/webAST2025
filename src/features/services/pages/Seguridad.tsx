@@ -1,47 +1,25 @@
-import { FiArrowRight } from "react-icons/fi";
-import { Link } from "react-router";
+import ImageGallery from "../../../components/gallery/ImageGallery";
+import HeroSection from "../../../components/hero/HeroSection";
 
 function Seguridad() {
   return (
     <div className="w-full min-h-screen">
-      <section className=" bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100 ">
-        <div className="grid grid-cols-4 gap-5 w-full">
-          <div className="col-span-2 w-full h-full flex justify-center  items-center">
-            <article className="flex flex-col items-end justify-center w-full">
-              <div className="max-w-2xl h-full flex flex-col gap-5">
-                <h2 className="text-white text-5xl font-bold">Seguridad</h2>
-                <p className="text-white-100 text-lg">
-                  Ofrecemos soluciones integrales de seguridad y
-                  tele-vigilancia, adaptadas a cada entorno productivo y bajo
-                  los más altos estándares de calidad. Desde cámaras ópticas,
-                  térmicas e infrarrojas hasta sistemas de radar IP y monitoreo
-                  remoto, integramos tecnología avanzada para garantizar
-                  control, confiabilidad y protección en cualquier condición,
-                  incluso en los entornos más exigentes.
-                </p>
-              </div>
-              <div className="w-full max-w-sm mt-5 mx-auto ">
-                <Link
-                  to={`#`}
-                  className="inline-flex items-center text-primary-100 hover:text-white-100 transition-colors duration-300 font-medium border px-4  py-1 w-max"
-                >
-                  Ver video
-                  <FiArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          </div>
-          <div className="relative col-span-2 w-full h-full overflow-hidden">
-            <img
-              draggable={false}
-              src={"img/services/seguridad/hero.png"}
-              alt={"Servicios"}
-              className="w-full object-cover  "
-            />
-            <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
-          </div>
-        </div>
-      </section>
+      <HeroSection
+        title="Seguridad"
+        description="Ofrecemos soluciones integrales de seguridad y tele-vigilancia, adaptadas a cada entorno productivo y bajo los más altos estándares de calidad. Desde cámaras ópticas, térmicas e infrarrojas hasta sistemas de radar IP y monitoreo remoto, integramos tecnología avanzada para garantizar control, confiabilidad y protección en cualquier condición, incluso en los entornos más exigentes."
+        buttonText="Ver video"
+        buttonLink="#"
+        images={[
+          "img/services/seguridad/hero.png",
+          "img/services/seguridad/cam.png",
+          "img/services/seguridad/cam2.png",
+          "img/services/seguridad/cam3.png",
+        ]}
+        altText="Seguridad"
+        onButtonClick={() => {
+          console.log("Ver video clicked");
+        }}
+      />
       <section className="w-full bg-primary-100 py-2 h-28 flex justify-center items-center">
         <div className=" flex justify-center items-center">
           <img src="AST-Logo-white.png" alt="AST Logo" className="h-20" />
@@ -142,76 +120,75 @@ function Seguridad() {
                   </a>
                 </li>
                 <li className="py-5 px-15">
-                  <a href="#almacenamiento" className="text-2xl font-bold">
+                  <a href="#vigilancia" className="text-2xl font-bold">
                     Vigilancia Radar IP
                   </a>
                 </li>
               </ul>
             </nav>
           </div>
-          <div className="max-w-7xl mx-auto w-full py-10 ">
-            <div id="sistema" className="grid grid-cols-2 gap-10 my-10 h-full">
-              <div className="w-full h-full flex flex-col">
-                <div className=" overflow-hidden rounded-2xl">
-                  <img
-                    draggable={false}
-                    src={"img/services/seguridad/cam3.png"}
-                    alt={"Servicios"}
-                    className="w-full  object-cover  scale-110 "
-                  />
-                </div>
-                <div className="relative  mt-4 grid grid-cols-4 gap-4 overflow-hidden">
-                  <img
-                    draggable={false}
-                    src={"img/services/seguridad/cam3.png"}
-                    alt={"Servicios"}
-                    className=" h-30 rounded-2xl "
-                  />
-                  <img
-                    draggable={false}
-                    src={"img/services/seguridad/cam3.png"}
-                    alt={"Servicios"}
-                    className=" h-30 rounded-2xl "
-                  />
-                  <img
-                    draggable={false}
-                    src={"img/services/seguridad/cam3.png"}
-                    alt={"Servicios"}
-                    className=" h-30 rounded-2xl "
-                  />
-                  <img
-                    draggable={false}
-                    src={"img/services/seguridad/cam3.png"}
-                    alt={"Servicios"}
-                    className=" h-30 rounded-2xl "
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col justify-between items-center gap-5 pt-10">
-                <div className="w-full flex flex-col gap-5 ">
-                  <h4 className="text-4xl font-black">
-                    Sistema de Iluminación IR
-                  </h4>
-                  <p className="text-lg font-light leading-6 text-left">
-                    De la serie RAYMAX diseñado específicamente para
-                    aplicaciones de larga distancia, ofrecen una excelente
-                    imagen de noche con una mejor salida óptica y sobresaliente
-                    fiabilidad. Los focos proporcionan un rendimiento de clase
-                    mundial, una larga vida y cero mantenimiento. Nuestros focos
-                    de iluminación pueden ser aplicados para todo tipo de
-                    condición en instalaciones de cero luz de hasta 1.000
-                    metros. (3.280 pies). Este sistema de Iluminación, más
-                    cámaras de alta sensibilidad Infrarroja, son el conjunto
-                    perfecto en condiciones de plena oscuridad, logrando
-                    imágenes en HD en el proceso de identificación de amenazas
-                  </p>
-                </div>
-                <div className="w-full h-20  ">
-                  <button className="flex justify-center items-center text-primary-100 hover:text-white-100 transition-colors duration-300 font-medium border px-4  py-1 w-full rounded">
-                    Solicitar
-                  </button>
-                </div>
-              </div>
+          <div className="max-w-7xl mx-auto w-full py-10 flex flex-col gap-10 ">
+            <div id="sistema">
+              <ImageGallery
+                images={[
+                  "img/services/seguridad/cam3.png",
+                  "img/services/seguridad/cam.png",
+                  "img/services/seguridad/cam2.png",
+                  "img/services/seguridad/hero.png",
+                ]}
+                title="Sistema de Iluminación IR"
+                description="De la serie RAYMAX diseñado específicamente para aplicaciones de larga distancia, ofrecen una excelente imagen de noche con una mejor salida óptica y sobresaliente fiabilidad. Los focos proporcionan un rendimiento de clase mundial, una larga vida y cero mantenimiento. Nuestros focos de iluminación pueden ser aplicados para todo tipo de condición en instalaciones de cero luz de hasta 1.000 metros. (3.280 pies). Este sistema de Iluminación, más cámaras de alta sensibilidad Infrarroja, son el conjunto perfecto en condiciones de plena oscuridad, logrando imágenes en HD en el proceso de identificación de amenazas"
+                buttonText="Solicitar"
+                altText="Sistema de Iluminación IR"
+                onButtonClick={() => {
+                  console.log("Solicitar Sistema de Iluminación IR");
+                }}
+              />
+            </div>
+            <div id="camaras">
+              <ImageGallery
+                images={[
+                  "img/services/seguridad/cam3.png",
+                  "img/services/seguridad/cam.png",
+                  "img/services/seguridad/cam2.png",
+                  "img/services/seguridad/hero.png",
+                ]}
+                title="Vigilancia Remota Termal"
+                description="Porque la seguridad puede ser llevada aun a peores condiciones que superan otras tecnologías como es ausencia de iluminación, clima adverso o largas distancias, para estas situaciones hemos implantado soluciones de imagen Termal, que pueden detectar actividad bajo toda condición.
+                Nuestra tecnología consiste en utilización de cámaras Duales (Óptico Termales), que nos dan capacidad de visión en 360º tanto de día como noche."
+                buttonText="Solicitar"
+                buttonViewMore="Ver más"
+                altText="Vigilancia Remota Termal"
+                onButtonClick={() => {
+                  console.log("Solicitar Vigilancia Remota Termal");
+                }}
+                onButtonClickViewMore={() => {
+                  console.log("Ver más Vigilancia Remota Termal");
+                }}
+              />
+            </div>
+            <div id="vigilancia">
+              <ImageGallery
+                images={[
+                  "img/services/seguridad/cam3.png",
+                  "img/services/seguridad/cam.png",
+                  "img/services/seguridad/cam2.png",
+                  "img/services/seguridad/hero.png",
+                ]}
+                title="Vigilancia Radar IP"
+                description="AST incorpora el radar SpotterRF, líder en detección compacta de largo alcance, capaz de operar en condiciones adversas como oscuridad o mal clima. Cubre áreas desde 3 hasta más de 233 acres, superando la vigilancia tradicional en perímetros.
+                Junto con los servidores NetworkedIO y cámaras PTZ, ofrece una solución de seguridad inteligente, eficiente y automatizada. Con solo 1 kg de peso, 10W de consumo y 15Kbps de ancho de banda, es ideal para zonas con limitaciones energéticas o de conectividad.
+                Aplicable en sectores comerciales y militares, como subestaciones, oleoductos, costas y zonas sensibles."
+                buttonText="Solicitar"
+                buttonViewMore="Ver más"
+                altText="Vigilancia Radar IP"
+                onButtonClick={() => {
+                  console.log("Solicitar Vigilancia Radar IP");
+                }}
+                onButtonClickViewMore={() => {
+                  console.log("Ver más Vigilancia Radar IP");
+                }}
+              />
             </div>
           </div>
         </div>
