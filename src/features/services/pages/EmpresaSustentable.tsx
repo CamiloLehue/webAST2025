@@ -35,39 +35,108 @@ function EmpresaSustentable() {
             title="Energía limpia e inagotable en sus manos"
             description={
               <>
-                Nos destacamos por ir más allá de la venta de un producto y
-                vemos la optimización de los sistemas completos usando
+                Nos destacamos por ir{" "}
+                <span className="font-bold">
+                  más allá de la venta de un producto
+                </span>{" "}
+                y vemos la optimización de los sistemas completos usando
                 diferentes tecnologías. Esto genera el mejor retorno para la
                 inversión de nuestros clientes. Vamos de la mano con nuestros
                 clientes y sus proyectos para alcanzar los objetivos y mejorar
                 el rendimiento de su sistema.
               </>
             }
-            images={["img/services/datacenter/image01.png"]}
+            images={["img/services/empresa-sustentable/image02.jpg"]}
             altText="Equipamiento"
             layout="text-left"
             className="mt-10 h-full"
             autoSlide={false}
           />
 
-          <div className=" w-full flex min-h-150  gap-5 text-white bg-amber-50 rounded-2xl"></div>
+          <div
+            className=" w-full flex h-150  gap-5 text-black bg-[#FFFEF1] rounded-2xl border-t border-t-white"
+            style={{
+              boxShadow:
+                "rgba(50, 50, 93, 0.15) 0px 3px 6px -12px inset, rgba(0, 0, 0, 0.2) 0px 6px 36px -6px inset",
+            }}
+          >
+            <div className="grid grid-cols-2 w-full h-full p-10">
+              <div className="rounded-2xl bg overflow-hidden  flex justify-center items-center">
+                <img
+                  draggable={false}
+                  src={"img/services/empresa-sustentable/image01.jpg"}
+                  alt={"Planes de ahorro personalizados"}
+                  className="w-full object-cover h-full "
+                />
+              </div>
+              <div className="flex flex-col justify-start items-start gap-5 ps-10">
+                <h5 className="font-black text-4xl">Paneles Fotovoltaicos</h5>
+                <p className="text-lg  leading-6">
+                  Ofrecemos proyectos de instalación de paneles solares,
+                  trabajando con equipos de alta calidad y garantizando máxima
+                  eficiencia.
+                </p>
+                <div className="relative flex flex-row justify-start items-center mt-5">
+                  <div className="w-30 h-full">
+                    <img
+                      src="img/services/empresa-sustentable/iconCasa.png"
+                      alt="Paneles Fotovoltaicos"
+                    />
+                  </div>
+                  <div className="w-full px-5">
+                    <p className="text-lg leading-6">
+                      <span className="font-bold">Ahorro Residencial:</span>
+                      Atendemos cada caso con un plan de ahorro personalizado.
+                      Tras un diagnóstico del consumo energético, proponemos
+                      soluciones completas que incluyen la instalación de
+                      paneles solares y mejoras como el cambio del sistema de
+                      iluminación.
+                    </p>
+                  </div>
+                </div>
+                <div className="relative flex flex-row justify-start items-center mt-5">
+                  <div className="w-30 h-full">
+                    <img
+                      src="img/services/empresa-sustentable/iconTorre.png"
+                      alt="Paneles Fotovoltaicos"
+                    />
+                  </div>
+                  <div className="w-full px-5">
+                    <p className="text-lg leading-6">
+                      <span className="font-bold">Comercial / Industrial:</span>
+                      Creamos soluciones a la medida para optimizar el uso de
+                      recursos naturales, maximizando el ahorro. Adaptamos
+                      nuestros sistemas a distintos espacios como
+                      estacionamientos, oficinas y plantas industriales, según
+                      las necesidades del cliente.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <ContentSection
             title="Respaldo y monitorización"
             description={
               <>
                 Como la totalidad de nuestros controladores de carga, la función
-                principal es proteger las baterías contra sobrecargas, pero
-                también incorpora muchas funciones que le ayudaran a monitorear
-                mejor el desempeño de su sistema solar. Se dispone de variados
-                modelos según su necesidad. Existen modelos con indicadores de
-                LED, y los más sofisticados con El display LCD incorporado que
-                permites controlar el nivel de carga y la corriente solar para
-                ver el nivel de potencia que está consiguiendo.
+                principal es{" "}
+                <span className="font-bold">
+                  proteger las baterías contra sobrecargas
+                </span>
+                , pero también incorpora muchas funciones que le ayudaran a
+                monitorear mejor el desempeño de su sistema solar. Se dispone de
+                variados modelos según su necesidad. Existen modelos con
+                indicadores de LED, y{" "}
+                <span className="font-bold">los más sofisticados </span>con el
+                display LCD incorporado que permiten controlar el nivel de carga
+                y la corriente solar para ver el nivel de potencia que está
+                consiguiendo.
               </>
             }
-            images={["img/services/datacenter/image02.png"]}
-            altText="Respaldo y monitorización"
+            images={["img/services/empresa-sustentable/image03.png"]}
+            altText="Equipamiento"
             layout="text-left"
             className="mt-10 h-full"
             autoSlide={false}
@@ -89,8 +158,8 @@ function EmpresaSustentable() {
                 etc.
               </>
             }
-            images={["img/services/datacenter/image02.png"]}
-            altText="Iluminación Led"
+            images={["img/services/empresa-sustentable/image04.png"]}
+            altText="Equipamiento"
             layout="text-right"
             className="mt-10 h-full"
             autoSlide={false}

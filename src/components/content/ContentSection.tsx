@@ -56,7 +56,7 @@ function ContentSection({
         alt={altText}
         className="w-full object-cover scale-110 transition-transform duration-300"
       />
-      
+
       {images.length > 1 && (
         <>
           <button
@@ -71,14 +71,14 @@ function ContentSection({
           >
             <FiChevronRight className="w-5 h-5" />
           </button>
-          
+
           <div className="absolute bottom-4 right-4 flex space-x-2">
             {images.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentImageIndex(index)}
                 className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                  index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                  index === currentImageIndex ? "bg-white" : "bg-white/50"
                 }`}
               />
             ))}
@@ -91,7 +91,7 @@ function ContentSection({
   const renderTextContent = () => (
     <div className="flex flex-col justify-center items-start gap-5">
       <h4 className="text-3xl font-black">{title}</h4>
-      <div className="text-lg font-semibold leading-6">{description}</div>
+      <div className="text-lg leading-6">{description}</div>
     </div>
   );
 
@@ -100,41 +100,31 @@ function ContentSection({
       case "text-right":
         return (
           <div className={`grid grid-cols-2 gap-8 ${className}`}>
-            <div className="w-full h-full">
-              {renderImageGallery()}
-            </div>
+            <div className="w-full h-full">{renderImageGallery()}</div>
             {renderTextContent()}
           </div>
         );
-      
+
       case "text-top":
         return (
           <div className={`flex flex-col gap-8 ${className}`}>
             {renderTextContent()}
-            <div className="w-full h-full">
-              {renderImageGallery()}
-            </div>
+            <div className="w-full h-full">{renderImageGallery()}</div>
           </div>
         );
-      
+
       case "text-left":
       default:
         return (
           <div className={`grid grid-cols-2 gap-8 ${className}`}>
             {renderTextContent()}
-            <div className="w-full h-full">
-              {renderImageGallery()}
-            </div>
+            <div className="w-full h-full">{renderImageGallery()}</div>
           </div>
         );
     }
   };
 
-  return (
-    <div className="h-full">
-      {renderLayout()}
-    </div>
-  );
+  return <div className="h-full">{renderLayout()}</div>;
 }
 
 export default ContentSection;
