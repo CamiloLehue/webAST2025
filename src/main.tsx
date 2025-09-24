@@ -31,6 +31,11 @@ import EmpresaSustentable from "./features/services/pages/EmpresaSustentable";
 import Satelital from "./features/services/pages/Satelital";
 import Wireless from "./features/services/pages/Wireless";
 import WisensorIa from "./features/services/pages/WisensorIa";
+import IoT from "./features/services/pages/IoT";
+import RoIp from "./features/services/pages/RoIp";
+import NetworkIp from "./features/services/pages/NetworkIp";
+import Drones from "./features/services/pages/Drones";
+import Software from "./features/services/pages/Software";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -73,6 +78,11 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/wireless" element={<Wireless />} />
                 <Route path="/wisensor" element={<Wisensor />} />
                 <Route path="/wisensor-ia" element={<WisensorIa />} />
+                <Route path="/iot" element={<IoT />} />
+                <Route path="/roip" element={<RoIp />} />
+                <Route path="/network-ip" element={<NetworkIp />} />
+                <Route path="/drones" element={<Drones />} />
+                <Route path="/software" element={<Software />} />
                 <Route path="/multimedia" element={<Multimedia />} />
 
                 {/* <Route path="/noticias" element={<News />} /> */}

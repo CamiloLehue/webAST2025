@@ -60,12 +60,28 @@
         "path": "/wireless"
       },
       {
-        "title": "Wisensor",
-        "path": "/wisensor"
-      },
-      {
         "title": "Wisensor IA",
         "path": "/wisensor-ia"
+      },
+      {
+        "title": "Network IP",
+        "path": "/network-ip"
+      },
+      {
+        "title": "Drones",
+        "path": "/drones"
+      },
+       {
+        "title": "RoIp",
+        "path": "/roip"
+      },
+       {
+        "title": "Software",
+        "path": "/software"
+      },
+       {
+        "title": "IoT",
+        "path": "/iot"
       }
     ],
     "external": false,
