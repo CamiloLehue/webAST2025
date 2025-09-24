@@ -118,7 +118,7 @@ function Services() {
               {subServices.map((item, index) => (
                 <li
                   key={item.path}
-                  className={`px-10 cursor-pointer transition-all duration-300 ${
+                  className={`px-7 cursor-pointer transition-all duration-300 ${
                     index === activeServiceIndex
                       ? "text-white font-semibold bg-primary-100 py-7"
                       : "text-bg-300 hover:text-primary-100"
