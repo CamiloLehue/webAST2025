@@ -26,6 +26,8 @@ const BlogPage: React.FC = () => {
   });
 
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 6;
 
   const publishedPosts = useMemo(() => {
     let filtered = (blogPosts || []).filter((post) => post.isPublished);
@@ -99,6 +101,18 @@ const BlogPage: React.FC = () => {
     return filtered;
   }, [blogPosts, filters]);
 
+  // Posts paginados
+  const paginatedPosts = useMemo(() => {
+    const startIndex = (currentPage - 1) * postsPerPage;
+    const endIndex = startIndex + postsPerPage;
+    return publishedPosts.slice(startIndex, endIndex);
+  }, [publishedPosts, currentPage, postsPerPage]);
+
+  // Información de paginación
+  const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
+  const hasNextPage = currentPage < totalPages;
+  const hasPrevPage = currentPage > 1;
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-ES", {
       year: "numeric",
@@ -126,6 +140,13 @@ const BlogPage: React.FC = () => {
       sortBy: 'date',
       sortOrder: 'desc'
     });
+    setCurrentPage(1);
+  };
+
+  // Función para cambiar filtros y resetear página
+  const updateFilter = (newFilters: Partial<BlogFilters>) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+    setCurrentPage(1);
   };
 
   // Contar filtros activos
@@ -205,6 +226,7 @@ const BlogPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
               <p className="text-bg-200 mb-2 sm:mb-0">
                 {publishedPosts.length} {publishedPosts.length === 1 ? 'artículo encontrado' : 'artículos encontrados'}
+                {totalPages > 1 && ` • Página ${currentPage} de ${totalPages}`}
               </p>
               <div className="flex items-center gap-2">
                 <label className="text-sm text-bg-200">Ordenar por:</label>
@@ -212,7 +234,7 @@ const BlogPage: React.FC = () => {
                   value={`${filters.sortBy}-${filters.sortOrder}`}
                   onChange={(e) => {
                     const [sortBy, sortOrder] = e.target.value.split('-');
-                    setFilters(prev => ({ ...prev, sortBy: sortBy as 'date' | 'title', sortOrder: sortOrder as 'desc' | 'asc' }));
+                    updateFilter({ sortBy: sortBy as 'date' | 'title', sortOrder: sortOrder as 'desc' | 'asc' });
                   }}
                   className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-primary-100"
                 >
@@ -232,7 +254,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Búsqueda: {filters.search}
                     <button
-                      onClick={() => setFilters(prev => ({ ...prev, search: '' }))}
+                      onClick={() => updateFilter({ search: '' })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -243,7 +265,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Categoría: {filters.category}
                     <button
-                      onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
+                      onClick={() => updateFilter({ category: '' })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -254,7 +276,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Etiqueta: {filters.tag}
                     <button
-                      onClick={() => setFilters(prev => ({ ...prev, tag: '' }))}
+                      onClick={() => updateFilter({ tag: '' })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -268,7 +290,7 @@ const BlogPage: React.FC = () => {
                               filters.dateRange === 'quarter' ? 'Últimos 3 meses' :
                               'Último año'}
                     <button
-                      onClick={() => setFilters(prev => ({ ...prev, dateRange: '' }))}
+                      onClick={() => updateFilter({ dateRange: '' })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -306,85 +328,146 @@ const BlogPage: React.FC = () => {
                 )}
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {publishedPosts.map((post) => (
-                  <article
-                    key={post.id}
-                    className="bg-white rounded-2xl shadow-md shadow-bg-300/10  overflow-hidden"
-                  >
-                    {post.featuredImage && (
-                      <div className="aspect-video overflow-hidden">
-                        <img
-                          src={post.featuredImage}
-                          alt={post.title}
-                          className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                    )}
-                    <div className="p-6 ">
-                      {post.tags.length > 0 && (
-                        <div className="flex flex-wrap justify-between gap-2 mb-4">
-                          <div className="flex flex-wrap gap-2">
-                            {post.tags.slice(0, 3).map((tag, index) => (
-                              <button
-                                key={index}
-                                onClick={() => setFilters(prev => ({ ...prev, tag }))}
-                                className="inline-block px-2 py-1 text-xs bg-white-100 text-bg-300 rounded hover:bg-primary-100 hover:text-white transition-colors cursor-pointer"
-                              >
-                                #{tag}
-                              </button>
-                            ))}
-                            {post.tags.length > 3 && (
-                              <span className="text-xs text-bg-200">+{post.tags.length - 3} más</span>
-                            )}
-                          </div>
-                          {post.category && (
-                            <button
-                              onClick={() => setFilters(prev => ({ ...prev, category: post.category }))}
-                              className="px-2 py-1 bg-white-100 text-primary-100 rounded text-xs font-medium hover:bg-primary-100 hover:text-white transition-colors cursor-pointer"
-                            >
-                              {post.category}
-                            </button>
-                          )}
+              <>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {paginatedPosts.map((post) => (
+                    <article
+                      key={post.id}
+                      className="bg-white rounded-2xl shadow-md shadow-bg-300/10  overflow-hidden"
+                    >
+                      {post.featuredImage && (
+                        <div className="aspect-video overflow-hidden">
+                          <img
+                            src={post.featuredImage}
+                            alt={post.title}
+                            className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                          />
                         </div>
                       )}
-                      <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
-                        <div className="flex items-center justify-center text-nowrap">
-                          <FiCalendar className="mr-1 h-4 w-4" />
-                          {formatDate(post.publishedAt || post.createdAt)}
+                      <div className="p-6 ">
+                        {post.tags.length > 0 && (
+                          <div className="flex flex-wrap justify-between gap-2 mb-4">
+                            <div className="flex flex-wrap gap-2">
+                              {post.tags.slice(0, 3).map((tag, index) => (
+                                <button
+                                  key={index}
+                                  onClick={() => updateFilter({ tag })}
+                                  className="inline-block px-2 py-1 text-xs bg-white-100 text-bg-300 rounded hover:bg-primary-100 hover:text-white transition-colors cursor-pointer"
+                                >
+                                  #{tag}
+                                </button>
+                              ))}
+                              {post.tags.length > 3 && (
+                                <span className="text-xs text-bg-200">+{post.tags.length - 3} más</span>
+                              )}
+                            </div>
+                            {post.category && (
+                              <button
+                                onClick={() => updateFilter({ category: post.category })}
+                                className="px-2 py-1 bg-white-100 text-primary-100 rounded text-xs font-medium hover:bg-primary-100 hover:text-white transition-colors cursor-pointer"
+                              >
+                                {post.category}
+                              </button>
+                            )}
+                          </div>
+                        )}
+                        <div className="flex items-center space-x-2 text-sm text-gray-500 mb-3">
+                          <div className="flex items-center justify-center text-nowrap">
+                            <FiCalendar className="mr-1 h-4 w-4" />
+                            {formatDate(post.publishedAt || post.createdAt)}
+                          </div>
+                          <div className="flex items-center">
+                            <FiUser className="mr-1 h-4 w-4" />
+                            {post.author}
+                          </div>
                         </div>
-                        <div className="flex items-center">
-                          <FiUser className="mr-1 h-4 w-4" />
-                          {post.author}
+
+                        <h2 className="text-2xl font-bold text-bg-100 mb-3">
+                          <Link
+                            to={`/noticias/${post.slug}`}
+                            className="hover:text-primary-100 transition-colors"
+                          >
+                            {post.title}
+                          </Link>
+                        </h2>
+
+                        <p className="text-bg-200 mb-4 line-clamp-3 min-h-16">
+                          {post.excerpt.slice(0, 160)}...
+                        </p>
+
+                        <div className="flex justify-end items-end">
+                          <Link
+                            to={`/noticias/${post.slug}`}
+                            className="inline-flex items-center text-primary-100 hover:text-white hover:bg-primary-100 transition-colors duration-300 font-medium  px-4 rounded py-1"
+                          >
+                            Leer más
+                            <FiArrowRight className="ml-1 h-4 w-4" />
+                          </Link>
                         </div>
                       </div>
+                    </article>
+                  ))}
+                </div>
 
-                      <h2 className="text-2xl font-bold text-bg-100 mb-3">
-                        <Link
-                          to={`/noticias/${post.slug}`}
-                          className="hover:text-primary-100 transition-colors"
-                        >
-                          {post.title}
-                        </Link>
-                      </h2>
-
-                      <p className="text-bg-200 mb-4 line-clamp-3 min-h-16">
-                        {post.excerpt.slice(0, 160)}...
-                      </p>
-
-                      <div className="flex justify-end items-end">
-                        <Link
-                          to={`/noticias/${post.slug}`}
-                          className="inline-flex items-center text-primary-100 hover:text-white hover:bg-primary-100 transition-colors duration-300 font-medium  px-4 rounded py-1"
-                        >
-                          Leer más
-                          <FiArrowRight className="ml-1 h-4 w-4" />
-                        </Link>
-                      </div>
+                {/* Paginación */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center mt-12 space-x-2">
+                    <button
+                      onClick={() => setCurrentPage(currentPage - 1)}
+                      disabled={!hasPrevPage}
+                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Anterior
+                    </button>
+                    
+                    <div className="flex space-x-1">
+                      {Array.from({ length: totalPages }, (_, index) => {
+                        const page = index + 1;
+                        const isCurrentPage = page === currentPage;
+                        
+                        // Mostrar solo algunas páginas alrededor de la actual
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 2 && page <= currentPage + 2)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`px-3 py-2 text-sm font-medium rounded-md ${
+                                isCurrentPage
+                                  ? 'text-white bg-primary-100 border border-primary-100'
+                                  : 'text-bg-300 bg-white border border-gray-300 hover:bg-gray-50'
+                              }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (
+                          (page === currentPage - 3 && currentPage > 4) ||
+                          (page === currentPage + 3 && currentPage < totalPages - 3)
+                        ) {
+                          return (
+                            <span key={page} className="px-2 py-2 text-bg-300">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      })}
                     </div>
-                  </article>
-                ))}
-              </div>
+
+                    <button
+                      onClick={() => setCurrentPage(currentPage + 1)}
+                      disabled={!hasNextPage}
+                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Siguiente
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
 
@@ -402,7 +485,7 @@ const BlogPage: React.FC = () => {
                     type="text"
                     placeholder="Buscar artículos..."
                     value={filters.search}
-                    onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                    onChange={(e) => updateFilter({ search: e.target.value })}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-100"
                   />
                   <FiSearch className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
@@ -417,7 +500,7 @@ const BlogPage: React.FC = () => {
                   </h3>
                   <div className="space-y-2">
                     <button
-                      onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
+                      onClick={() => updateFilter({ category: '' })}
                       className={`block w-full text-left px-3 py-2 rounded transition-colors ${
                         filters.category === '' 
                           ? 'bg-primary-100 text-white' 
@@ -433,7 +516,7 @@ const BlogPage: React.FC = () => {
                       return (
                         <button
                           key={category}
-                          onClick={() => setFilters(prev => ({ ...prev, category }))}
+                          onClick={() => updateFilter({ category })}
                           className={`flex items-center justify-between w-full text-left px-3 py-2 rounded transition-colors ${
                             filters.category === category 
                               ? 'bg-primary-100 text-white' 
@@ -461,7 +544,7 @@ const BlogPage: React.FC = () => {
                     {allTags.slice(0, 12).map((tag, index) => (
                       <button
                         key={index}
-                        onClick={() => setFilters(prev => ({ ...prev, tag }))}
+                        onClick={() => updateFilter({ tag })}
                         className={`px-3 py-1 text-sm rounded-full transition-colors ${
                           filters.tag === tag
                             ? 'bg-primary-100 text-white'
@@ -490,7 +573,7 @@ const BlogPage: React.FC = () => {
                   ].map((option) => (
                     <button
                       key={option.value}
-                      onClick={() => setFilters(prev => ({ ...prev, dateRange: option.value }))}
+                      onClick={() => updateFilter({ dateRange: option.value })}
                       className={`block w-full text-left px-3 py-2 rounded transition-colors ${
                         filters.dateRange === option.value 
                           ? 'bg-primary-100 text-white' 
