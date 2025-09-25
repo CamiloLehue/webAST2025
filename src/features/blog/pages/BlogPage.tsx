@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FiCalendar, FiUser, FiArrowRight, FiSearch, FiFilter, FiX } from "react-icons/fi";
 import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 
@@ -15,6 +15,7 @@ interface BlogFilters {
 
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
+  const [searchParams, setSearchParams] = useSearchParams();
   
   const [filters, setFilters] = useState<BlogFilters>({
     search: '',
@@ -25,6 +26,21 @@ const BlogPage: React.FC = () => {
     sortOrder: 'desc'
   });
 
+  useEffect(() => {
+    const urlCategory = searchParams.get('category');
+    const urlTag = searchParams.get('tag');
+    const urlSearch = searchParams.get('search');
+    
+    if (urlCategory || urlTag || urlSearch) {
+      setFilters(prev => ({
+        ...prev,
+        category: urlCategory || '',
+        tag: urlTag || '',
+        search: urlSearch || ''
+      }));
+    }
+  }, [searchParams]);
+
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 6;
@@ -32,7 +48,6 @@ const BlogPage: React.FC = () => {
   const publishedPosts = useMemo(() => {
     let filtered = (blogPosts || []).filter((post) => post.isPublished);
 
-    // Filtro por búsqueda
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase();
       filtered = filtered.filter(
@@ -43,19 +58,16 @@ const BlogPage: React.FC = () => {
       );
     }
 
-    // Filtro por categoría
     if (filters.category) {
       filtered = filtered.filter((post) => post.category === filters.category);
     }
 
-    // Filtro por etiqueta
     if (filters.tag) {
       filtered = filtered.filter((post) => 
         post.tags.some(tag => tag.toLowerCase().includes(filters.tag.toLowerCase()))
       );
     }
 
-    // Filtro por rango de fecha
     if (filters.dateRange) {
       const now = new Date();
       const startDate = new Date();
@@ -83,7 +95,6 @@ const BlogPage: React.FC = () => {
       }
     }
 
-    // Ordenamiento
     filtered.sort((a, b) => {
       let comparison = 0;
       
@@ -101,14 +112,12 @@ const BlogPage: React.FC = () => {
     return filtered;
   }, [blogPosts, filters]);
 
-  // Posts paginados
   const paginatedPosts = useMemo(() => {
     const startIndex = (currentPage - 1) * postsPerPage;
     const endIndex = startIndex + postsPerPage;
     return publishedPosts.slice(startIndex, endIndex);
   }, [publishedPosts, currentPage, postsPerPage]);
 
-  // Información de paginación
   const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
   const hasNextPage = currentPage < totalPages;
   const hasPrevPage = currentPage > 1;
@@ -121,7 +130,6 @@ const BlogPage: React.FC = () => {
     });
   };
 
-  // Obtener listas para los filtros
   const categories = useMemo(() => [
     ...new Set(blogPosts?.filter(p => p.isPublished).map((post) => post.category))
   ].filter(Boolean), [blogPosts]);
@@ -130,7 +138,6 @@ const BlogPage: React.FC = () => {
     ...new Set(blogPosts?.filter(p => p.isPublished).flatMap((post) => post.tags))
   ].filter(Boolean), [blogPosts]);
 
-  // Función para limpiar filtros
   const clearFilters = () => {
     setFilters({
       search: '',
@@ -143,13 +150,11 @@ const BlogPage: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // Función para cambiar filtros y resetear página
   const updateFilter = (newFilters: Partial<BlogFilters>) => {
     setFilters(prev => ({ ...prev, ...newFilters }));
     setCurrentPage(1);
   };
 
-  // Contar filtros activos
   const activeFiltersCount = Object.entries(filters).filter(([key, value]) => 
     key !== 'sortBy' && key !== 'sortOrder' && value !== ''
   ).length;

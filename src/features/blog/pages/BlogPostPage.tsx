@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
-import { FiCalendar, FiUser, FiArrowLeft } from "react-icons/fi";
+import { FiCalendar, FiUser, FiArrowLeft, FiChevronDown, FiChevronRight } from "react-icons/fi";
 import MarkdownContent from "../../../components/content/MarkdownContent";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { blogPosts, loading, error } = useBlogManagement();
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+  const [expandedTags, setExpandedTags] = useState<string[]>([]);
 
   const post = (blogPosts || []).find((p) => p.slug === slug && p.isPublished);
 
@@ -49,6 +51,37 @@ const BlogPostPage: React.FC = () => {
           .slice(0, 4)
       : relatedPosts;
   const navigate = useNavigate();
+
+  const toggleCategoryExpansion = (category: string) => {
+    setExpandedCategories(prev => 
+      prev.includes(category) 
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  const toggleTagExpansion = (tag: string) => {
+    setExpandedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    );
+  };
+
+  const getPostsByCategory = (category: string) => {
+    return (blogPosts || [])
+      .filter(p => p.isPublished && p.category === category && p.id !== post?.id)
+      .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
+      .slice(0, 5); 
+  };
+
+  const getPostsByTag = (tag: string) => {
+    return (blogPosts || [])
+      .filter(p => p.isPublished && p.tags.includes(tag) && p.id !== post?.id)
+      .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
+      .slice(0, 5); 
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -255,20 +288,79 @@ const BlogPostPage: React.FC = () => {
                   </h3>
                   <div className="space-y-3">
                     {allCategories.map((category) => {
-                      const count = (blogPosts || []).filter(
+                      const categoryPosts = getPostsByCategory(category);
+                      const isExpanded = expandedCategories.includes(category);
+                      const totalCount = (blogPosts || []).filter(
                         (p) => p.category === category && p.isPublished
                       ).length;
+                      
                       return (
-                        <div
-                          key={category}
-                          className="group flex items-center justify-between p-3 rounded-xl hover:bg-primary-100/5 transition-all duration-300 cursor-pointer border border-transparent hover:border-primary-100/20"
-                        >
-                          <span className="text-bg-300 group-hover:text-primary-100 font-medium transition-colors">
-                            {category}
-                          </span>
-                          <span className="bg-bg-300/10 group-hover:bg-primary-100/20 text-bg-300 group-hover:text-primary-100 text-xs font-semibold px-2 py-1 rounded-full transition-all">
-                            {count}
-                          </span>
+                        <div key={category}>
+                          <button
+                            onClick={() => toggleCategoryExpansion(category)}
+                            className="group flex items-center justify-between w-full p-3 rounded-xl hover:bg-primary-100/5 transition-all duration-300 border border-transparent hover:border-primary-100/20"
+                          >
+                            <div className="flex items-center">
+                              <span className="text-bg-300 group-hover:text-primary-100 font-medium transition-colors mr-2">
+                                {category}
+                              </span>
+                              <span className="bg-bg-300/10 group-hover:bg-primary-100/20 text-bg-300 group-hover:text-primary-100 text-xs font-semibold px-2 py-1 rounded-full transition-all">
+                                {totalCount}
+                              </span>
+                            </div>
+                            {categoryPosts.length > 0 && (
+                              <div className="text-bg-300 group-hover:text-primary-100 transition-colors">
+                                {isExpanded ? (
+                                  <FiChevronDown className="w-4 h-4" />
+                                ) : (
+                                  <FiChevronRight className="w-4 h-4" />
+                                )}
+                              </div>
+                            )}
+                          </button>
+                          
+                          {isExpanded && categoryPosts.length > 0 && (
+                            <div className="mt-3 ml-4 space-y-2 border-l border-bg-300/20 pl-4">
+                              {categoryPosts.map((categoryPost) => (
+                                <Link
+                                  key={categoryPost.id}
+                                  to={`/noticias/${categoryPost.slug}`}
+                                  className="block group"
+                                >
+                                  <div className="flex gap-3 p-2 rounded-lg hover:bg-primary-100/5 transition-all duration-300">
+                                    {categoryPost.featuredImage && (
+                                      <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden">
+                                        <img
+                                          src={categoryPost.featuredImage}
+                                          alt={categoryPost.title}
+                                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                      </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <h4 className="font-medium text-sm text-bg-100 group-hover:text-primary-100 line-clamp-2 transition-colors leading-tight mb-1">
+                                        {categoryPost.title}
+                                      </h4>
+                                      <span className="text-xs text-bg-200 flex items-center">
+                                        <FiCalendar className="w-3 h-3 mr-1" />
+                                        {formatDate(categoryPost.publishedAt || categoryPost.createdAt).split(",")[0]}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                              {categoryPosts.length === 5 && (
+                                <div className="pt-2">
+                                  <Link
+                                    to={`/noticias?category=${encodeURIComponent(category)}`}
+                                    className="text-xs text-primary-100 hover:text-primary-200 font-medium"
+                                  >
+                                    Ver todos los artículos de {category} →
+                                  </Link>
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -296,21 +388,89 @@ const BlogPostPage: React.FC = () => {
                     </div>
                     Tags Populares
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="space-y-3">
                     {allTags.slice(0, 10).map((tag, index) => {
+                      const tagPosts = getPostsByTag(tag);
+                      const isExpanded = expandedTags.includes(tag);
                       const count = (blogPosts || [])
                         .filter((p) => p.isPublished)
                         .filter((p) => p.tags.includes(tag)).length;
+                      
                       return (
-                        <span
-                          key={index}
-                          className="group inline-flex items-center gap-1 px-3 py-2 text-xs bg-white-100 hover:bg-accent-100/10 text-bg-300 hover:text-accent-100 rounded-full cursor-pointer transition-all duration-300 border border-transparent hover:border-accent-100/20"
-                        >
-                          #{tag}
-                          <span className="text-xs opacity-60 group-hover:opacity-100">
-                            ({count})
-                          </span>
-                        </span>
+                        <div key={index}>
+                          <button
+                            onClick={() => toggleTagExpansion(tag)}
+                            className="group flex items-center justify-between w-full p-3 rounded-xl hover:bg-accent-100/5 transition-all duration-300 border border-transparent hover:border-accent-100/20"
+                          >
+                            <div className="flex items-center">
+                              <span className="text-bg-300 hover:text-accent-100 font-medium transition-colors mr-2">
+                                #{tag}
+                              </span>
+                              <span className="bg-bg-300/10 group-hover:bg-accent-100/20 text-bg-300 group-hover:text-accent-100 text-xs font-semibold px-2 py-1 rounded-full transition-all">
+                                {count}
+                              </span>
+                            </div>
+                            {tagPosts.length > 0 && (
+                              <div className="text-bg-300 group-hover:text-accent-100 transition-colors">
+                                {isExpanded ? (
+                                  <FiChevronDown className="w-4 h-4" />
+                                ) : (
+                                  <FiChevronRight className="w-4 h-4" />
+                                )}
+                              </div>
+                            )}
+                          </button>
+                          
+                          {isExpanded && tagPosts.length > 0 && (
+                            <div className="mt-3 ml-4 space-y-2 border-l border-bg-300/20 pl-4">
+                              {tagPosts.map((tagPost) => (
+                                <Link
+                                  key={tagPost.id}
+                                  to={`/noticias/${tagPost.slug}`}
+                                  className="block group"
+                                >
+                                  <div className="flex gap-3 p-2 rounded-lg hover:bg-accent-100/5 transition-all duration-300">
+                                    {tagPost.featuredImage && (
+                                      <div className="flex-shrink-0 w-12 h-12 rounded-md overflow-hidden">
+                                        <img
+                                          src={tagPost.featuredImage}
+                                          alt={tagPost.title}
+                                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                        />
+                                      </div>
+                                    )}
+                                    <div className="flex-1 min-w-0">
+                                      <h4 className="font-medium text-sm text-bg-100 group-hover:text-accent-100 line-clamp-2 transition-colors leading-tight mb-1">
+                                        {tagPost.title}
+                                      </h4>
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-xs text-bg-200 flex items-center">
+                                          <FiCalendar className="w-3 h-3 mr-1" />
+                                          {formatDate(tagPost.publishedAt || tagPost.createdAt).split(",")[0]}
+                                        </span>
+                                        {tagPost.category && (
+                                          <span className="text-xs bg-primary-100/10 text-primary-100 px-1 py-0.5 rounded">
+                                            {tagPost.category}
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Link>
+                              ))}
+                              {tagPosts.length === 5 && (
+                                <div className="pt-2">
+                                  <Link
+                                    to={`/noticias?tag=${encodeURIComponent(tag)}`}
+                                    className="text-xs text-accent-100 hover:text-accent-200 font-medium"
+                                  >
+                                    Ver todos los artículos con #{tag} →
+                                  </Link>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
