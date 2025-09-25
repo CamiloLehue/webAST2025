@@ -130,7 +130,7 @@ function WisensorIa() {
                 realizadas.
               </>
             }
-            images={["img/services/wireless/image02.png"]}
+            images={["img/services/wisensoria/image01.png"]}
             altText="Bot Agente de IA"
             layout="text-right"
             className="mt-10 h-full"
@@ -156,8 +156,8 @@ function WisensorIa() {
                 de decisiones y minimizando riesgos.
               </>
             }
-            images={["img/services/wireless/image03.png"]}
-            altText="wireless"
+            images={["img/services/wisensoria/image02.png"]}
+            altText="wisensoria"
             layout="text-left"
             className="mt-10 h-full"
             autoSlide={false}
@@ -176,7 +176,7 @@ function WisensorIa() {
                 información tras un solo mensaje.
               </>
             }
-            images={["img/services/wireless/image03.png"]}
+            images={["img/services/wisensoria/image04.png"]}
             altText="Visualiza tus Datos de Manera Gráfica"
             layout="text-right"
             className="mt-10 h-full"
@@ -193,7 +193,7 @@ function WisensorIa() {
                 empresas salmoneras.
               </>
             }
-            images={["img/services/wireless/image03.png"]}
+            images={["img/services/wisensoria/image03.png"]}
             altText="Ve más allá"
             layout="text-left"
             className="mt-10 h-full"
