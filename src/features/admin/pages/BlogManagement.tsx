@@ -192,7 +192,7 @@ const BlogManagement: React.FC = () => {
 
                       <div className="flex items-center space-x-2 ml-4">
                         <Link
-                          to={`/blog/${post.slug}`}
+                          to={`/noticias/${post.slug}`}
                           target="_blank"
                           className="p-2 text-gray-400 hover:text-bg-200"
                           title="Ver post"
