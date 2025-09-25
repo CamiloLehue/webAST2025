@@ -1,7 +1,12 @@
 import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import ContentSection from "../../../components/content/ContentSection";
+import { motion, useInView } from "motion/react";
+import { useRef } from "react";
 
 function WisensorIa() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
   return (
     <div className="w-full min-h-screen">
       <section className="relative h-screen">
@@ -42,9 +47,64 @@ function WisensorIa() {
           <h2 className="text-5xl font-bold text-center">
             Todo en el mismo lugar
           </h2>
-          <div className="w-full h-150 flex justify-center items-center">
-            <img src="svg/services/wisensoria/Iconos.svg" alt="banner" />
-          </div>
+          <motion.div
+            ref={ref}
+            className="w-full h-150 flex justify-center items-center relative"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+            }
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            {/* Ícono central - visible inicialmente, se oculta cuando está en vista */}
+            <motion.img
+              src="svg/services/wisensoria/IconoCentral.svg"
+              alt="icono central"
+              className="w-auto h-auto max-w-full max-h-full object-contain"
+              initial={{ opacity: 1, scale: 1 }}
+              animate={
+                isInView
+                  ? {
+                      opacity: 0,
+                      scale: 0.5,
+                      transition: { duration: 0.3, ease: "easeInOut" },
+                    }
+                  : {
+                      opacity: 1,
+                      scale: 1,
+                      transition: { duration: 0.3, ease: "easeOut" },
+                    }
+              }
+            />
+
+            {/* Íconos completos - ocultos inicialmente, aparecen con efecto de expansión rápida */}
+            <motion.img
+              src="svg/services/wisensoria/Iconos.svg"
+              alt="iconos completos"
+              className="absolute inset-0 w-full h-full object-contain"
+              initial={{ opacity: 0, scale: 0.3 }}
+              animate={
+                isInView
+                  ? {
+                      opacity: 1,
+                      scale: 1,
+                      transition: {
+                        duration: 0.4,
+                        delay: 0.2,
+                        ease: "easeOut",
+                        type: "spring",
+                        stiffness: 200,
+                        damping: 20,
+                      },
+                    }
+                  : {
+                      opacity: 0,
+                      scale: 0.3,
+                      transition: { duration: 0.2, ease: "easeIn" },
+                    }
+              }
+            />
+          </motion.div>
           <div className="flex flex-col gap-5 justify-center items-center">
             <p className="text-lg text-center max-w-4xl ">
               La plataforma permite integrar datos de diversas fuentes, creando
