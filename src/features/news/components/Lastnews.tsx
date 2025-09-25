@@ -16,7 +16,7 @@ function Lastnews() {
         new Date(b.publishedAt || b.createdAt).getTime() -
         new Date(a.publishedAt || a.createdAt).getTime()
     )
-    .slice(0, maxNewsItems); 
+    .slice(0, maxNewsItems);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-ES", {
@@ -87,7 +87,9 @@ function Lastnews() {
         <div className="relative h-full flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-6xl mb-4">📰</div>
-            <p className="text-white-100 text-xl">No hay noticias disponibles</p>
+            <p className="text-white-100 text-xl">
+              No hay noticias disponibles
+            </p>
           </div>
         </div>
       </div>
@@ -153,14 +155,14 @@ function Lastnews() {
               to={`/noticias/${item.slug}`}
               className="relative w-80 rounded-2xl overflow-hidden h-96 flex-shrink-0 shadow-lg hover:shadow-xl transition-shadow duration-300 block"
             >
-              <div className="relative h-full w-full">
+              <div className="relative h-full w-full overflow-hidden">
                 <img
                   src={
                     item.featuredImage ||
                     "https://via.placeholder.com/320x384.png?text=Noticia"
                   }
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover scale-135"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
               </div>
