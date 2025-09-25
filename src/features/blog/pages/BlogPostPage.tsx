@@ -168,9 +168,9 @@ const BlogPostPage: React.FC = () => {
                 </h1>
 
                 {post.excerpt && (
-                  <p className="text-xl text-bg-200 leading-relaxed bg-white-100 border-s-2 border-s-bg-300 ps-5 py-2">
+                    <p className="text-lg text-bg-200 leading-relaxed bg-white-100 border-s-2 border-s-bg-300 ps-5 py-2 italic">
                     {post.excerpt}
-                  </p>
+                    </p>
                 )}
               </header>
 
