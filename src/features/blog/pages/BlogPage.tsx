@@ -2,6 +2,7 @@ import React from "react";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { Link } from "react-router-dom";
 import { FiCalendar, FiUser, FiArrowRight } from "react-icons/fi";
+import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
@@ -69,54 +70,7 @@ const BlogPage: React.FC = () => {
   return (
     <div className="w-full min-h-screen ">
       {/* Header */}
-      <section className=" bg-bg-400 border-t border-t-bg-200 border-b-4 border-primary-100 ">
-        <div className=" max-w-7xl mx-auto  grid grid-cols-2 gap-5">
-          <div className="max-w-md  h-130  mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-            <article>
-              {/* Ultima noticia */}
-              {(() => {
-                const latestPost = publishedPosts.find(
-                  (post) => post.isPublished
-                );
-                return latestPost ? (
-                  <div className="w-full h-full flex flex-col gap-5">
-                    <h2 className="text-white text-4xl font-semibold">
-                      {latestPost.title}
-                    </h2>
-                    <p className="text-white-100 text-xl">
-                      {latestPost.excerpt.length > 150
-                        ? latestPost.excerpt.substring(0, 150) + "..."
-                        : latestPost.excerpt}
-                    </p>
-                    <Link
-                      to={`/noticias/${latestPost.slug}`}
-                      className="inline-flex items-center text-primary-100 hover:text-white-100 transition-colors duration-300 font-medium border px-4  py-1 w-max"
-                    >
-                      Leer más
-                      <FiArrowRight className="ml-1 h-4 w-4" />
-                    </Link>
-                  </div>
-                ) : (
-                  "No hay noticias publicadas"
-                );
-              })()}
-            </article>
-          </div>
-          <div className="relative w-full ">
-            <div className="absolute right-0 top-0 bg-gradient-to-l from-bg-400 to-transparent h-full w-1/3"></div>
-            <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
-            <img
-              draggable={false}
-              src={
-                publishedPosts[0]?.featuredImage ||
-                "https://via.placeholder.com/400x300.png?text=No+Image"
-              }
-              alt={publishedPosts[0]?.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
+      <NewsHeroSection posts={publishedPosts} />
       <div className="bg-white-100 ">
         <div className="max-w-7xl mx-auto px-4  py-8">
           <div className="text-center">
