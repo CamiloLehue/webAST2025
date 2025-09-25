@@ -7,15 +7,10 @@ function NetworkIp() {
     <div className="w-full min-h-screen">
       <HeroSection
         title="Network IP"
-        description="Ofrecemos soluciones integrales de seguridad y tele-vigilancia, adaptadas a cada entorno productivo y bajo los más altos estándares de calidad. Desde cámaras ópticas, térmicas e infrarrojas hasta sistemas de radar IP y monitoreo remoto, integramos tecnología avanzada para garantizar control, confiabilidad y protección en cualquier condición, incluso en los entornos más exigentes."
+        description="En AST Networks, somos expertos en soluciones de telecomunicaciones. Con una amplia experiencia en tecnologías como la telefonía IP, el enrutamiento de datos y las redes inalámbricas, ofrecemos soluciones eficientes y asequibles para tu negocio. Nos enfocamos en equipos que brindan la mejor relación costo-beneficio para que puedas optimizar tu plataforma de comunicaciones y telefonía."
         buttonText="Ver video"
         buttonLink="#"
-        images={[
-          "img/services/seguridad/hero.png",
-          "img/services/seguridad/cam.png",
-          "img/services/seguridad/cam2.png",
-          "img/services/seguridad/cam3.png",
-        ]}
+        images={["img/services/networkip/hero.JPG"]}
         altText="Network IP"
         onButtonClick={() => {
           console.log("Ver video clicked");
@@ -31,7 +26,7 @@ function NetworkIp() {
       <section className="max-w-7xl mx-auto w-full py-10">
         <div className="flex flex-col gap-10 justify-center items-center w-full">
           <ContentSection
-            title="Servicios IP"
+            title="Equipamiento de Red"
             description={
               <>
                 Nuestra compañía en su experiencia ha realizado análisis de
@@ -43,7 +38,7 @@ function NetworkIp() {
                 costo/beneficio.
               </>
             }
-            images={["img/services/satelital/image04.jpg"]}
+            images={["img/services/networkip/image01.png"]}
             altText="Equipamiento"
             layout="text-left"
             className="mt-10 h-full"
@@ -64,7 +59,7 @@ function NetworkIp() {
                 asesorarlo en su decisión.
               </>
             }
-            images={["img/services/satelital/image02.jpg"]}
+            images={["img/services/networkip/image02.png"]}
             altText="Equipamiento"
             layout="text-right"
             className="mt-10 h-full"
@@ -100,10 +95,10 @@ function NetworkIp() {
             <div id="equipamiento">
               <ImageGallery
                 images={[
-                  "img/services/seguridad/cam3.png",
-                  "img/services/seguridad/cam.png",
-                  "img/services/seguridad/cam2.png",
-                  "img/services/seguridad/hero.png",
+                  "img/services/networkip/image03.jpg",
+                  "img/services/networkip/image04.jpg",
+                  "img/services/networkip/image05.jpg",
+                  "img/services/networkip/image06.JPG",
                 ]}
                 title="Equipamiento de Red"
                 description="Routing, QoS, VPN, VLAN, WiFi, NAT, Firewall, entre otros son los tantos servicios que a diario debemos confiar en nuestro equipamiento de red, frente a esto y a la cada vez superior demanda de procesos, confíe en soluciones Routerboard la mejor ecuación costo/beneficio, estamos para apoyarlo."
@@ -117,10 +112,10 @@ function NetworkIp() {
             <div id="servicio">
               <ImageGallery
                 images={[
-                  "img/services/seguridad/cam3.png",
-                  "img/services/seguridad/cam.png",
-                  "img/services/seguridad/cam2.png",
-                  "img/services/seguridad/hero.png",
+                  "img/services/networkip/image07.jpg",
+                  "img/services/networkip/image08.jpg",
+                  "img/services/networkip/image05.jpg",
+                  "img/services/networkip/image06.JPG",
                 ]}
                 title="Servicios de Instalación"
                 description="Para sus proyectos de implementación telefonía IP, video seguridad, troncales de Fibra Optica o enrutamiento, tenemos el mejor equipo de profesionales para ayudarle siempre con el mejor estándar de servicio y calidad."
