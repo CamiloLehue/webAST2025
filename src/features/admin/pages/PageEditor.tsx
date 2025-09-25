@@ -90,14 +90,13 @@ const PageEditor: React.FC = () => {
     }
   };
 
-  // Content Section Management
   const addContentSection = (type: ContentSectionType) => {
     const newSection: ContentSection = {
       id: `section-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type,
       data: getDefaultSectionData(type),
       order: formData.content.length,
-      gridWidth: 12, // Por defecto ocupa todo el ancho
+      gridWidth: 12,
     };
 
     setFormData((prev) => ({
@@ -106,7 +105,10 @@ const PageEditor: React.FC = () => {
     }));
   };
 
-  const updateContentSection = (sectionId: string, data: ContentSection["data"]) => {
+  const updateContentSection = (
+    sectionId: string,
+    data: ContentSection["data"]
+  ) => {
     setFormData((prev) => ({
       ...prev,
       content: prev.content.map((section) =>
@@ -115,7 +117,10 @@ const PageEditor: React.FC = () => {
     }));
   };
 
-  const updateFullContentSection = (sectionId: string, updatedSection: Partial<ContentSection>) => {
+  const updateFullContentSection = (
+    sectionId: string,
+    updatedSection: Partial<ContentSection>
+  ) => {
     setFormData((prev) => ({
       ...prev,
       content: prev.content.map((section) =>
@@ -144,13 +149,11 @@ const PageEditor: React.FC = () => {
 
       if (newIndex < 0 || newIndex >= sections.length) return prev;
 
-      // Swap sections
       [sections[index], sections[newIndex]] = [
         sections[newIndex],
         sections[index],
       ];
 
-      // Update order
       sections.forEach((section, idx) => {
         section.order = idx;
       });
@@ -185,13 +188,11 @@ const PageEditor: React.FC = () => {
         });
       } else {
         if (template) {
-          // Create from template
           await createPageFromTemplate(template, {
             title: formData.title,
             slug: formData.slug,
           });
         } else {
-          // Create new page
           await createCustomPage(formData);
         }
       }
@@ -239,7 +240,6 @@ const PageEditor: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
@@ -285,9 +285,7 @@ const PageEditor: React.FC = () => {
         </div>
       </div>
 
-      {/* Form */}
       <div className="bg-white rounded-lg shadow p-6 space-y-6">
-        {/* Basic Info */}
         <div className="grid grid-cols-1 gap-6">
           <div>
             <label
@@ -396,7 +394,6 @@ const PageEditor: React.FC = () => {
           </div>
         </div>
 
-        {/* Content Sections */}
         <div className="border-t pt-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-medium text-bg-100">
@@ -407,7 +404,6 @@ const PageEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Add Content Section Buttons */}
           <div className="mb-6">
             <h4 className="text-sm font-medium text-bg-300 mb-3">
               Agregar Sección
@@ -428,7 +424,6 @@ const PageEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Content Sections */}
           {formData.content.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
               <div className="mx-auto h-12 w-12 text-gray-400 text-4xl">📄</div>
@@ -450,12 +445,20 @@ const PageEditor: React.FC = () => {
                     index={index}
                     totalSections={formData.content.length}
                     onUpdate={(dataOrSection) => {
-                      // Si es una sección completa (tiene id), actualizar toda la sección
-                      if (typeof dataOrSection === 'object' && dataOrSection && 'id' in dataOrSection) {
-                        updateFullContentSection(section.id, dataOrSection as Partial<ContentSection>);
+                      if (
+                        typeof dataOrSection === "object" &&
+                        dataOrSection &&
+                        "id" in dataOrSection
+                      ) {
+                        updateFullContentSection(
+                          section.id,
+                          dataOrSection as Partial<ContentSection>
+                        );
                       } else {
-                        // Si son solo datos, actualizar solo los datos
-                        updateContentSection(section.id, dataOrSection as ContentSection["data"]);
+                        updateContentSection(
+                          section.id,
+                          dataOrSection as ContentSection["data"]
+                        );
                       }
                     }}
                     onRemove={() => removeContentSection(section.id)}
@@ -470,7 +473,6 @@ const PageEditor: React.FC = () => {
   );
 };
 
-// Section types configuration
 const sectionTypes: { type: ContentSectionType; name: string; icon: string }[] =
   [
     { type: "hero", name: "Hero", icon: "🎯" },
@@ -485,8 +487,9 @@ const sectionTypes: { type: ContentSectionType; name: string; icon: string }[] =
     { type: "spacer", name: "Espaciador", icon: "⬜" },
   ];
 
-// Default data for each section type
-const getDefaultSectionData = (type: ContentSectionType): ContentSection["data"] => {
+const getDefaultSectionData = (
+  type: ContentSectionType
+): ContentSection["data"] => {
   switch (type) {
     case "hero":
       return {
@@ -575,7 +578,6 @@ const getDefaultSectionData = (type: ContentSectionType): ContentSection["data"]
         height: "medium" as const,
       };
     default:
-      // Return a default object with all properties set to empty values for unknown types
       return {
         title: "",
         subtitle: "",
@@ -583,36 +585,37 @@ const getDefaultSectionData = (type: ContentSectionType): ContentSection["data"]
         buttonText: "",
         buttonLink: "",
         content: "",
-        fontSize: "",
-        padding: "",
+        fontSize: undefined,
+        padding: undefined,
         src: "",
         alt: "",
         width: "medium",
         rounded: false,
         caption: "",
         images: [],
-        columns: 0,
-        spacing: "",
+        columns: undefined,
+        spacing: undefined,
         autoplay: false,
         controls: false,
         fields: [],
         submitButtonText: "",
         successMessage: "",
-        layout: "",
+        layout: undefined,
         testimonials: [],
         features: [],
         description: "",
-        height: "",
+        height: undefined,
       };
   }
 };
 
-// Content Section Editor Component
 interface ContentSectionEditorProps {
   section: ContentSection;
   index: number;
   totalSections: number;
-  onUpdate: (dataOrSection: ContentSection["data"] | Partial<ContentSection>) => void;
+  onUpdate: (
+    dataOrSection: ContentSection["data"] | Partial<ContentSection>
+  ) => void;
   onRemove: () => void;
   onMove: (direction: "up" | "down") => void;
 }
@@ -675,7 +678,6 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
       </div>
 
       <div className="p-4 space-y-4">
-        {/* Grid Width Control */}
         <div className="border-b border-white pb-4">
           <label className="block text-sm font-medium text-bg-300 mb-2">
             Ancho en Grid (columnas de 12)
@@ -685,9 +687,8 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
             onChange={(e) => {
               const updatedSection = {
                 ...section,
-                gridWidth: parseInt(e.target.value)
+                gridWidth: parseInt(e.target.value),
               };
-              // Necesitamos actualizar toda la sección, no solo los datos
               if (onUpdate) {
                 onUpdate(updatedSection);
               }
@@ -702,7 +703,8 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
             <option value={9}>9 columnas (tres cuartos)</option>
           </select>
           <p className="mt-1 text-xs text-gray-500">
-            Controla cuánto espacio horizontal ocupa esta sección. Las secciones se agruparán en filas automáticamente.
+            Controla cuánto espacio horizontal ocupa esta sección. Las secciones
+            se agruparán en filas automáticamente.
           </p>
         </div>
 
@@ -716,7 +718,6 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
   );
 };
 
-// Content Section Form Component
 interface ContentSectionFormProps {
   type: ContentSectionType;
   data: any;
@@ -1147,7 +1148,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   onChange={(e) => updateField("autoplay", e.target.checked)}
                   className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
                 />
-                <label htmlFor="autoplay" className="ml-2 block text-sm text-bg-100">
+                <label
+                  htmlFor="autoplay"
+                  className="ml-2 block text-sm text-bg-100"
+                >
                   Reproducción automática
                 </label>
               </div>
@@ -1159,7 +1163,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   onChange={(e) => updateField("controls", e.target.checked)}
                   className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
                 />
-                <label htmlFor="controls" className="ml-2 block text-sm text-bg-100">
+                <label
+                  htmlFor="controls"
+                  className="ml-2 block text-sm text-bg-100"
+                >
                   Mostrar controles
                 </label>
               </div>
@@ -1178,7 +1185,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </label>
               <select
                 value={data.columns || 3}
-                onChange={(e) => updateField("columns", parseInt(e.target.value))}
+                onChange={(e) =>
+                  updateField("columns", parseInt(e.target.value))
+                }
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value={2}>2 columnas</option>
@@ -1207,7 +1216,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </label>
             <div className="mt-2 space-y-2">
               {(data.images || []).map((image: any, index: number) => (
-                <div key={index} className="flex space-x-2 items-center p-3 border border-white-100 rounded-md">
+                <div
+                  key={index}
+                  className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
+                >
                   <input
                     type="url"
                     value={image.src || ""}
@@ -1233,7 +1245,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   <button
                     type="button"
                     onClick={() => {
-                      const newImages = (data.images || []).filter((_: any, i: number) => i !== index);
+                      const newImages = (data.images || []).filter(
+                        (_: any, i: number) => i !== index
+                      );
                       updateField("images", newImages);
                     }}
                     className="px-2 py-1 text-sm text-red-600 hover:text-red-800"
@@ -1245,7 +1259,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  const newImages = [...(data.images || []), { src: "", alt: "", caption: "" }];
+                  const newImages = [
+                    ...(data.images || []),
+                    { src: "", alt: "", caption: "" },
+                  ];
                   updateField("images", newImages);
                 }}
                 className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
@@ -1302,7 +1319,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </label>
             <div className="mt-2 space-y-2">
               {(data.fields || []).map((field: any, index: number) => (
-                <div key={index} className="p-3 border border-white-100 rounded-md">
+                <div
+                  key={index}
+                  className="p-3 border border-white-100 rounded-md"
+                >
                   <div className="grid grid-cols-3 gap-2 mb-2">
                     <input
                       type="text"
@@ -1337,7 +1357,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                           checked={field.required || false}
                           onChange={(e) => {
                             const newFields = [...(data.fields || [])];
-                            newFields[index] = { ...field, required: e.target.checked };
+                            newFields[index] = {
+                              ...field,
+                              required: e.target.checked,
+                            };
                             updateField("fields", newFields);
                           }}
                           className="h-3 w-3 text-accent-100"
@@ -1347,7 +1370,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                       <button
                         type="button"
                         onClick={() => {
-                          const newFields = (data.fields || []).filter((_: any, i: number) => i !== index);
+                          const newFields = (data.fields || []).filter(
+                            (_: any, i: number) => i !== index
+                          );
                           updateField("fields", newFields);
                         }}
                         className="text-red-600 hover:text-red-800 text-sm"
@@ -1361,12 +1386,15 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  const newFields = [...(data.fields || []), { 
-                    id: `field-${Date.now()}`, 
-                    type: "text", 
-                    label: "", 
-                    required: false 
-                  }];
+                  const newFields = [
+                    ...(data.fields || []),
+                    {
+                      id: `field-${Date.now()}`,
+                      type: "text",
+                      label: "",
+                      required: false,
+                    },
+                  ];
                   updateField("fields", newFields);
                 }}
                 className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
@@ -1421,7 +1449,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   const testimonials = JSON.parse(e.target.value);
                   updateField("testimonials", testimonials);
                 } catch {
-                  // Invalid JSON, ignore
+                  // json invalido porsiacaso
                 }
               }}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
@@ -1478,7 +1506,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </label>
               <select
                 value={data.columns || 3}
-                onChange={(e) => updateField("columns", parseInt(e.target.value))}
+                onChange={(e) =>
+                  updateField("columns", parseInt(e.target.value))
+                }
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value={2}>2 columnas</option>
@@ -1502,7 +1532,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   const features = JSON.parse(e.target.value);
                   updateField("features", features);
                 } catch {
-                  // Invalid JSON, ignore
+                  // json invalido porsiacaso
                 }
               }}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
@@ -1547,7 +1577,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   const newData = JSON.parse(e.target.value);
                   onChange(newData);
                 } catch {
-                  // Invalid JSON, ignore
+                  // json invalido porsiacaso
                 }
               }}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"

@@ -2,6 +2,7 @@ import React from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { FiCalendar, FiUser, FiArrowLeft } from "react-icons/fi";
+import MarkdownContent from "../../../components/content/MarkdownContent";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -174,17 +175,10 @@ const BlogPostPage: React.FC = () => {
                 )}
               </header>
 
-              <div className="prose prose-lg max-w-none">
-                {post.content.split("\n").map((paragraph, index) => {
-                  if (paragraph.trim() === "") return <br key={index} />;
-
-                  return (
-                    <p key={index} className="mb-4 text-bg-300 leading-relaxed">
-                      {paragraph}
-                    </p>
-                  );
-                })}
-              </div>
+              <MarkdownContent 
+                content={post.content}
+                className="prose prose-lg max-w-none"
+              />
 
               {post.tags.length > 0 && (
                 <div className="mt-12 pt-8 border-t border-bg-300/10">

@@ -1,6 +1,6 @@
 import type { NavMenuItem } from "../types/NavMenu";
 
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
 
 export const getNavMenuItems = async (): Promise<NavMenuItem[]> => {
   // try {
