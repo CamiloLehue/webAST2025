@@ -32,10 +32,10 @@ function WisensorIa() {
               y la sostenibilidad en los centros de cultivo.
             </p>
             <div className="max-w-3xl flex gap-5 items-center mt-8">
-              <button className="bg-bg-400/30 border border-white/50 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
+              <button className="bg-bg-400/30 border border-white/50 hover:bg-primary-100 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
                 Ir a Wisensor IA
               </button>
-              <button className="bg-bg-400/30 border border-white/50 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
+              <button className="bg-bg-400/30 border border-white/50 hover:bg-primary-100 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
                 Ver Video
               </button>
             </div>
