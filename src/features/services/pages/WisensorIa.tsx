@@ -1,12 +1,146 @@
 import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
+import ContentSection from "../../../components/content/ContentSection";
 
 function WisensorIa() {
   return (
     <div className="w-full min-h-screen">
       <section className="relative h-screen">
-      <img src="" alt="" />
+        <img
+          src="img/services/wisensoria/hero.png"
+          alt="hero"
+          className=" object-cover w-full h-full"
+        />
+        <div className="w-full h-full absolute top-0 left-0 bg-black/40 flex flex-col justify-center items-center text-center px-5">
+          <div className="relative -top-0 w-full max-w-7xl mx-auto h-full flex flex-col justify-center items-start text-center px-5">
+            <h1 className="text-5xl font-bold text-white mb-5">
+              Bienvenido a WisensorIA
+            </h1>
+            <p className="text-lg text-white text-left max-w-3xl">
+              WisensorIA integra una infraestructura avanzada de IoT con
+              capacidades de inteligencia artificial (IA) para optimizar la
+              eficiencia en la gestión de datos en la industria salmonera. Este
+              sistema se basa en una red de sensores inteligentes que recogen
+              datos de diversas fuentes, permitiendo una recopilación eficiente
+              de información ambiental y operativa. La IA aplicada a estos datos
+              no solo predice posibles riesgos y problemas, sino que también
+              permite tomar decisiones proactivas para mejorar la productividad
+              y la sostenibilidad en los centros de cultivo.
+            </p>
+            <div className="max-w-3xl flex gap-5 items-center mt-8">
+              <button className="bg-bg-400/30 border border-white/50 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
+                Ir a Wisensor IA
+              </button>
+              <button className="bg-bg-400/30 border border-white/50 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full mt-5 flex items-center gap-2">
+                Ver Video
+              </button>
+            </div>
+          </div>
+        </div>
       </section>
+      <section className="max-w-7xl mx-auto w-full py-10">
+        <div className="flex flex-col gap-10 justify-center items-center w-full">
+          <h2 className="text-5xl font-bold text-center">
+            Todo en el mismo lugar
+          </h2>
+          <div className="w-full h-150 flex justify-center items-center">
+            <img src="svg/services/wisensoria/Iconos.svg" alt="banner" />
+          </div>
+          <div className="flex flex-col gap-5 justify-center items-center">
+            <p className="text-lg text-center max-w-4xl ">
+              La plataforma permite integrar datos de diversas fuentes, creando
+              una red conectada que facilita el monitoreo en tiempo real de las
+              condiciones de los centros de cultivo. Esto incluye variables como
+              el estado de las jaulas balsas, la corriente marina y otros
+              parámetros críticos para la operación.{" "}
+            </p>
+            <div className="max-w-sm w-full h-1 bg-primary-100 mt-5"></div>
+          </div>
+          <ContentSection
+            title="Bot Agente de IA"
+            description={
+              <>
+                El chatbox de{" "}
+                <span className="text-primary-100 font-bold">WisensorIA</span>,
+                potenciado por inteligencia artificial, permite consultar datos
+                en tiempo real con respuestas inmediatas y precisas. Además,
+                cuenta con una vista interactiva del mapa, donde los usuarios
+                pueden visualizar el clima y obtener representaciones gráficas
+                de los datos. La IA optimiza la interacción, proporcionando
+                respuestas más inteligentes y relevantes según las consultas
+                realizadas.
+              </>
+            }
+            images={["img/services/wireless/image02.png"]}
+            altText="Bot Agente de IA"
+            layout="text-right"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
 
+          <div>
+            <h4 className="font-semibold text-5xl">
+              Funcionalidades del Chatbot
+            </h4>
+            <img src="svg/services/wisensoria/banner.svg" alt="banner" />
+          </div>
+
+          <ContentSection
+            title="Mantente al tanto de todo"
+            description={
+              <>
+                <span className="text-primary-100 font-bold">WisensorIA</span>{" "}
+                también ofrece alertas configurables que permiten una respuesta
+                rápida ante cualquier evento inesperado. Estas notificaciones
+                mejoran la gestión operativa y aseguran que los usuarios estén
+                informados de cualquier variación relevante, optimizando la toma
+                de decisiones y minimizando riesgos.
+              </>
+            }
+            images={["img/services/wireless/image03.png"]}
+            altText="wireless"
+            layout="text-left"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
+          <ContentSection
+            title="Visualiza tus Datos de Manera Gráfica"
+            description={
+              <>
+                Con{" "}
+                <span className="text-primary-100 font-bold">WisensorIA</span>,
+                accede a datos en tiempo real y visualízalos de manera clara a
+                través de gráficos interactivos, facilitando la toma de
+                decisiones y el monitoreo eficiente de los centros de cultivo.
+                Ademas, con tan solo solicitarlo a través del Chatbox de IA
+                podrás obtener un gráfico de lo que necesites. Toda la
+                información tras un solo mensaje.
+              </>
+            }
+            images={["img/services/wireless/image03.png"]}
+            altText="Visualiza tus Datos de Manera Gráfica"
+            layout="text-right"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
+          <ContentSection
+            title="Ve más allá"
+            description={
+              <>
+                Con la integración de IA, Wisensor no solo mejora la eficiencia
+                de las operaciones, sino que también permite adaptarse
+                rápidamente a los cambios del entorno, lo que resulta en una
+                mayor productividad, sostenibilidad y competitividad para las
+                empresas salmoneras.
+              </>
+            }
+            images={["img/services/wireless/image03.png"]}
+            altText="Ve más allá"
+            layout="text-left"
+            className="mt-10 h-full"
+            autoSlide={false}
+          />
+        </div>
+      </section>
       <section className="relative h-130">
         <div
           className="absolute left-0 -top-0  w-full h-130  bg-primary-100 "
@@ -21,7 +155,6 @@ function WisensorIa() {
           <div className="grid grid-cols-2 gap-10 w-full py-10 text-black">
             <article className=" bg-white rounded-2xl h-80  border border-dashed border-bg-300/10  mb-4 flex flex-col justify-center items-center gap-5">
               <TbPhoneFilled className="text-8xl text-primary-100" />
-
               <p className="text-center text-xl max-w-lg">
                 Llámenos al{" "}
                 <span className="text-primary-100 font-semibold">
