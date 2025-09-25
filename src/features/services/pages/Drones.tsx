@@ -9,7 +9,7 @@ function Drones() {
         description="Ofrecemos una administración integral para industrias como la construcción, seguridad y energía a través de drones autónomos. Integramos tecnología de vanguardia con una estación de acoplamiento (DOCK) robusta y automatizada que permite optimizar las operaciones diarias, mejorar la seguridad y garantizar una supervisión continua y eficiente 24/7."
         buttonText="Ver video"
         buttonLink="#"
-        images={["img/services/networkip/hero.JPG"]}
+        images={["img/services/drones/image01.png"]}
         altText="Drones"
         onButtonClick={() => {
           console.log("Ver video clicked");
@@ -40,7 +40,7 @@ function Drones() {
                 altura o con elementos peligrosos.
               </>
             }
-            images={["img/services/networkip/image01.png"]}
+            images={["img/services/drones/image02.png"]}
             altText="Aplicaciones"
             layout="text-right"
             className="mt-10 h-full"
@@ -119,7 +119,7 @@ function Drones() {
                 eficiente.
               </>
             }
-            images={["img/services/networkip/image02.png"]}
+            images={["img/services/drones/image03.png"]}
             altText="Seguridad"
             layout="text-left"
             className="mt-10 h-full"
@@ -141,7 +141,7 @@ function Drones() {
                 máxima seguridad en cada misión.
               </>
             }
-            images={["img/services/networkip/image02.png"]}
+            images={["img/services/drones/image04.png"]}
             altText="Estación de Acoplamiento"
             layout="text-right"
             className="mt-10 h-full"
@@ -162,7 +162,7 @@ function Drones() {
                 recopilados.
               </>
             }
-            images={["img/services/networkip/image02.png"]}
+            images={["img/services/drones/image05.png"]}
             altText="Siempre en funcionamiento"
             layout="text-left"
             className="mt-10 h-full"

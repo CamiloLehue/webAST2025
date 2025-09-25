@@ -9,7 +9,7 @@ function Header() {
       </div>
       <div className="max-w-7xl mx-auto flex justify-between items-center px-5 h-full w-full">
         <div className="">
-          <img src="AST-Logo-white.png" alt="Logo AST" className="w-30" />
+          <img src="/AST-Logo-white.png" alt="Logo AST" className="w-30" />
         </div>
         <div className="relative">
           <NavBar />

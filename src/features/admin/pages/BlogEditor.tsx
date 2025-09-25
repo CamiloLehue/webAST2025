@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { FiSave, FiEye, FiArrowLeft } from "react-icons/fi";
 import { useBlogManagement } from "../blog-management";
+import RichTextEditor from "../../../components/editor/RichTextEditor";
 
 const BlogEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -123,7 +124,6 @@ const BlogEditor: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
@@ -165,9 +165,7 @@ const BlogEditor: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Title */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Título del Post
@@ -181,7 +179,6 @@ const BlogEditor: React.FC = () => {
             />
           </div>
 
-          {/* Slug */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Slug (URL)
@@ -202,7 +199,6 @@ const BlogEditor: React.FC = () => {
             </div>
           </div>
 
-          {/* Excerpt */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Resumen
@@ -218,29 +214,18 @@ const BlogEditor: React.FC = () => {
             />
           </div>
 
-          {/* Content */}
-          <div className="bg-white rounded-lg shadow p-6">
-            <label className="block text-sm font-medium text-bg-300 mb-2">
-              Contenido
-            </label>
-            <textarea
-              value={formData.content}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, content: e.target.value }))
-              }
-              rows={20}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="Escribe el contenido de tu post..."
-            />
-            <p className="mt-2 text-sm text-gray-500">
-              Puedes usar Markdown para formatear tu contenido.
-            </p>
-          </div>
+          {/* Contenidoo */}
+          <RichTextEditor
+            value={formData.content}
+            onChange={(content) =>
+              setFormData((prev) => ({ ...prev, content }))
+            }
+            placeholder="Escribe el contenido de tu post..."
+            rows={20}
+          />
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Featured Image */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Imagen Destacada
@@ -271,7 +256,6 @@ const BlogEditor: React.FC = () => {
             )}
           </div>
 
-          {/* Category */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Categoría
@@ -287,7 +271,6 @@ const BlogEditor: React.FC = () => {
             />
           </div>
 
-          {/* Tags */}
           <div className="bg-white rounded-lg shadow p-6">
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Etiquetas
@@ -328,7 +311,6 @@ const BlogEditor: React.FC = () => {
             )}
           </div>
 
-          {/* Publication Status */}
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-bg-300 mb-3">Estado</h3>
             <div className="space-y-2">
