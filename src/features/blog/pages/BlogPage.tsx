@@ -7,7 +7,6 @@ import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
 
-  // Proteger contra arrays undefined y filtrar posts publicados
   const publishedPosts = (blogPosts || [])
     .filter((post) => post.isPublished)
     .sort(
@@ -28,7 +27,6 @@ const BlogPage: React.FC = () => {
     ...new Set(publishedPosts.map((post) => post.category)),
   ].filter(Boolean);
 
-  // Manejo de estados de carga y error
   if (loading) {
     return (
       <div className="w-full min-h-screen bg-bg-400">
@@ -69,7 +67,6 @@ const BlogPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen ">
-      {/* Header */}
       <NewsHeroSection posts={publishedPosts} />
       <div className="bg-white-100 ">
         <div className="max-w-7xl mx-auto px-4  py-8">
@@ -86,7 +83,6 @@ const BlogPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-          {/* Main Content */}
           <div className="lg:col-span-3">
             {publishedPosts.length === 0 ? (
               <div className="text-center py-12">
@@ -174,10 +170,8 @@ const BlogPage: React.FC = () => {
             )}
           </div>
 
-          {/* Sidebar */}
           <div className="mt-12 lg:mt-0">
             <div className="space-y-8">
-              {/* Categories */}
               {categories.length > 0 && (
                 <div className="bg-white rounded-lg shadow p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
@@ -204,7 +198,6 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Recent Posts */}
               {publishedPosts.length > 3 && (
                 <div className="bg-white rounded-lg shadow p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
