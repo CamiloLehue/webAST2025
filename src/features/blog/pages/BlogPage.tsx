@@ -22,7 +22,7 @@ interface BlogFilters {
 
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const [filters, setFilters] = useState<BlogFilters>({
     search: "",
