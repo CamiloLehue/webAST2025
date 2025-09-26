@@ -1,7 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { Link, useSearchParams } from "react-router-dom";
-import { FiCalendar, FiUser, FiArrowRight, FiSearch, FiFilter, FiX } from "react-icons/fi";
+import {
+  FiCalendar,
+  FiUser,
+  FiArrowRight,
+  FiSearch,
+  FiFilter,
+  FiX,
+} from "react-icons/fi";
 import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 
 interface BlogFilters {
@@ -9,34 +16,34 @@ interface BlogFilters {
   category: string;
   tag: string;
   dateRange: string;
-  sortBy: 'date' | 'title';
-  sortOrder: 'desc' | 'asc';
+  sortBy: "date" | "title";
+  sortOrder: "desc" | "asc";
 }
 
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const [filters, setFilters] = useState<BlogFilters>({
-    search: '',
-    category: '',
-    tag: '',
-    dateRange: '',
-    sortBy: 'date',
-    sortOrder: 'desc'
+    search: "",
+    category: "",
+    tag: "",
+    dateRange: "",
+    sortBy: "date",
+    sortOrder: "desc",
   });
 
   useEffect(() => {
-    const urlCategory = searchParams.get('category');
-    const urlTag = searchParams.get('tag');
-    const urlSearch = searchParams.get('search');
-    
+    const urlCategory = searchParams.get("category");
+    const urlTag = searchParams.get("tag");
+    const urlSearch = searchParams.get("search");
+
     if (urlCategory || urlTag || urlSearch) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
-        category: urlCategory || '',
-        tag: urlTag || '',
-        search: urlSearch || ''
+        category: urlCategory || "",
+        tag: urlTag || "",
+        search: urlSearch || "",
       }));
     }
   }, [searchParams]);
@@ -63,31 +70,33 @@ const BlogPage: React.FC = () => {
     }
 
     if (filters.tag) {
-      filtered = filtered.filter((post) => 
-        post.tags.some(tag => tag.toLowerCase().includes(filters.tag.toLowerCase()))
+      filtered = filtered.filter((post) =>
+        post.tags.some((tag) =>
+          tag.toLowerCase().includes(filters.tag.toLowerCase())
+        )
       );
     }
 
     if (filters.dateRange) {
       const now = new Date();
       const startDate = new Date();
-      
+
       switch (filters.dateRange) {
-        case 'week':
+        case "week":
           startDate.setDate(now.getDate() - 7);
           break;
-        case 'month':
+        case "month":
           startDate.setMonth(now.getMonth() - 1);
           break;
-        case 'quarter':
+        case "quarter":
           startDate.setMonth(now.getMonth() - 3);
           break;
-        case 'year':
+        case "year":
           startDate.setFullYear(now.getFullYear() - 1);
           break;
       }
-      
-      if (filters.dateRange !== 'all') {
+
+      if (filters.dateRange !== "all") {
         filtered = filtered.filter((post) => {
           const postDate = new Date(post.publishedAt || post.createdAt);
           return postDate >= startDate;
@@ -97,16 +106,16 @@ const BlogPage: React.FC = () => {
 
     filtered.sort((a, b) => {
       let comparison = 0;
-      
-      if (filters.sortBy === 'date') {
+
+      if (filters.sortBy === "date") {
         const dateA = new Date(a.publishedAt || a.createdAt).getTime();
         const dateB = new Date(b.publishedAt || b.createdAt).getTime();
         comparison = dateB - dateA;
-      } else if (filters.sortBy === 'title') {
+      } else if (filters.sortBy === "title") {
         comparison = a.title.localeCompare(b.title);
       }
-      
-      return filters.sortOrder === 'asc' ? comparison : -comparison;
+
+      return filters.sortOrder === "asc" ? comparison : -comparison;
     });
 
     return filtered;
@@ -130,33 +139,45 @@ const BlogPage: React.FC = () => {
     });
   };
 
-  const categories = useMemo(() => [
-    ...new Set(blogPosts?.filter(p => p.isPublished).map((post) => post.category))
-  ].filter(Boolean), [blogPosts]);
+  const categories = useMemo(
+    () =>
+      [
+        ...new Set(
+          blogPosts?.filter((p) => p.isPublished).map((post) => post.category)
+        ),
+      ].filter(Boolean),
+    [blogPosts]
+  );
 
-  const allTags = useMemo(() => [
-    ...new Set(blogPosts?.filter(p => p.isPublished).flatMap((post) => post.tags))
-  ].filter(Boolean), [blogPosts]);
+  const allTags = useMemo(
+    () =>
+      [
+        ...new Set(
+          blogPosts?.filter((p) => p.isPublished).flatMap((post) => post.tags)
+        ),
+      ].filter(Boolean),
+    [blogPosts]
+  );
 
   const clearFilters = () => {
     setFilters({
-      search: '',
-      category: '',
-      tag: '',
-      dateRange: '',
-      sortBy: 'date',
-      sortOrder: 'desc'
+      search: "",
+      category: "",
+      tag: "",
+      dateRange: "",
+      sortBy: "date",
+      sortOrder: "desc",
     });
     setCurrentPage(1);
   };
 
   const updateFilter = (newFilters: Partial<BlogFilters>) => {
-    setFilters(prev => ({ ...prev, ...newFilters }));
+    setFilters((prev) => ({ ...prev, ...newFilters }));
     setCurrentPage(1);
   };
 
-  const activeFiltersCount = Object.entries(filters).filter(([key, value]) => 
-    key !== 'sortBy' && key !== 'sortOrder' && value !== ''
+  const activeFiltersCount = Object.entries(filters).filter(
+    ([key, value]) => key !== "sortBy" && key !== "sortOrder" && value !== ""
   ).length;
 
   if (loading) {
@@ -214,7 +235,6 @@ const BlogPage: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Botón para mostrar filtros en móviles */}
         <div className="lg:hidden mb-6">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -227,10 +247,12 @@ const BlogPage: React.FC = () => {
 
         <div className="lg:grid lg:grid-cols-4 lg:gap-8">
           <div className="lg:col-span-3">
-            {/* Resultados y ordenamiento */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
               <p className="text-bg-200 mb-2 sm:mb-0">
-                {publishedPosts.length} {publishedPosts.length === 1 ? 'artículo encontrado' : 'artículos encontrados'}
+                {publishedPosts.length}{" "}
+                {publishedPosts.length === 1
+                  ? "artículo encontrado"
+                  : "artículos encontrados"}
                 {totalPages > 1 && ` • Página ${currentPage} de ${totalPages}`}
               </p>
               <div className="flex items-center gap-2">
@@ -238,8 +260,11 @@ const BlogPage: React.FC = () => {
                 <select
                   value={`${filters.sortBy}-${filters.sortOrder}`}
                   onChange={(e) => {
-                    const [sortBy, sortOrder] = e.target.value.split('-');
-                    updateFilter({ sortBy: sortBy as 'date' | 'title', sortOrder: sortOrder as 'desc' | 'asc' });
+                    const [sortBy, sortOrder] = e.target.value.split("-");
+                    updateFilter({
+                      sortBy: sortBy as "date" | "title",
+                      sortOrder: sortOrder as "desc" | "asc",
+                    });
                   }}
                   className="text-sm border border-gray-300 rounded px-2 py-1 focus:outline-none focus:border-primary-100"
                 >
@@ -251,7 +276,6 @@ const BlogPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Filtros activos */}
             {activeFiltersCount > 0 && (
               <div className="flex flex-wrap items-center gap-2 mb-6">
                 <span className="text-sm text-bg-200">Filtros activos:</span>
@@ -259,7 +283,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Búsqueda: {filters.search}
                     <button
-                      onClick={() => updateFilter({ search: '' })}
+                      onClick={() => updateFilter({ search: "" })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -270,7 +294,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Categoría: {filters.category}
                     <button
-                      onClick={() => updateFilter({ category: '' })}
+                      onClick={() => updateFilter({ category: "" })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -281,7 +305,7 @@ const BlogPage: React.FC = () => {
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
                     Etiqueta: {filters.tag}
                     <button
-                      onClick={() => updateFilter({ tag: '' })}
+                      onClick={() => updateFilter({ tag: "" })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -290,12 +314,16 @@ const BlogPage: React.FC = () => {
                 )}
                 {filters.dateRange && (
                   <span className="inline-flex items-center gap-1 bg-primary-100 text-white text-xs px-2 py-1 rounded">
-                    Período: {filters.dateRange === 'week' ? 'Última semana' : 
-                              filters.dateRange === 'month' ? 'Último mes' :
-                              filters.dateRange === 'quarter' ? 'Últimos 3 meses' :
-                              'Último año'}
+                    Período:{" "}
+                    {filters.dateRange === "week"
+                      ? "Última semana"
+                      : filters.dateRange === "month"
+                      ? "Último mes"
+                      : filters.dateRange === "quarter"
+                      ? "Últimos 3 meses"
+                      : "Último año"}
                     <button
-                      onClick={() => updateFilter({ dateRange: '' })}
+                      onClick={() => updateFilter({ dateRange: "" })}
                       className="hover:text-gray-200"
                     >
                       <FiX className="h-3 w-3" />
@@ -315,13 +343,14 @@ const BlogPage: React.FC = () => {
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">📝</div>
                 <h2 className="text-2xl font-bold text-bg-100 mb-4">
-                  {activeFiltersCount > 0 ? 'No se encontraron artículos' : 'No hay posts publicados'}
+                  {activeFiltersCount > 0
+                    ? "No se encontraron artículos"
+                    : "No hay posts publicados"}
                 </h2>
                 <p className="text-bg-200">
-                  {activeFiltersCount > 0 
-                    ? 'Intenta ajustar los filtros para ver más resultados.'
-                    : '¡Mantente al pendiente para ver nuestros próximos artículos!'
-                  }
+                  {activeFiltersCount > 0
+                    ? "Intenta ajustar los filtros para ver más resultados."
+                    : "¡Mantente al pendiente para ver nuestros próximos artículos!"}
                 </p>
                 {activeFiltersCount > 0 && (
                   <button
@@ -363,12 +392,16 @@ const BlogPage: React.FC = () => {
                                 </button>
                               ))}
                               {post.tags.length > 3 && (
-                                <span className="text-xs text-bg-200">+{post.tags.length - 3} más</span>
+                                <span className="text-xs text-bg-200">
+                                  +{post.tags.length - 3} más
+                                </span>
                               )}
                             </div>
                             {post.category && (
                               <button
-                                onClick={() => updateFilter({ category: post.category })}
+                                onClick={() =>
+                                  updateFilter({ category: post.category })
+                                }
                                 className="px-2 py-1 bg-white-100 text-primary-100 rounded text-xs font-medium hover:bg-primary-100 hover:text-white transition-colors cursor-pointer"
                               >
                                 {post.category}
@@ -414,23 +447,21 @@ const BlogPage: React.FC = () => {
                   ))}
                 </div>
 
-                {/* Paginación */}
                 {totalPages > 1 && (
                   <div className="flex items-center justify-center mt-12 space-x-2">
                     <button
                       onClick={() => setCurrentPage(currentPage - 1)}
                       disabled={!hasPrevPage}
-                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white  rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Anterior
                     </button>
-                    
+
                     <div className="flex space-x-1">
                       {Array.from({ length: totalPages }, (_, index) => {
                         const page = index + 1;
                         const isCurrentPage = page === currentPage;
-                        
-                        // Mostrar solo algunas páginas alrededor de la actual
+
                         if (
                           page === 1 ||
                           page === totalPages ||
@@ -442,8 +473,8 @@ const BlogPage: React.FC = () => {
                               onClick={() => setCurrentPage(page)}
                               className={`px-3 py-2 text-sm font-medium rounded-md ${
                                 isCurrentPage
-                                  ? 'text-white bg-primary-100 border border-primary-100'
-                                  : 'text-bg-300 bg-white border border-gray-300 hover:bg-gray-50'
+                                  ? "text-white bg-primary-100 shadow"
+                                  : "text-bg-300 bg-white shadow hover:bg-gray-50"
                               }`}
                             >
                               {page}
@@ -451,7 +482,8 @@ const BlogPage: React.FC = () => {
                           );
                         } else if (
                           (page === currentPage - 3 && currentPage > 4) ||
-                          (page === currentPage + 3 && currentPage < totalPages - 3)
+                          (page === currentPage + 3 &&
+                            currentPage < totalPages - 3)
                         ) {
                           return (
                             <span key={page} className="px-2 py-2 text-bg-300">
@@ -466,7 +498,7 @@ const BlogPage: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(currentPage + 1)}
                       disabled={!hasNextPage}
-                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 py-2 text-sm font-medium text-bg-300 bg-white shadow  rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Siguiente
                     </button>
@@ -476,8 +508,11 @@ const BlogPage: React.FC = () => {
             )}
           </div>
 
-          {/* Sidebar con filtros */}
-          <div className={`mt-12 lg:mt-0 ${showMobileFilters || 'hidden lg:block'}`}>
+          <div
+            className={`mt-12 lg:mt-0 ${
+              showMobileFilters || "hidden lg:block"
+            }`}
+          >
             <div className="space-y-6">
               {/* Búsqueda */}
               <div className="bg-white rounded-lg shadow p-6">
@@ -497,7 +532,6 @@ const BlogPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Filtro por categoría */}
               {categories.length > 0 && (
                 <div className="bg-white rounded-lg shadow p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
@@ -505,11 +539,11 @@ const BlogPage: React.FC = () => {
                   </h3>
                   <div className="space-y-2">
                     <button
-                      onClick={() => updateFilter({ category: '' })}
-                      className={`block w-full text-left px-3 py-2 rounded transition-colors ${
-                        filters.category === '' 
-                          ? 'bg-primary-100 text-white' 
-                          : 'hover:bg-gray-100'
+                      onClick={() => updateFilter({ category: "" })}
+                      className={`block w-full text-bg-400 text-left px-3 py-2 rounded transition-colors ${
+                        filters.category === ""
+                          ? "bg-primary-100 text-white"
+                          : "hover:bg-gray-100"
                       }`}
                     >
                       Todas las categorías
@@ -522,13 +556,22 @@ const BlogPage: React.FC = () => {
                         <button
                           key={category}
                           onClick={() => updateFilter({ category })}
-                          className={`flex items-center justify-between w-full text-left px-3 py-2 rounded transition-colors ${
-                            filters.category === category 
-                              ? 'bg-primary-100 text-white' 
-                              : 'hover:bg-gray-100'
-                          }`}
+                          className={`flex items-center justify-between w-full text-left px-3 py-2 rounded transition-colors 
+                            ${
+                              filters.category === category
+                                ? "bg-primary-100 text-white"
+                                : "hover:bg-gray-100"
+                            }`}
                         >
-                          <span className="text-bg-300">{category}</span>
+                          <span
+                            className={` text-bg-100 ${
+                              filters.category === category
+                                ? "bg-primary-100 text-white"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {category}
+                          </span>
                           <span className="text-gray-500 text-sm">
                             ({count})
                           </span>
@@ -539,7 +582,6 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Filtro por etiquetas */}
               {allTags.length > 0 && (
                 <div className="bg-white rounded-lg shadow p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
@@ -552,8 +594,8 @@ const BlogPage: React.FC = () => {
                         onClick={() => updateFilter({ tag })}
                         className={`px-3 py-1 text-sm rounded-full transition-colors ${
                           filters.tag === tag
-                            ? 'bg-primary-100 text-white'
-                            : 'bg-gray-100 text-bg-300 hover:bg-gray-200'
+                            ? "bg-primary-100 text-white"
+                            : "bg-white-100 text-bg-300 hover:bg-gray-200"
                         }`}
                       >
                         #{tag}
@@ -563,26 +605,25 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Filtro por fecha */}
               <div className="bg-white rounded-lg shadow p-6">
                 <h3 className="text-lg font-semibold text-bg-100 mb-4">
                   Filtrar por fecha
                 </h3>
                 <div className="space-y-2">
                   {[
-                    { value: '', label: 'Todos los períodos' },
-                    { value: 'week', label: 'Última semana' },
-                    { value: 'month', label: 'Último mes' },
-                    { value: 'quarter', label: 'Últimos 3 meses' },
-                    { value: 'year', label: 'Último año' }
+                    { value: "", label: "Todos los períodos" },
+                    { value: "week", label: "Última semana" },
+                    { value: "month", label: "Último mes" },
+                    { value: "quarter", label: "Últimos 3 meses" },
+                    { value: "year", label: "Último año" },
                   ].map((option) => (
                     <button
                       key={option.value}
                       onClick={() => updateFilter({ dateRange: option.value })}
-                      className={`block w-full text-left px-3 py-2 rounded transition-colors ${
-                        filters.dateRange === option.value 
-                          ? 'bg-primary-100 text-white' 
-                          : 'hover:bg-gray-100'
+                      className={`block w-full font-light text-left px-3 py-2 rounded transition-colors ${
+                        filters.dateRange === option.value
+                          ? "bg-primary-100 text-white"
+                          : "hover:bg-bg-300/40 text-bg-300/70 hover:text-white-100 "
                       }`}
                     >
                       {option.label}
@@ -591,10 +632,9 @@ const BlogPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Posts recientes - solo si no hay filtros activos */}
               {activeFiltersCount === 0 && publishedPosts.length > 3 && (
                 <div className="bg-white rounded-lg shadow p-6">
-                  <h3 className="text-lg font-semibold text-bg-100 mb-4">
+                  <h3 className="text-lg font-semibold text-bg-300 mb-4">
                     Posts Recientes
                   </h3>
                   <div className="space-y-4">
@@ -604,10 +644,10 @@ const BlogPage: React.FC = () => {
                           to={`/noticias/${post.slug}`}
                           className="block hover:text-accent-100 transition-colors"
                         >
-                          <h4 className="font-medium text-bg-100 line-clamp-2 mb-1">
+                          <h4 className="font-light text-bg-100 line-clamp-2 mb-1">
                             {post.title}
                           </h4>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs font-light text-gray-500">
                             {formatDate(post.publishedAt || post.createdAt)}
                           </p>
                         </Link>
