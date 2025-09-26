@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { PageService } from "../features/admin/page-management/services/pageService";
 import ExistingHeroSection from "./hero/HeroSection";
 import ExistingContentSection from "./content/ContentSection";
+import MarkdownContent from "./content/MarkdownContent";
 import type {
   ContentSection,
   CustomPage,
@@ -284,16 +285,19 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
           </h1>
         )}
         {subtitle && (
-          <p
-            className=" text-lg leading-8 max-w-2xl mt-5"
+          <div
+            className="text-lg leading-8 max-w-2xl mt-5"
             style={{
               color:
                 textColor ||
                 (backgroundImage || backgroundColor ? "#d1d5db" : "inherit"),
             }}
           >
-            {subtitle}
-          </p>
+            <MarkdownContent 
+              content={subtitle} 
+              className="prose prose-lg max-w-none text-inherit"
+            />
+          </div>
         )}
         {buttonText && buttonLink && (
           <div className="mt-10">
@@ -366,11 +370,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
             "text-left"
           }`}
         >
-          {content.split("\n").map((paragraph, index) => (
-            <p key={index} className="mb-4">
-              {paragraph}
-            </p>
-          ))}
+          <MarkdownContent content={content} />
         </div>
       </div>
     </section>
@@ -673,7 +673,9 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                   )}
                 </div>
               </div>
-              <p className="text-bg-300 mb-4">"{testimonial.content}"</p>
+              <div className="text-bg-300 mb-4">
+                <MarkdownContent content={testimonial.content} />
+              </div>
               {testimonial.rating && (
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
@@ -738,7 +740,9 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-12">{description}</p>
+          <div className="text-center text-bg-200 mb-12">
+            <MarkdownContent content={description} />
+          </div>
         )}
         <div
           className={`${
@@ -775,7 +779,9 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               )}
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-bg-200">{feature.description}</p>
+                <div className="text-bg-200">
+                  <MarkdownContent content={feature.description} />
+                </div>
               </div>
             </div>
           ))}
@@ -819,9 +825,9 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
           {title}
         </h2>
         {description && (
-          <p className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
-            {description}
-          </p>
+          <div className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
+            <MarkdownContent content={description} />
+          </div>
         )}
         {buttonText && buttonLink && (
           <a

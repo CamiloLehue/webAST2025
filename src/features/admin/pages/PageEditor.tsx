@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
+import RichTextEditor from "../../../components/editor/RichTextEditor";
 import type {
   ContentSection,
   ContentSectionType,
@@ -779,12 +780,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Subtítulo
             </label>
-            <textarea
-              rows={2}
+            <RichTextEditor
               value={data.subtitle || ""}
-              onChange={(e) => updateField("subtitle", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("subtitle", value)}
               placeholder="Subtítulo del hero"
+              rows={3}
             />
           </div>
           <div>
@@ -885,12 +885,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={4}
+            <RichTextEditor
               value={data.description as string || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del servicio"
+              rows={4}
             />
           </div>
           <div>
@@ -1093,12 +1092,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={6}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del contenido..."
+              rows={6}
             />
           </div>
           <div>
@@ -1220,12 +1218,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Contenido
             </label>
-            <textarea
-              rows={6}
+            <RichTextEditor
               value={data.content || ""}
-              onChange={(e) => updateField("content", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("content", value)}
               placeholder="Contenido de la sección..."
+              rows={6}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -1314,12 +1311,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Contenido
             </label>
-            <textarea
-              rows={6}
+            <RichTextEditor
               value={data.content || ""}
-              onChange={(e) => updateField("content", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("content", value)}
               placeholder="Escribe el contenido aquí..."
+              rows={6}
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -1488,12 +1484,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del call to action"
+              rows={3}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -1570,12 +1565,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción (Opcional)
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del video"
+              rows={3}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -1748,12 +1742,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del formulario"
+              rows={3}
             />
           </div>
           <div>
