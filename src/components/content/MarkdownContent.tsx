@@ -7,12 +7,31 @@ import remarkGfm from "remark-gfm";
 interface MarkdownContentProps {
   content: string;
   className?: string;
+  allowHtml?: boolean;
 }
 
 const MarkdownContent: React.FC<MarkdownContentProps> = ({
   content,
   className = "prose prose-lg max-w-none",
+  allowHtml = true,
 }) => {
+  // Función para detectar si el contenido contiene HTML
+  const containsHtml = (text: string): boolean => {
+    const htmlTagRegex = /<[^>]+>/;
+    return htmlTagRegex.test(text);
+  };
+
+  // Si el contenido contiene HTML y está permitido, renderizar como HTML
+  if (allowHtml && containsHtml(content)) {
+    return (
+      <div 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+
+  // De lo contrario, renderizar como Markdown
   return (
     <div className={className}>
       <ReactMarkdown
