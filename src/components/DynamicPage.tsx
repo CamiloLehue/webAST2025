@@ -242,9 +242,15 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
     right: "text-right",
   };
 
+  // Detectar si la imagen es local o externa
+  const isExternal = backgroundImage?.startsWith('http://') || backgroundImage?.startsWith('https://');
+  const processedBackgroundImage = backgroundImage && backgroundImage.trim() !== ""
+    ? (isExternal ? backgroundImage : `/${backgroundImage.replace(/^\/+/, '')}`)
+    : "";
+
   const backgroundImageStyle =
-    backgroundImage && backgroundImage.trim() !== ""
-      ? `url("${backgroundImage}")`
+    processedBackgroundImage
+      ? `url("${processedBackgroundImage}")`
       : undefined;
 
   return (
@@ -388,6 +394,10 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (!src) return null;
 
+  // Detectar si la imagen es local o externa
+  const isExternal = src.startsWith('http://') || src.startsWith('https://');
+  const imageSrc = isExternal ? src : `/${src.replace(/^\/+/, '')}`;
+
   const widthClasses = {
     small: "max-w-md",
     medium: "max-w-2xl",
@@ -413,7 +423,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
       >
         <figure>
           <img
-            src={src}
+            src={imageSrc}
             alt={alt || ""}
             className={`w-full rounded-2xl min-h-90 object-cover shadow-lg ${
               rounded ? "rounded-lg" : ""
@@ -473,20 +483,27 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
             spacingClasses[spacing as keyof typeof spacingClasses] || "gap-6"
           }`}
         >
-          {images.map((image, index) => (
-            <figure key={index}>
-              <img
-                src={image.src}
-                alt={image.alt}
-                className="w-full h-64 object-cover rounded-lg shadow"
-              />
-              {image.caption && (
-                <figcaption className="mt-2 text-center text-bg-200 text-sm">
-                  {image.caption}
-                </figcaption>
-              )}
-            </figure>
-          ))}
+          {images.map((image, index) => {
+            // Detectar si la imagen es local o externa
+            const isExternal = image.src.startsWith('http://') || image.src.startsWith('https://');
+            const imageSrc = isExternal ? image.src : `/${image.src.replace(/^\/+/, '')}`;
+            
+            return (
+              <figure key={index}>
+                <img
+                  src={imageSrc}
+                  alt={image.alt}
+                  className="w-full h-64 object-cover rounded-lg shadow"
+                  loading="lazy"
+                />
+                {image.caption && (
+                  <figcaption className="mt-2 text-center text-bg-200 text-sm">
+                    {image.caption}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          })}
         </div>
       </div>
     </section>

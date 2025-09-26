@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
+import ImageSelector from "../../../components/editor/ImageSelector";
 import type {
   ContentSection,
   ContentSectionType,
@@ -791,12 +792,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Imagen de Fondo
             </label>
-            <input
-              type="text"
+            <ImageSelector
               value={data.backgroundImage || ""}
-              onChange={(e) => updateField("backgroundImage", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="URL de la imagen de fondo"
+              onChange={(value) => updateField("backgroundImage", value)}
+              placeholder="URL de la imagen de fondo o selecciona de la galería"
             />
           </div>
           <div>
@@ -911,17 +910,17 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <div className="mt-2 space-y-2">
               {((data.images as string[]) || []).map((imageUrl: string, index: number) => (
                 <div key={index} className="flex space-x-2 items-center">
-                  <input
-                    type="url"
-                    value={imageUrl}
-                    onChange={(e) => {
-                      const newImages = [...((data.images as string[]) || [])];
-                      newImages[index] = e.target.value;
-                      updateField("images", newImages);
-                    }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-                    placeholder="URL de la imagen"
-                  />
+                  <div className="flex-1">
+                    <ImageSelector
+                      value={imageUrl}
+                      onChange={(value) => {
+                        const newImages = [...((data.images as string[]) || [])];
+                        newImages[index] = value;
+                        updateField("images", newImages);
+                      }}
+                      placeholder="URL de la imagen o selecciona de la galería"
+                    />
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
@@ -998,12 +997,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Logo (URL)
             </label>
-            <input
-              type="text"
+            <ImageSelector
               value={data.logoSrc || ""}
-              onChange={(e) => updateField("logoSrc", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="AST-Logo-white.png"
+              onChange={(value) => updateField("logoSrc", value)}
+              placeholder="Logo desde la galería o URL externa"
             />
           </div>
           <div>
@@ -1118,16 +1115,14 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <div className="mt-2 space-y-2">
               {(data.images || []).map((imageUrl: string, index: number) => (
                 <div key={index} className="flex space-x-2 items-center">
-                  <input
-                    type="url"
+                  <ImageSelector
                     value={imageUrl}
-                    onChange={(e) => {
+                    onChange={(value) => {
                       const newImages = [...(data.images || [])];
-                      newImages[index] = e.target.value;
+                      newImages[index] = value;
                       updateField("images", newImages);
                     }}
-                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-                    placeholder="URL de la imagen"
+                    placeholder={`Imagen ${index + 1} desde la galería o URL externa`}
                   />
                   <button
                     type="button"
@@ -1139,7 +1134,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                     }}
                     className="px-3 py-2 text-sm text-red-600 hover:text-red-800"
                   >
-                    Eliminar
+                    <FiTrash2 size={16} />
                   </button>
                 </div>
               ))}
@@ -1384,12 +1379,10 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               URL de la Imagen
             </label>
-            <input
-              type="url"
+            <ImageSelector
               value={data.src || ""}
-              onChange={(e) => updateField("src", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="https://ejemplo.com/imagen.jpg"
+              onChange={(value) => updateField("src", value)}
+              placeholder="Imagen desde la galería o URL externa"
             />
           </div>
           <div>
@@ -1669,17 +1662,17 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                   key={index}
                   className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
                 >
-                  <input
-                    type="url"
-                    value={image.src || ""}
-                    onChange={(e) => {
-                      const newImages = [...(data.images || [])];
-                      newImages[index] = { ...image, src: e.target.value };
-                      updateField("images", newImages);
-                    }}
-                    className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded"
-                    placeholder="URL de la imagen"
-                  />
+                  <div className="flex-1">
+                    <ImageSelector
+                      value={image.src || ""}
+                      onChange={(value) => {
+                        const newImages = [...(data.images || [])];
+                        newImages[index] = { ...image, src: value };
+                        updateField("images", newImages);
+                      }}
+                      placeholder={`Imagen ${index + 1} desde la galería o URL externa`}
+                    />
+                  </div>
                   <input
                     type="text"
                     value={image.alt || ""}
@@ -1701,7 +1694,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                     }}
                     className="px-2 py-1 text-sm text-red-600 hover:text-red-800"
                   >
-                    Eliminar
+                    <FiTrash2 size={16} />
                   </button>
                 </div>
               ))}
