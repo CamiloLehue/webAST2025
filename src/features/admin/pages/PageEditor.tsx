@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
+import RichTextEditor from "../../../components/editor/RichTextEditor";
 import type {
   ContentSection,
   ContentSectionType,
@@ -476,6 +477,10 @@ const PageEditor: React.FC = () => {
 const sectionTypes: { type: ContentSectionType; name: string; icon: string }[] =
   [
     { type: "hero", name: "Hero", icon: "🎯" },
+    { type: "hero-multi", name: "Hero Múltiple", icon: "🎨" },
+    { type: "logo-section", name: "Logo/Título", icon: "🏢" },
+    { type: "content-section", name: "Contenido", icon: "📄" },
+    { type: "curved-section", name: "Sección Curva", icon: "🌊" },
     { type: "text", name: "Texto", icon: "📝" },
     { type: "image", name: "Imagen", icon: "🖼️" },
     { type: "gallery", name: "Galería", icon: "🖼️" },
@@ -501,6 +506,47 @@ const getDefaultSectionData = (
         backgroundImage: "",
         backgroundColor: "",
         textColor: "",
+      };
+    case "hero-multi":
+      return {
+        title: "Título del Hero",
+        description: "Descripción del servicio o producto",
+        images: [],
+        altText: "Imagen del hero",
+        buttonText: "Ver video",
+        buttonLink: "#",
+        alignment: "center" as const,
+        backgroundColor: "",
+        textColor: "",
+      };
+    case "logo-section":
+      return {
+        logoSrc: "AST-Logo-white.png",
+        logoAlt: "AST Logo",
+        title: "TÍTULO DE LA SECCIÓN",
+        backgroundColor: "#primary-100",
+        textColor: "white",
+        height: "medium" as const,
+      };
+    case "content-section":
+      return {
+        title: "Título de la sección",
+        description: "Descripción del contenido...",
+        images: [],
+        altText: "Imagen de contenido",
+        layout: "text-left" as const,
+        autoSlide: false,
+        className: "mt-10 h-full",
+      };
+    case "curved-section":
+      return {
+        title: "",
+        content: "Contenido de la sección con fondo curvo...",
+        iconSrc: "",
+        iconAlt: "Ícono",
+        backgroundColor: "#bg-400",
+        textColor: "black",
+        clipPath: "ellipse(100% 100% at 50% 100%)",
       };
     case "text":
       return {
@@ -578,34 +624,8 @@ const getDefaultSectionData = (
         height: "medium" as const,
       };
     default:
-      return {
-        title: "",
-        subtitle: "",
-        alignment: undefined,
-        buttonText: "",
-        buttonLink: "",
-        content: "",
-        fontSize: undefined,
-        padding: undefined,
-        src: "",
-        alt: "",
-        width: "medium",
-        rounded: false,
-        caption: "",
-        images: [],
-        columns: undefined,
-        spacing: undefined,
-        autoplay: false,
-        controls: false,
-        fields: [],
-        submitButtonText: "",
-        successMessage: "",
-        layout: undefined,
-        testimonials: [],
-        features: [],
-        description: "",
-        height: undefined,
-      };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return {} as any;
   }
 };
 
@@ -630,6 +650,10 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
 }) => {
   const sectionTypeNames: Record<string, string> = {
     hero: "🎯 Hero",
+    "hero-multi": "🎨 Hero Múltiple",
+    "logo-section": "🏢 Logo/Título",
+    "content-section": "📄 Contenido",
+    "curved-section": "🌊 Sección Curva",
     text: "📝 Texto",
     image: "🖼️ Imagen",
     gallery: "🖼️ Galería",
@@ -720,7 +744,9 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
 
 interface ContentSectionFormProps {
   type: ContentSectionType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange: (data: any) => void;
 }
 
@@ -729,6 +755,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
   data,
   onChange,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateField = (field: string, value: any) => {
     onChange({ ...data, [field]: value });
   };
@@ -753,12 +780,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Subtítulo
             </label>
-            <textarea
-              rows={2}
+            <RichTextEditor
               value={data.subtitle || ""}
-              onChange={(e) => updateField("subtitle", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("subtitle", value)}
               placeholder="Subtítulo del hero"
+              rows={3}
             />
           </div>
           <div>
@@ -840,6 +866,432 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
         </div>
       );
 
+    case "hero-multi":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título
+            </label>
+            <input
+              type="text"
+              value={data.title as string || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Título del hero"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Descripción
+            </label>
+            <RichTextEditor
+              value={data.description as string || ""}
+              onChange={(value) => updateField("description", value)}
+              placeholder="Descripción del servicio"
+              rows={4}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Texto Alternativo
+            </label>
+            <input
+              type="text"
+              value={data.altText as string || ""}
+              onChange={(e) => updateField("altText", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Texto alternativo para las imágenes"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Imágenes
+            </label>
+            <div className="mt-2 space-y-2">
+              {((data.images as string[]) || []).map((imageUrl: string, index: number) => (
+                <div key={index} className="flex space-x-2 items-center">
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => {
+                      const newImages = [...((data.images as string[]) || [])];
+                      newImages[index] = e.target.value;
+                      updateField("images", newImages);
+                    }}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                    placeholder="URL de la imagen"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImages = ((data.images as string[]) || []).filter(
+                        (_: string, i: number) => i !== index
+                      );
+                      updateField("images", newImages);
+                    }}
+                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newImages = [...((data.images as string[]) || []), ""];
+                  updateField("images", newImages);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
+              >
+                + Agregar imagen
+              </button>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Texto del Botón
+              </label>
+              <input
+                type="text"
+                value={data.buttonText as string || ""}
+                onChange={(e) => updateField("buttonText", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="Ver video"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Enlace del Botón
+              </label>
+              <input
+                type="text"
+                value={data.buttonLink as string || ""}
+                onChange={(e) => updateField("buttonLink", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="#"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Alineación
+            </label>
+            <select
+              value={data.alignment as string || "center"}
+              onChange={(e) => updateField("alignment", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value="left">Izquierda</option>
+              <option value="center">Centro</option>
+              <option value="right">Derecha</option>
+            </select>
+          </div>
+        </div>
+      );
+
+    case "logo-section":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Logo (URL)
+            </label>
+            <input
+              type="text"
+              value={data.logoSrc || ""}
+              onChange={(e) => updateField("logoSrc", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="AST-Logo-white.png"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Texto Alternativo del Logo
+            </label>
+            <input
+              type="text"
+              value={data.logoAlt || ""}
+              onChange={(e) => updateField("logoAlt", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="AST Logo"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="TÍTULO DE LA SECCIÓN"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Color de Fondo
+              </label>
+              <input
+                type="text"
+                value={data.backgroundColor || ""}
+                onChange={(e) => updateField("backgroundColor", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="#primary-100"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Color del Texto
+              </label>
+              <input
+                type="text"
+                value={data.textColor || ""}
+                onChange={(e) => updateField("textColor", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="white"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Altura de la Sección
+            </label>
+            <select
+              value={data.height || "medium"}
+              onChange={(e) => updateField("height", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value="small">Pequeña (h-20)</option>
+              <option value="medium">Mediana (h-28)</option>
+              <option value="large">Grande (h-36)</option>
+            </select>
+          </div>
+        </div>
+      );
+
+    case "content-section":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Título de la sección"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Descripción
+            </label>
+            <RichTextEditor
+              value={data.description || ""}
+              onChange={(value) => updateField("description", value)}
+              placeholder="Descripción del contenido..."
+              rows={6}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Texto Alternativo
+            </label>
+            <input
+              type="text"
+              value={data.altText || ""}
+              onChange={(e) => updateField("altText", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Texto alternativo para las imágenes"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Imágenes
+            </label>
+            <div className="mt-2 space-y-2">
+              {(data.images || []).map((imageUrl: string, index: number) => (
+                <div key={index} className="flex space-x-2 items-center">
+                  <input
+                    type="url"
+                    value={imageUrl}
+                    onChange={(e) => {
+                      const newImages = [...(data.images || [])];
+                      newImages[index] = e.target.value;
+                      updateField("images", newImages);
+                    }}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                    placeholder="URL de la imagen"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImages = (data.images || []).filter(
+                        (_: string, i: number) => i !== index
+                      );
+                      updateField("images", newImages);
+                    }}
+                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newImages = [...(data.images || []), ""];
+                  updateField("images", newImages);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
+              >
+                + Agregar imagen
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Layout
+            </label>
+            <select
+              value={data.layout || "text-left"}
+              onChange={(e) => updateField("layout", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value="text-left">Texto a la Izquierda</option>
+              <option value="text-right">Texto a la Derecha</option>
+              <option value="text-center">Texto al Centro</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Clase CSS Adicional
+            </label>
+            <input
+              type="text"
+              value={data.className || ""}
+              onChange={(e) => updateField("className", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="mt-10 h-full"
+            />
+          </div>
+          <div className="flex items-center">
+            <input
+              id="autoSlide"
+              type="checkbox"
+              checked={data.autoSlide || false}
+              onChange={(e) => updateField("autoSlide", e.target.checked)}
+              className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="autoSlide"
+              className="ml-2 block text-sm text-bg-100"
+            >
+              Deslizamiento automático
+            </label>
+          </div>
+        </div>
+      );
+
+    case "curved-section":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Título de la sección"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Contenido
+            </label>
+            <RichTextEditor
+              value={data.content || ""}
+              onChange={(value) => updateField("content", value)}
+              placeholder="Contenido de la sección..."
+              rows={6}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Ícono (URL)
+              </label>
+              <input
+                type="text"
+                value={data.iconSrc || ""}
+                onChange={(e) => updateField("iconSrc", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="/public/svg/services/satelital/cell_tower.svg"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Texto Alternativo del Ícono
+              </label>
+              <input
+                type="text"
+                value={data.iconAlt || ""}
+                onChange={(e) => updateField("iconAlt", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="Ícono descriptivo"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Color de Fondo
+              </label>
+              <input
+                type="text"
+                value={data.backgroundColor || ""}
+                onChange={(e) => updateField("backgroundColor", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="#bg-400"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-bg-300">
+                Color del Texto
+              </label>
+              <input
+                type="text"
+                value={data.textColor || ""}
+                onChange={(e) => updateField("textColor", e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="black"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Clip Path CSS
+            </label>
+            <input
+              type="text"
+              value={data.clipPath || ""}
+              onChange={(e) => updateField("clipPath", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="ellipse(100% 100% at 50% 100%)"
+            />
+          </div>
+        </div>
+      );
+
     case "text":
       return (
         <div className="space-y-4">
@@ -859,12 +1311,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Contenido
             </label>
-            <textarea
-              rows={6}
+            <RichTextEditor
               value={data.content || ""}
-              onChange={(e) => updateField("content", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("content", value)}
               placeholder="Escribe el contenido aquí..."
+              rows={6}
             />
           </div>
           <div className="grid grid-cols-3 gap-4">
@@ -1033,12 +1484,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del call to action"
+              rows={3}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -1115,12 +1565,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción (Opcional)
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del video"
+              rows={3}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -1215,7 +1664,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Imágenes
             </label>
             <div className="mt-2 space-y-2">
-              {(data.images || []).map((image: any, index: number) => (
+              {(data.images || []).map((image: { src: string; alt: string; caption?: string }, index: number) => (
                 <div
                   key={index}
                   className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
@@ -1246,7 +1695,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                     type="button"
                     onClick={() => {
                       const newImages = (data.images || []).filter(
-                        (_: any, i: number) => i !== index
+                        (_: { src: string; alt: string; caption?: string }, i: number) => i !== index
                       );
                       updateField("images", newImages);
                     }}
@@ -1293,12 +1742,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción del formulario"
+              rows={3}
             />
           </div>
           <div>
@@ -1318,7 +1766,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Campos del formulario
             </label>
             <div className="mt-2 space-y-2">
-              {(data.fields || []).map((field: any, index: number) => (
+              {(data.fields || []).map((field: { id: string; type: string; label: string; required: boolean }, index: number) => (
                 <div
                   key={index}
                   className="p-3 border border-white-100 rounded-md"
@@ -1371,7 +1819,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                         type="button"
                         onClick={() => {
                           const newFields = (data.fields || []).filter(
-                            (_: any, i: number) => i !== index
+                            (_: { id: string; type: string; label: string; required: boolean }, i: number) => i !== index
                           );
                           updateField("fields", newFields);
                         }}

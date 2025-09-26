@@ -13,13 +13,17 @@ export interface CustomPage {
 export interface ContentSection {
   id: string;
   type: ContentSectionType;
-  data: HeroSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection;
+  data: HeroSection | HeroMultiSection | LogoSection | ContentSectionData | CurvedSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection;
   order: number;
   gridWidth?: number; // Ancho en el sistema de grid (1-12), por defecto 12
 }
 
 export type ContentSectionType = 
   | 'hero'
+  | 'hero-multi'
+  | 'logo-section'
+  | 'content-section'
+  | 'curved-section'
   | 'text'
   | 'image'
   | 'gallery'
@@ -139,6 +143,48 @@ export interface CTASection {
 
 export interface SpacerSection {
   height: 'small' | 'medium' | 'large' | 'xl';
+}
+
+// Nuevas interfaces para tipos de secciones específicas
+export interface HeroMultiSection {
+  title: string;
+  description?: string;
+  images: string[]; // Array de URLs de imágenes
+  altText: string;
+  buttonText?: string;
+  buttonLink?: string;
+  alignment: 'left' | 'center' | 'right';
+  backgroundColor?: string;
+  textColor?: string;
+}
+
+export interface LogoSection {
+  logoSrc: string;
+  logoAlt: string;
+  title: string;
+  backgroundColor?: string;
+  textColor?: string;
+  height?: 'small' | 'medium' | 'large';
+}
+
+export interface ContentSectionData {
+  title?: string;
+  description: string;
+  images: string[];
+  altText: string;
+  layout: 'text-left' | 'text-right' | 'text-center';
+  autoSlide?: boolean;
+  className?: string;
+}
+
+export interface CurvedSection {
+  title?: string;
+  content: string;
+  iconSrc?: string;
+  iconAlt?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  clipPath?: string;
 }
 
 export interface PageTemplate {

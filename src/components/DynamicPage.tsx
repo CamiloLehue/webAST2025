@@ -1,6 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { PageService } from "../features/admin/page-management/services/pageService";
+import ExistingHeroSection from "./hero/HeroSection";
+import ExistingContentSection from "./content/ContentSection";
+import MarkdownContent from "./content/MarkdownContent";
 import type {
   ContentSection,
   CustomPage,
@@ -185,6 +189,14 @@ const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
   switch (section.type) {
     case "hero":
       return <HeroSection data={section.data} />;
+    case "hero-multi":
+      return <HeroMultiSection data={section.data} />;
+    case "logo-section":
+      return <LogoSection data={section.data} />;
+    case "content-section":
+      return <ContentSectionComponent data={section.data} />;
+    case "curved-section":
+      return <CurvedSection data={section.data} />;
     case "text":
       return <TextSection data={section.data} />;
     case "image":
@@ -273,16 +285,19 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
           </h1>
         )}
         {subtitle && (
-          <p
-            className=" text-lg leading-8 max-w-2xl mt-5"
+          <div
+            className="text-lg leading-8 max-w-2xl mt-5"
             style={{
               color:
                 textColor ||
                 (backgroundImage || backgroundColor ? "#d1d5db" : "inherit"),
             }}
           >
-            {subtitle}
-          </p>
+            <MarkdownContent 
+              content={subtitle} 
+              className="prose prose-lg max-w-none text-inherit"
+            />
+          </div>
         )}
         {buttonText && buttonLink && (
           <div className="mt-10">
@@ -355,11 +370,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
             "text-left"
           }`}
         >
-          {content.split("\n").map((paragraph, index) => (
-            <p key={index} className="mb-4">
-              {paragraph}
-            </p>
-          ))}
+          <MarkdownContent content={content} />
         </div>
       </div>
     </section>
@@ -511,7 +522,12 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-8">{description}</p>
+          <div className="text-center text-bg-200 mb-8">
+            <MarkdownContent 
+              content={description} 
+              className="prose prose-lg max-w-none text-inherit mx-auto"
+            />
+          </div>
         )}
         <div className="relative rounded-lg overflow-hidden shadow-lg">
           <video
@@ -550,7 +566,12 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-8">{description}</p>
+          <div className="text-center text-bg-200 mb-8">
+            <MarkdownContent 
+              content={description} 
+              className="prose prose-lg max-w-none text-inherit mx-auto"
+            />
+          </div>
         )}
         <div className="bg-white rounded-lg shadow p-8">
           <form className="space-y-4">
@@ -662,7 +683,9 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                   )}
                 </div>
               </div>
-              <p className="text-bg-300 mb-4">"{testimonial.content}"</p>
+              <div className="text-bg-300 mb-4">
+                <MarkdownContent content={testimonial.content} />
+              </div>
               {testimonial.rating && (
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
@@ -727,7 +750,9 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-12">{description}</p>
+          <div className="text-center text-bg-200 mb-12">
+            <MarkdownContent content={description} />
+          </div>
         )}
         <div
           className={`${
@@ -764,7 +789,9 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               )}
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-bg-200">{feature.description}</p>
+                <div className="text-bg-200">
+                  <MarkdownContent content={feature.description} />
+                </div>
               </div>
             </div>
           ))}
@@ -808,9 +835,9 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
           {title}
         </h2>
         {description && (
-          <p className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
-            {description}
-          </p>
+          <div className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
+            <MarkdownContent content={description} />
+          </div>
         )}
         {buttonText && buttonLink && (
           <a
@@ -840,6 +867,134 @@ const SpacerSection: React.FC<{ data: any }> = ({ data }) => {
     <div
       className={heightClasses[height as keyof typeof heightClasses] || "h-16"}
     />
+  );
+};
+
+// New Section Components
+
+// Hero Multi Section Component (uses existing HeroSection component)
+const HeroMultiSection: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <ExistingHeroSection
+      title={data.title || ""}
+      description={data.description || ""}
+      buttonText={data.buttonText}
+      buttonLink={data.buttonLink}
+      images={data.images || []}
+      altText={data.altText || "Hero Image"}
+      onButtonClick={() => {
+        if (data.buttonLink && data.buttonLink !== "#") {
+          window.open(data.buttonLink, "_blank");
+        }
+      }}
+    />
+  );
+};
+
+// Logo Section Component
+const LogoSection: React.FC<{ data: any }> = ({ data }) => {
+  const height = data.height || "medium";
+  const heightClasses = {
+    small: "h-20",
+    medium: "h-28", 
+    large: "h-36",
+  };
+
+  return (
+    <section 
+      className={`w-full py-2 ${heightClasses[height as keyof typeof heightClasses]} flex justify-center items-center`}
+      style={{ backgroundColor: data.backgroundColor || "#primary-100" }}
+    >
+      <div className="flex justify-center items-center">
+        <img 
+          src={data.logoSrc || "AST-Logo-white.png"} 
+          alt={data.logoAlt || "Logo"} 
+          className="h-20" 
+        />
+        <div 
+          className="h-10 w-0.5 mx-10"
+          style={{ backgroundColor: data.textColor || "white" }}
+        ></div>
+        <h4 
+          className="font-black text-3xl"
+          style={{ color: data.textColor || "white" }}
+        >
+          {data.title || "TÍTULO"}
+        </h4>
+      </div>
+    </section>
+  );
+};
+
+// Content Section Component (uses existing ContentSection component)
+const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
+  // Procesar la descripción con MarkdownContent si contiene Markdown/HTML
+  const processedDescription = data.description ? (
+    <MarkdownContent 
+      content={data.description} 
+      className="prose prose-lg max-w-none text-inherit"
+    />
+  ) : "";
+
+  return (
+    <section className="max-w-7xl mx-auto w-full py-10">
+      <div className="flex flex-col gap-10 justify-center items-center w-full">
+        <ExistingContentSection
+          title={data.title || ""}
+          description={processedDescription}
+          images={data.images || []}
+          altText={data.altText || "Content Image"}
+          layout={data.layout || "text-left"}
+          className={data.className || "mt-10 h-full"}
+          autoSlide={data.autoSlide !== false}
+        />
+      </div>
+    </section>
+  );
+};
+
+// Curved Section Component
+const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <section className="relative h-100 mt-50">
+      <div
+        className="absolute left-0 -top-0 w-full h-100"
+        style={{
+          backgroundColor: data.backgroundColor || "#bg-400",
+          clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
+        }}
+      ></div>
+      <div className="relative -top-30 z-10 w-full max-w-6xl mx-auto h-full flex flex-col justify-center items-center text-center text-white px-5">
+        <div className="flex justify-center items-center gap-10 w-full py-10 text-black">
+          <article className="relative shadow-lg bg-white rounded-2xl w-full mb-4 flex flex-col justify-center items-center gap-5 py-20">
+            {data.iconSrc && (
+              <img
+                src={data.iconSrc}
+                alt={data.iconAlt || "Ícono"}
+                className="absolute -top-18 w-30 h-30"
+              />
+            )}
+            {data.title && (
+              <h3 
+                className="text-2xl font-bold mb-4"
+                style={{ color: data.textColor || "black" }}
+              >
+                {data.title}
+              </h3>
+            )}
+            <div 
+              className="max-w-4xl text-lg leading-6"
+              style={{ color: data.textColor || "black" }}
+            >
+              <MarkdownContent 
+                content={data.content || ""} 
+                className="prose prose-lg max-w-none text-inherit"
+              />
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 };
 
