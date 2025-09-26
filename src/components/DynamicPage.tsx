@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { PageService } from "../features/admin/page-management/services/pageService";
+import ExistingHeroSection from "./hero/HeroSection";
+import ExistingContentSection from "./content/ContentSection";
 import type {
   ContentSection,
   CustomPage,
@@ -185,6 +188,14 @@ const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
   switch (section.type) {
     case "hero":
       return <HeroSection data={section.data} />;
+    case "hero-multi":
+      return <HeroMultiSection data={section.data} />;
+    case "logo-section":
+      return <LogoSection data={section.data} />;
+    case "content-section":
+      return <ContentSectionComponent data={section.data} />;
+    case "curved-section":
+      return <CurvedSection data={section.data} />;
     case "text":
       return <TextSection data={section.data} />;
     case "image":
@@ -840,6 +851,123 @@ const SpacerSection: React.FC<{ data: any }> = ({ data }) => {
     <div
       className={heightClasses[height as keyof typeof heightClasses] || "h-16"}
     />
+  );
+};
+
+// New Section Components
+
+// Hero Multi Section Component (uses existing HeroSection component)
+const HeroMultiSection: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <ExistingHeroSection
+      title={data.title || ""}
+      description={data.description || ""}
+      buttonText={data.buttonText}
+      buttonLink={data.buttonLink}
+      images={data.images || []}
+      altText={data.altText || "Hero Image"}
+      onButtonClick={() => {
+        if (data.buttonLink && data.buttonLink !== "#") {
+          window.open(data.buttonLink, "_blank");
+        }
+      }}
+    />
+  );
+};
+
+// Logo Section Component
+const LogoSection: React.FC<{ data: any }> = ({ data }) => {
+  const height = data.height || "medium";
+  const heightClasses = {
+    small: "h-20",
+    medium: "h-28", 
+    large: "h-36",
+  };
+
+  return (
+    <section 
+      className={`w-full py-2 ${heightClasses[height as keyof typeof heightClasses]} flex justify-center items-center`}
+      style={{ backgroundColor: data.backgroundColor || "#primary-100" }}
+    >
+      <div className="flex justify-center items-center">
+        <img 
+          src={data.logoSrc || "AST-Logo-white.png"} 
+          alt={data.logoAlt || "Logo"} 
+          className="h-20" 
+        />
+        <div 
+          className="h-10 w-0.5 mx-10"
+          style={{ backgroundColor: data.textColor || "white" }}
+        ></div>
+        <h4 
+          className="font-black text-3xl"
+          style={{ color: data.textColor || "white" }}
+        >
+          {data.title || "TÍTULO"}
+        </h4>
+      </div>
+    </section>
+  );
+};
+
+// Content Section Component (uses existing ContentSection component)
+const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <section className="max-w-7xl mx-auto w-full py-10">
+      <div className="flex flex-col gap-10 justify-center items-center w-full">
+        <ExistingContentSection
+          title={data.title || ""}
+          description={data.description || ""}
+          images={data.images || []}
+          altText={data.altText || "Content Image"}
+          layout={data.layout || "text-left"}
+          className={data.className || "mt-10 h-full"}
+          autoSlide={data.autoSlide !== false}
+        />
+      </div>
+    </section>
+  );
+};
+
+// Curved Section Component
+const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <section className="relative h-100 mt-50">
+      <div
+        className="absolute left-0 -top-0 w-full h-100"
+        style={{
+          backgroundColor: data.backgroundColor || "#bg-400",
+          clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
+        }}
+      ></div>
+      <div className="relative -top-30 z-10 w-full max-w-6xl mx-auto h-full flex flex-col justify-center items-center text-center text-white px-5">
+        <div className="flex justify-center items-center gap-10 w-full py-10 text-black">
+          <article className="relative shadow-lg bg-white rounded-2xl w-full mb-4 flex flex-col justify-center items-center gap-5 py-20">
+            {data.iconSrc && (
+              <img
+                src={data.iconSrc}
+                alt={data.iconAlt || "Ícono"}
+                className="absolute -top-18 w-30 h-30"
+              />
+            )}
+            {data.title && (
+              <h3 
+                className="text-2xl font-bold mb-4"
+                style={{ color: data.textColor || "black" }}
+              >
+                {data.title}
+              </h3>
+            )}
+            <p 
+              className="max-w-4xl text-lg leading-6"
+              style={{ color: data.textColor || "black" }}
+            >
+              {data.content || ""}
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 };
 
