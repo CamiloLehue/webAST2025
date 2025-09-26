@@ -35,6 +35,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [mode, setMode] = useState<'markdown' | 'html'>('markdown');
   const [showColorPalette, setShowColorPalette] = useState(false);
+  const [customColor, setCustomColor] = useState("#000000");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Paleta de colores predefinida
@@ -49,6 +50,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     { name: 'Índigo', hex: '#6366f1', class: 'text-indigo-500' },
     { name: 'Gris', hex: '#6b7280', class: 'text-gray-500' },
     { name: 'Negro', hex: '#000000', class: 'text-black' },
+    { name: 'Blanco', hex: '#ffffff', class: 'text-white' },
+    { name: 'Rojo Oscuro', hex: '#dc2626', class: 'text-red-600' },
+    { name: 'Azul Oscuro', hex: '#2563eb', class: 'text-blue-600' },
+    { name: 'Verde Oscuro', hex: '#059669', class: 'text-green-600' },
+    { name: 'Cian', hex: '#06b6d4', class: 'text-cyan-500' },
   ];
 
   const insertText = useCallback(
@@ -126,7 +132,30 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       
       setShowColorPalette(false);
     },
-    [value, onChange, insertText]
+    [value, insertText]
+  );
+
+  // Función para aplicar color personalizado
+  const applyCustomColor = useCallback(
+    () => {
+      const textarea = textareaRef.current;
+      if (!textarea) return;
+
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = value.slice(start, end);
+      
+      if (!selectedText) {
+        // Si no hay texto seleccionado, insertar ejemplo
+        insertText(`<span style="color: ${customColor}">`, `</span>`, "texto con color");
+      } else {
+        // Si hay texto seleccionado, aplicar color
+        insertText(`<span style="color: ${customColor}">`, `</span>`, "");
+      }
+      
+      setShowColorPalette(false);
+    },
+    [value, customColor, insertText]
   );
 
   // Función para insertar HTML
@@ -148,7 +177,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         insertText(openTag, closeTag, "");
       }
     },
-    [value, onChange, insertText]
+    [value, insertText]
   );
 
   const formatButtons = [
@@ -373,20 +402,53 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                   ✕
                 </button>
               </div>
-              <div className="grid grid-cols-5 gap-2">
-                {colorPalette.map((color, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => applyColor(color)}
-                    title={`${color.name} (${color.hex})`}
-                    className="w-8 h-8 rounded border-2 border-gray-300 hover:border-gray-500 transition-colors flex items-center justify-center text-white text-xs font-bold shadow-sm"
-                    style={{ backgroundColor: color.hex }}
-                  >
-                    A
-                  </button>
-                ))}
+              
+              {/* Colores predefinidos */}
+              <div className="mb-3">
+                <p className="text-xs text-gray-600 mb-2">Colores predefinidos:</p>
+                <div className="grid grid-cols-5 gap-2 max-w-xs">
+                  {colorPalette.map((color, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => applyColor(color)}
+                      title={`${color.name} (${color.hex})`}
+                      className="w-8 h-8 rounded border-2 border-gray-300 hover:border-gray-500 transition-colors flex items-center justify-center text-white text-xs font-bold shadow-sm"
+                      style={{ 
+                        backgroundColor: color.hex,
+                        color: color.hex === '#ffffff' ? '#000000' : '#ffffff'
+                      }}
+                    >
+                      A
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Selector de color personalizado */}
+              <div className="border-t border-gray-200 pt-3">
+                <p className="text-xs text-gray-600 mb-2">Color personalizado:</p>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="color"
+                    value={customColor}
+                    onChange={(e) => setCustomColor(e.target.value)}
+                    className="w-12 h-8 rounded border border-gray-300 cursor-pointer"
+                    title="Seleccionar color personalizado"
+                  />
+                  <button
+                    type="button"
+                    onClick={applyCustomColor}
+                    className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs rounded border border-gray-300 transition-colors"
+                  >
+                    Aplicar Color
+                  </button>
+                  <span className="text-xs text-gray-500 font-mono">
+                    {customColor}
+                  </span>
+                </div>
+              </div>
+              
               <div className="mt-3 pt-2 border-t border-gray-200">
                 <p className="text-xs text-gray-500">
                   Selecciona texto y luego elige un color para aplicarlo
