@@ -143,6 +143,22 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
           pre: ({ children }) => (
             <div className="my-4">{children}</div>
           ),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          img: ({ src, alt, ...props }: any) => {
+            // Detectar si la imagen es local o externa
+            const isExternal = src?.startsWith('http://') || src?.startsWith('https://');
+            const imageSrc = isExternal ? src : `/${src?.replace(/^\/+/, '')}`;
+            
+            return (
+              <img
+                src={imageSrc}
+                alt={alt || ''}
+                className="max-w-full h-auto rounded-lg shadow-md my-6"
+                loading="lazy"
+                {...props}
+              />
+            );
+          },
         }}
       >
         {content}

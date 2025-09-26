@@ -48,45 +48,53 @@ function ContentSection({
     );
   };
 
-  const renderImageGallery = () => (
-    <div className="relative w-full h-full overflow-hidden rounded-2xl">
-      <img
-        draggable={false}
-        src={images[currentImageIndex]}
-        alt={altText}
-        className="w-full object-cover scale-110 transition-transform duration-300"
-      />
+  const renderImageGallery = () => {
+    // Detectar si la imagen es local o externa
+    const currentImage = images[currentImageIndex];
+    const isExternal = currentImage?.startsWith('http://') || currentImage?.startsWith('https://');
+    const imageSrc = isExternal ? currentImage : `/${currentImage?.replace(/^\/+/, '')}`;
 
-      {images.length > 1 && (
-        <>
-          <button
-            onClick={prevImage}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors duration-300"
-          >
-            <FiChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            onClick={nextImage}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors duration-300"
-          >
-            <FiChevronRight className="w-5 h-5" />
-          </button>
+    return (
+      <div className="relative w-full h-full overflow-hidden rounded-2xl">
+        <img
+          draggable={false}
+          src={imageSrc}
+          alt={altText}
+          className="w-full object-cover scale-110 transition-transform duration-300"
+          loading="lazy"
+        />
 
-          <div className="absolute bottom-4 right-4 flex space-x-2">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                  index === currentImageIndex ? "bg-white" : "bg-white/50"
-                }`}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors duration-300"
+            >
+              <FiChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors duration-300"
+            >
+              <FiChevronRight className="w-5 h-5" />
+            </button>
+
+            <div className="absolute bottom-4 right-4 flex space-x-2">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`w-2 h-2 rounded-full transition-colors duration-300 ${
+                    index === currentImageIndex ? "bg-white" : "bg-white/50"
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
 
   const renderTextContent = () => (
     <div className="flex flex-col justify-center items-start gap-5">
