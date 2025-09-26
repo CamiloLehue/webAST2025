@@ -3,6 +3,7 @@ import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import { FadeInSection, SlideInLeft, SlideInRight } from "../animations";
+import MarkdownContent from "../content/MarkdownContent";
 
 interface HeroSectionProps {
   title: string;
@@ -65,7 +66,12 @@ function HeroSection({
                 <h2 className="text-white text-5xl font-bold">{title}</h2>
               </FadeInSection>
               <FadeInSection delay={0.4}>
-                <p className="text-white-100 text-lg">{description}</p>
+                <div className="text-white-100 text-lg">
+                  <MarkdownContent 
+                    content={description} 
+                    className="prose prose-lg max-w-none text-inherit"
+                  />
+                </div>
               </FadeInSection>
             </div>
             <FadeInSection delay={0.6} className="w-full max-w-sm mt-5 mx-auto">

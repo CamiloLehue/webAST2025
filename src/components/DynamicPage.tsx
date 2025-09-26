@@ -522,7 +522,12 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-8">{description}</p>
+          <div className="text-center text-bg-200 mb-8">
+            <MarkdownContent 
+              content={description} 
+              className="prose prose-lg max-w-none text-inherit mx-auto"
+            />
+          </div>
         )}
         <div className="relative rounded-lg overflow-hidden shadow-lg">
           <video
@@ -561,7 +566,12 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
         {description && (
-          <p className="text-center text-bg-200 mb-8">{description}</p>
+          <div className="text-center text-bg-200 mb-8">
+            <MarkdownContent 
+              content={description} 
+              className="prose prose-lg max-w-none text-inherit mx-auto"
+            />
+          </div>
         )}
         <div className="bg-white rounded-lg shadow p-8">
           <form className="space-y-4">
@@ -918,12 +928,20 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
 
 // Content Section Component (uses existing ContentSection component)
 const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
+  // Procesar la descripción con MarkdownContent si contiene Markdown/HTML
+  const processedDescription = data.description ? (
+    <MarkdownContent 
+      content={data.description} 
+      className="prose prose-lg max-w-none text-inherit"
+    />
+  ) : "";
+
   return (
     <section className="max-w-7xl mx-auto w-full py-10">
       <div className="flex flex-col gap-10 justify-center items-center w-full">
         <ExistingContentSection
           title={data.title || ""}
-          description={data.description || ""}
+          description={processedDescription}
           images={data.images || []}
           altText={data.altText || "Content Image"}
           layout={data.layout || "text-left"}
@@ -964,12 +982,15 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
                 {data.title}
               </h3>
             )}
-            <p 
+            <div 
               className="max-w-4xl text-lg leading-6"
               style={{ color: data.textColor || "black" }}
             >
-              {data.content || ""}
-            </p>
+              <MarkdownContent 
+                content={data.content || ""} 
+                className="prose prose-lg max-w-none text-inherit"
+              />
+            </div>
           </article>
         </div>
       </div>

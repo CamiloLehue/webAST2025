@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
 interface MarkdownContentProps {
   content: string;
@@ -15,27 +16,13 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
   className = "prose prose-lg max-w-none",
   allowHtml = true,
 }) => {
-  // Función para detectar si el contenido contiene HTML
-  const containsHtml = (text: string): boolean => {
-    const htmlTagRegex = /<[^>]+>/;
-    return htmlTagRegex.test(text);
-  };
-
-  // Si el contenido contiene HTML y está permitido, renderizar como HTML
-  if (allowHtml && containsHtml(content)) {
-    return (
-      <div 
-        className={className}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
-    );
-  }
-
-  // De lo contrario, renderizar como Markdown
+  // Si el contenido contiene HTML y está permitido, usar ReactMarkdown con rehypeRaw
+  // Esto permite HTML mezclado con Markdown
   return (
     <div className={className}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        rehypePlugins={allowHtml ? [rehypeRaw] : []}
         components={{
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           code({ className, children, ...props }: any) {
