@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { FiArrowRight, FiChevronLeft, FiChevronRight, FiCalendar } from "react-icons/fi";
+import {
+  FiArrowRight,
+  FiChevronLeft,
+  FiChevronRight,
+  FiCalendar,
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 import type { BlogPost } from "../../features/admin/blog-management/types/blogTypes";
 
@@ -10,10 +15,13 @@ interface NewsHeroSectionProps {
 function NewsHeroSection({ posts }: NewsHeroSectionProps) {
   const [currentPostIndex, setCurrentPostIndex] = useState(0);
 
-  // Obtener solo las últimas 4 noticias publicadas
-  const latestPosts = posts
-    .filter(post => post.isPublished)
-    .slice(0, 4);
+  const latestPosts = posts.filter((post) => post.isPublished).slice(0, 4);
+
+  useEffect(() => {
+    if (currentPostIndex >= latestPosts.length) {
+      setCurrentPostIndex(0);
+    }
+  }, [latestPosts.length, currentPostIndex]);
 
   useEffect(() => {
     if (latestPosts.length > 1) {
@@ -56,7 +64,8 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
               <div className="max-w-2xl h-full flex flex-col gap-5">
                 <h2 className="text-white text-5xl font-bold">Noticias</h2>
                 <p className="text-white-100 text-lg">
-                  Mantente informado con las últimas noticias y actualizaciones de nuestra empresa.
+                  Mantente informado con las últimas noticias y actualizaciones
+                  de nuestra empresa.
                 </p>
               </div>
             </article>
@@ -64,7 +73,9 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
           <div className="relative col-span-2 w-full h-full overflow-hidden flex items-center justify-center">
             <div className="text-white text-center">
               <div className="text-6xl mb-4">📰</div>
-              <p className="text-white-100 text-xl">No hay noticias disponibles</p>
+              <p className="text-white-100 text-xl">
+                No hay noticias disponibles
+              </p>
             </div>
             <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
           </div>
@@ -74,6 +85,30 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
   }
 
   const currentPost = latestPosts[currentPostIndex];
+
+  if (!currentPost) {
+    return (
+      <section className="bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100">
+        <div className="grid grid-cols-4 gap-5 w-full">
+          <div className="col-span-2 w-full h-full flex justify-center items-center">
+            <article className="flex flex-col items-end justify-center w-full">
+              <div className="max-w-2xl h-full flex flex-col gap-5">
+                <h2 className="text-white text-5xl font-bold">Noticias</h2>
+                <p className="text-white-100 text-lg">Cargando noticias...</p>
+              </div>
+            </article>
+          </div>
+          <div className="relative col-span-2 w-full h-full overflow-hidden flex items-center justify-center">
+            <div className="text-white text-center">
+              <div className="text-6xl mb-4">📰</div>
+              <p className="text-white-100 text-xl">Cargando...</p>
+            </div>
+            <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100">
@@ -159,7 +194,6 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
                 ))}
               </div>
 
-              {/* Indicador de progreso */}
               <div className="absolute bottom-4 left-4 bg-black/30 rounded px-2 py-1">
                 <span className="text-white text-sm">
                   {currentPostIndex + 1} / {latestPosts.length}
@@ -168,7 +202,6 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
             </>
           )}
 
-          {/* Overlay con información adicional */}
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
             <p className="text-white text-sm opacity-75">
               Por {currentPost.author}
