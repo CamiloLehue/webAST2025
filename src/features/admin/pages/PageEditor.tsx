@@ -259,7 +259,7 @@ const PageEditor: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="col-span-10">
+      <div className="col-span-10 p-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
@@ -672,12 +672,14 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
 
   return (
     <div className="border border-white-100 rounded-lg">
-      <div className="flex items-center justify-between p-4 bg-gray-50 border-b border-white-100">
-        <div className="flex items-center space-x-3">
-          <span className="font-medium text-bg-100">
-            Sección {index + 1}:{" "}
-            {sectionTypeNames[section.type] || section.type}
-          </span>
+      <div className="flex items-center justify-between p-4 bg-accent-100/20 border-b border-primary-100">
+        <div className="flex items-center space-x-3 ">
+          <h3 className="font-bold text-bg-100  ">
+            <span className="bg-gradient-to-bl from-primary-100 to-orange-400 mx-3 px-3 shadow-xl text-white font-black  text-2xl p-2 rounded ">
+              {index + 1}
+            </span>{" "}
+            Sección : {sectionTypeNames[section.type] || section.type}
+          </h3>
         </div>
         <div className="flex items-center space-x-2">
           <button
