@@ -242,11 +242,11 @@ const PageEditor: React.FC = () => {
 
   return (
     <div className="w-full grid grid-cols-12 mx-auto space-y-6 gap-2">
-      <div className="relative col-span-2 bg-bg-400 ">
-        <div className=" fixed top-24 w-75 left-60 flex flex-col gap-1 px-5">
-          <h4 className="text-sm text-center font-medium text-white-100 mb-3">
-            Agregar Sección
-          </h4>
+      <div className="col-span-2 bg-bg-400 ">
+        <h4 className="text-sm text-center font-medium text-white-100 mb-3">
+          Agregar Sección
+        </h4>
+        <div className="flex flex-col gap-1 px-5">
           {sectionTypes.map((sectionType) => (
             <button
               key={sectionType.type}
@@ -259,7 +259,7 @@ const PageEditor: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="col-span-10 p-5">
+      <div className="col-span-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
             <button
