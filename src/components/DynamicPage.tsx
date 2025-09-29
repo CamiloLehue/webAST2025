@@ -5,10 +5,44 @@ import { PageService } from "../features/admin/page-management/services/pageServ
 import ExistingHeroSection from "./hero/HeroSection";
 import ExistingContentSection from "./content/ContentSection";
 import MarkdownContent from "./content/MarkdownContent";
+import HtmlContent from "./content/HtmlContent";
 import type {
   ContentSection,
   CustomPage,
 } from "../features/admin/page-management/types/pageTypes";
+
+// Función utilitaria para detectar si el contenido es HTML
+const isHtmlContent = (content: string): boolean => {
+  if (!content) return false;
+  
+  // Detectar etiquetas HTML básicas
+  const htmlRegex = /<\/?[a-z][\s\S]*>/i;
+  
+  // También detectar elementos HTML comunes específicos
+  const specificHtmlElements = [
+    '<div', '<span', '<p>', '<h1', '<h2', '<h3', '<h4', '<h5', '<h6',
+    '<svg', '<path', '<img', '<a', '<ul', '<ol', '<li',
+    '<strong', '<em', '<br', '<button', '<form', '<input'
+  ];
+  
+  const hasHtmlTags = htmlRegex.test(content);
+  const hasSpecificElements = specificHtmlElements.some(element => 
+    content.toLowerCase().includes(element)
+  );
+  
+  // También revisar si tiene atributos HTML comunes
+  const hasHtmlAttributes = /\s(class|id|src|href|style|data-\w+)\s*=/.test(content);
+  
+  return hasHtmlTags || hasSpecificElements || hasHtmlAttributes;
+};
+
+// Componente para renderizar contenido dinámicamente
+const ContentRenderer: React.FC<{ content: string; className?: string }> = ({ content, className }) => {
+  if (isHtmlContent(content)) {
+    return <HtmlContent content={content} className={className} />;
+  }
+  return <MarkdownContent content={content} className={className} />;
+};
 
 const DynamicPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -299,7 +333,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
                 (backgroundImage || backgroundColor ? "#d1d5db" : "inherit"),
             }}
           >
-            <MarkdownContent 
+            <ContentRenderer 
               content={subtitle} 
               className="prose prose-lg max-w-none text-inherit"
             />
@@ -376,7 +410,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
             "text-left"
           }`}
         >
-          <MarkdownContent content={content} />
+          <ContentRenderer content={content} />
         </div>
       </div>
     </section>
@@ -540,7 +574,7 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
-            <MarkdownContent 
+            <ContentRenderer 
               content={description} 
               className="prose prose-lg max-w-none text-inherit mx-auto"
             />
@@ -584,7 +618,7 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
-            <MarkdownContent 
+            <ContentRenderer 
               content={description} 
               className="prose prose-lg max-w-none text-inherit mx-auto"
             />
@@ -701,7 +735,7 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                 </div>
               </div>
               <div className="text-bg-300 mb-4">
-                <MarkdownContent content={testimonial.content} />
+                <ContentRenderer content={testimonial.content} />
               </div>
               {testimonial.rating && (
                 <div className="flex">
@@ -768,7 +802,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-12">
-            <MarkdownContent content={description} />
+            <ContentRenderer content={description} />
           </div>
         )}
         <div
@@ -807,7 +841,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <div className="text-bg-200">
-                  <MarkdownContent content={feature.description} />
+                  <ContentRenderer content={feature.description} />
                 </div>
               </div>
             </div>
@@ -853,7 +887,7 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
         </h2>
         {description && (
           <div className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
-            <MarkdownContent content={description} />
+            <ContentRenderer content={description} />
           </div>
         )}
         {buttonText && buttonLink && (
@@ -945,9 +979,9 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
 
 // Content Section Component (uses existing ContentSection component)
 const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
-  // Procesar la descripción con MarkdownContent si contiene Markdown/HTML
+  // Procesar la descripción con ContentRenderer si contiene HTML/Markdown
   const processedDescription = data.description ? (
-    <MarkdownContent 
+    <ContentRenderer 
       content={data.description} 
       className="prose prose-lg max-w-none text-inherit"
     />
@@ -1003,7 +1037,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
               className="max-w-4xl text-lg leading-6"
               style={{ color: data.textColor || "black" }}
             >
-              <MarkdownContent 
+              <ContentRenderer 
                 content={data.content || ""} 
                 className="prose prose-lg max-w-none text-inherit"
               />
