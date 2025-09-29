@@ -7,13 +7,7 @@ import type {
   ContentSection,
   ContentSectionType,
 } from "../page-management/types/pageTypes";
-import {
-  FiSave,
-  FiEye,
-  FiArrowLeft,
-  FiLoader,
-  FiTrash2,
-} from "react-icons/fi";
+import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
 import { TbArrowNarrowDown, TbArrowNarrowUp } from "react-icons/tb";
 
 const PageEditor: React.FC = () => {
@@ -700,7 +694,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
             className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-50"
             title="Mover abajo"
           >
-            <TbArrowNarrowDown  className="h-6 w-6" />
+            <TbArrowNarrowDown className="h-6 w-6" />
           </button>
           <button
             onClick={onRemove}
