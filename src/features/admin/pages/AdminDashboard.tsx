@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
+import { useUserManagement } from "../user-management/hooks/useUserManagement";
 import {
   FiMenu,
   FiFileText,
@@ -10,6 +12,23 @@ import {
 } from "react-icons/fi";
 
 const AdminDashboard: React.FC = () => {
+  const { hasPermission } = useAuth();
+  const { users, fetchUsers } = useUserManagement();
+  const [userStats, setUserStats] = useState({ total: 0, admins: 0, editors: 0 });
+
+  useEffect(() => {
+    if (hasPermission('canViewUsers')) {
+      fetchUsers({ limit: 100 }); // Get all users for stats
+    }
+  }, [hasPermission, fetchUsers]);
+
+  useEffect(() => {
+    if (users.length > 0) {
+      const admins = users.filter(user => user.role === 'admin').length;
+      const editors = users.filter(user => user.role === 'editor').length;
+      setUserStats({ total: users.length, admins, editors });
+    }
+  }, [users]);
   const stats = [
     {
       label: "Páginas Activas",
@@ -30,8 +49,8 @@ const AdminDashboard: React.FC = () => {
       color: "bg-purple-500",
     },
     {
-      label: "Usuarios Admin",
-      value: "2",
+      label: "Total Usuarios",
+      value: userStats.total.toString(),
       icon: FiUsers,
       color: "bg-orange-500",
     },
@@ -59,6 +78,13 @@ const AdminDashboard: React.FC = () => {
       link: "/admin/blog/new",
       color: "bg-green-600",
     },
+    ...(hasPermission('canViewUsers') ? [{
+      title: "Gestionar Usuarios",
+      description: "Administrar usuarios y roles del sistema",
+      icon: FiUsers,
+      link: "/admin/users",
+      color: "bg-orange-600",
+    }] : []),
     {
       title: "Ver Sitio Web",
       description: "Revisar el sitio web público",

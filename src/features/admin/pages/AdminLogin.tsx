@@ -1,24 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const { login, isLoading } = useAuth();
+  const [showCredentials, setShowCredentials] = useState(false);
+  const { login, isLoading, error: authError, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Redirigir si ya está autenticado
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/admin");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
-    const success = await login(email, password);
+    
+    const success = await login({ email, password });
     if (success) {
       navigate("/admin");
-    } else {
-      setError("Credenciales incorrectas");
     }
+  };
+
+  const testCredentials = [
+    { email: "admin@ast.com", role: "Administrador (administrador)", password: "Ver en BD" },
+    { email: "javier@ast.com", role: "Editor (editor)", password: "Ver en BD" },
+    { email: "nay@ast.com", role: "Administrador (admin)", password: "Ver en BD" }
+  ];
+
+  const fillCredentials = (email: string) => {
+    setEmail(email);
   };
 
   return (
@@ -71,20 +85,66 @@ const AdminLogin: React.FC = () => {
             />
           </div>
 
-          {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
+          {authError && (
+            <div className="text-red-300 text-sm text-center bg-red-900/20 p-3 rounded-md">
+              {authError}
+            </div>
           )}
 
           <div>
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-100 hover:bg-primary-100/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:opacity-50"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-100 hover:bg-primary-100/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-100 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
             </button>
           </div>
-          <div className="text-xs text-white-100 mt-4 flex flex-col justify-center items-center">
+
+          {/* Botón para mostrar credenciales de prueba */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowCredentials(!showCredentials)}
+              className="w-full text-xs text-white-100/70 hover:text-white-100 transition-colors"
+            >
+              {showCredentials ? "Ocultar" : "Ver"} usuarios de prueba
+            </button>
+          </div>
+
+          {/* Lista de credenciales de prueba */}
+          {showCredentials && (
+            <div className="space-y-2">
+              <div className="text-xs text-white-100/80 text-center mb-2">
+                Usuarios disponibles:
+              </div>
+              {testCredentials.map((cred, index) => (
+                <div key={index} className="bg-bg-300/30 p-2 rounded text-xs">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <div className="text-white font-medium">{cred.email}</div>
+                      <div className="text-white-100/60">{cred.role}</div>
+                      <div className="text-white-100/50 text-xs mt-1">
+                        Contraseña: {cred.password}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => fillCredentials(cred.email)}
+                      className="text-xs text-primary-100 hover:text-primary-100/80 border border-primary-100/30 hover:border-primary-100/60 px-2 py-1 rounded transition-colors"
+                    >
+                      Usar
+                    </button>
+                  </div>
+                </div>
+              ))}
+              <div className="text-xs text-white-100/50 text-center mt-2">
+                Las contraseñas están hasheadas en la BD. Usa las credenciales originales.
+              </div>
+            </div>
+          )}
+
+          <div className="text-xs text-white-100/50 mt-4 flex flex-col justify-center items-center">
             <p>
               <strong>Credenciales de prueba:</strong>
             </p>

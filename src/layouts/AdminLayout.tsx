@@ -1,10 +1,11 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { FiHome, FiMenu, FiFileText, FiLogOut, FiGrid } from "react-icons/fi";
+import { FiHome, FiMenu, FiFileText, FiLogOut, FiGrid, FiUsers } from "react-icons/fi";
+import { getRoleDisplayName } from "../features/admin/user-management/types/userTypes";
 
 const AdminLayout: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
 
   const menuItems = [
     {
@@ -28,17 +29,15 @@ const AdminLayout: React.FC = () => {
       icon: FiFileText,
       label: "Blog",
     },
-    // {
-    //   to: "/admin/users",
-    //   icon: FiUsers,
-    //   label: "Usuarios",
-    // },
-    // {
-    //   to: "/admin/settings",
-    //   icon: FiSettings,
-    //   label: "Configuración",
-    // },
   ];
+
+  if (hasPermission('canViewUsers')) {
+    menuItems.push({
+      to: "/admin/users",
+      icon: FiUsers,
+      label: "Usuarios",
+    });
+  }
 
   const handleLogout = () => {
     logout();
@@ -57,7 +56,7 @@ const AdminLayout: React.FC = () => {
             <p className="text-xs text-white/50">{user?.email}</p>
           </div>
           <span className="inline-block px-5 py-1 text-xs font-medium text-white-100 border border-bg-300 rounded-full">
-            {user?.role}
+            {user?.role ? getRoleDisplayName(user.role) : 'Sin rol'}
           </span>
         </div>
 
