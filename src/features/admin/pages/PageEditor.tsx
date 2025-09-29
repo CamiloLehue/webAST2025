@@ -8,7 +8,23 @@ import type {
   ContentSectionType,
 } from "../page-management/types/pageTypes";
 import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
-import { TbArrowNarrowDown, TbArrowNarrowUp } from "react-icons/tb";
+import { 
+  TbArrowNarrowDown, 
+  TbArrowNarrowUp,
+  TbPaint,
+  TbBuildingStore,
+  TbFileText,
+  TbWaveSine,
+  TbNotes,
+  TbPhoto,
+  TbPhotoPlus,
+  TbVideo,
+  TbPhone,
+  TbMessage,
+  TbStar,
+  TbTarget,
+  TbSquare
+} from "react-icons/tb";
 
 const PageEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -245,16 +261,21 @@ const PageEditor: React.FC = () => {
           página.
         </p>
         <div className="flex flex-col gap-1 px-5 mt-5">
-          {sectionTypes.map((sectionType) => (
-            <button
-              key={sectionType.type}
-              onClick={() => addContentSection(sectionType.type)}
-              className="flex items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
-            >
-              <span className="text-2xl mb-1">{sectionType.icon}</span>
-              <span className="text-xs text-center">{sectionType.name}</span>
-            </button>
-          ))}
+          {sectionTypes.map((sectionType) => {
+            const IconComponent = sectionType.icon;
+            return (
+              <button
+                key={sectionType.type}
+                onClick={() => addContentSection(sectionType.type)}
+                className="flex gap-2 items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
+              >
+                <span className="text-2xl mb-1">
+                  <IconComponent />
+                </span>
+                <span className="text-xs text-center">{sectionType.name}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
       <div className="col-span-10 p-5">
@@ -428,7 +449,7 @@ const PageEditor: React.FC = () => {
             {formData.content.length === 0 ? (
               <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
                 <div className="mx-auto h-12 w-12 text-gray-400 text-4xl">
-                  📄
+                  <TbFileText className="w-full h-full" />
                 </div>
                 <h3 className="mt-2 text-sm font-medium text-bg-100">
                   No hay contenido
@@ -477,22 +498,22 @@ const PageEditor: React.FC = () => {
   );
 };
 
-const sectionTypes: { type: ContentSectionType; name: string; icon: string }[] =
+const sectionTypes: { type: ContentSectionType; name: string; icon: React.ComponentType }[] =
   [
-    // { type: "hero", name: "Hero", icon: "🎯" },
-    { type: "hero-multi", name: "Hero Múltiple", icon: "🎨" },
-    { type: "logo-section", name: "Logo/Título", icon: "🏢" },
-    { type: "content-section", name: "Contenido", icon: "📄" },
-    { type: "curved-section", name: "Sección Curva", icon: "🌊" },
-    { type: "text", name: "Texto", icon: "📝" },
-    { type: "image", name: "Imagen", icon: "🖼️" },
-    { type: "gallery", name: "Galería", icon: "🖼️" },
-    { type: "video", name: "Video", icon: "🎥" },
-    { type: "contact-form", name: "Formulario", icon: "📞" },
-    { type: "testimonials", name: "Testimonios", icon: "💬" },
-    { type: "features", name: "Características", icon: "⭐" },
-    { type: "cta", name: "Call to Action", icon: "🎯" },
-    { type: "spacer", name: "Espaciador", icon: "⬜" },
+    // { type: "hero", name: "Hero", icon: TbTarget },
+    { type: "hero-multi", name: "Hero Múltiple", icon: TbPaint },
+    { type: "logo-section", name: "Logo/Título", icon: TbBuildingStore },
+    { type: "content-section", name: "Contenido", icon: TbFileText },
+    { type: "curved-section", name: "Sección Curva", icon: TbWaveSine },
+    { type: "text", name: "Texto", icon: TbNotes },
+    { type: "image", name: "Imagen", icon: TbPhoto },
+    { type: "gallery", name: "Galería", icon: TbPhotoPlus },
+    { type: "video", name: "Video", icon: TbVideo },
+    { type: "contact-form", name: "Formulario", icon: TbPhone },
+    { type: "testimonials", name: "Testimonios", icon: TbMessage },
+    { type: "features", name: "Características", icon: TbStar },
+    { type: "cta", name: "Call to Action", icon: TbTarget },
+    { type: "spacer", name: "Espaciador", icon: TbSquare },
   ];
 
 const getDefaultSectionData = (
@@ -651,32 +672,39 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
   onRemove,
   onMove,
 }) => {
-  const sectionTypeNames: Record<string, string> = {
-    hero: "🎯 Hero",
-    "hero-multi": "🎨 Hero Múltiple",
-    "logo-section": "🏢 Logo/Título",
-    "content-section": "📄 Contenido",
-    "curved-section": "🌊 Sección Curva",
-    text: "📝 Texto",
-    image: "🖼️ Imagen",
-    gallery: "🖼️ Galería",
-    video: "🎥 Video",
-    "contact-form": "📞 Formulario",
-    testimonials: "💬 Testimonios",
-    features: "⭐ Características",
-    cta: "🎯 Call to Action",
-    spacer: "⬜ Espaciador",
+  const sectionTypeInfo: Record<string, { name: string; icon: React.ComponentType }> = {
+    hero: { name: "Hero", icon: TbTarget },
+    "hero-multi": { name: "Hero Múltiple", icon: TbPaint },
+    "logo-section": { name: "Logo/Título", icon: TbBuildingStore },
+    "content-section": { name: "Contenido", icon: TbFileText },
+    "curved-section": { name: "Sección Curva", icon: TbWaveSine },
+    text: { name: "Texto", icon: TbNotes },
+    image: { name: "Imagen", icon: TbPhoto },
+    gallery: { name: "Galería", icon: TbPhotoPlus },
+    video: { name: "Video", icon: TbVideo },
+    "contact-form": { name: "Formulario", icon: TbPhone },
+    testimonials: { name: "Testimonios", icon: TbMessage },
+    features: { name: "Características", icon: TbStar },
+    cta: { name: "Call to Action", icon: TbTarget },
+    spacer: { name: "Espaciador", icon: TbSquare },
+  };
+
+  const getSectionInfo = (type: string) => {
+    return sectionTypeInfo[type] || { name: type, icon: TbFileText };
   };
 
   return (
     <div className="border border-white-100 rounded-lg">
       <div className="flex items-center justify-between p-4 bg-accent-100/20 border-b border-primary-100">
         <div className="flex items-center space-x-3 ">
-          <h3 className="font-bold text-bg-100  ">
+          <h3 className="font-bold text-bg-100 flex items-center gap-2">
             <span className="bg-gradient-to-bl from-primary-100 to-orange-400 mx-3 px-3 shadow-xl text-white font-black  text-2xl p-2 rounded ">
               {index + 1}
-            </span>{" "}
-            Sección : {sectionTypeNames[section.type] || section.type}
+            </span>
+            <span className="text-xl">
+              {React.createElement(getSectionInfo(section.type).icon)}
+            </span>
+            Sección : {getSectionInfo(section.type).name}
           </h3>
         </div>
         <div className="flex items-center space-x-2">
