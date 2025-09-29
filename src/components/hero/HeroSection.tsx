@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { Link } from "react-router";
 import { motion } from "motion/react";
-import { FadeInSection, SlideInLeft, SlideInRight } from "../animations";
 import MarkdownContent from "../content/MarkdownContent";
 
 interface HeroSectionProps {
@@ -59,22 +58,40 @@ function HeroSection({
   return (
     <section className="bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100">
       <div className="grid grid-cols-4 gap-5 w-full">
-        <SlideInLeft className="col-span-2 w-full h-full flex justify-center items-center">
+        <motion.div 
+          className="col-span-2 w-full h-full flex justify-center items-center"
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        >
           <article className="flex flex-col items-end justify-center w-full">
             <div className="max-w-2xl h-full flex flex-col gap-5">
-              <FadeInSection delay={0.2}>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
+              >
                 <h2 className="text-white text-5xl font-bold">{title}</h2>
-              </FadeInSection>
-              <FadeInSection delay={0.4}>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.9, ease: [0.25, 0.1, 0.25, 1] }}
+              >
                 <div className="text-white-100 text-lg">
                   <MarkdownContent 
                     content={description} 
                     className="prose prose-lg max-w-none text-inherit"
                   />
                 </div>
-              </FadeInSection>
+              </motion.div>
             </div>
-            <FadeInSection delay={0.6} className="w-full max-w-sm mt-5 mx-auto">
+            <motion.div 
+              className="w-full max-w-sm mt-5 mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.1, ease: [0.25, 0.1, 0.25, 1] }}
+            >
               <Link
                 to={buttonLink}
                 className="inline-flex items-center text-primary-100 hover:text-white-100 transition-colors duration-300 font-medium border px-4 py-1 w-max"
@@ -83,10 +100,15 @@ function HeroSection({
                 {buttonText}
                 <FiArrowRight className="ml-1 h-4 w-4" />
               </Link>
-            </FadeInSection>
+            </motion.div>
           </article>
-        </SlideInLeft>
-        <SlideInRight className="relative col-span-2 w-full h-full overflow-hidden">
+        </motion.div>
+        <motion.div 
+          className="relative col-span-2 w-full h-full overflow-hidden"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+        >
           <motion.img
             draggable={false}
             src={images[currentImageIndex]}
@@ -95,7 +117,7 @@ function HeroSection({
             key={currentImageIndex}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
           />
           <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
 
@@ -129,7 +151,7 @@ function HeroSection({
               </div>
             </>
           )}
-        </SlideInRight>
+        </motion.div>
       </div>
     </section>
   );
