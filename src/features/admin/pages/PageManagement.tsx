@@ -85,13 +85,10 @@ const PageManagement: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6 p-5">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-bg-100">
-            Gestión de Páginas
-          </h2>
+          <h2 className="text-2xl font-bold text-bg-100">Gestión de Páginas</h2>
           <p className="mt-1 text-bg-200">
             Administra las páginas personalizadas del sitio web
           </p>
@@ -105,7 +102,6 @@ const PageManagement: React.FC = () => {
         </Link>
       </div>
 
-      {/* Filters */}
       <div className="bg-white p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
         <div className="flex-1">
           <input
@@ -131,7 +127,6 @@ const PageManagement: React.FC = () => {
         </div>
       </div>
 
-      {/* Pages Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPages.length === 0 ? (
           <div className="col-span-full">
@@ -160,15 +155,29 @@ const PageManagement: React.FC = () => {
               key={page.id}
               className="bg-white rounded-lg shadow overflow-hidden"
             >
-              {/* Page Preview */}
-              <div className="aspect-video bg-white flex items-center justify-center">
+              <div className="flex justify-end items-center space-x-2 p-3">
+                <Link
+                  to={`/admin/pages/edit/${page.id}`}
+                  className="p-2 text-gray-400 hover:text-bg-200"
+                  title="Editar página"
+                >
+                  <FiEdit2 className="h-4 w-4" />
+                </Link>
+                <button
+                  onClick={() => handleDeletePage(page.id)}
+                  className="p-2 text-gray-400 hover:text-red-600"
+                  title="Eliminar página"
+                >
+                  <FiTrash2 className="h-4 w-4" />
+                </button>
+              </div>
+              <div className=" py-5 bg-white flex items-center justify-center">
                 <div className="text-center">
                   <div className="text-4xl mb-2">📄</div>
                   <p className="text-sm text-gray-500">Vista previa</p>
                 </div>
               </div>
 
-              {/* Page Info */}
               <div className="p-6">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-lg font-medium text-bg-100 truncate">
@@ -181,7 +190,7 @@ const PageManagement: React.FC = () => {
                         : "bg-yellow-100 text-yellow-800"
                     }`}
                   >
-                    {page.isPublished ? "Publicado" : "Borrador"}
+                    {page.isPublished ? "Publicado" : "En Borrador"}
                   </span>
                 </div>
 
@@ -203,32 +212,15 @@ const PageManagement: React.FC = () => {
                   </p>
                 </div>
 
-                {/* Actions */}
                 <div className="flex items-center justify-between">
+                  <div></div>
                   <Link
                     to={`/${page.slug}`}
                     target="_blank"
                     className="text-accent-100 hover:text-accent-200 text-sm font-medium"
                   >
-                    Ver página
+                    Ver página en vivo
                   </Link>
-
-                  <div className="flex items-center space-x-2">
-                    <Link
-                      to={`/admin/pages/edit/${page.id}`}
-                      className="p-2 text-gray-400 hover:text-bg-200"
-                      title="Editar página"
-                    >
-                      <FiEdit2 className="h-4 w-4" />
-                    </Link>
-                    <button
-                      onClick={() => handleDeletePage(page.id)}
-                      className="p-2 text-gray-400 hover:text-red-600"
-                      title="Eliminar página"
-                    >
-                      <FiTrash2 className="h-4 w-4" />
-                    </button>
-                  </div>
                 </div>
               </div>
             </div>
@@ -236,7 +228,6 @@ const PageManagement: React.FC = () => {
         )}
       </div>
 
-      {/* Quick Templates */}
       <div className="bg-white rounded-lg shadow p-6">
         <h3 className="text-lg font-medium text-bg-100 mb-4">
           Plantillas Rápidas

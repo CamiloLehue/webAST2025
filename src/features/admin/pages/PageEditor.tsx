@@ -241,234 +241,238 @@ const PageEditor: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => navigate("/admin/pages")}
-            className="p-2 text-gray-400 hover:text-bg-200"
-          >
-            <FiArrowLeft className="h-5 w-5" />
-          </button>
-          <div>
-            <h1 className="text-2xl font-bold text-bg-100">
-              {isEditing ? "Editar Página" : "Nueva Página"}
-            </h1>
-            {template && (
-              <p className="text-sm text-bg-200">
-                Usando plantilla: {template}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <button
-            onClick={handlePreview}
-            disabled={!formData.slug}
-            className="inline-flex items-center px-4 py-2 border border-gray-300 text-bg-300 bg-white hover:bg-gray-50 rounded-md disabled:opacity-50"
-          >
-            <FiEye className="mr-2 h-4 w-4" />
-            Vista Previa
-          </button>
-
-          <button
-            onClick={handleSave}
-            disabled={isSaving || !!slugError}
-            className="inline-flex items-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50"
-          >
-            {isSaving ? (
-              <FiLoader className="animate-spin mr-2 h-4 w-4" />
-            ) : (
-              <FiSave className="mr-2 h-4 w-4" />
-            )}
-            {isSaving ? "Guardando..." : "Guardar"}
-          </button>
+    <div className="w-full grid grid-cols-12 mx-auto space-y-6 gap-2">
+      <div className="col-span-2 bg-bg-400 ">
+        <h4 className="text-sm text-center font-medium text-white-100 mb-3">
+          Agregar Sección
+        </h4>
+        <div className="flex flex-col gap-1 px-5">
+          {sectionTypes.map((sectionType) => (
+            <button
+              key={sectionType.type}
+              onClick={() => addContentSection(sectionType.type)}
+              className="flex items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
+            >
+              <span className="text-2xl mb-1">{sectionType.icon}</span>
+              <span className="text-xs text-center">{sectionType.name}</span>
+            </button>
+          ))}
         </div>
       </div>
-
-      <div className="bg-white rounded-lg shadow p-6 space-y-6">
-        <div className="grid grid-cols-1 gap-6">
-          <div>
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium text-bg-300"
+      <div className="col-span-10 p-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => navigate("/admin/pages")}
+              className="p-2 text-gray-400 hover:text-bg-200"
             >
-              Título *
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={formData.title}
-              onChange={(e) => handleTitleChange(e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="Ingresa el título de la página"
-            />
-          </div>
-
-          <div>
-            <label
-              htmlFor="slug"
-              className="block text-sm font-medium text-bg-300"
-            >
-              Slug (URL) *
-            </label>
-            <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
-                {window.location.origin}/
-              </span>
-              <input
-                type="text"
-                id="slug"
-                value={formData.slug}
-                onChange={(e) => handleSlugChange(e.target.value)}
-                className={`flex-1 block w-full px-3 py-2 border rounded-none rounded-r-md focus:outline-none focus:ring-accent-100 focus:border-accent-100 ${
-                  slugError ? "border-red-300" : "border-gray-300"
-                }`}
-                placeholder="url-de-la-pagina"
-              />
+              <FiArrowLeft className="h-5 w-5" />
+            </button>
+            <div>
+              <h1 className="text-2xl font-bold text-bg-100">
+                {isEditing ? "Editar Página" : "Nueva Página"}
+              </h1>
+              {template && (
+                <p className="text-sm text-bg-200">
+                  Usando plantilla: {template}
+                </p>
+              )}
             </div>
-            {slugError && (
-              <p className="mt-1 text-sm text-red-600">{slugError}</p>
-            )}
           </div>
 
-          <div>
-            <label
-              htmlFor="metaTitle"
-              className="block text-sm font-medium text-bg-300"
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={handlePreview}
+              disabled={!formData.slug}
+              className="inline-flex items-center px-4 py-2 border border-gray-300 text-bg-300 bg-white hover:bg-gray-50 rounded-md disabled:opacity-50"
             >
-              Meta Título (SEO)
-            </label>
-            <input
-              type="text"
-              id="metaTitle"
-              value={formData.metaTitle}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, metaTitle: e.target.value }))
-              }
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="Título para SEO (opcional)"
-            />
-          </div>
+              <FiEye className="mr-2 h-4 w-4" />
+              Vista Previa
+            </button>
 
-          <div>
-            <label
-              htmlFor="metaDescription"
-              className="block text-sm font-medium text-bg-300"
+            <button
+              onClick={handleSave}
+              disabled={isSaving || !!slugError}
+              className="inline-flex items-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50"
             >
-              Meta Descripción (SEO)
-            </label>
-            <textarea
-              id="metaDescription"
-              rows={3}
-              value={formData.metaDescription}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  metaDescription: e.target.value,
-                }))
-              }
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="Descripción para SEO (opcional)"
-            />
-          </div>
-
-          <div className="flex items-center">
-            <input
-              id="isPublished"
-              type="checkbox"
-              checked={formData.isPublished}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  isPublished: e.target.checked,
-                }))
-              }
-              className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
-            />
-            <label
-              htmlFor="isPublished"
-              className="ml-2 block text-sm text-bg-100"
-            >
-              Publicar página
-            </label>
+              {isSaving ? (
+                <FiLoader className="animate-spin mr-2 h-4 w-4" />
+              ) : (
+                <FiSave className="mr-2 h-4 w-4" />
+              )}
+              {isSaving ? "Guardando..." : "Guardar"}
+            </button>
           </div>
         </div>
 
-        <div className="border-t pt-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium text-bg-100">
-              Contenido de la Página
-            </h3>
-            <div className="text-sm text-gray-500">
-              {formData.content.length} sección(es)
+        <div className="bg-white rounded-lg shadow p-6 space-y-6">
+          <div className="grid grid-cols-1 gap-6">
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-bg-300"
+              >
+                Título *
+              </label>
+              <input
+                type="text"
+                id="title"
+                value={formData.title}
+                onChange={(e) => handleTitleChange(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="Ingresa el título de la página"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="slug"
+                className="block text-sm font-medium text-bg-300"
+              >
+                Slug (URL) *
+              </label>
+              <div className="mt-1 flex rounded-md shadow-sm">
+                <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  {window.location.origin}/
+                </span>
+                <input
+                  type="text"
+                  id="slug"
+                  value={formData.slug}
+                  onChange={(e) => handleSlugChange(e.target.value)}
+                  className={`flex-1 block w-full px-3 py-2 border rounded-none rounded-r-md focus:outline-none focus:ring-accent-100 focus:border-accent-100 ${
+                    slugError ? "border-red-300" : "border-gray-300"
+                  }`}
+                  placeholder="url-de-la-pagina"
+                />
+              </div>
+              {slugError && (
+                <p className="mt-1 text-sm text-red-600">{slugError}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="metaTitle"
+                className="block text-sm font-medium text-bg-300"
+              >
+                Meta Título (SEO)
+              </label>
+              <input
+                type="text"
+                id="metaTitle"
+                value={formData.metaTitle}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    metaTitle: e.target.value,
+                  }))
+                }
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="Título para SEO (opcional)"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="metaDescription"
+                className="block text-sm font-medium text-bg-300"
+              >
+                Meta Descripción (SEO)
+              </label>
+              <textarea
+                id="metaDescription"
+                rows={3}
+                value={formData.metaDescription}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    metaDescription: e.target.value,
+                  }))
+                }
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                placeholder="Descripción para SEO (opcional)"
+              />
+            </div>
+
+            <div className="flex items-center">
+              <input
+                id="isPublished"
+                type="checkbox"
+                checked={formData.isPublished}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    isPublished: e.target.checked,
+                  }))
+                }
+                className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
+              />
+              <label
+                htmlFor="isPublished"
+                className="ml-2 block text-sm text-bg-100"
+              >
+                Publicar página
+              </label>
             </div>
           </div>
 
-          <div className="mb-6">
-            <h4 className="text-sm font-medium text-bg-300 mb-3">
-              Agregar Sección
-            </h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {sectionTypes.map((sectionType) => (
-                <button
-                  key={sectionType.type}
-                  onClick={() => addContentSection(sectionType.type)}
-                  className="flex flex-col items-center p-3 border border-gray-300 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
-                >
-                  <span className="text-2xl mb-1">{sectionType.icon}</span>
-                  <span className="text-xs text-center">
-                    {sectionType.name}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {formData.content.length === 0 ? (
-            <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
-              <div className="mx-auto h-12 w-12 text-gray-400 text-4xl">📄</div>
-              <h3 className="mt-2 text-sm font-medium text-bg-100">
-                No hay contenido
+          <div className="border-t pt-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-bg-100">
+                Contenido de la Página
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Comienza agregando una sección de contenido arriba.
-              </p>
+              <div className="text-sm text-gray-500">
+                {formData.content.length} sección(es)
+              </div>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {formData.content
-                .sort((a, b) => a.order - b.order)
-                .map((section, index) => (
-                  <ContentSectionEditor
-                    key={section.id}
-                    section={section}
-                    index={index}
-                    totalSections={formData.content.length}
-                    onUpdate={(dataOrSection) => {
-                      if (
-                        typeof dataOrSection === "object" &&
-                        dataOrSection &&
-                        "id" in dataOrSection
-                      ) {
-                        updateFullContentSection(
-                          section.id,
-                          dataOrSection as Partial<ContentSection>
-                        );
-                      } else {
-                        updateContentSection(
-                          section.id,
-                          dataOrSection as ContentSection["data"]
-                        );
-                      }
-                    }}
-                    onRemove={() => removeContentSection(section.id)}
-                    onMove={(direction) => moveSection(section.id, direction)}
-                  />
-                ))}
-            </div>
-          )}
+
+            {formData.content.length === 0 ? (
+              <div className="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+                <div className="mx-auto h-12 w-12 text-gray-400 text-4xl">
+                  📄
+                </div>
+                <h3 className="mt-2 text-sm font-medium text-bg-100">
+                  No hay contenido
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Comienza agregando una sección de contenido arriba.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {formData.content
+                  .sort((a, b) => a.order - b.order)
+                  .map((section, index) => (
+                    <ContentSectionEditor
+                      key={section.id}
+                      section={section}
+                      index={index}
+                      totalSections={formData.content.length}
+                      onUpdate={(dataOrSection) => {
+                        if (
+                          typeof dataOrSection === "object" &&
+                          dataOrSection &&
+                          "id" in dataOrSection
+                        ) {
+                          updateFullContentSection(
+                            section.id,
+                            dataOrSection as Partial<ContentSection>
+                          );
+                        } else {
+                          updateContentSection(
+                            section.id,
+                            dataOrSection as ContentSection["data"]
+                          );
+                        }
+                      }}
+                      onRemove={() => removeContentSection(section.id)}
+                      onMove={(direction) => moveSection(section.id, direction)}
+                    />
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -477,7 +481,7 @@ const PageEditor: React.FC = () => {
 
 const sectionTypes: { type: ContentSectionType; name: string; icon: string }[] =
   [
-    { type: "hero", name: "Hero", icon: "🎯" },
+    // { type: "hero", name: "Hero", icon: "🎯" },
     { type: "hero-multi", name: "Hero Múltiple", icon: "🎨" },
     { type: "logo-section", name: "Logo/Título", icon: "🏢" },
     { type: "content-section", name: "Contenido", icon: "📄" },
@@ -668,12 +672,14 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
 
   return (
     <div className="border border-white-100 rounded-lg">
-      <div className="flex items-center justify-between p-4 bg-gray-50 border-b border-white-100">
-        <div className="flex items-center space-x-3">
-          <span className="font-medium text-bg-100">
-            Sección {index + 1}:{" "}
-            {sectionTypeNames[section.type] || section.type}
-          </span>
+      <div className="flex items-center justify-between p-4 bg-accent-100/20 border-b border-primary-100">
+        <div className="flex items-center space-x-3 ">
+          <h3 className="font-bold text-bg-100  ">
+            <span className="bg-gradient-to-bl from-primary-100 to-orange-400 mx-3 px-3 shadow-xl text-white font-black  text-2xl p-2 rounded ">
+              {index + 1}
+            </span>{" "}
+            Sección : {sectionTypeNames[section.type] || section.type}
+          </h3>
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -874,7 +880,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </label>
             <input
               type="text"
-              value={data.title as string || ""}
+              value={(data.title as string) || ""}
               onChange={(e) => updateField("title", e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Título del hero"
@@ -885,7 +891,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Descripción
             </label>
             <RichTextEditor
-              value={data.description as string || ""}
+              value={(data.description as string) || ""}
               onChange={(value) => updateField("description", value)}
               placeholder="Descripción del servicio"
               rows={4}
@@ -897,7 +903,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </label>
             <input
               type="text"
-              value={data.altText as string || ""}
+              value={(data.altText as string) || ""}
               onChange={(e) => updateField("altText", e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               placeholder="Texto alternativo para las imágenes"
@@ -908,33 +914,37 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Imágenes
             </label>
             <div className="mt-2 space-y-2">
-              {((data.images as string[]) || []).map((imageUrl: string, index: number) => (
-                <div key={index} className="flex space-x-2 items-center">
-                  <div className="flex-1">
-                    <ImageSelector
-                      value={imageUrl}
-                      onChange={(value) => {
-                        const newImages = [...((data.images as string[]) || [])];
-                        newImages[index] = value;
+              {((data.images as string[]) || []).map(
+                (imageUrl: string, index: number) => (
+                  <div key={index} className="flex space-x-2 items-center">
+                    <div className="flex-1">
+                      <ImageSelector
+                        value={imageUrl}
+                        onChange={(value) => {
+                          const newImages = [
+                            ...((data.images as string[]) || []),
+                          ];
+                          newImages[index] = value;
+                          updateField("images", newImages);
+                        }}
+                        placeholder="URL de la imagen o selecciona de la galería"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newImages = (
+                          (data.images as string[]) || []
+                        ).filter((_: string, i: number) => i !== index);
                         updateField("images", newImages);
                       }}
-                      placeholder="URL de la imagen o selecciona de la galería"
-                    />
+                      className="px-3 py-2 text-sm text-red-600 hover:text-red-800"
+                    >
+                      Eliminar
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newImages = ((data.images as string[]) || []).filter(
-                        (_: string, i: number) => i !== index
-                      );
-                      updateField("images", newImages);
-                    }}
-                    className="px-3 py-2 text-sm text-red-600 hover:text-red-800"
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              ))}
+                )
+              )}
               <button
                 type="button"
                 onClick={() => {
@@ -954,7 +964,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </label>
               <input
                 type="text"
-                value={data.buttonText as string || ""}
+                value={(data.buttonText as string) || ""}
                 onChange={(e) => updateField("buttonText", e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="Ver video"
@@ -966,7 +976,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               </label>
               <input
                 type="text"
-                value={data.buttonLink as string || ""}
+                value={(data.buttonLink as string) || ""}
                 onChange={(e) => updateField("buttonLink", e.target.value)}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 placeholder="#"
@@ -978,7 +988,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Alineación
             </label>
             <select
-              value={data.alignment as string || "center"}
+              value={(data.alignment as string) || "center"}
               onChange={(e) => updateField("alignment", e.target.value)}
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             >
@@ -1122,7 +1132,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                       newImages[index] = value;
                       updateField("images", newImages);
                     }}
-                    placeholder={`Imagen ${index + 1} desde la galería o URL externa`}
+                    placeholder={`Imagen ${
+                      index + 1
+                    } desde la galería o URL externa`}
                   />
                   <button
                     type="button"
@@ -1657,47 +1669,57 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Imágenes
             </label>
             <div className="mt-2 space-y-2">
-              {(data.images || []).map((image: { src: string; alt: string; caption?: string }, index: number) => (
-                <div
-                  key={index}
-                  className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
-                >
-                  <div className="flex-1">
-                    <ImageSelector
-                      value={image.src || ""}
-                      onChange={(value) => {
+              {(data.images || []).map(
+                (
+                  image: { src: string; alt: string; caption?: string },
+                  index: number
+                ) => (
+                  <div
+                    key={index}
+                    className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
+                  >
+                    <div className="flex-1">
+                      <ImageSelector
+                        value={image.src || ""}
+                        onChange={(value) => {
+                          const newImages = [...(data.images || [])];
+                          newImages[index] = { ...image, src: value };
+                          updateField("images", newImages);
+                        }}
+                        placeholder={`Imagen ${
+                          index + 1
+                        } desde la galería o URL externa`}
+                      />
+                    </div>
+                    <input
+                      type="text"
+                      value={image.alt || ""}
+                      onChange={(e) => {
                         const newImages = [...(data.images || [])];
-                        newImages[index] = { ...image, src: value };
+                        newImages[index] = { ...image, alt: e.target.value };
                         updateField("images", newImages);
                       }}
-                      placeholder={`Imagen ${index + 1} desde la galería o URL externa`}
+                      className="w-32 px-2 py-1 text-sm border border-gray-300 rounded"
+                      placeholder="Alt text"
                     />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newImages = (data.images || []).filter(
+                          (
+                            _: { src: string; alt: string; caption?: string },
+                            i: number
+                          ) => i !== index
+                        );
+                        updateField("images", newImages);
+                      }}
+                      className="px-2 py-1 text-sm text-red-600 hover:text-red-800"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
                   </div>
-                  <input
-                    type="text"
-                    value={image.alt || ""}
-                    onChange={(e) => {
-                      const newImages = [...(data.images || [])];
-                      newImages[index] = { ...image, alt: e.target.value };
-                      updateField("images", newImages);
-                    }}
-                    className="w-32 px-2 py-1 text-sm border border-gray-300 rounded"
-                    placeholder="Alt text"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newImages = (data.images || []).filter(
-                        (_: { src: string; alt: string; caption?: string }, i: number) => i !== index
-                      );
-                      updateField("images", newImages);
-                    }}
-                    className="px-2 py-1 text-sm text-red-600 hover:text-red-800"
-                  >
-                    <FiTrash2 size={16} />
-                  </button>
-                </div>
-              ))}
+                )
+              )}
               <button
                 type="button"
                 onClick={() => {
@@ -1759,71 +1781,92 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               Campos del formulario
             </label>
             <div className="mt-2 space-y-2">
-              {(data.fields || []).map((field: { id: string; type: string; label: string; required: boolean }, index: number) => (
-                <div
-                  key={index}
-                  className="p-3 border border-white-100 rounded-md"
-                >
-                  <div className="grid grid-cols-3 gap-2 mb-2">
-                    <input
-                      type="text"
-                      value={field.label || ""}
-                      onChange={(e) => {
-                        const newFields = [...(data.fields || [])];
-                        newFields[index] = { ...field, label: e.target.value };
-                        updateField("fields", newFields);
-                      }}
-                      className="px-2 py-1 text-sm border border-gray-300 rounded"
-                      placeholder="Etiqueta"
-                    />
-                    <select
-                      value={field.type || "text"}
-                      onChange={(e) => {
-                        const newFields = [...(data.fields || [])];
-                        newFields[index] = { ...field, type: e.target.value };
-                        updateField("fields", newFields);
-                      }}
-                      className="px-2 py-1 text-sm border border-gray-300 rounded"
-                    >
-                      <option value="text">Texto</option>
-                      <option value="email">Email</option>
-                      <option value="tel">Teléfono</option>
-                      <option value="textarea">Área de texto</option>
-                      <option value="select">Selección</option>
-                    </select>
-                    <div className="flex items-center space-x-2">
-                      <label className="flex items-center text-sm">
-                        <input
-                          type="checkbox"
-                          checked={field.required || false}
-                          onChange={(e) => {
-                            const newFields = [...(data.fields || [])];
-                            newFields[index] = {
-                              ...field,
-                              required: e.target.checked,
-                            };
-                            updateField("fields", newFields);
-                          }}
-                          className="h-3 w-3 text-accent-100"
-                        />
-                        <span className="ml-1">Requerido</span>
-                      </label>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const newFields = (data.fields || []).filter(
-                            (_: { id: string; type: string; label: string; required: boolean }, i: number) => i !== index
-                          );
+              {(data.fields || []).map(
+                (
+                  field: {
+                    id: string;
+                    type: string;
+                    label: string;
+                    required: boolean;
+                  },
+                  index: number
+                ) => (
+                  <div
+                    key={index}
+                    className="p-3 border border-white-100 rounded-md"
+                  >
+                    <div className="grid grid-cols-3 gap-2 mb-2">
+                      <input
+                        type="text"
+                        value={field.label || ""}
+                        onChange={(e) => {
+                          const newFields = [...(data.fields || [])];
+                          newFields[index] = {
+                            ...field,
+                            label: e.target.value,
+                          };
                           updateField("fields", newFields);
                         }}
-                        className="text-red-600 hover:text-red-800 text-sm"
+                        className="px-2 py-1 text-sm border border-gray-300 rounded"
+                        placeholder="Etiqueta"
+                      />
+                      <select
+                        value={field.type || "text"}
+                        onChange={(e) => {
+                          const newFields = [...(data.fields || [])];
+                          newFields[index] = { ...field, type: e.target.value };
+                          updateField("fields", newFields);
+                        }}
+                        className="px-2 py-1 text-sm border border-gray-300 rounded"
                       >
-                        Eliminar
-                      </button>
+                        <option value="text">Texto</option>
+                        <option value="email">Email</option>
+                        <option value="tel">Teléfono</option>
+                        <option value="textarea">Área de texto</option>
+                        <option value="select">Selección</option>
+                      </select>
+                      <div className="flex items-center space-x-2">
+                        <label className="flex items-center text-sm">
+                          <input
+                            type="checkbox"
+                            checked={field.required || false}
+                            onChange={(e) => {
+                              const newFields = [...(data.fields || [])];
+                              newFields[index] = {
+                                ...field,
+                                required: e.target.checked,
+                              };
+                              updateField("fields", newFields);
+                            }}
+                            className="h-3 w-3 text-accent-100"
+                          />
+                          <span className="ml-1">Requerido</span>
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFields = (data.fields || []).filter(
+                              (
+                                _: {
+                                  id: string;
+                                  type: string;
+                                  label: string;
+                                  required: boolean;
+                                },
+                                i: number
+                              ) => i !== index
+                            );
+                            updateField("fields", newFields);
+                          }}
+                          className="text-red-600 hover:text-red-800 text-sm"
+                        >
+                          Eliminar
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
               <button
                 type="button"
                 onClick={() => {

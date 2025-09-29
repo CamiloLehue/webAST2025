@@ -38,7 +38,7 @@ const MenuManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-5">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>

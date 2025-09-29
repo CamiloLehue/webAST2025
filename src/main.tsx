@@ -21,6 +21,7 @@ import BlogManagement from "./features/admin/pages/BlogManagement";
 import BlogEditor from "./features/admin/pages/BlogEditor";
 import PageManagement from "./features/admin/pages/PageManagement";
 import PageEditor from "./features/admin/pages/PageEditor";
+import UserManagement from "./features/admin/pages/UserManagement";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
@@ -61,6 +62,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="pages" element={<PageManagement />} />
                 <Route path="pages/new" element={<PageEditor />} />
                 <Route path="pages/edit/:id" element={<PageEditor />} />
+                <Route path="users" element={<UserManagement />} />
               </Route>
 
               <Route element={<LayoutTemplate />}>
