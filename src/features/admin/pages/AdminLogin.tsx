@@ -9,7 +9,6 @@ const AdminLogin: React.FC = () => {
   const { login, isLoading, error: authError, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  // Redirigir si ya está autenticado
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/admin");
@@ -18,7 +17,7 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const success = await login({ email, password });
     if (success) {
       navigate("/admin");
@@ -26,9 +25,11 @@ const AdminLogin: React.FC = () => {
   };
 
   const testCredentials = [
-    { email: "admin@ast.com", role: "Administrador (administrador)", password: "Ver en BD" },
-    { email: "javier@ast.com", role: "Editor (editor)", password: "Ver en BD" },
-    { email: "nay@ast.com", role: "Administrador (admin)", password: "Ver en BD" }
+    {
+      email: "admin@ast.com",
+      role: "Administrador (administrador)",
+      password: "Ver en BD",
+    },
   ];
 
   const fillCredentials = (email: string) => {
@@ -45,7 +46,7 @@ const AdminLogin: React.FC = () => {
             alt="AST Logo"
           />
           <h2 className="mt-6 text-center text-xl font-extrabold text-white-100">
-            Panel Administrativo
+            Administrador
           </h2>
           <p className="mt-2 text-center text-sm text-white-100/50">
             Ingresa tus credenciales para acceder
@@ -101,7 +102,6 @@ const AdminLogin: React.FC = () => {
             </button>
           </div>
 
-          {/* Botón para mostrar credenciales de prueba */}
           <div>
             <button
               type="button"
@@ -112,7 +112,6 @@ const AdminLogin: React.FC = () => {
             </button>
           </div>
 
-          {/* Lista de credenciales de prueba */}
           {showCredentials && (
             <div className="space-y-2">
               <div className="text-xs text-white-100/80 text-center mb-2">
@@ -139,18 +138,10 @@ const AdminLogin: React.FC = () => {
                 </div>
               ))}
               <div className="text-xs text-white-100/50 text-center mt-2">
-                Las contraseñas están hasheadas en la BD. Usa las credenciales originales.
+                Sistema monitoreado, el acceso no autorizado será reportado.
               </div>
             </div>
           )}
-
-          <div className="text-xs text-white-100/50 mt-4 flex flex-col justify-center items-center">
-            <p>
-              <strong>Credenciales de prueba:</strong>
-            </p>
-            <p>Admin: admin@ast.com / admin123</p>
-            <p>Editor: editor@ast.com / editor123</p>
-          </div>
         </form>
       </div>
     </div>

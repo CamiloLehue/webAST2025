@@ -13,8 +13,8 @@ import {
   FiArrowLeft,
   FiLoader,
   FiTrash2,
-  FiMove,
 } from "react-icons/fi";
+import { TbArrowNarrowDown, TbArrowNarrowUp } from "react-icons/tb";
 
 const PageEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -241,12 +241,16 @@ const PageEditor: React.FC = () => {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 mx-auto space-y-6 gap-2">
-      <div className="col-span-2 bg-bg-400 ">
+    <div className="w-full grid grid-cols-12 mx-auto space-y-6  gap-2 h-full">
+      <div className="col-span-2 bg-bg-100 h-full  shadow p-5">
         <h4 className="text-sm text-center font-medium text-white-100 mb-3">
           Agregar Sección
         </h4>
-        <div className="flex flex-col gap-1 px-5">
+        <p className="text-white-100/80 text-center text-xs leading-3">
+          Selecciona el tipo de sección que deseas agregar al contenido de la
+          página.
+        </p>
+        <div className="flex flex-col gap-1 px-5 mt-5">
           {sectionTypes.map((sectionType) => (
             <button
               key={sectionType.type}
@@ -688,7 +692,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
             className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-50"
             title="Mover arriba"
           >
-            <FiMove className="h-4 w-4 transform rotate-180" />
+            <TbArrowNarrowUp className="h-6 w-6 transform " />
           </button>
           <button
             onClick={() => onMove("down")}
@@ -696,7 +700,7 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
             className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-50"
             title="Mover abajo"
           >
-            <FiMove className="h-4 w-4" />
+            <TbArrowNarrowDown  className="h-6 w-6" />
           </button>
           <button
             onClick={onRemove}
