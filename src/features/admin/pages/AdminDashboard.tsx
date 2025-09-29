@@ -14,18 +14,22 @@ import {
 const AdminDashboard: React.FC = () => {
   const { hasPermission } = useAuth();
   const { users, fetchUsers } = useUserManagement();
-  const [userStats, setUserStats] = useState({ total: 0, admins: 0, editors: 0 });
+  const [userStats, setUserStats] = useState({
+    total: 0,
+    admins: 0,
+    editors: 0,
+  });
 
   useEffect(() => {
-    if (hasPermission('canViewUsers')) {
-      fetchUsers({ limit: 100 }); // Get all users for stats
+    if (hasPermission("canViewUsers")) {
+      fetchUsers({ limit: 100 });
     }
   }, [hasPermission, fetchUsers]);
 
   useEffect(() => {
     if (users.length > 0) {
-      const admins = users.filter(user => user.role === 'admin').length;
-      const editors = users.filter(user => user.role === 'editor').length;
+      const admins = users.filter((user) => user.role === "admin").length;
+      const editors = users.filter((user) => user.role === "editor").length;
       setUserStats({ total: users.length, admins, editors });
     }
   }, [users]);
@@ -78,13 +82,17 @@ const AdminDashboard: React.FC = () => {
       link: "/admin/blog/new",
       color: "bg-green-600",
     },
-    ...(hasPermission('canViewUsers') ? [{
-      title: "Gestionar Usuarios",
-      description: "Administrar usuarios y roles del sistema",
-      icon: FiUsers,
-      link: "/admin/users",
-      color: "bg-orange-600",
-    }] : []),
+    ...(hasPermission("canViewUsers")
+      ? [
+          {
+            title: "Gestionar Usuarios",
+            description: "Administrar usuarios y roles del sistema",
+            icon: FiUsers,
+            link: "/admin/users",
+            color: "bg-orange-600",
+          },
+        ]
+      : []),
     {
       title: "Ver Sitio Web",
       description: "Revisar el sitio web público",
@@ -114,26 +122,28 @@ const AdminDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 p-5 bg-bg-200 h-full">
       <div>
-        <h2 className="text-3xl font-bold text-bg-100">Dashboard</h2>
+        <h2 className="text-2xl font-bold text-white">
+          <span className="text-primary-100">AST</span>Dashboard
+        </h2>
         <p className="mt-2 text-bg-200">
           Gestiona el contenido de tu sitio web desde aquí
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  border border-bg-300/10 p-2 rounded-xl">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-lg shadow p-6">
+          <div key={index} className="bg-bg-300 rounded-lg  p-2 ">
             <div className="flex items-center">
               <div className={`${stat.color} rounded-lg p-3`}>
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <p className="text-2xl font-semibold text-bg-100">
+                <p className="text-2xl font-semibold text-white">
                   {stat.value}
                 </p>
-                <p className="text-bg-200">{stat.label}</p>
+                <p className="text-white">{stat.label}</p>
               </div>
             </div>
           </div>
@@ -141,37 +151,35 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-medium text-bg-100 mb-4">
+        <h3 className="text-lg font-medium text-white mb-4">
           Acciones Rápidas
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {quickActions.map((action, index) => (
             <Link
               key={index}
               to={action.link}
               target={action.external ? "_blank" : undefined}
-              className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow"
+              className="bg-bg-300 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
             >
               <div
                 className={`${action.color} rounded-lg p-3 w-12 h-12 flex items-center justify-center mb-4`}
               >
                 <action.icon className="h-6 w-6 text-white" />
               </div>
-              <h4 className="text-lg font-medium text-bg-100 mb-2">
+              <h4 className="text-lg font-medium text-white mb-2">
                 {action.title}
               </h4>
-              <p className="text-bg-200 text-sm">{action.description}</p>
+              <p className="text-white-100 text-sm">{action.description}</p>
             </Link>
           ))}
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-white-100">
-          <h3 className="text-lg font-medium text-bg-100">
-            Actividad Reciente
-          </h3>
+      <div className="bg-bg-300 rounded-lg shadow">
+        <div className="px-6 py-4 border-b border-white/20">
+          <h3 className="text-lg font-medium text-white">Actividad Reciente</h3>
         </div>
-        <div className="divide-y divide-white-100">
+        <div className="divide-y divide-white/10">
           {recentActivity.map((activity, index) => (
             <div
               key={index}
@@ -180,13 +188,13 @@ const AdminDashboard: React.FC = () => {
               <div className="flex items-center">
                 <FiTrendingUp className="h-5 w-5 text-gray-400 mr-3" />
                 <div>
-                  <p className="text-sm font-medium text-bg-100">
+                  <p className="text-sm font-medium text-white">
                     {activity.action}
                   </p>
-                  <p className="text-sm text-gray-500">por {activity.user}</p>
+                  <p className="text-sm text-white-100">por {activity.user}</p>
                 </div>
               </div>
-              <span className="text-sm text-gray-500">{activity.time}</span>
+              <span className="text-sm text-white-100">{activity.time}</span>
             </div>
           ))}
         </div>
