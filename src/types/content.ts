@@ -9,6 +9,8 @@ export interface MenuItem {
   contentType?: 'page' | 'blog' | 'external' | 'custom';
   pageId?: string;
   icon?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PageContent {

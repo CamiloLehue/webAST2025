@@ -8,8 +8,8 @@ import type {
   ContentSectionType,
 } from "../page-management/types/pageTypes";
 import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
-import { 
-  TbArrowNarrowDown, 
+import {
+  TbArrowNarrowDown,
   TbArrowNarrowUp,
   TbPaint,
   TbBuildingStore,
@@ -23,7 +23,7 @@ import {
   TbMessage,
   TbStar,
   TbTarget,
-  TbSquare
+  TbSquare,
 } from "react-icons/tb";
 
 const PageEditor: React.FC = () => {
@@ -252,35 +252,39 @@ const PageEditor: React.FC = () => {
 
   return (
     <div className="w-full grid grid-cols-12 mx-auto space-y-6  gap-2 h-full">
-      <div className="col-span-2 bg-bg-100 h-full  shadow p-5">
-        <h4 className="text-sm text-center font-medium text-white-100 mb-3">
-          Agregar Sección
-        </h4>
-        <p className="text-white-100/80 text-center text-xs leading-3">
-          Selecciona el tipo de sección que deseas agregar al contenido de la
-          página.
-        </p>
-        <div className="flex flex-col gap-1 px-5 mt-5">
-          {sectionTypes.map((sectionType) => {
-            const IconComponent = sectionType.icon;
-            return (
-              <button
-                key={sectionType.type}
-                onClick={() => addContentSection(sectionType.type)}
-                className="flex gap-2 items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
-              >
-                <span className="text-2xl mb-1">
-                  <IconComponent />
-                </span>
-                <span className="text-xs text-center">{sectionType.name}</span>
-              </button>
-            );
-          })}
+      <div className="relative col-span-2 bg-bg-100 h-full  shadow p-5">
+        <div className="sticky top-10">
+          <h4 className="text-sm text-center font-medium text-white-100 mb-3">
+            Agregar Sección
+          </h4>
+          <p className="text-white-100/80 text-center text-xs leading-3">
+            Selecciona el tipo de sección que deseas agregar al contenido de la
+            página.
+          </p>
+          <div className="flex flex-col gap-1 px-5 mt-5">
+            {sectionTypes.map((sectionType) => {
+              const IconComponent = sectionType.icon;
+              return (
+                <button
+                  key={sectionType.type}
+                  onClick={() => addContentSection(sectionType.type)}
+                  className="flex gap-2 items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
+                >
+                  <span className="text-2xl mb-1">
+                    <IconComponent />
+                  </span>
+                  <span className="text-xs text-center">
+                    {sectionType.name}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
       <div className="col-span-10 p-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className=" relative flex items-center justify-between">
+          <div className=" flex items-center space-x-4">
             <button
               onClick={() => navigate("/admin/pages")}
               className="p-2 text-gray-400 hover:text-bg-200"
@@ -299,7 +303,7 @@ const PageEditor: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="fixed right-5 top-17 flex items-center space-x-3 bg-white-100 ">
             <button
               onClick={handlePreview}
               disabled={!formData.slug}
@@ -498,23 +502,26 @@ const PageEditor: React.FC = () => {
   );
 };
 
-const sectionTypes: { type: ContentSectionType; name: string; icon: React.ComponentType }[] =
-  [
-    // { type: "hero", name: "Hero", icon: TbTarget },
-    { type: "hero-multi", name: "Hero Múltiple", icon: TbPaint },
-    { type: "logo-section", name: "Logo/Título", icon: TbBuildingStore },
-    { type: "content-section", name: "Contenido", icon: TbFileText },
-    { type: "curved-section", name: "Sección Curva", icon: TbWaveSine },
-    { type: "text", name: "Texto", icon: TbNotes },
-    { type: "image", name: "Imagen", icon: TbPhoto },
-    { type: "gallery", name: "Galería", icon: TbPhotoPlus },
-    { type: "video", name: "Video", icon: TbVideo },
-    { type: "contact-form", name: "Formulario", icon: TbPhone },
-    { type: "testimonials", name: "Testimonios", icon: TbMessage },
-    { type: "features", name: "Características", icon: TbStar },
-    { type: "cta", name: "Call to Action", icon: TbTarget },
-    { type: "spacer", name: "Espaciador", icon: TbSquare },
-  ];
+const sectionTypes: {
+  type: ContentSectionType;
+  name: string;
+  icon: React.ComponentType;
+}[] = [
+  // { type: "hero", name: "Hero", icon: TbTarget },
+  { type: "hero-multi", name: "Hero Múltiple", icon: TbPaint },
+  { type: "logo-section", name: "Logo/Título", icon: TbBuildingStore },
+  { type: "content-section", name: "Contenido", icon: TbFileText },
+  { type: "curved-section", name: "Sección Curva", icon: TbWaveSine },
+  { type: "text", name: "Texto", icon: TbNotes },
+  { type: "image", name: "Imagen", icon: TbPhoto },
+  { type: "gallery", name: "Galería", icon: TbPhotoPlus },
+  { type: "video", name: "Video", icon: TbVideo },
+  { type: "contact-form", name: "Formulario", icon: TbPhone },
+  { type: "testimonials", name: "Testimonios", icon: TbMessage },
+  { type: "features", name: "Características", icon: TbStar },
+  { type: "cta", name: "Call to Action", icon: TbTarget },
+  { type: "spacer", name: "Espaciador", icon: TbSquare },
+];
 
 const getDefaultSectionData = (
   type: ContentSectionType
@@ -672,7 +679,10 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
   onRemove,
   onMove,
 }) => {
-  const sectionTypeInfo: Record<string, { name: string; icon: React.ComponentType }> = {
+  const sectionTypeInfo: Record<
+    string,
+    { name: string; icon: React.ComponentType }
+  > = {
     hero: { name: "Hero", icon: TbTarget },
     "hero-multi": { name: "Hero Múltiple", icon: TbPaint },
     "logo-section": { name: "Logo/Título", icon: TbBuildingStore },

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FiImage, FiLink, FiX, FiFolder } from "react-icons/fi";
+import { FiImage, FiLink, FiX, FiFolder, FiAlertTriangle, FiUpload } from "react-icons/fi";
 import { useImageGallery } from "../../hooks/useImageGallery";
+import ImageUploader from "./ImageUploader";
 
 interface ImageSelectorProps {
   value: string;
@@ -8,7 +9,6 @@ interface ImageSelectorProps {
   placeholder?: string;
 }
 
-// Mantenemos la interfaz local para compatibilidad
 interface ImageItem {
   name: string;
   path: string;
@@ -16,19 +16,32 @@ interface ImageItem {
   children?: ImageItem[];
 }
 
+// Función para estimar el tamaño de una imagen basándose en patrones conocidos
+const getImageSizeWarning = (imageName: string): string | null => {
+  const largeImages = [
+    'hero.png', 'image01.png', 'image02.png', 'image03.png', 'wisensor-app2.png'
+  ];
+  
+  if (largeImages.some(name => imageName.includes(name))) {
+    return "⚠️ Imagen grande (>2MB) - puede tardar en cargar";
+  }
+  
+  return null;
+};
+
 const ImageSelector: React.FC<ImageSelectorProps> = ({
   value,
   onChange,
   placeholder = "URL de la imagen o selecciona de la galería",
 }) => {
   const [showSelector, setShowSelector] = useState(false);
-  const [useUrl, setUseUrl] = useState(true);
+  const [useUrl, setUseUrl] = useState(false);
+  const [showUploader, setShowUploader] = useState(false);
   const [availableImages, setAvailableImages] = useState<ImageItem[]>([]);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   
   const { fetchImages, loading, isExternalUrl } = useImageGallery();
 
-  // Función para obtener las imágenes disponibles
   const fetchAvailableImages = useCallback(async (path: string[]) => {
     try {
       const images = await fetchImages(path);
@@ -39,18 +52,15 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
     }
   }, [fetchImages]);
 
-  // Efecto combinado para manejar la carga de imágenes
   useEffect(() => {
     if (showSelector && !useUrl) {
       fetchAvailableImages(currentPath);
     } else if (!showSelector) {
-      // Limpiar imágenes cuando se cierra el selector
       setAvailableImages([]);
     }
   }, [showSelector, useUrl, currentPath, fetchAvailableImages]);
 
   useEffect(() => {
-    // Detectar si el valor actual es una URL externa o una ruta local
     if (value) {
       const isExternal = isExternalUrl(value);
       if (isExternal !== useUrl) {
@@ -62,13 +72,13 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
   const handleImageSelect = (imagePath: string) => {
     onChange(imagePath);
     setShowSelector(false);
-    setCurrentPath([]); // Reset path when closing
+    setCurrentPath([]); 
   };
 
   const handleCloseSelector = () => {
     setShowSelector(false);
-    setCurrentPath([]); // Reset path when closing
-    setAvailableImages([]); // Clear images
+    setCurrentPath([]); 
+    setAvailableImages([]); 
   };
 
   const navigateToFolder = (folderName: string) => {
@@ -85,7 +95,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
 
   return (
     <div className="space-y-2">
-      {/* Input principal */}
       <div className="flex space-x-2">
         <input
           type={useUrl ? "url" : "text"}
@@ -103,9 +112,16 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
         >
           <FiImage className="h-4 w-4" />
         </button>
+        <button
+          type="button"
+          onClick={() => setShowUploader(true)}
+          className="px-3 py-2 bg-accent-100 hover:bg-accent-200 text-white rounded-md border border-accent-100 transition-colors"
+          title="Subir imagen"
+        >
+          <FiUpload className="h-4 w-4" />
+        </button>
       </div>
 
-      {/* Selector de modo */}
       <div className="flex items-center space-x-4 text-sm">
         <label className="flex items-center space-x-2 cursor-pointer">
           <input
@@ -150,7 +166,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
             </div>
 
             <div className="p-4">
-              {/* Navegación */}
               {currentPath.length > 0 && (
                 <button
                   onClick={navigateBack}
@@ -193,28 +208,45 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                       ) : (
                         <button
                           onClick={() => handleImageSelect(item.path)}
-                          className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-transparent hover:border-accent-100 transition-colors group"
+                          className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-transparent hover:border-accent-100 transition-colors group relative"
                         >
+                          {getImageSizeWarning(item.name) && (
+                            <div className="absolute top-1 right-1 z-10 bg-yellow-100 text-yellow-800 text-xs px-1 py-0.5 rounded opacity-75">
+                              <FiAlertTriangle className="h-3 w-3" />
+                            </div>
+                          )}
                           <img
                             src={item.path}
                             alt={item.name}
                             className="w-full h-full object-cover"
+                            loading="lazy"
                             onError={(e) => {
-                              // Si la imagen no carga, mostrar placeholder
                               const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              target.parentElement!.innerHTML = `
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                  <FiImage class="h-8 w-8 text-gray-400 mb-2" />
+                              const container = target.parentElement!;
+                              container.innerHTML = `
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100">
+                                  <svg class="h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                                  </svg>
                                   <span class="text-xs text-gray-500 px-2 text-center">${item.name}</span>
+                                  <span class="text-xs text-red-500 px-2 text-center mt-1">Error de carga</span>
                                 </div>
                               `;
+                              console.warn(`Error loading image: ${item.path}`, e);
+                            }}
+                            onLoad={() => {
+                              console.log(`Successfully loaded: ${item.path}`);
                             }}
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity px-2 text-center">
-                              {item.name}
-                            </span>
+                          <div className="absolute inset-0 bg-black/5 bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                            <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity px-2 text-center">
+                              <div>{item.name}</div>
+                              {getImageSizeWarning(item.name) && (
+                                <div className="text-yellow-200 mt-1 text-xs">
+                                  {getImageSizeWarning(item.name)}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </button>
                       )}
@@ -222,6 +254,48 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                   ))
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de subida de imágenes */}
+      {showUploader && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center space-x-2">
+                <FiUpload className="h-5 w-5 text-gray-600" />
+                <h3 className="text-lg font-medium">Subir Nueva Imagen</h3>
+              </div>
+              <button
+                onClick={() => setShowUploader(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <FiX className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <ImageUploader
+                directory={currentPath.length > 0 ? `img/${currentPath.join("/")}` : 'img'}
+                onUploadSuccess={(imagePath) => {
+                  onChange(imagePath);
+                  setShowUploader(false);
+                  // Refrescar la lista de imágenes
+                  fetchAvailableImages(currentPath);
+                }}
+                onUploadError={(error) => {
+                  console.error('Upload error:', error);
+                }}
+                maxSizeMB={10}
+                showPreview={true}
+                resize={{
+                  width: 1920,
+                  height: 1080,
+                  maintainAspectRatio: true
+                }}
+              />
             </div>
           </div>
         </div>

@@ -113,3 +113,60 @@ export const generateImagePreview = (path: string): string => {
   // Por ahora, retornamos la imagen original
   return normalizedPath;
 };
+
+/**
+ * Constantes para límites de tamaño de imagen
+ */
+export const IMAGE_LIMITS = {
+  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_WIDTH: 4096,
+  MAX_HEIGHT: 4096,
+  RECOMMENDED_MAX_SIZE: 5 * 1024 * 1024, // 5MB recomendado
+};
+
+/**
+ * Verifica si una imagen cumple con los límites de tamaño
+ */
+export const validateImageSize = (file: File): { isValid: boolean; message?: string } => {
+  if (file.size > IMAGE_LIMITS.MAX_FILE_SIZE) {
+    return {
+      isValid: false,
+      message: `El archivo es demasiado grande (${(file.size / (1024 * 1024)).toFixed(2)}MB). Máximo permitido: ${IMAGE_LIMITS.MAX_FILE_SIZE / (1024 * 1024)}MB`
+    };
+  }
+  
+  if (file.size > IMAGE_LIMITS.RECOMMENDED_MAX_SIZE) {
+    return {
+      isValid: true,
+      message: `Archivo grande (${(file.size / (1024 * 1024)).toFixed(2)}MB). Se recomienda optimizar la imagen para mejorar el rendimiento.`
+    };
+  }
+  
+  return { isValid: true };
+};
+
+/**
+ * Obtiene información detallada de una imagen
+ */
+export const getImageInfo = (file: File): Promise<{
+  width: number;
+  height: number;
+  size: number;
+  type: string;
+  sizeFormatted: string;
+}> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({
+        width: img.width,
+        height: img.height,
+        size: file.size,
+        type: file.type,
+        sizeFormatted: `${(file.size / (1024 * 1024)).toFixed(2)}MB`
+      });
+    };
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
+};

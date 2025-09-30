@@ -351,12 +351,12 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
 
   return (
     <section
-      className={`px-6 lg:px-8 ${
+      className={`px-6 lg:px-8  w-full flex flex-col justify-center items-center  ${
         paddingClasses[padding as keyof typeof paddingClasses] || "py-16"
       }`}
       style={{ backgroundColor: backgroundColor || undefined }}
     >
-      <div className="mx-auto max-w-3xl">
+      <div className=" w-full  ">
         {title && (
           <h2
             className={`text-3xl font-bold mb-8 ${
@@ -368,7 +368,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
           </h2>
         )}
         <div
-          className={`prose prose-lg mx-auto text-bg-300 ${
+          className={`prose prose-lg mx-auto flex justify-center items-center text-bg-300  ${
             fontSizeClasses[fontSize as keyof typeof fontSizeClasses] ||
             "text-base"
           } ${
@@ -401,7 +401,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
   const widthClasses = {
     small: "max-w-md",
     medium: "max-w-2xl",
-    large: "max-w-4xl",
+    large: "max-w-7xl",
     full: "max-w-full",
   };
 
@@ -415,7 +415,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
     <section className="py-16 px-6 lg:px-8">
       <div
         className={`${
-          widthClasses[width as keyof typeof widthClasses] || "max-w-4xl"
+          widthClasses[width as keyof typeof widthClasses] || "max-w-7xl"
         } ${
           alignmentClasses[alignment as keyof typeof alignmentClasses] ||
           "mx-auto"
@@ -425,7 +425,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
           <img
             src={imageSrc}
             alt={alt || ""}
-            className={`w-full rounded-2xl min-h-90 object-cover shadow-lg ${
+            className={`w-full rounded-2xl  ${
               rounded ? "rounded-lg" : ""
             }`}
           />
@@ -524,7 +524,7 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
   const widthClasses = {
     small: "max-w-md",
     medium: "max-w-2xl",
-    large: "max-w-4xl",
+    large: "max-w-7xl",
     full: "max-w-full",
   };
 

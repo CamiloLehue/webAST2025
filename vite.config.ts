@@ -10,4 +10,24 @@ export default defineConfig({
     port: 5180, //PUERTO
     allowedHosts: ["ast.cl", "admin.ast.cl", "localhost"], //PERMITIR DOMINIOS
   },
+  build: {
+    // Configurar límites para archivos grandes
+    assetsInlineLimit: 0, // No inlinear assets, siempre usar archivos separados
+    rollupOptions: {
+      output: {
+        // Configurar límites de tamaño más grandes para assets
+        assetFileNames: (assetInfo) => {
+          // Mantener nombres originales para imágenes
+          if (assetInfo.name && /\.(png|jpe?g|gif|svg|webp|avif)$/i.test(assetInfo.name)) {
+            return 'assets/images/[name].[hash][extname]';
+          }
+          return 'assets/[name].[hash][extname]';
+        },
+      },
+    },
+  },
+  // Configurar para manejar archivos grandes de imágenes
+  optimizeDeps: {
+    exclude: [], // Excluir dependencias que causeen problemas
+  },
 });

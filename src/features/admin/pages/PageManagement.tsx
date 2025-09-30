@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
-import { FiEdit2, FiTrash2, FiPlus, FiCopy, FiLoader } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PageManagement: React.FC = () => {
@@ -57,10 +57,10 @@ const PageManagement: React.FC = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-full  bg-bg-200">
         <div className="flex items-center space-x-2">
           <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
-          <span className="text-bg-200">Cargando páginas...</span>
+          <span className="text-white-100/70">Cargando páginas...</span>
         </div>
       </div>
     );
@@ -85,11 +85,11 @@ const PageManagement: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6 p-5 bg-bg-200 min-h-full">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-bg-100">Gestión de Páginas</h2>
-          <p className="mt-1 text-bg-200">
+          <h2 className="text-2xl font-bold text-white">Gestión de Páginas</h2>
+          <p className="mt-1 text-white-100/70">
             Administra las páginas personalizadas del sitio web
           </p>
         </div>
@@ -102,14 +102,14 @@ const PageManagement: React.FC = () => {
         </Link>
       </div>
 
-      <div className="bg-white p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+      <div className="bg-bg-100 p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
         <div className="flex-1">
           <input
             type="text"
             placeholder="Buscar páginas..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="w-full text-white bg-bg-400 placeholder:text-white-100/70 px-3 py-2 border border-bg-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           />
         </div>
         <div>
@@ -118,7 +118,7 @@ const PageManagement: React.FC = () => {
             onChange={(e) =>
               setStatusFilter(e.target.value as "all" | "published" | "draft")
             }
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="px-3 py-2 border border-bg-300 text-white bg-bg-400 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           >
             <option value="all">Todas las páginas</option>
             <option value="published">Publicadas</option>
@@ -127,15 +127,15 @@ const PageManagement: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {filteredPages.length === 0 ? (
           <div className="col-span-full">
             <div className="text-center py-12">
               <div className="mx-auto h-12 w-12 text-gray-400">📄</div>
-              <h3 className="mt-2 text-sm font-medium text-bg-100">
+              <h3 className="mt-2 text-sm font-medium text-white">
                 No hay páginas
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-white-100/70">
                 Comienza creando tu primera página personalizada.
               </p>
               <div className="mt-6">
@@ -153,71 +153,65 @@ const PageManagement: React.FC = () => {
           filteredPages.map((page) => (
             <div
               key={page.id}
-              className="bg-white rounded-lg shadow overflow-hidden"
+              className="bg-bg-300 rounded-lg shadow overflow-hidden"
             >
-              <div className="flex justify-end items-center space-x-2 p-3">
-                <Link
-                  to={`/admin/pages/edit/${page.id}`}
-                  className="p-2 text-gray-400 hover:text-bg-200"
-                  title="Editar página"
+              <div className="flex justify-between items-center space-x-2 p-3 bg-bg-100">
+                <span
+                  className={`ml-2 px-4 py-1 text-xs font-medium rounded-full ${
+                    page.isPublished
+                      ? "bg-green-950 border-t border-t-green-900 shadow text-green-400"
+                      : "bg-yellow-100/20 text-yellow-100 border-t border-t-yellow-100/20 shadow"
+                  }`}
                 >
-                  <FiEdit2 className="h-4 w-4" />
-                </Link>
-                <button
-                  onClick={() => handleDeletePage(page.id)}
-                  className="p-2 text-gray-400 hover:text-red-600"
-                  title="Eliminar página"
-                >
-                  <FiTrash2 className="h-4 w-4" />
-                </button>
-              </div>
-              <div className=" py-5 bg-white flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-4xl mb-2">📄</div>
-                  <p className="text-sm text-gray-500">Vista previa</p>
+                  {page.isPublished ? "Publicado" : "Borrador"}
+                </span>
+                <div className="flex items-center justify-center space-x-1">
+                  <Link
+                    to={`/admin/pages/edit/${page.id}`}
+                    className="p-2 text-white-100/80 hover:text-white"
+                    title="Editar página"
+                  >
+                    <FiEdit2 className="h-4 w-4" />
+                  </Link>
+                  <button
+                    onClick={() => handleDeletePage(page.id)}
+                    className="p-2 text-white-100/80 hover:text-primary-100"
+                    title="Eliminar página"
+                  >
+                    <FiTrash2 className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-medium text-bg-100 truncate">
+              <div className="p-4">
+                <div className="flex items-center justify-center mb-2">
+                  <h3 className="text-lg font-bold text-white-100 truncate border-b-4 border-white/15 px-5 ">
                     {page.title}
                   </h3>
-                  <span
-                    className={`ml-2 px-2 py-1 text-xs font-medium rounded-full ${
-                      page.isPublished
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                    }`}
-                  >
-                    {page.isPublished ? "Publicado" : "En Borrador"}
-                  </span>
                 </div>
 
-                <div className="mb-4">
-                  <p className="text-sm text-bg-200 flex items-center">
-                    <FiCopy className="mr-1 h-3 w-3" />/{page.slug}
+                <div className="mb-4 px-5">
+                  <p className="text-sm text-white-100/90 flex items-center">
+                    slug: /{page.slug}
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-white-100/70 mt-1">
                     Actualizado el {formatDate(page.updatedAt)}
                   </p>
                 </div>
 
-                <div className="mb-4">
-                  <p className="text-sm text-bg-200">
+                <div className="mb-4 px-5">
+                  <p className="text-sm text-white-100/70">
                     {page.content.length} bloques de contenido
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-white-100/70">
                     Creado el {formatDate(page.createdAt)}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div></div>
+                <div className="flex items-center justify-center">
                   <Link
                     to={`/${page.slug}`}
                     target="_blank"
-                    className="text-accent-100 hover:text-accent-200 text-sm font-medium"
+                    className="text-white/80 bg-bg-200 px-4 py-2 hover:text-white-100/70 transition-colors duration-300 text-sm font-medium"
                   >
                     Ver página en vivo
                   </Link>
@@ -228,40 +222,40 @@ const PageManagement: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-white rounded-lg shadow p-6">
-        <h3 className="text-lg font-medium text-bg-100 mb-4">
+      {/* <div className="bg-bg-100 rounded-lg shadow p-6">
+        <h3 className="text-lg font-medium text-white mb-4">
           Plantillas Rápidas
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link
             to="/admin/pages/new?template=landing-page"
-            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-400 transition-colors"
           >
-            <h4 className="font-medium text-bg-100">Página de Aterrizaje</h4>
-            <p className="text-sm text-bg-200 mt-1">
+            <h4 className="font-medium text-white">Página de Aterrizaje</h4>
+            <p className="text-sm text-white-100/70 mt-1">
               Hero, características y call-to-action
             </p>
           </Link>
           <Link
             to="/admin/pages/new?template=about-page"
-            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-400 transition-colors"
           >
-            <h4 className="font-medium text-bg-100">Sobre Nosotros</h4>
-            <p className="text-sm text-bg-200 mt-1">
+            <h4 className="font-medium text-white">Sobre Nosotros</h4>
+            <p className="text-sm text-white-100/70 mt-1">
               Historia, equipo y valores
             </p>
           </Link>
           <Link
             to="/admin/pages/new?template=contact-page"
-            className="p-4 border border-white-100 rounded-lg hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+            className="p-4 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-400 transition-colors"
           >
-            <h4 className="font-medium text-bg-100">Contacto</h4>
-            <p className="text-sm text-bg-200 mt-1">
+            <h4 className="font-medium text-white">Contacto</h4>
+            <p className="text-sm text-white-100/70 mt-1">
               Formulario y información de contacto
             </p>
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
