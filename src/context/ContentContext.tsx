@@ -1,14 +1,22 @@
-import React, { createContext, useEffect, useState } from 'react';
-import type { MenuItem, PageContent } from '../types/content';
-import menuItemsData from '../layouts/json/MenuNavItems.json';
+import React, { createContext, useEffect, useState } from "react";
+import type { MenuItem, PageContent } from "../types/content";
+import { menuService } from "../services/menuService";
 
 interface ContentContextType {
   menuItems: MenuItem[];
   pages: PageContent[];
-  updateMenuItem: (item: MenuItem) => void;
-  deleteMenuItem: (id: string) => void;
-  addMenuItem: (item: Omit<MenuItem, 'id'>) => void;
-  createPage: (page: Omit<PageContent, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  loading: boolean;
+  error: string | null;
+  updateMenuItem: (item: MenuItem) => Promise<void>;
+  deleteMenuItem: (id: string) => Promise<void>;
+  addMenuItem: (item: Omit<MenuItem, "id" | "createdAt" | "updatedAt">) => Promise<void>;
+  addSubmenuItem: (item: Omit<MenuItem, "id" | "createdAt" | "updatedAt">, parentId: string) => Promise<void>;
+  updateSubmenuItem: (parentId: string, submenuId: string, item: Partial<MenuItem>) => Promise<void>;
+  deleteSubmenuItem: (parentId: string, submenuId: string) => Promise<void>;
+  refreshMenuItems: () => Promise<void>;
+  createPage: (
+    page: Omit<PageContent, "id" | "createdAt" | "updatedAt">
+  ) => void;
   updatePage: (page: PageContent) => void;
   deletePage: (id: string) => void;
 }
@@ -21,35 +29,35 @@ interface ContentProviderProps {
   children: React.ReactNode;
 }
 
-export const ContentProvider: React.FC<ContentProviderProps> = ({ children }) => {
+export const ContentProvider: React.FC<ContentProviderProps> = ({
+  children,
+}) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [pages, setPages] = useState<PageContent[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Convertir los datos existentes al nuevo formato
-    const convertedMenuItems: MenuItem[] = menuItemsData.map((item, index) => ({
-      id: `menu-${index + 1}`,
-      title: item.title,
-      path: item.path,
-      submenu: item.submenu?.map((subItem, subIndex) => ({
-        id: `submenu-${index + 1}-${subIndex + 1}`,
-        title: subItem.title,
-        path: subItem.path,
-        external: false,
-        disabled: false,
-        order: subIndex + 1,
-        contentType: 'page' as const
-      })),
-      external: item.external,
-      disabled: item.disabled,
-      order: item.order,
-      contentType: 'page' as const
-    }));
+    loadMenuItems();
+    loadPages();
+  }, []);
 
-    setMenuItems(convertedMenuItems);
+  const loadMenuItems = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const items = await menuService.getMenuItems();
+      setMenuItems(items);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al cargar menús');
+      console.error('Error loading menu items:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    // Cargar datos del localStorage si existen
-    const savedPages = localStorage.getItem('ast_pages');
+  const loadPages = () => {
+    const savedPages = localStorage.getItem("ast_pages");
     if (savedPages) {
       try {
         setPages(JSON.parse(savedPages));
@@ -57,70 +65,173 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({ children }) =>
         setPages([]);
       }
     }
-  }, []);
-
-  // Funciones para gestionar menús
-  const updateMenuItem = (item: MenuItem) => {
-    setMenuItems(prev => prev.map(menuItem => 
-      menuItem.id === item.id ? item : menuItem
-    ));
   };
 
-  const deleteMenuItem = (id: string) => {
-    setMenuItems(prev => prev.filter(item => item.id !== id));
+  const updateMenuItem = async (item: MenuItem): Promise<void> => {
+    try {
+      setError(null);
+      const updatedItem = await menuService.updateMenuItem(item.id, item);
+      setMenuItems((prev) =>
+        prev.map((menuItem) => (menuItem.id === item.id ? updatedItem : menuItem))
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al actualizar menú');
+      throw err;
+    }
   };
 
-  const addMenuItem = (item: Omit<MenuItem, 'id'>) => {
-    const newItem: MenuItem = {
-      ...item,
-      id: `menu-${Date.now()}`
-    };
-    setMenuItems(prev => [...prev, newItem].sort((a, b) => a.order - b.order));
+  const deleteMenuItem = async (id: string): Promise<void> => {
+    try {
+      setError(null);
+      await menuService.deleteMenuItem(id);
+      setMenuItems((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al eliminar menú');
+      throw err;
+    }
   };
 
-  // Funciones para gestionar páginas
-  const createPage = (page: Omit<PageContent, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addMenuItem = async (item: Omit<MenuItem, "id" | "createdAt" | "updatedAt">): Promise<void> => {
+    try {
+      setError(null);
+      const menuItemData = {
+        ...item,
+        contentType: item.contentType || 'page' as const
+      };
+      const newItem = await menuService.createMenuItem(menuItemData);
+      setMenuItems((prev) =>
+        [...prev, newItem].sort((a, b) => a.order - b.order)
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al crear menú');
+      throw err;
+    }
+  };
+
+  const addSubmenuItem = async (item: Omit<MenuItem, "id" | "createdAt" | "updatedAt">, parentId: string): Promise<void> => {
+    try {
+      setError(null);
+      const submenuItemData = {
+        ...item,
+        contentType: item.contentType || 'page' as const
+      };
+      const newSubmenuItem = await menuService.createSubmenuItem(submenuItemData, parentId);
+      
+      setMenuItems((prev) =>
+        prev.map((menuItem) => {
+          if (menuItem.id === parentId) {
+            return {
+              ...menuItem,
+              submenu: [...(menuItem.submenu || []), newSubmenuItem].sort((a, b) => a.order - b.order)
+            };
+          }
+          return menuItem;
+        })
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al crear submenu');
+      throw err;
+    }
+  };
+
+  const updateSubmenuItem = async (parentId: string, submenuId: string, item: Partial<MenuItem>): Promise<void> => {
+    try {
+      setError(null);
+      const updatedSubmenu = await menuService.updateSubmenuItem(parentId, submenuId, item);
+      
+      setMenuItems((prev) =>
+        prev.map((menuItem) => {
+          if (menuItem.id === parentId) {
+            return {
+              ...menuItem,
+              submenu: menuItem.submenu?.map((sub) =>
+                sub.id === submenuId ? updatedSubmenu : sub
+              )
+            };
+          }
+          return menuItem;
+        })
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al actualizar submenu');
+      throw err;
+    }
+  };
+
+  const deleteSubmenuItem = async (parentId: string, submenuId: string): Promise<void> => {
+    try {
+      setError(null);
+      await menuService.deleteSubmenuItem(parentId, submenuId);
+      
+      setMenuItems((prev) =>
+        prev.map((menuItem) => {
+          if (menuItem.id === parentId) {
+            return {
+              ...menuItem,
+              submenu: menuItem.submenu?.filter((sub) => sub.id !== submenuId)
+            };
+          }
+          return menuItem;
+        })
+      );
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al eliminar submenu');
+      throw err;
+    }
+  };
+
+  const refreshMenuItems = async (): Promise<void> => {
+    await loadMenuItems();
+  };
+
+  const createPage = (
+    page: Omit<PageContent, "id" | "createdAt" | "updatedAt">
+  ) => {
     const newPage: PageContent = {
       ...page,
       id: `page-${Date.now()}`,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     const updatedPages = [...pages, newPage];
     setPages(updatedPages);
-    localStorage.setItem('ast_pages', JSON.stringify(updatedPages));
+    localStorage.setItem("ast_pages", JSON.stringify(updatedPages));
   };
 
   const updatePage = (page: PageContent) => {
     const updatedPage = {
       ...page,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
-    const updatedPages = pages.map(p => p.id === page.id ? updatedPage : p);
+    const updatedPages = pages.map((p) => (p.id === page.id ? updatedPage : p));
     setPages(updatedPages);
-    localStorage.setItem('ast_pages', JSON.stringify(updatedPages));
+    localStorage.setItem("ast_pages", JSON.stringify(updatedPages));
   };
 
   const deletePage = (id: string) => {
-    const updatedPages = pages.filter(page => page.id !== id);
+    const updatedPages = pages.filter((page) => page.id !== id);
     setPages(updatedPages);
-    localStorage.setItem('ast_pages', JSON.stringify(updatedPages));
+    localStorage.setItem("ast_pages", JSON.stringify(updatedPages));
   };
 
   const value: ContentContextType = {
     menuItems,
     pages,
+    loading,
+    error,
     updateMenuItem,
     deleteMenuItem,
     addMenuItem,
+    addSubmenuItem,
+    updateSubmenuItem,
+    deleteSubmenuItem,
+    refreshMenuItems,
     createPage,
     updatePage,
-    deletePage
+    deletePage,
   };
 
   return (
-    <ContentContext.Provider value={value}>
-      {children}
-    </ContentContext.Provider>
+    <ContentContext.Provider value={value}>{children}</ContentContext.Provider>
   );
 };

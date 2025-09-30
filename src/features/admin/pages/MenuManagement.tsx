@@ -5,46 +5,230 @@ import {
   FiEdit2,
   FiTrash2,
   FiPlus,
-  FiMove,
   FiExternalLink,
+  FiChevronDown,
+  FiChevronRight,
 } from "react-icons/fi";
 
 const MenuManagement: React.FC = () => {
-  const { menuItems, updateMenuItem, deleteMenuItem, addMenuItem } =
-    useContent();
+  const { 
+    menuItems, 
+    updateMenuItem, 
+    deleteMenuItem, 
+    addMenuItem,
+    addSubmenuItem,
+    updateSubmenuItem,
+    deleteSubmenuItem,
+    loading,
+    error 
+  } = useContent();
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [addingSubmenuTo, setAddingSubmenuTo] = useState<string | null>(null);
+
+  const toggleExpanded = (itemId: string) => {
+    const newExpanded = new Set(expandedItems);
+    if (newExpanded.has(itemId)) {
+      newExpanded.delete(itemId);
+    } else {
+      newExpanded.add(itemId);
+    }
+    setExpandedItems(newExpanded);
+  };
 
   const handleEditItem = (item: MenuItem) => {
     setEditingItem(item);
   };
 
-  const handleSaveItem = (item: MenuItem) => {
-    updateMenuItem(item);
-    setEditingItem(null);
-  };
-
-  const handleDeleteItem = (id: string) => {
-    if (
-      confirm("¿Estás seguro de que quieres eliminar este elemento del menú?")
-    ) {
-      deleteMenuItem(id);
+  const handleSaveItem = async (item: MenuItem, parentId?: string) => {
+    try {
+      if (parentId) {
+        await updateSubmenuItem(parentId, item.id, item);
+      } else {
+        await updateMenuItem(item);
+      }
+      setEditingItem(null);
+    } catch (error) {
+      console.error('Error al guardar elemento:', error);
     }
   };
 
-  const handleAddItem = (item: Omit<MenuItem, "id">) => {
-    addMenuItem(item);
-    setShowAddForm(false);
+  const handleDeleteItem = async (id: string, parentId?: string) => {
+    if (
+      confirm("¿Estás seguro de que quieres eliminar este elemento del menú?")
+    ) {
+      try {
+        if (parentId) {
+          await deleteSubmenuItem(parentId, id);
+        } else {
+          await deleteMenuItem(id);
+        }
+      } catch (error) {
+        console.error('Error al eliminar elemento:', error);
+      }
+    }
+  };
+
+  const handleAddItem = async (item: Omit<MenuItem, "id">, parentId?: string) => {
+    try {
+      if (parentId) {
+        await addSubmenuItem(item, parentId);
+        setAddingSubmenuTo(null);
+      } else {
+        await addMenuItem(item);
+        setShowAddForm(false);
+      }
+    } catch (error) {
+      console.error('Error al agregar elemento:', error);
+    }
+  };
+
+  const renderMenuItem = (
+    item: MenuItem,
+    level: number = 0,
+    parentId?: string
+  ) => {
+    const hasSubmenu = item.submenu && item.submenu.length > 0;
+    const isExpanded = expandedItems.has(item.id);
+
+    return (
+      <div key={item.id}>
+        <div
+          className={`p-6 ${
+            level > 0 ? "bg-gray-50 border-l-4 border-gray-200" : ""
+          }`}
+        >
+          {editingItem?.id === item.id ? (
+            <MenuItemForm
+              item={editingItem}
+              onSave={(item) => handleSaveItem(item as MenuItem, parentId)}
+              onCancel={() => setEditingItem(null)}
+            />
+          ) : (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  {hasSubmenu && (
+                    <button
+                      onClick={() => toggleExpanded(item.id)}
+                      className="p-1 hover:bg-gray-200 rounded"
+                    >
+                      {isExpanded ? (
+                        <FiChevronDown className="h-4 w-4 text-gray-600" />
+                      ) : (
+                        <FiChevronRight className="h-4 w-4 text-gray-600" />
+                      )}
+                    </button>
+                  )}
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h4
+                      className={`text-lg font-medium text-bg-100 ${
+                        level > 0 ? "text-base" : ""
+                      }`}
+                    >
+                      {item.title}
+                    </h4>
+                    {item.external && (
+                      <FiExternalLink className="h-4 w-4 text-gray-400" />
+                    )}
+                    {item.disabled && (
+                      <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
+                        Deshabilitado
+                      </span>
+                    )}
+                    {level > 0 && (
+                      <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+                        Submenú
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-bg-200">{item.path}</p>
+                  <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                    <span>Orden: {item.order}</span>
+                    <span>Tipo: {item.contentType || "page"}</span>
+                    {hasSubmenu && (
+                      <span>{item.submenu!.length} subelementos</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                {level === 0 && (
+                  <button
+                    onClick={() => setAddingSubmenuTo(item.id)}
+                    className="p-2 text-gray-400 hover:text-blue-600"
+                    title="Agregar submenú"
+                  >
+                    <FiPlus className="h-4 w-4" />
+                  </button>
+                )}
+                <button
+                  onClick={() => handleEditItem(item)}
+                  className="p-2 text-gray-400 hover:text-bg-200"
+                >
+                  <FiEdit2 className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => handleDeleteItem(item.id, parentId)}
+                  className="p-2 text-gray-400 hover:text-red-600"
+                >
+                  <FiTrash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {addingSubmenuTo === item.id && (
+          <div className="px-6 pb-6">
+            <div className="ml-12 border-l-2 border-blue-200 pl-6">
+              <h4 className="text-sm font-medium text-gray-700 mb-4">
+                Agregar submenú a "{item.title}"
+              </h4>
+              <MenuItemForm
+                onSave={(submenuItem) =>
+                  handleAddItem(submenuItem as Omit<MenuItem, "id">, item.id)
+                }
+                onCancel={() => setAddingSubmenuTo(null)}
+              />
+            </div>
+          </div>
+        )}
+
+        {hasSubmenu && isExpanded && (
+          <div className="border-l-4 border-blue-100">
+            {item
+              .submenu!.sort((a, b) => a.order - b.order)
+              .map((subItem) => renderMenuItem(subItem, level + 1, item.id))}
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
     <div className="space-y-6 p-5">
-      {/* Header */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-700">{error}</p>
+        </div>
+      )}
+      
+      {loading && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <p className="text-blue-700">Cargando menús...</p>
+        </div>
+      )}
+      
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-bg-100">Gestión de Menú</h2>
           <p className="mt-1 text-bg-200">
-            Administra los elementos del menú principal de navegación
+            Administra los elementos del menú principal de navegación y sus
+            submenús
           </p>
         </div>
         <button
@@ -52,82 +236,35 @@ const MenuManagement: React.FC = () => {
           className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
         >
           <FiPlus className="mr-2 h-4 w-4" />
-          Agregar Elemento
+          Agregar Elemento Principal
         </button>
       </div>
 
-      {/* Add Form */}
       {showAddForm && (
-        <MenuItemForm
-          onSave={(item) => handleAddItem(item as Omit<MenuItem, "id">)}
-          onCancel={() => setShowAddForm(false)}
-        />
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-bg-100 mb-4">
+            Nuevo Elemento Principal
+          </h3>
+          <MenuItemForm
+            onSave={(item) => handleAddItem(item as Omit<MenuItem, "id">)}
+            onCancel={() => setShowAddForm(false)}
+          />
+        </div>
       )}
 
-      {/* Menu Items List */}
       <div className="bg-white shadow rounded-lg">
         <div className="px-6 py-4 border-b border-white-100">
           <h3 className="text-lg font-medium text-bg-100">
             Elementos del Menú
           </h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Haz clic en las flechas para expandir/contraer submenús
+          </p>
         </div>
         <div className="divide-y divide-white-100">
           {menuItems
             .sort((a, b) => a.order - b.order)
-            .map((item) => (
-              <div key={item.id} className="p-6">
-                {editingItem?.id === item.id ? (
-                  <MenuItemForm
-                    item={editingItem}
-                    onSave={(item) => handleSaveItem(item as MenuItem)}
-                    onCancel={() => setEditingItem(null)}
-                  />
-                ) : (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <FiMove className="h-5 w-5 text-gray-400 cursor-move" />
-                      <div>
-                        <div className="flex items-center space-x-2">
-                          <h4 className="text-lg font-medium text-bg-100">
-                            {item.title}
-                          </h4>
-                          {item.external && (
-                            <FiExternalLink className="h-4 w-4 text-gray-400" />
-                          )}
-                          {item.disabled && (
-                            <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
-                              Deshabilitado
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-bg-200">{item.path}</p>
-                        <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                          <span>Orden: {item.order}</span>
-                          <span>Tipo: {item.contentType || "page"}</span>
-                          {item.submenu && (
-                            <span>{item.submenu.length} subelementos</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => handleEditItem(item)}
-                        className="p-2 text-gray-400 hover:text-bg-200"
-                      >
-                        <FiEdit2 className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteItem(item.id)}
-                        className="p-2 text-gray-400 hover:text-red-600"
-                      >
-                        <FiTrash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+            .map((item) => renderMenuItem(item))}
         </div>
       </div>
     </div>
