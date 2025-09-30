@@ -173,6 +173,115 @@ export const checkImageExists = async (imagePath: string): Promise<boolean> => {
 };
 
 /**
+ * Función para subir una imagen al servidor
+ */
+export const uploadImage = async (
+  file: File, 
+  directory?: string
+): Promise<{ success: boolean; imagePath?: string; error?: string }> => {
+  try {
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    if (directory) {
+      formData.append('directory', directory);
+    }
+
+    const response = await fetch('/api/upload-image', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error uploading image');
+    }
+
+    const result = await response.json();
+    return {
+      success: true,
+      imagePath: result.imagePath,
+    };
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+    };
+  }
+};
+
+/**
+ * Función para eliminar una imagen del servidor
+ */
+export const deleteImage = async (imagePath: string): Promise<{ success: boolean; error?: string }> => {
+  try {
+    const response = await fetch('/api/delete-image', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ imagePath }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error deleting image');
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+    };
+  }
+};
+
+/**
+ * Función para redimensionar una imagen (requiere backend con procesamiento de imágenes)
+ */
+export const resizeImage = async (
+  imagePath: string,
+  width: number,
+  height: number,
+  maintainAspectRatio: boolean = true
+): Promise<{ success: boolean; newImagePath?: string; error?: string }> => {
+  try {
+    const response = await fetch('/api/resize-image', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imagePath,
+        width,
+        height,
+        maintainAspectRatio,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Error resizing image');
+    }
+
+    const result = await response.json();
+    return {
+      success: true,
+      newImagePath: result.newImagePath,
+    };
+  } catch (error) {
+    console.error('Error resizing image:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error occurred',
+    };
+  }
+};
+
+/**
  * Función para escanear dinámicamente un directorio (requiere backend)
  * Esta sería la implementación ideal con un endpoint del servidor
  */

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FiImage, FiLink, FiX, FiFolder, FiAlertTriangle } from "react-icons/fi";
+import { FiImage, FiLink, FiX, FiFolder, FiAlertTriangle, FiUpload } from "react-icons/fi";
 import { useImageGallery } from "../../hooks/useImageGallery";
+import ImageUploader from "./ImageUploader";
 
 interface ImageSelectorProps {
   value: string;
@@ -35,6 +36,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
 }) => {
   const [showSelector, setShowSelector] = useState(false);
   const [useUrl, setUseUrl] = useState(false);
+  const [showUploader, setShowUploader] = useState(false);
   const [availableImages, setAvailableImages] = useState<ImageItem[]>([]);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   
@@ -109,6 +111,14 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
           title="Seleccionar imagen"
         >
           <FiImage className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowUploader(true)}
+          className="px-3 py-2 bg-accent-100 hover:bg-accent-200 text-white rounded-md border border-accent-100 transition-colors"
+          title="Subir imagen"
+        >
+          <FiUpload className="h-4 w-4" />
         </button>
       </div>
 
@@ -244,6 +254,48 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                   ))
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de subida de imágenes */}
+      {showUploader && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] overflow-hidden">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <div className="flex items-center space-x-2">
+                <FiUpload className="h-5 w-5 text-gray-600" />
+                <h3 className="text-lg font-medium">Subir Nueva Imagen</h3>
+              </div>
+              <button
+                onClick={() => setShowUploader(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <FiX className="h-6 w-6" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <ImageUploader
+                directory={currentPath.length > 0 ? `img/${currentPath.join("/")}` : 'img'}
+                onUploadSuccess={(imagePath) => {
+                  onChange(imagePath);
+                  setShowUploader(false);
+                  // Refrescar la lista de imágenes
+                  fetchAvailableImages(currentPath);
+                }}
+                onUploadError={(error) => {
+                  console.error('Upload error:', error);
+                }}
+                maxSizeMB={10}
+                showPreview={true}
+                resize={{
+                  width: 1920,
+                  height: 1080,
+                  maintainAspectRatio: true
+                }}
+              />
             </div>
           </div>
         </div>
