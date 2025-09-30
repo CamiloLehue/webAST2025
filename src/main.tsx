@@ -90,7 +90,7 @@ createRoot(document.getElementById("root")!).render(
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
                 <Route path="/noticias/:slug" element={<BlogPostPage />} />
-                {/* Dynamic pages route - this should be last to catch all other routes */}
+                {/* rutas dinamicas, para crear web desde el panel administrativo */}
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>
             </Routes>

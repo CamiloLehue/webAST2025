@@ -8,7 +8,6 @@ interface ImageSelectorProps {
   placeholder?: string;
 }
 
-// Mantenemos la interfaz local para compatibilidad
 interface ImageItem {
   name: string;
   path: string;
@@ -22,13 +21,12 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
   placeholder = "URL de la imagen o selecciona de la galería",
 }) => {
   const [showSelector, setShowSelector] = useState(false);
-  const [useUrl, setUseUrl] = useState(true);
+  const [useUrl, setUseUrl] = useState(false);
   const [availableImages, setAvailableImages] = useState<ImageItem[]>([]);
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   
   const { fetchImages, loading, isExternalUrl } = useImageGallery();
 
-  // Función para obtener las imágenes disponibles
   const fetchAvailableImages = useCallback(async (path: string[]) => {
     try {
       const images = await fetchImages(path);
@@ -39,18 +37,15 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
     }
   }, [fetchImages]);
 
-  // Efecto combinado para manejar la carga de imágenes
   useEffect(() => {
     if (showSelector && !useUrl) {
       fetchAvailableImages(currentPath);
     } else if (!showSelector) {
-      // Limpiar imágenes cuando se cierra el selector
       setAvailableImages([]);
     }
   }, [showSelector, useUrl, currentPath, fetchAvailableImages]);
 
   useEffect(() => {
-    // Detectar si el valor actual es una URL externa o una ruta local
     if (value) {
       const isExternal = isExternalUrl(value);
       if (isExternal !== useUrl) {
@@ -62,13 +57,13 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
   const handleImageSelect = (imagePath: string) => {
     onChange(imagePath);
     setShowSelector(false);
-    setCurrentPath([]); // Reset path when closing
+    setCurrentPath([]); 
   };
 
   const handleCloseSelector = () => {
     setShowSelector(false);
-    setCurrentPath([]); // Reset path when closing
-    setAvailableImages([]); // Clear images
+    setCurrentPath([]); 
+    setAvailableImages([]); 
   };
 
   const navigateToFolder = (folderName: string) => {
@@ -85,7 +80,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
 
   return (
     <div className="space-y-2">
-      {/* Input principal */}
       <div className="flex space-x-2">
         <input
           type={useUrl ? "url" : "text"}
@@ -105,7 +99,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
         </button>
       </div>
 
-      {/* Selector de modo */}
       <div className="flex items-center space-x-4 text-sm">
         <label className="flex items-center space-x-2 cursor-pointer">
           <input
@@ -150,7 +143,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
             </div>
 
             <div className="p-4">
-              {/* Navegación */}
               {currentPath.length > 0 && (
                 <button
                   onClick={navigateBack}
@@ -200,7 +192,6 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                             alt={item.name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              // Si la imagen no carga, mostrar placeholder
                               const target = e.target as HTMLImageElement;
                               target.style.display = 'none';
                               target.parentElement!.innerHTML = `
@@ -211,7 +202,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                               `;
                             }}
                           />
-                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
+                          <div className="absolute inset-0 bg-black/5 bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
                             <span className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity px-2 text-center">
                               {item.name}
                             </span>
