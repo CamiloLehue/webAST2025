@@ -1,14 +1,20 @@
 import { NavLink } from "react-router";
-import { useContent } from "../../hooks/useContent";
+import { useMenuNavItemsCompat } from "../hooks/useMenuNavItemsCompat";
 import { useBreakpoints } from "../../context/ProviderBreakpoints";
 import type { MenuItem } from "../../types/content";
 import { useState } from "react";
 import { TbChevronDown, TbMenu2, TbMenuDeep } from "react-icons/tb";
 import { AnimatePresence, motion } from "motion/react";
 
-function NavBar() {
-  const { menuItems, loading, error } = useContent();
+
+
+function NavBarCompat() {
+  const { menuItems, loading, error, isUsingNewAPI } = useMenuNavItemsCompat();
   const { isSmallDevice, isMediumDevice } = useBreakpoints();
+
+  if (import.meta.env.DEV) {
+    console.log('NavBar using:', isUsingNewAPI ? 'New API' : 'Legacy JSON');
+  }
 
   if (loading) {
     return (
@@ -36,6 +42,12 @@ function NavBar() {
           : "p-0"
       }`}
     >
+      {import.meta.env.DEV && (
+        <div className="fixed top-2 right-2 z-50 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+          {isUsingNewAPI ? 'API' : 'JSON'}
+        </div>
+      )}
+      
       {isSmallDevice || isMediumDevice ? (
         <NavSmallDevice menuItems={menuItems} />
       ) : (
@@ -217,4 +229,4 @@ const NavSmallDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
   );
 };
 
-export default NavBar;
+export default NavBarCompat;

@@ -96,7 +96,7 @@ const MenuManagement: React.FC = () => {
       <div key={item.id}>
         <div
           className={`p-6 ${
-            level > 0 ? "bg-gray-50 border-l-4 border-gray-200" : ""
+            level > 0 ? "bg-accent-100/15 border-l-8 border-bg-400/20" : ""
           }`}
         >
           {editingItem?.id === item.id ? (
@@ -132,7 +132,7 @@ const MenuManagement: React.FC = () => {
                       {item.title}
                     </h4>
                     {item.external && (
-                      <FiExternalLink className="h-4 w-4 text-gray-400" />
+                      <FiExternalLink className="h-4 w-4 text-bg-300" />
                     )}
                     {item.disabled && (
                       <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
@@ -159,7 +159,7 @@ const MenuManagement: React.FC = () => {
                 {level === 0 && (
                   <button
                     onClick={() => setAddingSubmenuTo(item.id)}
-                    className="p-2 text-gray-400 hover:text-blue-600"
+                    className="p-2 text-bg-300 hover:text-blue-600"
                     title="Agregar submenú"
                   >
                     <FiPlus className="h-4 w-4" />
@@ -167,13 +167,13 @@ const MenuManagement: React.FC = () => {
                 )}
                 <button
                   onClick={() => handleEditItem(item)}
-                  className="p-2 text-gray-400 hover:text-bg-200"
+                  className="p-2 text-bg-300 hover:text-bg-200"
                 >
                   <FiEdit2 className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => handleDeleteItem(item.id, parentId)}
-                  className="p-2 text-gray-400 hover:text-red-600"
+                  className="p-2 text-bg-300 hover:text-primary-100"
                 >
                   <FiTrash2 className="h-4 w-4" />
                 </button>
@@ -199,7 +199,7 @@ const MenuManagement: React.FC = () => {
         )}
 
         {hasSubmenu && isExpanded && (
-          <div className="border-l-4 border-blue-100">
+          <div className="border-l-[12px] border-accent-100">
             {item
               .submenu!.sort((a, b) => a.order - b.order)
               .map((subItem) => renderMenuItem(subItem, level + 1, item.id))}
@@ -228,7 +228,7 @@ const MenuManagement: React.FC = () => {
           <h2 className="text-2xl font-bold text-bg-100">Gestión de Menú</h2>
           <p className="mt-1 text-bg-200">
             Administra los elementos del menú principal de navegación y sus
-            submenús
+            submenús de www.ast.cl/
           </p>
         </div>
         <button
