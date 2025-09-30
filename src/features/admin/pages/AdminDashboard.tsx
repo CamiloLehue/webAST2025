@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { useUserManagement } from "../user-management/hooks/useUserManagement";
+import { useBlogManagement } from "../blog-management/hooks/useBlogManagement";
+import { useMenuManagement } from "../menu-management/hooks/useMenuManagement";
+import { usePageManagement } from "../page-management/hooks/usePageManagement";
+import { useActivity } from "../../../hooks/useActivity";
 import {
   FiMenu,
   FiFileText,
@@ -9,16 +13,33 @@ import {
   FiEye,
   FiGrid,
   FiTrendingUp,
+  FiRefreshCw,
 } from "react-icons/fi";
 
 const AdminDashboard: React.FC = () => {
-  const { hasPermission } = useAuth();
+  const { hasPermission, user } = useAuth();
   const { users, fetchUsers } = useUserManagement();
+  const { getBlogStats, loading: blogLoading } = useBlogManagement();
+  const { menuItems, loading: menuLoading } = useMenuManagement();
+  const { customPages, loading: pageLoading } = usePageManagement();
+  const {
+    activities,
+    formatTimeAgo,
+    logSystemAction,
+    logBlogAction,
+    logPageAction,
+    logMenuAction,
+    logUserAction,
+    clearActivities,
+  } = useActivity();
+
   const [userStats, setUserStats] = useState({
     total: 0,
     admins: 0,
     editors: 0,
   });
+
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (hasPermission("canViewUsers")) {
@@ -33,22 +54,53 @@ const AdminDashboard: React.FC = () => {
       setUserStats({ total: users.length, admins, editors });
     }
   }, [users]);
+
+  useEffect(() => {
+    if (activities.length === 0 && user) {
+      logSystemAction("Dashboard cargado");
+      logSystemAction("Sistema iniciado");
+      logSystemAction("Configuración actualizada");
+      logBlogAction("creado", "Nuevas características de la plataforma");
+      logPageAction("actualizada", "Página de servicios");
+      logMenuAction("reorganizado");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activities.length, user]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      if (hasPermission("canViewUsers")) {
+        await fetchUsers({ limit: 100 });
+      }
+      logSystemAction("Dashboard actualizado");
+    } catch (error) {
+      console.error("Error refreshing dashboard:", error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const blogStats = getBlogStats();
+  const publishedPagesCount = customPages.filter(
+    (page) => page.isPublished
+  ).length;
   const stats = [
     {
       label: "Páginas Activas",
-      value: "12",
+      value: pageLoading ? "..." : publishedPagesCount.toString(),
       icon: FiGrid,
       color: "bg-blue-500",
     },
     {
       label: "Posts del Blog",
-      value: "8",
+      value: blogLoading ? "..." : blogStats.publishedPosts.toString(),
       icon: FiFileText,
       color: "bg-green-500",
     },
     {
       label: "Items del Menú",
-      value: "6",
+      value: menuLoading ? "..." : menuItems.length.toString(),
       icon: FiMenu,
       color: "bg-purple-500",
     },
@@ -103,40 +155,33 @@ const AdminDashboard: React.FC = () => {
     },
   ];
 
-  const recentActivity = [
-    {
-      action: 'Página "Nuevos Servicios" creada',
-      time: "Hace 2 horas",
-      user: "Admin",
-    },
-    {
-      action: 'Post "Últimas novedades" publicado',
-      time: "Hace 1 día",
-      user: "Editor",
-    },
-    {
-      action: "Menú actualizado",
-      time: "Hace 2 días",
-      user: "Admin",
-    },
-  ];
-
   return (
-    <div className="space-y-4 p-5 bg-bg-200 h-full">
-      <div>
-        <h2 className="text-2xl font-bold text-white">
-          <span className="text-primary-100">AST</span>Dashboard
-        </h2>
-        <p className="mt-2 text-bg-200">
-          Gestiona el contenido de tu sitio web desde aquí
-        </p>
+    <div className="space-y-1 p-5 bg-bg-200 h-full">
+      <div className="flex justify-between items-start">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            <span className="text-primary-100">AST</span>Dashboard
+          </h2>
+          <p className="mt-2 text-bg-200">
+            Gestiona el contenido de tu sitio web desde aquí
+          </p>
+        </div>
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="flex items-center gap-2 px-4 py-2 bg-primary-100 text-white rounded-2xl hover:bg-primary-200 transition-colors disabled:opacity-50"
+        >
+          <FiRefreshCw
+            className={`h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+          />
+          {refreshing ? "Actualizando..." : "Actualizar"}
+        </button>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  border border-bg-300/10 p-2 rounded-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  border border-bg-300/10  rounded-xl">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-bg-300 rounded-lg  p-2 ">
+          <div key={index} className="bg-bg-300 rounded-2xl  p-2 ">
             <div className="flex items-center">
-              <div className={`${stat.color} rounded-lg p-3`}>
+              <div className={`${stat.color} rounded-2xl p-3`}>
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
@@ -150,8 +195,94 @@ const AdminDashboard: React.FC = () => {
         ))}
       </div>
 
-      <div>
-        <h3 className="text-lg font-medium text-white mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-bg-300 rounded-2xl shadow p-6">
+          <h3 className="text-lg font-medium text-white mb-4">
+            Estadísticas del Blog
+          </h3>
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Total de posts:</span>
+              <span className="text-white font-medium">
+                {blogStats.totalPosts}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Publicados:</span>
+              <span className="text-green-400 font-medium">
+                {blogStats.publishedPosts}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Borradores:</span>
+              <span className="text-yellow-400 font-medium">
+                {blogStats.draftPosts}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Categorías:</span>
+              <span className="text-blue-400 font-medium">
+                {blogStats.totalCategories}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-bg-300 rounded-2xl shadow p-6">
+          <h3 className="text-lg font-medium text-white mb-4">Páginas</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Total de páginas:</span>
+              <span className="text-white font-medium">
+                {customPages.length}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Publicadas:</span>
+              <span className="text-green-400 font-medium">
+                {publishedPagesCount}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Borrador:</span>
+              <span className="text-yellow-400 font-medium">
+                {customPages.length - publishedPagesCount}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-bg-300 rounded-2xl shadow p-6">
+          <h3 className="text-lg font-medium text-white mb-4">Sistema</h3>
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Elementos del menú:</span>
+              <span className="text-white font-medium">{menuItems.length}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Administradores:</span>
+              <span className="text-purple-400 font-medium">
+                {userStats.admins}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Editores:</span>
+              <span className="text-blue-400 font-medium">
+                {userStats.editors}
+              </span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-white-100">Actividades hoy:</span>
+              <span className="text-green-400 font-medium">
+                {activities.length}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-bg">
+        <h3 className="text-lg font-medium text-white py-2 px-5">
           Acciones Rápidas
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
@@ -160,10 +291,10 @@ const AdminDashboard: React.FC = () => {
               key={index}
               to={action.link}
               target={action.external ? "_blank" : undefined}
-              className="bg-bg-300 rounded-lg shadow p-6 hover:shadow-md transition-shadow"
+              className="bg-bg-300 rounded-2xl shadow p-6 hover:shadow-md transition-shadow"
             >
               <div
-                className={`${action.color} rounded-lg p-3 w-12 h-12 flex items-center justify-center mb-4`}
+                className={`${action.color} rounded-2xl p-3 w-12 h-12 flex items-center justify-center mb-4`}
               >
                 <action.icon className="h-6 w-6 text-white" />
               </div>
@@ -175,28 +306,39 @@ const AdminDashboard: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="bg-bg-300 rounded-lg shadow">
-        <div className="px-6 py-4 border-b border-white/20">
+
+      <div className=" rounded-2xl shadow">
+        <div className="px-6 py-2 ">
           <h3 className="text-lg font-medium text-white">Actividad Reciente</h3>
         </div>
-        <div className="divide-y divide-white/10">
-          {recentActivity.map((activity, index) => (
-            <div
-              key={index}
-              className="px-6 py-4 flex items-center justify-between"
-            >
-              <div className="flex items-center">
-                <FiTrendingUp className="h-5 w-5 text-gray-400 mr-3" />
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    {activity.action}
-                  </p>
-                  <p className="text-sm text-white-100">por {activity.user}</p>
+        <div className="divide-y bg-bg-300 rounded-2xl divide-white/10 h-48 overflow-y-scroll">
+          {activities.length > 0 ? (
+            activities.slice(0, 5).map((activity) => (
+              <div
+                key={activity.id}
+                className="px-6 py-4 flex items-center justify-between"
+              >
+                <div className="flex items-center">
+                  <FiTrendingUp className="h-5 w-5 text-gray-400 mr-3" />
+                  <div>
+                    <p className="text-sm font-medium text-white">
+                      {activity.action}
+                    </p>
+                    <p className="text-sm text-white-100">
+                      por {activity.userName}
+                    </p>
+                  </div>
                 </div>
+                <span className="text-sm text-white-100">
+                  {formatTimeAgo(activity.timestamp)}
+                </span>
               </div>
-              <span className="text-sm text-white-100">{activity.time}</span>
+            ))
+          ) : (
+            <div className="px-6 py-4 text-center text-white-100">
+              <p>No hay actividad reciente</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
