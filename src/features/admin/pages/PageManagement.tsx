@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
-import { FiEdit2, FiTrash2, FiPlus, FiCopy, FiLoader } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiPlus, FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PageManagement: React.FC = () => {
@@ -57,7 +57,7 @@ const PageManagement: React.FC = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-full  bg-bg-200">
         <div className="flex items-center space-x-2">
           <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
           <span className="text-white-100/70">Cargando páginas...</span>
@@ -85,7 +85,7 @@ const PageManagement: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 p-5 bg-bg-200 h-full">
+    <div className="space-y-6 p-5 bg-bg-200 min-h-full">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-white">Gestión de Páginas</h2>
@@ -127,7 +127,7 @@ const PageManagement: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {filteredPages.length === 0 ? (
           <div className="col-span-full">
             <div className="text-center py-12">
@@ -155,55 +155,50 @@ const PageManagement: React.FC = () => {
               key={page.id}
               className="bg-bg-300 rounded-lg shadow overflow-hidden"
             >
-              <div className="flex justify-end items-center space-x-2 p-3">
-                <Link
-                  to={`/admin/pages/edit/${page.id}`}
-                  className="p-2 text-white-100/80 hover:text-white"
-                  title="Editar página"
+              <div className="flex justify-between items-center space-x-2 p-3 bg-bg-100">
+                <span
+                  className={`ml-2 px-4 py-1 text-xs font-medium rounded-full ${
+                    page.isPublished
+                      ? "bg-green-950 border-t border-t-green-900 shadow text-green-400"
+                      : "bg-yellow-100/20 text-yellow-100 border-t border-t-yellow-100/20 shadow"
+                  }`}
                 >
-                  <FiEdit2 className="h-4 w-4" />
-                </Link>
-                <button
-                  onClick={() => handleDeletePage(page.id)}
-                  className="p-2 text-white-100/80 hover:text-primary-100"
-                  title="Eliminar página"
-                >
-                  <FiTrash2 className="h-4 w-4" />
-                </button>
-              </div>
-              <div className=" py-5 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-4xl mb-2">📄</div>
-                  <p className="text-sm text-white-100/70">Vista previa</p>
+                  {page.isPublished ? "Publicado" : "Borrador"}
+                </span>
+                <div className="flex items-center justify-center space-x-1">
+                  <Link
+                    to={`/admin/pages/edit/${page.id}`}
+                    className="p-2 text-white-100/80 hover:text-white"
+                    title="Editar página"
+                  >
+                    <FiEdit2 className="h-4 w-4" />
+                  </Link>
+                  <button
+                    onClick={() => handleDeletePage(page.id)}
+                    className="p-2 text-white-100/80 hover:text-primary-100"
+                    title="Eliminar página"
+                  >
+                    <FiTrash2 className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-lg font-medium text-white truncate">
+              <div className="p-4">
+                <div className="flex items-center justify-center mb-2">
+                  <h3 className="text-lg font-bold text-white-100 truncate border-b-4 border-white/15 px-5 ">
                     {page.title}
                   </h3>
-                  <span
-                    className={`ml-2 px-4 py-1 text-xs font-medium rounded-full ${
-                      page.isPublished
-                        ? "bg-green-950 text-green-400"
-                        : "bg-yellow-100/20 text-yellow-100"
-                    }`}
-                  >
-                    {page.isPublished ? "Publicado" : "En Borrador"}
-                  </span>
                 </div>
 
-                <div className="mb-4">
-                  <p className="text-sm text-white-100/70 flex items-center">
-                    <FiCopy className="mr-1 h-3 w-3" />/{page.slug}
+                <div className="mb-4 px-5">
+                  <p className="text-sm text-white-100/90 flex items-center">
+                    slug: /{page.slug}
                   </p>
                   <p className="text-xs text-white-100/70 mt-1">
                     Actualizado el {formatDate(page.updatedAt)}
                   </p>
                 </div>
 
-                <div className="mb-4">
+                <div className="mb-4 px-5">
                   <p className="text-sm text-white-100/70">
                     {page.content.length} bloques de contenido
                   </p>
@@ -212,8 +207,7 @@ const PageManagement: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div></div>
+                <div className="flex items-center justify-center">
                   <Link
                     to={`/${page.slug}`}
                     target="_blank"
@@ -228,7 +222,7 @@ const PageManagement: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-bg-100 rounded-lg shadow p-6">
+      {/* <div className="bg-bg-100 rounded-lg shadow p-6">
         <h3 className="text-lg font-medium text-white mb-4">
           Plantillas Rápidas
         </h3>
@@ -261,7 +255,7 @@ const PageManagement: React.FC = () => {
             </p>
           </Link>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

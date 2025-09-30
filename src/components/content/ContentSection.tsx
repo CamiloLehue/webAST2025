@@ -60,7 +60,7 @@ function ContentSection({
           draggable={false}
           src={imageSrc}
           alt={altText}
-          className="w-full object-cover scale-110 transition-transform duration-300"
+          className="w-full object-cover scale-110 transition-transform duration-300 max-h-[420px] min-h-[420px]"
           loading="lazy"
         />
 

@@ -45,12 +45,12 @@ const BlogManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6 p-5 bg-bg-200">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-bg-100">Gestión de Blog</h2>
-          <p className="mt-1 text-bg-200">
+          <h2 className="text-2xl font-bold text-white">Gestión de Blog</h2>
+          <p className="mt-1 text-white-100/70">
             Administra los posts y contenido del blog
           </p>
         </div>
@@ -76,27 +76,27 @@ const BlogManagement: React.FC = () => {
 
       {/* Loading State */}
       {loading ? (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-bg-200 min-h-screen h-full rounded-lg shadow p-6">
           <div className="animate-pulse">
-            <div className="h-4 bg-white-100 rounded w-1/4 mb-4"></div>
+            <div className="h-4 bg-bg-300 rounded w-1/4 mb-4"></div>
             <div className="space-y-3">
-              <div className="h-4 bg-white-100 rounded"></div>
-              <div className="h-4 bg-white-100 rounded w-5/6"></div>
-              <div className="h-4 bg-white-100 rounded w-4/6"></div>
+              <div className="h-4 bg-bg-300 rounded"></div>
+              <div className="h-4 bg-bg-300 rounded w-5/6"></div>
+              <div className="h-4 bg-bg-300 rounded w-4/6"></div>
             </div>
           </div>
         </div>
       ) : (
         <div className="space-y-4">
           {/* Filters */}
-          <div className="bg-white p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+          <div className="bg-bg-100 p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
             <div className="flex-1">
               <input
                 type="text"
                 placeholder="Buscar posts..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                className="w-full px-3 text-white placeholder:text-white-100/50 py-2 border border-bg-300 bg-bg-400 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               />
             </div>
             <div>
@@ -107,7 +107,7 @@ const BlogManagement: React.FC = () => {
                     e.target.value as "all" | "published" | "draft"
                   )
                 }
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                className="px-3 py-2 border border-bg-300 bg-bg-400 text-white rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
               >
                 <option value="all">Todos los posts</option>
                 <option value="published">Publicados</option>
@@ -117,14 +117,14 @@ const BlogManagement: React.FC = () => {
           </div>
 
           {/* Posts List */}
-          <div className="bg-white shadow rounded-lg">
+          <div className="bg-bg-300 shadow rounded-lg">
             {filteredPosts.length === 0 ? (
               <div className="p-12 text-center">
-                <FiFileText className="mx-auto h-12 w-12 text-gray-400" />
-                <h3 className="mt-2 text-sm font-medium text-bg-100">
+                <FiFileText className="mx-auto h-12 w-12 text-white" />
+                <h3 className="mt-2 text-sm font-medium text-white">
                   No hay posts
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-white-100/70">
                   Comienza creando tu primer post del blog.
                 </p>
                 <div className="mt-6">
@@ -138,31 +138,31 @@ const BlogManagement: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="divide-y divide-white-100">
+              <div className="divide-y divide-bg-200">
                 {filteredPosts.map((post) => (
                   <div key={post.id} className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-2">
-                          <h3 className="text-lg font-medium text-bg-100">
+                          <h3 className="text-lg font-medium text-white">
                             {post.title}
                           </h3>
                           <span
                             className={`px-2 py-1 text-xs font-medium rounded-full ${
                               post.isPublished
-                                ? "bg-green-100 text-green-800"
-                                : "bg-yellow-100 text-yellow-800"
+                                ? "bg-green-950 text-green-200"
+                                : "bg-yellow-100/50 text-yellow-100"
                             }`}
                           >
                             {post.isPublished ? "Publicado" : "Borrador"}
                           </span>
                         </div>
 
-                        <p className="text-bg-200 mb-3 line-clamp-2">
+                        <p className="text-white-100/70 mb-3 line-clamp-2">
                           {post.excerpt}
                         </p>
 
-                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                        <div className="flex items-center space-x-4 text-sm text-white-100/70">
                           <div className="flex items-center">
                             <FiUser className="mr-1 h-4 w-4" />
                             {post.author}
@@ -171,7 +171,7 @@ const BlogManagement: React.FC = () => {
                             <FiCalendar className="mr-1 h-4 w-4" />
                             {formatDate(post.createdAt)}
                           </div>
-                          <span className="px-2 py-1 bg-white text-gray-800 rounded">
+                          <span className="px-2 py-1 bg-bg-400 text-white-100/70 rounded">
                             {post.category}
                           </span>
                         </div>
@@ -181,7 +181,7 @@ const BlogManagement: React.FC = () => {
                             {post.tags.map((tag, index) => (
                               <span
                                 key={index}
-                                className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded"
+                                className="inline-block px-2 py-1 text-xs bg-bg-200 text-white-100/50 rounded"
                               >
                                 #{tag}
                               </span>
@@ -194,21 +194,21 @@ const BlogManagement: React.FC = () => {
                         <Link
                           to={`/noticias/${post.slug}`}
                           target="_blank"
-                          className="p-2 text-gray-400 hover:text-bg-200"
+                          className="p-2 text-white hover:text-white-100/70"
                           title="Ver post"
                         >
                           <FiEye className="h-4 w-4" />
                         </Link>
                         <Link
                           to={`/admin/blog/edit/${post.id}`}
-                          className="p-2 text-gray-400 hover:text-bg-200"
+                          className="p-2 text-white hover:text-white-100/70"
                           title="Editar post"
                         >
                           <FiEdit2 className="h-4 w-4" />
                         </Link>
                         <button
                           onClick={() => handleDeletePost(post.id)}
-                          className="p-2 text-gray-400 hover:text-red-600"
+                          className="p-2 text-white hover:text-red-600"
                           title="Eliminar post"
                         >
                           <FiTrash2 className="h-4 w-4" />
