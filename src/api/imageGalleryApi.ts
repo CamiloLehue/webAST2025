@@ -14,7 +14,6 @@ export interface ImageItem {
  */
 export const fetchRealImages = async (path: string[] = []): Promise<ImageItem[]> => {
   try {
-    // Simular un pequeño delay para mostrar el loading
     await new Promise(resolve => setTimeout(resolve, 100));
     
     // Por ahora, usar la estructura de fallback que refleja tus archivos reales
@@ -112,13 +111,43 @@ const getFallbackImageStructure = async (path: string[] = []): Promise<ImageItem
     ],
     
     // Resto de carpetas de servicios (agregar contenido cuando lo necesites)
-    'img/services/empresa-sustentable': [],
-    'img/services/networkip': [],
+    'img/services/empresa-sustentable': [
+      { name: 'iconCasa.png', path: '/img/services/empresa-sustentable/iconCasa.png', isDirectory: false },
+      { name: 'iconTorre.png', path: '/img/services/empresa-sustentable/iconTorre.png', isDirectory: false },
+      { name: 'image03.png', path: '/img/services/empresa-sustentable/image03.png', isDirectory: false },
+      { name: 'image04.png', path: '/img/services/empresa-sustentable/image04.png', isDirectory: false },
+    ],
+    'img/services/networkip': [
+      { name: 'image01.png', path: '/img/services/networkip/image01.png', isDirectory: false },
+      { name: 'image02.png', path: '/img/services/networkip/image02.png', isDirectory: false },
+    ],
     'img/services/satelital': [],
-    'img/services/seguridad': [],
-    'img/services/wireless': [],
-    'img/services/wisensor': [],
-    'img/services/wisensoria': [],
+    'img/services/seguridad': [
+      { name: 'cam.png', path: '/img/services/seguridad/cam.png', isDirectory: false },
+      { name: 'cam2.png', path: '/img/services/seguridad/cam2.png', isDirectory: false },
+      { name: 'cam3.png', path: '/img/services/seguridad/cam3.png', isDirectory: false },
+      { name: 'campana.png', path: '/img/services/seguridad/campana.png', isDirectory: false },
+      { name: 'hero.png', path: '/img/services/seguridad/hero.png', isDirectory: false },
+    ],
+    'img/services/wireless': [
+      { name: 'image01.png', path: '/img/services/wireless/image01.png', isDirectory: false },
+      { name: 'image02.png', path: '/img/services/wireless/image02.png', isDirectory: false },
+      { name: 'image03.png', path: '/img/services/wireless/image03.png', isDirectory: false },
+    ],
+    'img/services/wisensor': [
+      { name: 'aplicaciones.png', path: '/img/services/wisensor/aplicaciones.png', isDirectory: false },
+      { name: 'Artboard.png', path: '/img/services/wisensor/Artboard.png', isDirectory: false },
+      { name: 'wisensor-app.png', path: '/img/services/wisensor/wisensor-app.png', isDirectory: false },
+      { name: 'wisensor-app2.png', path: '/img/services/wisensor/wisensor-app2.png', isDirectory: false },
+      { name: 'Wisensor.png', path: '/img/services/wisensor/Wisensor.png', isDirectory: false },
+    ],
+    'img/services/wisensoria': [
+      { name: 'hero.png', path: '/img/services/wisensoria/hero.png', isDirectory: false },
+      { name: 'image01.png', path: '/img/services/wisensoria/image01.png', isDirectory: false },
+      { name: 'image02.png', path: '/img/services/wisensoria/image02.png', isDirectory: false },
+      { name: 'image03.png', path: '/img/services/wisensoria/image03.png', isDirectory: false },
+      { name: 'image04.png', path: '/img/services/wisensoria/image04.png', isDirectory: false },
+    ],
   };
 
   const pathKey = path.join('/');

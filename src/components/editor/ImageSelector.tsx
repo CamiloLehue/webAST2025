@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FiImage, FiLink, FiX, FiFolder } from "react-icons/fi";
+import { FiImage, FiLink, FiX, FiFolder, FiAlertTriangle } from "react-icons/fi";
 import { useImageGallery } from "../../hooks/useImageGallery";
 
 interface ImageSelectorProps {
@@ -14,6 +14,19 @@ interface ImageItem {
   isDirectory: boolean;
   children?: ImageItem[];
 }
+
+// Función para estimar el tamaño de una imagen basándose en patrones conocidos
+const getImageSizeWarning = (imageName: string): string | null => {
+  const largeImages = [
+    'hero.png', 'image01.png', 'image02.png', 'image03.png', 'wisensor-app2.png'
+  ];
+  
+  if (largeImages.some(name => imageName.includes(name))) {
+    return "⚠️ Imagen grande (>2MB) - puede tardar en cargar";
+  }
+  
+  return null;
+};
 
 const ImageSelector: React.FC<ImageSelectorProps> = ({
   value,
@@ -185,27 +198,45 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                       ) : (
                         <button
                           onClick={() => handleImageSelect(item.path)}
-                          className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-transparent hover:border-accent-100 transition-colors group"
+                          className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 border-transparent hover:border-accent-100 transition-colors group relative"
                         >
+                          {getImageSizeWarning(item.name) && (
+                            <div className="absolute top-1 right-1 z-10 bg-yellow-100 text-yellow-800 text-xs px-1 py-0.5 rounded opacity-75">
+                              <FiAlertTriangle className="h-3 w-3" />
+                            </div>
+                          )}
                           <img
                             src={item.path}
                             alt={item.name}
                             className="w-full h-full object-cover"
+                            loading="lazy"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              target.parentElement!.innerHTML = `
-                                <div class="w-full h-full flex flex-col items-center justify-center">
-                                  <FiImage class="h-8 w-8 text-gray-400 mb-2" />
+                              const container = target.parentElement!;
+                              container.innerHTML = `
+                                <div class="w-full h-full flex flex-col items-center justify-center bg-gray-100">
+                                  <svg class="h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                                  </svg>
                                   <span class="text-xs text-gray-500 px-2 text-center">${item.name}</span>
+                                  <span class="text-xs text-red-500 px-2 text-center mt-1">Error de carga</span>
                                 </div>
                               `;
+                              console.warn(`Error loading image: ${item.path}`, e);
+                            }}
+                            onLoad={() => {
+                              console.log(`Successfully loaded: ${item.path}`);
                             }}
                           />
                           <div className="absolute inset-0 bg-black/5 bg-opacity-0 group-hover:bg-opacity-30 transition-opacity flex items-center justify-center">
-                            <span className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity px-2 text-center">
-                              {item.name}
-                            </span>
+                            <div className="text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity px-2 text-center">
+                              <div>{item.name}</div>
+                              {getImageSizeWarning(item.name) && (
+                                <div className="text-yellow-200 mt-1 text-xs">
+                                  {getImageSizeWarning(item.name)}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </button>
                       )}
