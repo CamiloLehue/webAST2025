@@ -11,16 +11,16 @@ import {
 } from "react-icons/fi";
 
 const MenuManagement: React.FC = () => {
-  const { 
-    menuItems, 
-    updateMenuItem, 
-    deleteMenuItem, 
+  const {
+    menuItems,
+    updateMenuItem,
+    deleteMenuItem,
     addMenuItem,
     addSubmenuItem,
     updateSubmenuItem,
     deleteSubmenuItem,
     loading,
-    error 
+    error,
   } = useContent();
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -50,7 +50,7 @@ const MenuManagement: React.FC = () => {
       }
       setEditingItem(null);
     } catch (error) {
-      console.error('Error al guardar elemento:', error);
+      console.error("Error al guardar elemento:", error);
     }
   };
 
@@ -65,12 +65,15 @@ const MenuManagement: React.FC = () => {
           await deleteMenuItem(id);
         }
       } catch (error) {
-        console.error('Error al eliminar elemento:', error);
+        console.error("Error al eliminar elemento:", error);
       }
     }
   };
 
-  const handleAddItem = async (item: Omit<MenuItem, "id">, parentId?: string) => {
+  const handleAddItem = async (
+    item: Omit<MenuItem, "id">,
+    parentId?: string
+  ) => {
     try {
       if (parentId) {
         await addSubmenuItem(item, parentId);
@@ -80,7 +83,7 @@ const MenuManagement: React.FC = () => {
         setShowAddForm(false);
       }
     } catch (error) {
-      console.error('Error al agregar elemento:', error);
+      console.error("Error al agregar elemento:", error);
     }
   };
 
@@ -96,7 +99,7 @@ const MenuManagement: React.FC = () => {
       <div key={item.id}>
         <div
           className={`p-6 ${
-            level > 0 ? "bg-accent-100/15 border-l-8 border-bg-400/20" : ""
+            level > 0 ? "bg-bg-100 border-l-8 border-bg-400/20" : ""
           }`}
         >
           {editingItem?.id === item.id ? (
@@ -112,12 +115,12 @@ const MenuManagement: React.FC = () => {
                   {hasSubmenu && (
                     <button
                       onClick={() => toggleExpanded(item.id)}
-                      className="p-1 hover:bg-gray-200 rounded"
+                      className="p-1 hover:bg-bg-400 rounded-full"
                     >
                       {isExpanded ? (
-                        <FiChevronDown className="h-4 w-4 text-gray-600" />
+                        <FiChevronDown className="h-4 w-4 text-white" />
                       ) : (
-                        <FiChevronRight className="h-4 w-4 text-gray-600" />
+                        <FiChevronRight className="h-4 w-4 text-white" />
                       )}
                     </button>
                   )}
@@ -125,14 +128,14 @@ const MenuManagement: React.FC = () => {
                 <div>
                   <div className="flex items-center space-x-2">
                     <h4
-                      className={`text-lg font-medium text-bg-100 ${
+                      className={`text-lg font-medium text-white ${
                         level > 0 ? "text-base" : ""
                       }`}
                     >
                       {item.title}
                     </h4>
                     {item.external && (
-                      <FiExternalLink className="h-4 w-4 text-bg-300" />
+                      <FiExternalLink className="h-4 w-4 text-white-100" />
                     )}
                     {item.disabled && (
                       <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 rounded-full">
@@ -145,8 +148,8 @@ const MenuManagement: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <p className="text-bg-200">{item.path}</p>
-                  <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                  <p className="text-white-100/70">{item.path}</p>
+                  <div className="flex items-center space-x-4 mt-2 text-sm text-white-100/70">
                     <span>Orden: {item.order}</span>
                     <span>Tipo: {item.contentType || "page"}</span>
                     {hasSubmenu && (
@@ -159,7 +162,7 @@ const MenuManagement: React.FC = () => {
                 {level === 0 && (
                   <button
                     onClick={() => setAddingSubmenuTo(item.id)}
-                    className="p-2 text-bg-300 hover:text-blue-600"
+                    className="p-2 text-white hover:text-blue-600"
                     title="Agregar submenú"
                   >
                     <FiPlus className="h-4 w-4" />
@@ -167,13 +170,13 @@ const MenuManagement: React.FC = () => {
                 )}
                 <button
                   onClick={() => handleEditItem(item)}
-                  className="p-2 text-bg-300 hover:text-bg-200"
+                  className="p-2 text-white hover:text-white-100/70"
                 >
                   <FiEdit2 className="h-4 w-4" />
                 </button>
                 <button
                   onClick={() => handleDeleteItem(item.id, parentId)}
-                  className="p-2 text-bg-300 hover:text-primary-100"
+                  className="p-2 text-white hover:text-primary-100"
                 >
                   <FiTrash2 className="h-4 w-4" />
                 </button>
@@ -184,8 +187,8 @@ const MenuManagement: React.FC = () => {
 
         {addingSubmenuTo === item.id && (
           <div className="px-6 pb-6">
-            <div className="ml-12 border-l-2 border-blue-200 pl-6">
-              <h4 className="text-sm font-medium text-gray-700 mb-4">
+            <div className="ml-12 border-l-2 border-accent-100 pl-6">
+              <h4 className="text-sm font-medium text-white-100/70 mb-4">
                 Agregar submenú a "{item.title}"
               </h4>
               <MenuItemForm
@@ -210,23 +213,23 @@ const MenuManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6 p-5 bg-bg-200 h-full">
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-700">{error}</p>
         </div>
       )}
-      
+
       {loading && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-blue-700">Cargando menús...</p>
         </div>
       )}
-      
+
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-bg-100">Gestión de Menú</h2>
-          <p className="mt-1 text-bg-200">
+          <h2 className="text-2xl font-bold text-white">Gestión de Menú</h2>
+          <p className="mt-1 text-white-100/70">
             Administra los elementos del menú principal de navegación y sus
             submenús de www.ast.cl/
           </p>
@@ -252,16 +255,14 @@ const MenuManagement: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-white-100">
-          <h3 className="text-lg font-medium text-bg-100">
-            Elementos del Menú
-          </h3>
-          <p className="text-sm text-gray-500 mt-1">
+      <div className="bg-bg-300 shadow rounded-lg">
+        <div className="px-6 py-4 border-b border-bg-200">
+          <h3 className="text-lg font-medium text-white">Elementos del Menú</h3>
+          <p className="text-sm text-white-100/70 mt-1">
             Haz clic en las flechas para expandir/contraer submenús
           </p>
         </div>
-        <div className="divide-y divide-white-100">
+        <div className="divide-y divide-bg-200">
           {menuItems
             .sort((a, b) => a.order - b.order)
             .map((item) => renderMenuItem(item))}
@@ -307,11 +308,11 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-gray-50 p-6 rounded-lg space-y-4"
+      className="bg-bg-200 p-6 rounded-lg space-y-4"
     >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-sm font-medium text-bg-300 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Título
           </label>
           <input
@@ -320,12 +321,12 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, title: e.target.value }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="w-full px-3 py-2 text-white border border-bg-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-bg-300 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Ruta
           </label>
           <input
@@ -334,13 +335,13 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, path: e.target.value }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="w-full px-3 py-2 border text-white placeholder:text-white-100/40 border-bg-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             placeholder="/mi-pagina"
             required
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-bg-300 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Tipo de Contenido
           </label>
           <select
@@ -355,7 +356,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
                   | "custom",
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="w-full px-3 py-2 border bg-bg-400 border-bg-300  text-white rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
           >
             <option value="page">Página</option>
             <option value="blog">Blog</option>
@@ -364,7 +365,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-bg-300 mb-1">
+          <label className="block text-sm font-medium text-white mb-1">
             Orden
           </label>
           <input
@@ -376,7 +377,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
                 order: parseInt(e.target.value),
               }))
             }
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            className="w-full px-3 py-2 border border-bg-300 placeholder:text-white-100/40 text-white rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
             min="1"
           />
         </div>
@@ -390,9 +391,9 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, external: e.target.checked }))
             }
-            className="rounded border-gray-300 text-accent-100 focus:ring-accent-100"
+            className="rounded border-bg-300 text-accent-100 focus:ring-accent-100"
           />
-          <span className="ml-2 text-sm text-bg-300">Enlace externo</span>
+          <span className="ml-2 text-sm text-white-100/70">Enlace externo</span>
         </label>
         <label className="flex items-center">
           <input
@@ -401,9 +402,9 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, disabled: e.target.checked }))
             }
-            className="rounded border-gray-300 text-accent-100 focus:ring-accent-100"
+            className="rounded border-bg-300 text-accent-100 focus:ring-accent-100"
           />
-          <span className="ml-2 text-sm text-bg-300">Deshabilitado</span>
+          <span className="ml-2 text-sm text-white-100/70">Deshabilitado</span>
         </label>
       </div>
 
@@ -411,7 +412,7 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm font-medium text-bg-300 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+          className="px-4 py-2 text-sm font-medium text-white bg-bg-100  border border-bg-100 rounded-md hover:bg-bg-400"
         >
           Cancelar
         </button>
