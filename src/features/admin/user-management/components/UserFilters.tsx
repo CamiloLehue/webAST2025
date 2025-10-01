@@ -73,11 +73,11 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-6">
+    <div className="bg-bg-100 p-4 rounded-lg shadow-sm border border-bg-300 mb-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Search */}
         <div>
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="search" className="block text-sm font-medium text-white mb-1">
             Buscar
           </label>
           <input
@@ -86,21 +86,21 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
             placeholder="Nombre o email..."
             value={filters.search}
             onChange={(e) => handleFilterChange('search', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 bg-bg-400 placeholder:text-white/60 text-white border border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           />
         </div>
 
         {/* Role Filter */}
         <div>
-          <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="role" className="block text-sm font-medium text-white mb-1">
             Rol
           </label>
           <select
             id="role"
             value={filters.role || ''}
             onChange={(e) => handleFilterChange('role', e.target.value || undefined)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 text-white bg-bg-400 border border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           >
             <option value="">Todos los roles</option>
@@ -115,14 +115,14 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
 
         {/* Active Filter */}
         <div>
-          <label htmlFor="active" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="active" className="block text-sm font-medium text-white mb-1">
             Estado
           </label>
           <select
             id="active"
             value={filters.active === undefined ? '' : filters.active.toString()}
             onChange={(e) => handleFilterChange('active', e.target.value === '' ? undefined : e.target.value === 'true')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 text-white bg-bg-400 border border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           >
             <option value="">Todos los estados</option>
@@ -133,7 +133,7 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
 
         {/* Sort */}
         <div>
-          <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="sort" className="block text-sm font-medium text-white mb-1">
             Ordenar por
           </label>
           <div className="flex space-x-2">
@@ -141,7 +141,7 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
               id="sort"
               value={filters.sortBy}
               onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-3 text-white bg-bg-400 py-2 border border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={loading}
             >
               <option value="name">Nombre</option>
@@ -153,7 +153,7 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
             <select
               value={filters.sortOrder}
               onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
-              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-white bg-bg-400 border  border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               disabled={loading}
             >
               <option value="asc">Ascendente</option>
@@ -165,14 +165,14 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
 
       <div className="flex justify-between items-center mt-4">
         <div className="flex items-center space-x-2">
-          <label htmlFor="limit" className="text-sm font-medium text-gray-700">
+          <label htmlFor="limit" className="text-sm font-medium text-white">
             Mostrar:
           </label>
           <select
             id="limit"
             value={filters.limit}
             onChange={(e) => handleFilterChange('limit', parseInt(e.target.value))}
-            className="px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-1 text-white bg-bg-400 border border-bg-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             disabled={loading}
           >
             <option value={5}>5</option>
@@ -180,7 +180,7 @@ const UserFiltersComponent: React.FC<UserFiltersProps> = ({
             <option value={25}>25</option>
             <option value={50}>50</option>
           </select>
-          <span className="text-sm text-gray-700">usuarios por página</span>
+          <span className="text-sm text-white">usuarios por página</span>
         </div>
 
         <button

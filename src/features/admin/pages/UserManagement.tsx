@@ -111,11 +111,11 @@ const UserManagement: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="w-full mx-auto px-6 py-8 bg-bg-200 min-h-full">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Usuarios</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-3xl font-bold text-white">Gestión de Usuarios</h1>
+          <p className="text-white-100 mt-1">
             Administra los usuarios y sus roles en el sistema
           </p>
         </div>
@@ -148,9 +148,9 @@ const UserManagement: React.FC = () => {
         loading={loading}
       />
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-gray-900">
+      <div className="bg-bg-300 rounded-lg shadow overflow-hidden">
+        <div className="px-6 py-4 border-b border-bg-200">
+          <h2 className="text-lg font-medium text-white">
             Usuarios ({total})
           </h2>
         </div>
