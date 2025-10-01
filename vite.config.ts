@@ -9,6 +9,15 @@ export default defineConfig({
     host: "0.0.0.0", //PERMITIR CUALQUIER IP
     port: 5180, //PUERTO
     allowedHosts: ["demo.ast.cl", "admindemo.ast.cl", "localhost"], //PERMITIR DOMINIOS
+    proxy: {
+      // Proxy para rutas API - redirige al backend
+      '/api': {
+        target: 'http://10.20.1.42:8000', // URL del backend sin /api
+        changeOrigin: true,
+        secure: false,
+        // No reescribir la ruta, mantener /api
+      }
+    }
   },
   build: {
     // Configurar límites para archivos grandes

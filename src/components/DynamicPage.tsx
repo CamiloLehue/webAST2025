@@ -25,7 +25,13 @@ const DynamicPage: React.FC = () => {
         return;
       }
 
-      console.log("Fetching page for slug:", slug);
+      // Excluir rutas API y otras rutas del sistema
+      if (slug.startsWith('api') || slug === 'admin' || slug === 'assets') {
+        console.log("System route detected, not handling:", slug);
+        setError("Ruta del sistema");
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
