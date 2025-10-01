@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0", //PERMITIR CUALQUIER IP
     port: 5180, //PUERTO
-    allowedHosts: ["ast.cl", "admin.ast.cl", "localhost"], //PERMITIR DOMINIOS
+    allowedHosts: ["astdemo.cl", "admin.astdemo.cl", "localhost"], //PERMITIR DOMINIOS
   },
   build: {
     // Configurar límites para archivos grandes
