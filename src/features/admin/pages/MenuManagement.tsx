@@ -244,8 +244,8 @@ const MenuManagement: React.FC = () => {
       </div>
 
       {showAddForm && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h3 className="text-lg font-medium text-bg-100 mb-4">
+        <div className="bg-bg-100 border border-bg-300 rounded-lg p-6">
+          <h3 className="text-lg font-medium text-white mb-4">
             Nuevo Elemento Principal
           </h3>
           <MenuItemForm

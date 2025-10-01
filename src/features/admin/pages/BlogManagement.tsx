@@ -45,7 +45,7 @@ const BlogManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 p-5 bg-bg-200">
+    <div className="space-y-6 p-5 bg-bg-200 min-h-full">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
