@@ -84,11 +84,15 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/network-ip" element={<NetworkIp />} />
                 <Route path="/drones" element={<Drones />} />
                 <Route path="/software" element={<Software />} />
-                <Route path="/multimedia" element={<Multimedia/>} />
+                <Route path="/multimedia" element={<Multimedia />} />
 
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
                 <Route path="/noticias/:slug" element={<BlogPostPage />} />
+                
+                {/* Excluir rutas del sistema de ser manejadas por DynamicPage */}
+                <Route path="/api/*" element={<div>API Route</div>} />
+                
                 {/* rutas dinamicas, para crear web desde el panel administrativo */}
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>
