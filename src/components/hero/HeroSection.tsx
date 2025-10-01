@@ -17,7 +17,7 @@ interface HeroSectionProps {
 function HeroSection({
   title,
   description,
-  buttonText = "Ver video",
+  buttonText = "" ,
   buttonLink = "#",
   images,
   altText = "Hero Image",
@@ -86,7 +86,9 @@ function HeroSection({
                 </div>
               </motion.div>
             </div>
-            <motion.div 
+            {
+              buttonText &&
+              <motion.div 
               className="w-full max-w-sm mt-5 mx-auto"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -101,6 +103,7 @@ function HeroSection({
                 <FiArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </motion.div>
+            }
           </article>
         </motion.div>
         <motion.div 
