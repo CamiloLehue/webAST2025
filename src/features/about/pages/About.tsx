@@ -2,7 +2,7 @@ import ClientsCarousel from "../components/ClientsCarousel";
 
 function About() {
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full min-w-screen">
       <section
         id="hero"
         className="relative w-full h-120 bg-black flex flex-col justify-center items-center gap-5"
