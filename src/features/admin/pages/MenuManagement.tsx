@@ -213,7 +213,7 @@ const MenuManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 p-5 bg-bg-200 h-full">
+    <div className="space-y-6 p-5 bg-bg-200 min-h-full">
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
           <p className="text-red-700">{error}</p>
