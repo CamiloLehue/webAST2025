@@ -56,8 +56,8 @@ function HeroSection({
   };
 
   return (
-    <section className="bg-bg-400 flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100">
-      <div className="grid grid-cols-4 gap-5 w-full">
+    <section className="bg-bg-400 min-w-screen flex flex-row justify-center items-center h-130 overflow-hidden border-t border-t-bg-200 border-b-4 border-primary-100">
+      <div className="grid grid-cols-4 gap-5 w-full bg-bg-400">
         <motion.div 
           className="col-span-2 w-full h-full flex justify-center items-center"
           initial={{ opacity: 0, x: -100 }}
