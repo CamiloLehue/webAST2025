@@ -108,7 +108,7 @@ export const FadeInSection = ({
     variants={variants}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
     transition={{ delay }}
   >
     {children}
@@ -125,7 +125,7 @@ export const SlideInLeft = ({
     variants={slideInLeftVariants}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
     transition={{ delay }}
   >
     {children}
@@ -142,7 +142,7 @@ export const SlideInRight = ({
     variants={slideInRightVariants}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
     transition={{ delay }}
   >
     {children}
@@ -159,7 +159,7 @@ export const ScaleUpSection = ({
     variants={scaleUpVariants}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, amount: 0.3 }}
+    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
     transition={{ delay }}
   >
     {children}
@@ -175,7 +175,7 @@ export const StaggerContainer = ({
     variants={staggerContainerVariants}
     initial="hidden"
     whileInView="visible"
-    viewport={{ once: true, amount: 0.2 }}
+    viewport={{ once: true, amount: 0.05, margin: "0px 0px -150px 0px" }}
   >
     {children}
   </motion.div>

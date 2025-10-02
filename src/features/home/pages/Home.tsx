@@ -50,11 +50,8 @@ function Home() {
       )}
       <section id="aboutUs" className="relative w-full space-y-9 py-10">
         <FadeInSection
-          className={`max-w-7xl mx-auto  border border-dashed border-bg-300/10 rounded-2xl
-            
-            ${
-              isSmallDevice ? "flex flex-col p-4" : " grid grid-cols-2 gap-15"
-            }`}
+          className={`max-w-7xl mx-auto grid grid-cols-2 gap-15  border border-dashed border-bg-300/10 rounded-2xl
+           `}
         >
           <SlideInLeft className="min-h-100">
             <img
