@@ -6,18 +6,18 @@ function CardNav() {
       title: "Satelital",
       icon: "/svg/inicio/navHome/Satelital.svg",
     },
-    {
-      title: "Drones",
-      icon: "svg/inicio/navHome/Drone.svg",
-    },
+    // {
+    //   title: "Drones",
+    //   icon: "svg/inicio/navHome/Drone.svg",
+    // },
     {
       title: "RoIP",
       icon: "svg/inicio/navHome/cell_tower.svg",
     },
-    {
-      title: "Network IP",
-      icon: "svg/inicio/navHome/Network.svg",
-    },
+    // {
+    //   title: "Network IP",
+    //   icon: "svg/inicio/navHome/Network.svg",
+    // },
     {
       title: "Wisensor",
       icon: "svg/inicio/navHome/Wisensor.svg",
@@ -30,13 +30,13 @@ function CardNav() {
       title: "Datacenter",
       icon: "svg/inicio/navHome/Data center.svg",
     },
-    {
-      title: "Energía Renovable",
-      icon: "svg/inicio/navHome/renovable.svg",
-    },
+    // {
+    //   title: "Energía Renovable",
+    //   icon: "svg/inicio/navHome/renovable.svg",
+    // },
     {
       title: "Wisensor IA",
-      icon: "svg/inicio/navHome/WisensorIA.svg",
+      icon: "svg/inicio/navHome/Wisensor.svg",
     },
     {
       title: "Software",
