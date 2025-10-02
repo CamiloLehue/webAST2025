@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { useBreakpoints } from "../../context/ProviderBreakpoints";
 
 interface ContentSectionProps {
   title: string;
@@ -51,9 +52,12 @@ function ContentSection({
   const renderImageGallery = () => {
     // Detectar si la imagen es local o externa
     const currentImage = images[currentImageIndex];
-    const isExternal = currentImage?.startsWith('http://') || currentImage?.startsWith('https://');
-    const imageSrc = isExternal ? currentImage : `/${currentImage?.replace(/^\/+/, '')}`;
-
+    const isExternal =
+      currentImage?.startsWith("http://") ||
+      currentImage?.startsWith("https://");
+    const imageSrc = isExternal
+      ? currentImage
+      : `/${currentImage?.replace(/^\/+/, "")}`;
     return (
       <div className="relative w-full h-full overflow-hidden rounded-2xl">
         <img
@@ -102,12 +106,21 @@ function ContentSection({
       <div className="text-lg leading-6">{description}</div>
     </div>
   );
+  const { isSmallDevice } = useBreakpoints();
 
   const renderLayout = () => {
     switch (layout) {
       case "text-right":
         return (
-          <div className={`grid grid-cols-2 gap-8 ${className}`}>
+          <div
+            className={` ${className}
+          ${
+            isSmallDevice
+              ? "grid grid-cols-1 gap-5 p-5"
+              : "grid grid-cols-2 gap-8"
+          }
+          `}
+          >
             <div className="w-full h-full">{renderImageGallery()}</div>
             {renderTextContent()}
           </div>
@@ -124,7 +137,15 @@ function ContentSection({
       case "text-left":
       default:
         return (
-          <div className={`grid grid-cols-2 gap-8 ${className}`}>
+          <div
+            className={` ${className}
+          ${
+            isSmallDevice
+              ? "grid grid-cols-1 gap-5 p-5"
+              : "grid grid-cols-2 gap-8"
+          }
+          `}
+          >
             {renderTextContent()}
             <div className="w-full h-full">{renderImageGallery()}</div>
           </div>

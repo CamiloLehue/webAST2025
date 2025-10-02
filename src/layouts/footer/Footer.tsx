@@ -21,7 +21,7 @@ function Footer() {
       ${
         isSmallDevice
           ? "flex flex-col justify-center p-5"
-          : "grid grid-cols-4 gap-20"
+          : "grid grid-cols-3 gap-20"
       }`}
       >
         <StaggerItem className="flex flex-col gap-5">
@@ -53,27 +53,7 @@ function Footer() {
             ))}
           </ul>
         </StaggerItem>
-        <StaggerItem className="flex flex-col gap-5">
-          <div className="w-full border-b border-white-100">
-            <h4 className="text-base font-bold py-5">Productos</h4>
-          </div>
-          <ul>
-            {[
-              "Monocular Termal S243W",
-              "Monocular Termal S253",
-              "Radar Spotterrf C40",
-            ].map((item, index) => (
-              <li key={index} className="py-1">
-                <a
-                  href="#"
-                  className="text-sm font-light text-white-100 hover:underline"
-                >
-                  {item}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </StaggerItem>
+
         <StaggerItem className="flex flex-col gap-5">
           <div className="w-full border-b border-white-100">
             <h4 className="text-base font-bold py-5">Contáctanos</h4>
