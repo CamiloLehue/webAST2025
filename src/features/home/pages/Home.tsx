@@ -4,13 +4,13 @@ import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
 import ClientsCarousel from "../../about/components/ClientsCarousel";
 import CardNav from "../components/CardNav";
-import { 
-  FadeInSection, 
-  SlideInLeft, 
-  SlideInRight, 
+import {
+  FadeInSection,
+  SlideInLeft,
+  SlideInRight,
   ScaleUpSection,
   StaggerContainer,
-  StaggerItem 
+  StaggerItem,
 } from "../../../components/animations";
 
 function Home() {
@@ -35,19 +35,27 @@ function Home() {
           </>
         )}
       </section>
-      <section id="cardNav" className="relative h-20 ">
-        <div
-          className="absolute left-0 -top-20  w-full h-90  bg-white-100 "
-          style={{
-            clipPath: "ellipse(100% 100% at 50% 100%)",
-          }}
-        ></div>
-        <FadeInSection className="relative  -top-35">
-          <CardNav />
-        </FadeInSection>
-      </section>
+      {!isSmallDevice && (
+        <section id="cardNav" className="relative h-20 ">
+          <div
+            className="absolute left-0 -top-20  w-full h-90  bg-white-100 "
+            style={{
+              clipPath: "ellipse(100% 100% at 50% 100%)",
+            }}
+          ></div>
+          <FadeInSection className="relative  -top-35">
+            <CardNav />
+          </FadeInSection>
+        </section>
+      )}
       <section id="aboutUs" className="relative w-full space-y-9 py-10">
-        <FadeInSection className="max-w-7xl mx-auto grid grid-cols-2 gap-15  border border-dashed border-bg-300/10 rounded-2xl  ">
+        <FadeInSection
+          className={`max-w-7xl mx-auto  border border-dashed border-bg-300/10 rounded-2xl
+            
+            ${
+              isSmallDevice ? "flex flex-col p-4" : " grid grid-cols-2 gap-15"
+            }`}
+        >
           <SlideInLeft className="min-h-100">
             <img
               src="img/inicio/ia-wisensor.jpg"
@@ -94,7 +102,11 @@ function Home() {
         <Lastnews />
       </section>
       <section id="contact">
-        <StaggerContainer className="grid grid-cols-2 gap-10 max-w-7xl mx-auto py-10">
+        <StaggerContainer
+          className={` gap-10 max-w-7xl mx-auto py-10 ${
+            isSmallDevice ? "flex flex-col gap-4" : "grid grid-cols-2"
+          }`}
+        >
           <StaggerItem className="bg-white h-80 border border-dashed border-bg-300/10 rounded-2xl mb-4 flex flex-col justify-center items-center gap-5">
             <TbPhoneFilled className="text-8xl text-primary-100" />
 

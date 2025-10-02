@@ -26,7 +26,7 @@ const DynamicPage: React.FC = () => {
       }
 
       // Excluir rutas API y otras rutas del sistema
-      if (slug.startsWith('api') || slug === 'admin' || slug === 'assets') {
+      if (slug.startsWith("api") || slug === "admin" || slug === "assets") {
         console.log("System route detected, not handling:", slug);
         setError("Ruta del sistema");
         setLoading(false);
@@ -249,15 +249,19 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   // Detectar si la imagen es local o externa
-  const isExternal = backgroundImage?.startsWith('http://') || backgroundImage?.startsWith('https://');
-  const processedBackgroundImage = backgroundImage && backgroundImage.trim() !== ""
-    ? (isExternal ? backgroundImage : `/${backgroundImage.replace(/^\/+/, '')}`)
-    : "";
+  const isExternal =
+    backgroundImage?.startsWith("http://") ||
+    backgroundImage?.startsWith("https://");
+  const processedBackgroundImage =
+    backgroundImage && backgroundImage.trim() !== ""
+      ? isExternal
+        ? backgroundImage
+        : `/${backgroundImage.replace(/^\/+/, "")}`
+      : "";
 
-  const backgroundImageStyle =
-    processedBackgroundImage
-      ? `url("${processedBackgroundImage}")`
-      : undefined;
+  const backgroundImageStyle = processedBackgroundImage
+    ? `url("${processedBackgroundImage}")`
+    : undefined;
 
   return (
     <section
@@ -305,8 +309,8 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
                 (backgroundImage || backgroundColor ? "#d1d5db" : "inherit"),
             }}
           >
-            <MarkdownContent 
-              content={subtitle} 
+            <MarkdownContent
+              content={subtitle}
               className="prose prose-lg max-w-none text-inherit"
             />
           </div>
@@ -401,8 +405,8 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
   if (!src) return null;
 
   // Detectar si la imagen es local o externa
-  const isExternal = src.startsWith('http://') || src.startsWith('https://');
-  const imageSrc = isExternal ? src : `/${src.replace(/^\/+/, '')}`;
+  const isExternal = src.startsWith("http://") || src.startsWith("https://");
+  const imageSrc = isExternal ? src : `/${src.replace(/^\/+/, "")}`;
 
   const widthClasses = {
     small: "max-w-md",
@@ -431,9 +435,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
           <img
             src={imageSrc}
             alt={alt || ""}
-            className={`w-full rounded-2xl  ${
-              rounded ? "rounded-lg" : ""
-            }`}
+            className={`w-full rounded-2xl  ${rounded ? "rounded-lg" : ""}`}
           />
           {caption && (
             <figcaption className="mt-4 text-center text-bg-200 text-sm">
@@ -491,9 +493,13 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
         >
           {images.map((image, index) => {
             // Detectar si la imagen es local o externa
-            const isExternal = image.src.startsWith('http://') || image.src.startsWith('https://');
-            const imageSrc = isExternal ? image.src : `/${image.src.replace(/^\/+/, '')}`;
-            
+            const isExternal =
+              image.src.startsWith("http://") ||
+              image.src.startsWith("https://");
+            const imageSrc = isExternal
+              ? image.src
+              : `/${image.src.replace(/^\/+/, "")}`;
+
             return (
               <figure key={index}>
                 <img
@@ -546,8 +552,8 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
-            <MarkdownContent 
-              content={description} 
+            <MarkdownContent
+              content={description}
               className="prose prose-lg max-w-none text-inherit mx-auto"
             />
           </div>
@@ -590,8 +596,8 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
-            <MarkdownContent 
-              content={description} 
+            <MarkdownContent
+              content={description}
               className="prose prose-lg max-w-none text-inherit mx-auto"
             />
           </div>
@@ -858,7 +864,10 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
           {title}
         </h2>
         {description && (
-          <div className="text-lg mb-8" style={{ color: textColor || "#d1d5db" }}>
+          <div
+            className="text-lg mb-8"
+            style={{ color: textColor || "#d1d5db" }}
+          >
             <MarkdownContent content={description} />
           </div>
         )}
@@ -919,26 +928,28 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
   const height = data.height || "medium";
   const heightClasses = {
     small: "h-20",
-    medium: "h-28", 
+    medium: "h-28",
     large: "h-36",
   };
 
   return (
-    <section 
-      className={`w-full py-2 ${heightClasses[height as keyof typeof heightClasses]} flex justify-center items-center`}
+    <section
+      className={`w-full py-2 ${
+        heightClasses[height as keyof typeof heightClasses]
+      } flex justify-center items-center`}
       style={{ backgroundColor: data.backgroundColor || "#primary-100" }}
     >
-      <div className="flex justify-center items-center">
-        <img 
-          src={data.logoSrc || "AST-Logo-white.png"} 
-          alt={data.logoAlt || "Logo"} 
-          className="h-20" 
+      <div className="flex justify-center items-center ">
+        <img
+          src={data.logoSrc || "AST-Logo-white.png"}
+          alt={data.logoAlt || "Logo"}
+          className="h-20"
         />
-        <div 
+        <div
           className="h-10 w-0.5 mx-10"
           style={{ backgroundColor: data.textColor || "white" }}
         ></div>
-        <h4 
+        <h4
           className="font-black text-3xl"
           style={{ color: data.textColor || "white" }}
         >
@@ -953,11 +964,13 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
 const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
   // Procesar la descripción con MarkdownContent si contiene Markdown/HTML
   const processedDescription = data.description ? (
-    <MarkdownContent 
-      content={data.description} 
+    <MarkdownContent
+      content={data.description}
       className="prose prose-lg max-w-none text-inherit"
     />
-  ) : "";
+  ) : (
+    ""
+  );
 
   return (
     <section className="max-w-7xl mx-auto w-full py-10">
@@ -998,19 +1011,19 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
               />
             )}
             {data.title && (
-              <h3 
+              <h3
                 className="text-2xl font-bold mb-4"
                 style={{ color: data.textColor || "black" }}
               >
                 {data.title}
               </h3>
             )}
-            <div 
+            <div
               className="max-w-4xl text-lg leading-6"
               style={{ color: data.textColor || "black" }}
             >
-              <MarkdownContent 
-                content={data.content || ""} 
+              <MarkdownContent
+                content={data.content || ""}
                 className="prose prose-lg max-w-none text-inherit"
               />
             </div>
