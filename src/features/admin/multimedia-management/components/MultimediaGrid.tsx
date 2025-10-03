@@ -100,7 +100,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
   // Construir URL completa para la imagen
   const getImageUrl = () => {
     const baseUrl =
-      import.meta.env.VITE_API_URL?.replace("/api", "") ||
+      import.meta.env.VITE_API_IMG_URL?.replace("/api", "") ||
       "http://10.30.7.14:8001";
 
     // Si la URL ya es absoluta, usarla directamente

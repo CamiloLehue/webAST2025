@@ -77,7 +77,7 @@ export function useImageLoader({ src, fallbackSrc }: UseImageLoaderOptions): Use
  * Construye la URL completa para acceder a recursos multimedia
  */
 export function buildMediaUrl(url: string): string {
-  const baseUrl = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://10.30.7.14:8001';
+  const baseUrl = import.meta.env.VITE_API_IMG_URL?.replace('/api', '') || 'http://10.30.7.14:8001';
   
   // Si la URL ya es absoluta, usarla directamente
   if (url.startsWith('http')) {
