@@ -4,6 +4,16 @@ import type {
   MultimediaCategory,
   UploadProgress,
 } from "../types/multimediaTypes";
+import {
+  TbPhoto,
+  TbVideo,
+  TbFileCode,
+  TbFile,
+  TbFolder,
+  TbX,
+  TbCheck,
+  TbAlertCircle
+} from "react-icons/tb";
 
 interface MultimediaUploaderProps {
   onUpload: (files: CreateMultimediaRequest[]) => Promise<void>;
@@ -81,8 +91,8 @@ const MultimediaUploaderComponent: React.FC<MultimediaUploaderProps> = ({
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-    } catch (error) {
-      console.error("Error en upload:", error);
+    } catch {
+      // Error handling can be implemented here if needed
     }
   };
 
@@ -94,11 +104,11 @@ const MultimediaUploaderComponent: React.FC<MultimediaUploaderProps> = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const getFileTypeIcon = (file: File): string => {
-    if (file.type.startsWith("image/")) return "🖼️";
-    if (file.type.startsWith("video/")) return "🎥";
-    if (file.type === "image/svg+xml") return "🎨";
-    return "📄";
+  const getFileTypeIcon = (file: File) => {
+    if (file.type.startsWith("image/")) return <TbPhoto className="w-5 h-5" />;
+    if (file.type.startsWith("video/")) return <TbVideo className="w-5 h-5" />;
+    if (file.type === "image/svg+xml") return <TbFileCode className="w-5 h-5" />;
+    return <TbFile className="w-5 h-5" />;
   };
 
   return (
@@ -191,7 +201,9 @@ const MultimediaUploaderComponent: React.FC<MultimediaUploaderProps> = ({
         />
 
         <div className="space-y-2">
-          <div className="text-4xl">📁</div>
+          <div className="text-4xl flex justify-center">
+            <TbFolder className="w-16 h-16" />
+          </div>
           <div>
             <p className="text-lg font-medium text-gray-900">
               Arrastra archivos aquí o haz clic para seleccionar
@@ -231,19 +243,7 @@ const MultimediaUploaderComponent: React.FC<MultimediaUploaderProps> = ({
                   className="text-red-500 hover:text-red-700 p-1"
                   disabled={loading}
                 >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
+                  <TbX className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -263,9 +263,19 @@ const MultimediaUploaderComponent: React.FC<MultimediaUploaderProps> = ({
                 <div className="flex justify-between text-xs text-white-100">
                   <span>Archivo {index + 1}</span>
                   <span>
-                    {progress.status === "completed" && "✅ Completado"}
+                    {progress.status === "completed" && (
+                      <span className="flex items-center gap-1">
+                        <TbCheck className="w-4 h-4 text-green-500" />
+                        Completado
+                      </span>
+                    )}
                     {progress.status === "uploading" && `${progress.progress}%`}
-                    {progress.status === "error" && "❌ Error"}
+                    {progress.status === "error" && (
+                      <span className="flex items-center gap-1">
+                        <TbAlertCircle className="w-4 h-4 text-red-500" />
+                        Error
+                      </span>
+                    )}
                   </span>
                 </div>
                 <div className="w-full bg-bg-400 rounded-full h-2">

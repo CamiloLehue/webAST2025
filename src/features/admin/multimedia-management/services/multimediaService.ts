@@ -76,16 +76,15 @@ class MultimediaService {
    * Obtiene la lista de archivos multimedia con filtros
    */
   async getMultimediaFiles(filters?: MultimediaFilters): Promise<MultimediaListResponse> {
-    try {
-      const {
-        page = 1,
-        limit = 12,
-        search,
-        category,
-        tags,
-        sortField = 'created_at',
-        sortOrder = 'desc'
-      } = filters || {};
+    const {
+      page = 1,
+      limit = 12,
+      search,
+      category,
+      tags,
+      sortField = 'created_at',
+      sortOrder = 'desc'
+    } = filters || {};
 
       const params = new URLSearchParams({
         page: page.toString(),
@@ -106,24 +105,16 @@ class MultimediaService {
 
       const filesUrl = `${API_URL}/multimedia?${params.toString()}`;
       
-      console.log('🌐 Haciendo petición a:', filesUrl);
-      console.log('🔑 Headers de autenticación:', this.getAuthHeaders());
-
       const response = await fetch(filesUrl, {
         method: 'GET',
         headers: this.getAuthHeaders()
       });
 
-      console.log('📡 Respuesta:', response.status, response.statusText);
-
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Error en respuesta:', errorText);
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
-      console.log('✅ Datos recibidos:', data);
 
       // La respuesta ya incluye toda la información de paginación
       return {
@@ -134,10 +125,6 @@ class MultimediaService {
         hasNextPage: data.hasNextPage || false,
         hasPrevPage: data.hasPrevPage || false
       };
-    } catch (error) {
-      console.error('❌ Error al obtener archivos multimedia:', error);
-      throw error;
-    }
   }
 
   /**
@@ -208,7 +195,6 @@ class MultimediaService {
         xhr.send(formData);
       });
     } catch (error) {
-      console.error('Error al subir archivo:', error);
       throw error;
     }
   }
@@ -253,7 +239,6 @@ class MultimediaService {
 
       return await response.json();
     } catch (error) {
-      console.error('Error al obtener archivo multimedia:', error);
       throw error;
     }
   }
@@ -275,7 +260,6 @@ class MultimediaService {
 
       return await response.json();
     } catch (error) {
-      console.error('Error al actualizar archivo multimedia:', error);
       throw error;
     }
   }
@@ -294,7 +278,6 @@ class MultimediaService {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
-      console.error('Error al eliminar archivo multimedia:', error);
       throw error;
     }
   }
@@ -314,7 +297,6 @@ class MultimediaService {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
     } catch (error) {
-      console.error('Error al eliminar archivos multimedia:', error);
       throw error;
     }
   }
@@ -330,13 +312,13 @@ class MultimediaService {
       });
 
       if (!response.ok) {
-        console.log('⚠️ Endpoint de tags no disponible, devolviendo array vacío');
+        // Tags endpoint not available, return empty array
         return [];
       }
 
       return await response.json();
-    } catch (error) {
-      console.log('⚠️ Error al obtener etiquetas, devolviendo array vacío:', error);
+    } catch {
+      // Error getting tags, return empty array
       return [];
     }
   }
@@ -357,13 +339,13 @@ class MultimediaService {
       });
 
       if (!response.ok) {
-        console.log('⚠️ Endpoint de estadísticas no disponible, devolviendo null');
+        // Stats endpoint not available, return null
         return null;
       }
 
       return await response.json();
-    } catch (error) {
-      console.log('⚠️ Error al obtener estadísticas, devolviendo null:', error);
+    } catch {
+      // Error getting stats, return null
       return null;
     }
   }

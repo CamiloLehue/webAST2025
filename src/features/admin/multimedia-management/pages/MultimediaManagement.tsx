@@ -10,6 +10,12 @@ import {
   MultimediaGrid,
   Pagination,
 } from "../components";
+import {
+  TbFolder,
+  TbDeviceFloppy,
+  TbPhoto,
+  TbVideo
+} from "react-icons/tb";
 
 const MultimediaManagement: React.FC = () => {
   const {
@@ -145,7 +151,9 @@ const MultimediaManagement: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="text-2xl">📁</div>
+                    <div className="text-2xl">
+                      <TbFolder className="w-8 h-8" />
+                    </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
@@ -165,7 +173,9 @@ const MultimediaManagement: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="text-2xl">💾</div>
+                    <div className="text-2xl">
+                      <TbDeviceFloppy className="w-8 h-8" />
+                    </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
@@ -185,7 +195,9 @@ const MultimediaManagement: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="text-2xl">🖼️</div>
+                    <div className="text-2xl">
+                      <TbPhoto className="w-8 h-8" />
+                    </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
@@ -205,7 +217,9 @@ const MultimediaManagement: React.FC = () => {
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <div className="text-2xl">🎥</div>
+                    <div className="text-2xl">
+                      <TbVideo className="w-8 h-8" />
+                    </div>
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>

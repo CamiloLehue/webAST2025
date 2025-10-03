@@ -183,13 +183,8 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     const results: MultimediaFile[] = [];
     
     for (let i = 0; i < fileRequests.length; i++) {
-      try {
-        const result = await uploadFile(fileRequests[i]);
-        results.push(result);
-      } catch (error) {
-        console.error(`Error al subir archivo ${i + 1}:`, error);
-        throw error;
-      }
+      const result = await uploadFile(fileRequests[i]);
+      results.push(result);
     }
 
     return results;
@@ -266,7 +261,7 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       const allTags = await multimediaService.getTags();
       setTags(allTags);
     } catch {
-      console.log(' No se pudieron cargar las etiquetas, usando array vacío');
+      // Silently handle error - tags are optional
       setTags([]);
     }
   }, []);
@@ -277,7 +272,7 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       const statistics = await multimediaService.getStats();
       setStats(statistics);
     } catch {
-      console.log('no se pudieron cargar las estadísticas');
+      // Silently handle error - stats are optional
       setStats(null);
     }
   }, []);
