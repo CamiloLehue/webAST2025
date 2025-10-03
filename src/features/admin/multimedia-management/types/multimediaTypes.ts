@@ -1,18 +1,20 @@
 export interface MultimediaFile {
   id: string;
   filename: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
+  original_name: string;
+  file_path: string;
   url: string;
-  thumbnailUrl?: string;
   category: MultimediaCategory;
+  mime_type: string;
+  size: number;
+  width?: number;
+  height?: number;
+  duration?: number;
   tags: string[];
   description?: string;
   alt?: string;
   created_at: string;
   updated_at?: string;
-  uploaded_by: string;
 }
 
 export interface CreateMultimediaRequest {

@@ -194,7 +194,7 @@ const AdminDashboard: React.FC = () => {
           {refreshing ? "Actualizando..." : "Actualizar"}
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6  border border-bg-300/10  rounded-xl">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6  border border-bg-300/10  rounded-xl">
         {stats.map((stat, index) => (
           <div key={index} className="bg-bg-300 rounded-2xl  p-2 ">
             <div className="flex items-center">
@@ -335,13 +335,13 @@ const AdminDashboard: React.FC = () => {
         <h3 className="text-lg font-medium text-white py-2 px-5">
           Acciones Rápidas
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
           {quickActions.map((action, index) => (
             <Link
               key={index}
               to={action.link}
               target={action.external ? "_blank" : undefined}
-              className="bg-bg-300 rounded-2xl shadow p-6 hover:shadow-md transition-shadow"
+              className="bg-bg-100 border-t border-t-bg-300 hover:bg-bg-400 hover:border-t-white/40 transition-colors duration-500 rounded-2xl shadow p-6 hover:shadow-md "
             >
               <div
                 className={`${action.color} rounded-2xl p-3 w-12 h-12 flex items-center justify-center mb-4`}

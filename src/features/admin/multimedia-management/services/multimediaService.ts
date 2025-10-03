@@ -87,9 +87,8 @@ class MultimediaService {
         sortOrder = 'desc'
       } = filters || {};
 
-      const skip = (page - 1) * limit;
       const params = new URLSearchParams({
-        skip: skip.toString(),
+        page: page.toString(),
         limit: limit.toString(),
         sortField,
         sortOrder
@@ -105,38 +104,38 @@ class MultimediaService {
         params.append('tags', tags.join(','));
       }
 
-      const [filesResponse, countResponse] = await Promise.all([
-        fetch(`${API_URL}/multimedia?${params.toString()}`, {
-          method: 'GET',
-          headers: this.getAuthHeaders()
-        }),
-        fetch(`${API_URL}/multimedia/count?${params.toString()}`, {
-          method: 'GET',
-          headers: this.getAuthHeaders()
-        })
-      ]);
+      const filesUrl = `${API_URL}/multimedia?${params.toString()}`;
+      
+      console.log('🌐 Haciendo petición a:', filesUrl);
+      console.log('🔑 Headers de autenticación:', this.getAuthHeaders());
 
-      if (!filesResponse.ok) {
-        throw new Error(`Error ${filesResponse.status}: ${filesResponse.statusText}`);
+      const response = await fetch(filesUrl, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      console.log('📡 Respuesta:', response.status, response.statusText);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Error en respuesta:', errorText);
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
-      if (!countResponse.ok) {
-        throw new Error(`Error ${countResponse.status}: ${countResponse.statusText}`);
-      }
 
-      const files = await filesResponse.json();
-      const { total } = await countResponse.json();
-      const totalPages = Math.ceil(total / limit);
+      const data = await response.json();
+      console.log('✅ Datos recibidos:', data);
 
+      // La respuesta ya incluye toda la información de paginación
       return {
-        files,
-        total,
-        page,
-        totalPages,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1
+        files: data.files || [],
+        total: data.total || 0,
+        page: data.page || page,
+        totalPages: data.totalPages || 0,
+        hasNextPage: data.hasNextPage || false,
+        hasPrevPage: data.hasPrevPage || false
       };
     } catch (error) {
-      console.error('Error al obtener archivos multimedia:', error);
+      console.error('❌ Error al obtener archivos multimedia:', error);
       throw error;
     }
   }
@@ -331,13 +330,14 @@ class MultimediaService {
       });
 
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
+        console.log('⚠️ Endpoint de tags no disponible, devolviendo array vacío');
+        return [];
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Error al obtener etiquetas:', error);
-      throw error;
+      console.log('⚠️ Error al obtener etiquetas, devolviendo array vacío:', error);
+      return [];
     }
   }
 
@@ -349,7 +349,7 @@ class MultimediaService {
     totalSize: number;
     byCategory: Record<MultimediaCategory, number>;
     recentUploads: number;
-  }> {
+  } | null> {
     try {
       const response = await fetch(`${API_URL}/multimedia/stats`, {
         method: 'GET',
@@ -357,13 +357,14 @@ class MultimediaService {
       });
 
       if (!response.ok) {
-        throw new Error(`Error ${response.status}: ${response.statusText}`);
+        console.log('⚠️ Endpoint de estadísticas no disponible, devolviendo null');
+        return null;
       }
 
       return await response.json();
     } catch (error) {
-      console.error('Error al obtener estadísticas:', error);
-      throw error;
+      console.log('⚠️ Error al obtener estadísticas, devolviendo null:', error);
+      return null;
     }
   }
 }

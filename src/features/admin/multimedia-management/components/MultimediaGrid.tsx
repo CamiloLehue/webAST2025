@@ -95,7 +95,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
     if (file.category === 'image' || file.category === 'svg') {
       return (
         <img
-          src={file.thumbnailUrl || file.url}
+          src={file.url}
           alt={file.alt || file.filename}
           className="w-full h-32 object-cover"
           loading="lazy"
@@ -118,7 +118,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
           <div className="text-center">
             <div className="text-3xl mb-2">{getCategoryIcon()}</div>
             <div className="text-xs text-gray-500">
-              {file.mimeType}
+              {file.mime_type}
             </div>
           </div>
         </div>

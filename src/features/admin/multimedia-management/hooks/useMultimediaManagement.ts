@@ -265,8 +265,9 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     try {
       const allTags = await multimediaService.getTags();
       setTags(allTags);
-    } catch (err) {
-      console.error('Error al cargar etiquetas:', err);
+    } catch {
+      console.log(' No se pudieron cargar las etiquetas, usando array vacío');
+      setTags([]);
     }
   }, []);
 
@@ -275,8 +276,9 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     try {
       const statistics = await multimediaService.getStats();
       setStats(statistics);
-    } catch (err) {
-      console.error('Error al cargar estadísticas:', err);
+    } catch {
+      console.log('no se pudieron cargar las estadísticas');
+      setStats(null);
     }
   }, []);
 
@@ -313,12 +315,11 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       ...filters,
       sortField: field,
       sortOrder: order,
-      page: 1 // Resetear a primera página
+      page: 1 
     };
     await loadFiles(newFilters);
   }, [filters, loadFiles]);
 
-  // Gestión de filtros
   const setFilters = useCallback((newFilters: Partial<MultimediaFilters>) => {
     const updatedFilters = { ...filters, ...newFilters, page: 1 };
     setFiltersState(updatedFilters);
@@ -328,7 +329,6 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     setFiltersState(defaultFilters);
   }, []);
 
-  // Utilidades
   const getFilesByCategory = useCallback((category: MultimediaCategory): MultimediaFile[] => {
     return files.filter(file => file.category === category);
   }, [files]);
@@ -346,7 +346,6 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
   }, []);
 
   return {
-    // Estado
     files,
     loading,
     error,
