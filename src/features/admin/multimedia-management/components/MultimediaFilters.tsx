@@ -110,13 +110,13 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
   const hasActiveFilters = filters.search || filters.category || selectedTags.length > 0;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+    <div className="bg-bg-100 rounded-lg shadow-sm border border-bg-300 text-white placeholder:text-white-100/70 p-6 mb-6">
       <div className="flex flex-wrap items-center gap-4 mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">Filtros</h3>
+        <h3 className="text-lg font-semibold text-white">Filtros</h3>
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
-            className="text-sm text-blue-600 hover:text-blue-800 underline"
+            className="text-sm text-blue-100 hover:text-blue-300 underline"
             disabled={loading}
           >
             Limpiar filtros
@@ -125,9 +125,8 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-        {/* Buscador */}
         <div className="lg:col-span-2">
-          <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="search" className="block text-sm font-medium text-white-100 mb-1">
             Buscar archivos
           </label>
           <input
@@ -136,21 +135,21 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
             value={filters.search || ''}
             onChange={handleSearchChange}
             placeholder="Nombre de archivo, descripción..."
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-bg-300 text-white placeholder:text-white-100/70 bg-bg-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             disabled={loading}
           />
         </div>
 
         {/* Categoría */}
         <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="category" className="block text-sm font-medium text-white-100 mb-1">
             Categoría
           </label>
           <select
             id="category"
             value={filters.category || ''}
             onChange={handleCategoryChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-bg-300 text-white placeholder:text-white-100/70 bg-bg-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             disabled={loading}
           >
             <option value="">Todas las categorías</option>
@@ -163,14 +162,14 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
 
         {/* Campo de ordenamiento */}
         <div>
-          <label htmlFor="sortField" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="sortField" className="block text-sm font-medium text-white-100 mb-1">
             Ordenar por
           </label>
           <select
             id="sortField"
             value={filters.sortField || 'created_at'}
             onChange={handleSortFieldChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-bg-300 text-white placeholder:text-white-100/70 bg-bg-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             disabled={loading}
           >
             <option value="filename">Nombre A-Z</option>
@@ -182,14 +181,14 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
 
         {/* Orden */}
         <div>
-          <label htmlFor="sortOrder" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="sortOrder" className="block text-sm font-medium text-white-100 mb-1">
             Orden
           </label>
           <select
             id="sortOrder"
             value={filters.sortOrder || 'desc'}
             onChange={handleSortOrderChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-3 py-2 border border-bg-300 text-white placeholder:text-white-100/70 bg-bg-400 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
             disabled={loading}
           >
             <option value="asc">Ascendente</option>
@@ -201,7 +200,7 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
       {/* Etiquetas */}
       {availableTags.length > 0 && (
         <div className="mt-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-white-100 mb-2">
             Etiquetas
           </label>
           <div className="flex flex-wrap gap-2">
@@ -212,7 +211,7 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
                 className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
                   selectedTags.includes(tag)
                     ? 'bg-blue-100 text-blue-800 border-2 border-blue-200'
-                    : 'bg-gray-100 text-gray-700 border-2 border-transparent hover:bg-gray-200'
+                    : 'bg-gray-100 text-white-100 border-2 border-transparent hover:bg-gray-200'
                 }`}
                 disabled={loading}
               >

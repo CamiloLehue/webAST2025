@@ -52,19 +52,19 @@ const PaginationComponent: React.FC<PaginationProps> = ({
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+    <div className="flex items-center justify-between border-t border-bg-300 bg-bg-100 px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={!hasPrevPage || loading}
-          className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative inline-flex items-center rounded-md border border-bg-300 bg-white px-4 py-2 text-sm font-medium text-white-100 hover:bg-bg-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Anterior
         </button>
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={!hasNextPage || loading}
-          className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="relative ml-3 inline-flex items-center rounded-md border border-bg-300 bg-white px-4 py-2 text-sm font-medium text-white-100 hover:bg-bg-400 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Siguiente
         </button>
@@ -72,7 +72,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
       
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-white-100">
             Página <span className="font-medium">{currentPage}</span> de{' '}
             <span className="font-medium">{totalPages}</span>
           </p>
@@ -84,7 +84,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
             <button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={!hasPrevPage || loading}
-              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-bg-300 hover:bg-bg-400 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="sr-only">Anterior</span>
               <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -98,7 +98,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
                 return (
                   <span
                     key={`dots-${index}`}
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-inset ring-gray-300 focus:outline-offset-0"
+                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-white-100 ring-1 ring-inset ring-bg-300 focus:outline-offset-0"
                   >
                     ...
                   </span>
@@ -113,10 +113,10 @@ const PaginationComponent: React.FC<PaginationProps> = ({
                   key={pageNumber}
                   onClick={() => onPageChange(pageNumber)}
                   disabled={loading}
-                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-gray-300 focus:z-20 focus:outline-offset-0 disabled:cursor-not-allowed ${
+                  className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-bg-300 focus:z-20 focus:outline-offset-0 disabled:cursor-not-allowed ${
                     isCurrent
-                      ? 'z-10 bg-blue-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
-                      : 'text-gray-900 hover:bg-gray-50'
+                      ? 'z-10 bg-bg-400 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600'
+                      : 'text-white-100/60 hover:bg-bg-400'
                   }`}
                 >
                   {pageNumber}
@@ -128,7 +128,7 @@ const PaginationComponent: React.FC<PaginationProps> = ({
             <button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={!hasNextPage || loading}
-              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-bg-300 hover:bg-bg-400 focus:z-20 focus:outline-offset-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <span className="sr-only">Siguiente</span>
               <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
