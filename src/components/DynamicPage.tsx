@@ -5,6 +5,7 @@ import { PageService } from "../features/admin/page-management/services/pageServ
 import ExistingHeroSection from "./hero/HeroSection";
 import ExistingContentSection from "./content/ContentSection";
 import MarkdownContent from "./content/MarkdownContent";
+import { processImageUrl } from "../utils/imageUrlUtils";
 import type {
   ContentSection,
   CustomPage,
@@ -248,17 +249,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
     right: "text-right",
   };
 
-  // Detectar si la imagen es local o externa
-  const isExternal =
-    backgroundImage?.startsWith("http://") ||
-    backgroundImage?.startsWith("https://");
-  const processedBackgroundImage =
-    backgroundImage && backgroundImage.trim() !== ""
-      ? isExternal
-        ? backgroundImage
-        : `/${backgroundImage.replace(/^\/+/, "")}`
-      : "";
-
+  const processedBackgroundImage = processImageUrl(backgroundImage);
   const backgroundImageStyle = processedBackgroundImage
     ? `url("${processedBackgroundImage}")`
     : undefined;
@@ -404,9 +395,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (!src) return null;
 
-  // Detectar si la imagen es local o externa
-  const isExternal = src.startsWith("http://") || src.startsWith("https://");
-  const imageSrc = isExternal ? src : `/${src.replace(/^\/+/, "")}`;
+  const imageSrc = processImageUrl(src);
 
   const widthClasses = {
     small: "max-w-md",
@@ -491,31 +480,21 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
             spacingClasses[spacing as keyof typeof spacingClasses] || "gap-6"
           }`}
         >
-          {images.map((image, index) => {
-            // Detectar si la imagen es local o externa
-            const isExternal =
-              image.src.startsWith("http://") ||
-              image.src.startsWith("https://");
-            const imageSrc = isExternal
-              ? image.src
-              : `/${image.src.replace(/^\/+/, "")}`;
-
-            return (
-              <figure key={index}>
-                <img
-                  src={imageSrc}
-                  alt={image.alt}
-                  className="w-full h-64 object-cover rounded-lg shadow"
-                  loading="lazy"
-                />
-                {image.caption && (
-                  <figcaption className="mt-2 text-center text-bg-200 text-sm">
-                    {image.caption}
-                  </figcaption>
-                )}
-              </figure>
-            );
-          })}
+          {images.map((image, index) => (
+            <figure key={index}>
+              <img
+                src={processImageUrl(image.src)}
+                alt={image.alt}
+                className="w-full h-64 object-cover rounded-lg shadow"
+                loading="lazy"
+              />
+              {image.caption && (
+                <figcaption className="mt-2 text-center text-bg-200 text-sm">
+                  {image.caption}
+                </figcaption>
+              )}
+            </figure>
+          ))}
         </div>
       </div>
     </section>
@@ -697,7 +676,7 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
               <div className="flex items-center mb-4">
                 {testimonial.avatar && (
                   <img
-                    src={testimonial.avatar}
+                    src={processImageUrl(testimonial.avatar)}
                     alt={testimonial.name}
                     className="w-12 h-12 rounded-full mr-4"
                   />
@@ -809,7 +788,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               )}
               {feature.image && (
                 <img
-                  src={feature.image}
+                  src={processImageUrl(feature.image)}
                   alt={feature.title}
                   className={`w-16 h-16 object-cover rounded-lg mb-4 ${
                     layout === "list" ? "mt-1" : "mx-auto"
@@ -941,7 +920,7 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
     >
       <div className="flex justify-center items-center ">
         <img
-          src={data.logoSrc || "AST-Logo-white.png"}
+          src={processImageUrl(data.logoSrc || "AST-Logo-white.png")}
           alt={data.logoAlt || "Logo"}
           className="h-20"
         />
@@ -1005,7 +984,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           <article className="relative shadow-lg bg-white rounded-2xl w-full mb-4 flex flex-col justify-center items-center gap-5 py-20">
             {data.iconSrc && (
               <img
-                src={data.iconSrc}
+                src={processImageUrl(data.iconSrc)}
                 alt={data.iconAlt || "Ícono"}
                 className="absolute -top-18 w-30 h-30"
               />
