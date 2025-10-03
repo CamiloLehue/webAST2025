@@ -10,12 +10,6 @@ import {
   MultimediaGrid,
   Pagination,
 } from "../components";
-import {
-  TbFolder,
-  TbDeviceFloppy,
-  TbPhoto,
-  TbVideo
-} from "react-icons/tb";
 
 const MultimediaManagement: React.FC = () => {
   const {
@@ -28,8 +22,6 @@ const MultimediaManagement: React.FC = () => {
     totalPages,
     hasNextPage,
     hasPrevPage,
-    tags,
-    stats,
     filters,
     loadFiles,
     uploadMultipleFiles,
@@ -144,99 +136,6 @@ const MultimediaManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* Estadísticas */}
-        {stats && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="bg-bg-100 overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="text-2xl">
-                      <TbFolder className="w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-white-100 truncate">
-                        Total de archivos
-                      </dt>
-                      <dd className="text-lg font-medium text-white-100">
-                        {stats.totalFiles.toLocaleString()}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="text-2xl">
-                      <TbDeviceFloppy className="w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-white truncate">
-                        Espacio utilizado
-                      </dt>
-                      <dd className="text-lg font-medium text-white-100">
-                        {formatFileSize(stats.totalSize)}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="text-2xl">
-                      <TbPhoto className="w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-white truncate">
-                        Imágenes
-                      </dt>
-                      <dd className="text-lg font-medium text-white-100">
-                        {stats.byCategory.image || 0}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white overflow-hidden shadow rounded-lg">
-              <div className="p-5">
-                <div className="flex items-center">
-                  <div className="flex-shrink-0">
-                    <div className="text-2xl">
-                      <TbVideo className="w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt className="text-sm font-medium text-white truncate">
-                        Videos
-                      </dt>
-                      <dd className="text-lg font-medium text-white-100">
-                        {stats.byCategory.video || 0}
-                      </dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Error Message */}
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-md p-4">
@@ -276,7 +175,7 @@ const MultimediaManagement: React.FC = () => {
         {/* Filtros */}
         <MultimediaFiltersComponent
           onFiltersChange={handleFiltersChange}
-          availableTags={tags}
+          availableTags={[]}
           loading={loading}
         />
 

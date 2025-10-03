@@ -5,7 +5,6 @@ import { useUserManagement } from "../user-management/hooks/useUserManagement";
 import { useBlogManagement } from "../blog-management/hooks/useBlogManagement";
 import { useMenuManagement } from "../menu-management/hooks/useMenuManagement";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
-import { useMultimediaManagement } from "../multimedia-management/hooks/useMultimediaManagement";
 import { useActivity } from "../../../hooks/useActivity";
 import {
   FiMenu,
@@ -24,7 +23,6 @@ const AdminDashboard: React.FC = () => {
   const { getBlogStats, loading: blogLoading } = useBlogManagement();
   const { menuItems, loading: menuLoading } = useMenuManagement();
   const { customPages, loading: pageLoading } = usePageManagement();
-  const { stats: multimediaStats, loadStats: loadMultimediaStats } = useMultimediaManagement();
   const {
     activities,
     formatTimeAgo,
@@ -46,9 +44,7 @@ const AdminDashboard: React.FC = () => {
     if (hasPermission("canViewUsers")) {
       fetchUsers({ limit: 100 });
     }
-    // Cargar estadísticas multimedia
-    loadMultimediaStats();
-  }, [hasPermission, fetchUsers, loadMultimediaStats]);
+  }, [hasPermission, fetchUsers]);
 
   useEffect(() => {
     if (users.length > 0) {
@@ -76,7 +72,6 @@ const AdminDashboard: React.FC = () => {
       if (hasPermission("canViewUsers")) {
         await fetchUsers({ limit: 100 });
       }
-      await loadMultimediaStats();
       logSystemAction("Dashboard actualizado");
     } catch (error) {
       console.error("Error refreshing dashboard:", error);
@@ -110,9 +105,9 @@ const AdminDashboard: React.FC = () => {
     },
     {
       label: "Archivos Multimedia",
-      value: multimediaStats ? multimediaStats.totalFiles.toString() : "...",
+      value: "N/A",
       icon: FiImage,
-      color: "bg-pink-500",
+      color: "bg-green-500",
     },
     {
       label: "Total Usuarios",
@@ -297,39 +292,6 @@ const AdminDashboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Nueva sección de estadísticas multimedia */}
-      {multimediaStats && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-bg-300 rounded-2xl shadow p-6">
-            <h3 className="text-lg font-medium text-white mb-4">Multimedia</h3>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-white-100">Total archivos:</span>
-                <span className="text-white font-medium">{multimediaStats.totalFiles}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-white-100">Imágenes:</span>
-                <span className="text-blue-400 font-medium">
-                  {multimediaStats.byCategory.image || 0}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-white-100">Videos:</span>
-                <span className="text-purple-400 font-medium">
-                  {multimediaStats.byCategory.video || 0}
-                </span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-white-100">Documentos:</span>
-                <span className="text-green-400 font-medium">
-                  {multimediaStats.byCategory.document || 0}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="bg-bg">
         <h3 className="text-lg font-medium text-white py-2 px-5">

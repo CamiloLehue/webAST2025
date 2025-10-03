@@ -215,7 +215,6 @@ class MultimediaService {
         });
         results.push(result);
       } catch (error) {
-        console.error(`Error al subir archivo ${i + 1}:`, error);
         throw error;
       }
     }
@@ -298,55 +297,6 @@ class MultimediaService {
       }
     } catch (error) {
       throw error;
-    }
-  }
-
-  /**
-   * Obtiene todas las etiquetas disponibles
-   */
-  async getTags(): Promise<string[]> {
-    try {
-      const response = await fetch(`${API_URL}/multimedia/tags`, {
-        method: 'GET',
-        headers: this.getAuthHeaders()
-      });
-
-      if (!response.ok) {
-        // Tags endpoint not available, return empty array
-        return [];
-      }
-
-      return await response.json();
-    } catch {
-      // Error getting tags, return empty array
-      return [];
-    }
-  }
-
-  /**
-   * Obtiene estadísticas de uso de multimedia
-   */
-  async getStats(): Promise<{
-    totalFiles: number;
-    totalSize: number;
-    byCategory: Record<MultimediaCategory, number>;
-    recentUploads: number;
-  } | null> {
-    try {
-      const response = await fetch(`${API_URL}/multimedia/stats`, {
-        method: 'GET',
-        headers: this.getAuthHeaders()
-      });
-
-      if (!response.ok) {
-        // Stats endpoint not available, return null
-        return null;
-      }
-
-      return await response.json();
-    } catch {
-      // Error getting stats, return null
-      return null;
     }
   }
 }

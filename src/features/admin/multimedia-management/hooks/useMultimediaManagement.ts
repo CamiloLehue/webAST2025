@@ -23,13 +23,6 @@ interface UseMultimediaManagementReturn {
   totalPages: number;
   hasNextPage: boolean;
   hasPrevPage: boolean;
-  tags: string[];
-  stats: {
-    totalFiles: number;
-    totalSize: number;
-    byCategory: Record<MultimediaCategory, number>;
-    recentUploads: number;
-  } | null;
 
   // Filtros
   filters: MultimediaFilters;
@@ -43,8 +36,6 @@ interface UseMultimediaManagementReturn {
   updateFile: (id: string, request: UpdateMultimediaRequest) => Promise<MultimediaFile>;
   deleteFile: (id: string) => Promise<void>;
   deleteMultipleFiles: (ids: string[]) => Promise<void>;
-  loadTags: () => Promise<void>;
-  loadStats: () => Promise<void>;
   refreshData: () => Promise<void>;
 
   // Navegación
@@ -74,13 +65,6 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([]);
-  const [tags, setTags] = useState<string[]>([]);
-  const [stats, setStats] = useState<{
-    totalFiles: number;
-    totalSize: number;
-    byCategory: Record<MultimediaCategory, number>;
-    recentUploads: number;
-  } | null>(null);
 
   // Estado de paginación
   const [totalFiles, setTotalFiles] = useState(0);
@@ -255,36 +239,10 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     }
   }, []);
 
-  // Cargar etiquetas
-  const loadTags = useCallback(async () => {
-    try {
-      const allTags = await multimediaService.getTags();
-      setTags(allTags);
-    } catch {
-      // Silently handle error - tags are optional
-      setTags([]);
-    }
-  }, []);
-
-  // Cargar estadísticas
-  const loadStats = useCallback(async () => {
-    try {
-      const statistics = await multimediaService.getStats();
-      setStats(statistics);
-    } catch {
-      // Silently handle error - stats are optional
-      setStats(null);
-    }
-  }, []);
-
   // Refrescar datos
   const refreshData = useCallback(async () => {
-    await Promise.all([
-      loadFiles(),
-      loadTags(),
-      loadStats()
-    ]);
-  }, [loadFiles, loadTags, loadStats]);
+    await loadFiles();
+  }, [loadFiles]);
 
   // Navegación de páginas
   const goToPage = useCallback(async (page: number) => {
@@ -350,8 +308,6 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     totalPages,
     hasNextPage,
     hasPrevPage,
-    tags,
-    stats,
 
     // Filtros
     filters,
@@ -365,8 +321,6 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     updateFile,
     deleteFile,
     deleteMultipleFiles,
-    loadTags,
-    loadStats,
     refreshData,
 
     // Navegación
