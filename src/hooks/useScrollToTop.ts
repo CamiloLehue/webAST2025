@@ -1,16 +1,24 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useBreakpoints } from "../context/ProviderBreakpoints";
 
 export const useScrollToTop = () => {
   const { pathname } = useLocation();
+  const { isSmallDevice } = useBreakpoints();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  }, [pathname]);
+    if (isSmallDevice) {
+      // En móviles, scroll instantáneo para mejor rendimiento
+      window.scrollTo(0, 0);
+    } else {
+      // En desktop, scroll suave
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [pathname, isSmallDevice]);
 };
 
 
@@ -25,16 +33,23 @@ export const useScrollToTopInstant = () => {
 
 export const useScrollToTopDelayed = (delay: number = 100) => {
   const { pathname } = useLocation();
+  const { isSmallDevice } = useBreakpoints();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth",
-      });
+      if (isSmallDevice) {
+        // En móviles, scroll instantáneo
+        window.scrollTo(0, 0);
+      } else {
+        // En desktop, scroll suave
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: "smooth",
+        });
+      }
     }, delay);
 
     return () => clearTimeout(timer);
-  }, [pathname, delay]);
+  }, [pathname, delay, isSmallDevice]);
 };

@@ -259,3 +259,39 @@ body {
 .animate-infinite-scroll-seamless:hover {
   animation-play-state: paused;
 }
+
+/* Deshabilitar animaciones y transiciones en dispositivos móviles */
+@media (max-width: 768px) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Deshabilitar específicamente las animaciones de carrusel en móviles */
+  .animate-infinite-scroll,
+  .animate-infinite-scroll-seamless {
+    animation: none !important;
+  }
+  
+  /* Deshabilitar hover effects en móviles */
+  .animate-infinite-scroll:hover,
+  .animate-infinite-scroll-seamless:hover {
+    animation-play-state: running !important;
+  }
+  
+  /* Optimizar scroll en móviles */
+  html {
+    scroll-behavior: auto !important;
+  }
+  
+  /* Reducir sombras y efectos en móviles */
+  img {
+    transition: none !important;
+  }
+  
+  .hover\:shadow-lg:hover {
+    box-shadow: none !important;
+  }
+}

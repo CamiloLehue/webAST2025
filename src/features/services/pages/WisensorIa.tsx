@@ -2,10 +2,12 @@ import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import ContentSection from "../../../components/content/ContentSection";
 import { motion, useInView } from "motion/react";
 import { useRef } from "react";
+import { useReducedMotion } from "../../../hooks/useReducedMotion";
 
 function WisensorIa() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const { shouldReduceMotion } = useReducedMotion();
 
   return (
     <div className="w-full min-h-screen">
@@ -50,30 +52,34 @@ function WisensorIa() {
           <motion.div
             ref={ref}
             className="w-full h-150 flex justify-center items-center relative"
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.8 }}
             animate={
-              isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }
+              shouldReduceMotion 
+                ? undefined 
+                : (isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 })
             }
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.6, ease: "easeOut" }}
           >
             {/* Ícono central - visible inicialmente, se oculta cuando está en vista */}
             <motion.img
               src="svg/services/wisensoria/IconoCentral.svg"
               alt="icono central"
               className="w-auto h-auto max-w-full max-h-full object-contain"
-              initial={{ opacity: 1, scale: 1 }}
+              initial={shouldReduceMotion ? undefined : { opacity: 1, scale: 1 }}
               animate={
-                isInView
-                  ? {
-                      opacity: 0,
-                      scale: 0.5,
-                      transition: { duration: 0.3, ease: "easeInOut" },
-                    }
-                  : {
-                      opacity: 1,
-                      scale: 1,
-                      transition: { duration: 0.3, ease: "easeOut" },
-                    }
+                shouldReduceMotion 
+                  ? undefined 
+                  : (isInView
+                      ? {
+                          opacity: 0,
+                          scale: 0.5,
+                          transition: { duration: 0.3, ease: "easeInOut" },
+                        }
+                      : {
+                          opacity: 1,
+                          scale: 1,
+                          transition: { duration: 0.3, ease: "easeOut" },
+                        })
               }
             />
 
@@ -82,26 +88,28 @@ function WisensorIa() {
               src="svg/services/wisensoria/Iconos.svg"
               alt="iconos completos"
               className="absolute inset-0 w-full h-full object-contain"
-              initial={{ opacity: 0, scale: 0.3 }}
+              initial={shouldReduceMotion ? undefined : { opacity: 0, scale: 0.3 }}
               animate={
-                isInView
-                  ? {
-                      opacity: 1,
-                      scale: 1,
-                      transition: {
-                        duration: 0.4,
-                        delay: 0.2,
-                        ease: "easeOut",
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 20,
-                      },
-                    }
-                  : {
-                      opacity: 0,
-                      scale: 0.3,
-                      transition: { duration: 0.2, ease: "easeIn" },
-                    }
+                shouldReduceMotion 
+                  ? undefined 
+                  : (isInView
+                      ? {
+                          opacity: 1,
+                          scale: 1,
+                          transition: {
+                            duration: 0.4,
+                            delay: 0.2,
+                            ease: "easeOut",
+                            type: "spring",
+                            stiffness: 200,
+                            damping: 20,
+                          },
+                        }
+                      : {
+                          opacity: 0,
+                          scale: 0.3,
+                          transition: { duration: 0.2, ease: "easeIn" },
+                        })
               }
             />
           </motion.div>

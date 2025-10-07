@@ -5,6 +5,7 @@ import type { MenuItem } from "../../types/content";
 import { useState } from "react";
 import { TbChevronDown, TbMenu2, TbMenuDeep } from "react-icons/tb";
 import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 function NavBar() {
   const { menuItems, loading, error } = useContent();
@@ -117,13 +118,14 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
 const NavSmallDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedSubmenu, setExpandedSubmenu] = useState<string | null>(null);
+  const { shouldReduceMotion } = useReducedMotion();
 
   return (
     <div className=" h-full w-full ">
       <motion.button
-        whileTap={{ scale: 0.9 }}
-        animate={{ rotate: isOpen ? 360 : 0, scale: isOpen ? 1.2 : 1 }}
-        transition={{ type: "keyframes", duration: 0.1 }}
+        whileTap={shouldReduceMotion ? undefined : { scale: 0.9 }}
+        animate={shouldReduceMotion ? undefined : { rotate: isOpen ? 360 : 0, scale: isOpen ? 1.2 : 1 }}
+        transition={shouldReduceMotion ? { duration: 0 } : { type: "keyframes", duration: 0.1 }}
         className={`absolute h-full w-full z-50 ${
           isOpen ? "bottom-0 right-0  h-full bg-accent-100 " : "top-0 right-0"
         }`}
@@ -135,10 +137,10 @@ const NavSmallDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.ul
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
+            initial={shouldReduceMotion ? undefined : { opacity: 0, y: -20 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+            exit={shouldReduceMotion ? undefined : { opacity: 0, y: -20 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.3 }}
             className="fixed inset-0 flex flex-col items-center justify-start bg-bg-400 w-full h-full pt-20 overflow-y-auto"
           >
             {menuItems
@@ -148,10 +150,10 @@ const NavSmallDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
               <motion.li
                 key={item.id}
                 className="w-full"
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.2, delay: 0.05 * index }}
+                initial={shouldReduceMotion ? undefined : { opacity: 0, x: -50 }}
+                animate={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
+                exit={shouldReduceMotion ? undefined : { opacity: 0, x: -50 }}
+                transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.2, delay: 0.05 * index }}
               >
                 <div className="px-10 py-5">
                   <div className="flex items-center justify-between">
