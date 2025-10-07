@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { type ReactNode } from "react";
 import type { Variants } from "motion/react";
+import { useReducedMotion, createConditionalVariants } from "../../hooks/useReducedMotion";
 
 // Variantes de animación para diferentes efectos
 const fadeInVariants: Variants = {
@@ -102,93 +103,123 @@ export const FadeInSection = ({
   className = "", 
   variants = fadeInVariants,
   delay = 0 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={variants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
-    transition={{ delay }}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(variants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+      transition={shouldReduceMotion ? { duration: 0 } : { delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const SlideInLeft = ({ 
   children, 
   className = "", 
   delay = 0 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={slideInLeftVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
-    transition={{ delay }}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(slideInLeftVariants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+      transition={shouldReduceMotion ? { duration: 0 } : { delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const SlideInRight = ({ 
   children, 
   className = "", 
   delay = 0 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={slideInRightVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
-    transition={{ delay }}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(slideInRightVariants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+      transition={shouldReduceMotion ? { duration: 0 } : { delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const ScaleUpSection = ({ 
   children, 
   className = "", 
   delay = 0 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={scaleUpVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
-    transition={{ delay }}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(scaleUpVariants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+      transition={shouldReduceMotion ? { duration: 0 } : { delay }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const StaggerContainer = ({ 
   children, 
   className = "" 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={staggerContainerVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.05, margin: "0px 0px -150px 0px" }}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(staggerContainerVariants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
+      viewport={{ once: true, amount: 0.05, margin: "0px 0px -150px 0px" }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export const StaggerItem = ({ 
   children, 
   className = "" 
-}: AnimatedSectionProps) => (
-  <motion.div
-    className={className}
-    variants={staggerItemVariants}
-  >
-    {children}
-  </motion.div>
-);
+}: AnimatedSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  const conditionalVariants = createConditionalVariants(staggerItemVariants, shouldReduceMotion);
+  
+  return (
+    <motion.div
+      className={className}
+      variants={conditionalVariants}
+    >
+      {children}
+    </motion.div>
+  );
+};

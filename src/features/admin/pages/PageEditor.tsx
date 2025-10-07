@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
-import ImageSelector from "../../../components/editor/ImageSelector";
+import MultimediaSelector from "../../../components/editor/MultimediaSelector";
 import type {
   ContentSection,
   ContentSectionType,
@@ -41,7 +41,7 @@ const PageEditor: React.FC = () => {
     createPageFromTemplate,
     generateSlug,
     validateSlug,
-  } = usePageManagement();
+  } = usePageManagement({ loadTemplates: false });
 
   const isEditing = !!id;
   const existingPage = isEditing
@@ -834,10 +834,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Imagen de Fondo
             </label>
-            <ImageSelector
+            <MultimediaSelector
               value={data.backgroundImage || ""}
-              onChange={(value) => updateField("backgroundImage", value)}
+              onChange={(value: string) => updateField("backgroundImage", value)}
               placeholder="URL de la imagen de fondo o selecciona de la galería"
+              acceptedTypes={["image"]}
             />
           </div>
           <div>
@@ -954,9 +955,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                 (imageUrl: string, index: number) => (
                   <div key={index} className="flex space-x-2 items-center">
                     <div className="flex-1">
-                      <ImageSelector
+                      <MultimediaSelector
                         value={imageUrl}
-                        onChange={(value) => {
+                        onChange={(value: string) => {
                           const newImages = [
                             ...((data.images as string[]) || []),
                           ];
@@ -964,6 +965,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                           updateField("images", newImages);
                         }}
                         placeholder="URL de la imagen o selecciona de la galería"
+                        acceptedTypes={["image"]}
                       />
                     </div>
                     <button
@@ -1043,10 +1045,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Logo (URL)
             </label>
-            <ImageSelector
+            <MultimediaSelector
               value={data.logoSrc || ""}
-              onChange={(value) => updateField("logoSrc", value)}
+              onChange={(value: string) => updateField("logoSrc", value)}
               placeholder="Logo desde la galería o URL externa"
+              acceptedTypes={["image", "svg"]}
             />
           </div>
           <div>
@@ -1161,9 +1164,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <div className="mt-2 space-y-2">
               {(data.images || []).map((imageUrl: string, index: number) => (
                 <div key={index} className="flex space-x-2 items-center">
-                  <ImageSelector
+                  <MultimediaSelector
                     value={imageUrl}
-                    onChange={(value) => {
+                    onChange={(value: string) => {
                       const newImages = [...(data.images || [])];
                       newImages[index] = value;
                       updateField("images", newImages);
@@ -1171,6 +1174,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                     placeholder={`Imagen ${
                       index + 1
                     } desde la galería o URL externa`}
+                    acceptedTypes={["image"]}
                   />
                   <button
                     type="button"
@@ -1427,10 +1431,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               URL de la Imagen
             </label>
-            <ImageSelector
+            <MultimediaSelector
               value={data.src || ""}
-              onChange={(value) => updateField("src", value)}
+              onChange={(value: string) => updateField("src", value)}
               placeholder="Imagen desde la galería o URL externa"
+              acceptedTypes={["image"]}
             />
           </div>
           <div>
@@ -1715,9 +1720,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                     className="flex space-x-2 items-center p-3 border border-white-100 rounded-md"
                   >
                     <div className="flex-1">
-                      <ImageSelector
+                      <MultimediaSelector
                         value={image.src || ""}
-                        onChange={(value) => {
+                        onChange={(value: string) => {
                           const newImages = [...(data.images || [])];
                           newImages[index] = { ...image, src: value };
                           updateField("images", newImages);
@@ -1725,6 +1730,7 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
                         placeholder={`Imagen ${
                           index + 1
                         } desde la galería o URL externa`}
+                        acceptedTypes={["image"]}
                       />
                     </div>
                     <input

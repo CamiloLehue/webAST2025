@@ -17,6 +17,7 @@ import BlogEditor from "./features/admin/pages/BlogEditor";
 import PageManagement from "./features/admin/pages/PageManagement";
 import PageEditor from "./features/admin/pages/PageEditor";
 import UserManagement from "./features/admin/pages/UserManagement";
+import MultimediaManagement from "./features/admin/multimedia-management/pages/MultimediaManagement";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
@@ -61,6 +62,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="pages" element={<PageManagement />} />
                 <Route path="pages/new" element={<PageEditor />} />
                 <Route path="pages/edit/:id" element={<PageEditor />} />
+                <Route path="multimedia" element={<MultimediaManagement />} />
                 <Route path="users" element={<UserManagement />} />
               </Route>
 
@@ -89,10 +91,10 @@ createRoot(document.getElementById("root")!).render(
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
                 <Route path="/noticias/:slug" element={<BlogPostPage />} />
-                
+
                 {/* Excluir rutas del sistema de ser manejadas por DynamicPage */}
                 <Route path="/api/*" element={<div>API Route</div>} />
-                
+
                 {/* rutas dinamicas, para crear web desde el panel administrativo */}
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>

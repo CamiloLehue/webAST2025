@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { type ReactNode, useRef } from "react";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 interface ParallaxSectionProps {
   children: ReactNode;
@@ -12,19 +13,20 @@ export const ParallaxSection = ({
   className = "", 
   offset = 50 
 }: ParallaxSectionProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [offset, -offset]);
+  const y = useTransform(scrollYProgress, [0, 1], [shouldReduceMotion ? 0 : offset, shouldReduceMotion ? 0 : -offset]);
 
   return (
     <motion.div
       ref={ref}
       className={className}
-      style={{ y }}
+      style={{ y: shouldReduceMotion ? 0 : y }}
     >
       {children}
     </motion.div>
@@ -44,19 +46,21 @@ export const ScrollReveal = ({
   direction = 'up',
   delay = 0 
 }: ScrollRevealProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
+  
   const variants = {
     hidden: {
-      opacity: 0,
-      x: direction === 'left' ? -60 : direction === 'right' ? 60 : 0,
-      y: direction === 'up' ? 60 : direction === 'down' ? -60 : 0,
+      opacity: shouldReduceMotion ? 1 : 0,
+      x: shouldReduceMotion ? 0 : (direction === 'left' ? -60 : direction === 'right' ? 60 : 0),
+      y: shouldReduceMotion ? 0 : (direction === 'up' ? 60 : direction === 'down' ? -60 : 0),
     },
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
       transition: {
-        duration: 0.6,
-        delay,
+        duration: shouldReduceMotion ? 0 : 0.6,
+        delay: shouldReduceMotion ? 0 : delay,
         ease: "easeOut" as const
       }
     }
@@ -66,8 +70,8 @@ export const ScrollReveal = ({
     <motion.div
       className={className}
       variants={variants}
-      initial="hidden"
-      whileInView="visible"
+      initial={shouldReduceMotion ? undefined : "hidden"}
+      whileInView={shouldReduceMotion ? undefined : "visible"}
       viewport={{ once: true, amount: 0.3 }}
     >
       {children}
@@ -86,18 +90,19 @@ export const CounterAnimation = ({
   to, 
   className = "" 
 }: CounterAnimationProps) => {
+  const { shouldReduceMotion } = useReducedMotion();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
   });
 
-  const counter = useTransform(scrollYProgress, [0, 0.5], [from, to]);
+  const counter = useTransform(scrollYProgress, [0, 0.5], [shouldReduceMotion ? to : from, to]);
 
   return (
     <motion.div ref={ref} className={className}>
       <motion.span>
-        {counter}
+        {shouldReduceMotion ? to : counter}
       </motion.span>
     </motion.div>
   );

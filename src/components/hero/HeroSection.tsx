@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { motion } from "motion/react";
 import MarkdownContent from "../content/MarkdownContent";
 import { useBreakpoints } from "../../context/ProviderBreakpoints";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 interface HeroSectionProps {
   title: string;
@@ -26,6 +27,7 @@ function HeroSection({
 }: HeroSectionProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { isSmallDevice } = useBreakpoints();
+  const { shouldReduceMotion } = useReducedMotion();
   useEffect(() => {
     if (images.length > 1) {
       const interval = setInterval(() => {
@@ -69,9 +71,9 @@ function HeroSection({
       >
         <motion.div
           className="col-span-2 w-full h-full flex justify-center items-center"
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          initial={shouldReduceMotion ? undefined : { opacity: 0, x: -100 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <article className="flex flex-col items-end justify-center w-full">
             <div
@@ -79,9 +81,9 @@ function HeroSection({
               ${isSmallDevice ? "px-4 text-center items-center" : ""}`}
             >
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
+                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 30 }}
+                animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                transition={shouldReduceMotion ? { duration: 0 } : {
                   duration: 0.6,
                   delay: 0.7,
                   ease: [0.25, 0.1, 0.25, 1],
@@ -90,9 +92,9 @@ function HeroSection({
                 <h2 className="text-white text-5xl font-bold">{title}</h2>
               </motion.div>
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
+                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 30 }}
+                animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                transition={shouldReduceMotion ? { duration: 0 } : {
                   duration: 0.6,
                   delay: 0.9,
                   ease: [0.25, 0.1, 0.25, 1],
@@ -109,9 +111,9 @@ function HeroSection({
             {buttonText && (
               <motion.div
                 className="w-full max-w-sm mt-5 mx-auto"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
+                initial={shouldReduceMotion ? undefined : { opacity: 0, y: 30 }}
+                animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                transition={shouldReduceMotion ? { duration: 0 } : {
                   duration: 0.6,
                   delay: 1.1,
                   ease: [0.25, 0.1, 0.25, 1],
@@ -131,9 +133,9 @@ function HeroSection({
         </motion.div>
         <motion.div
           className="relative col-span-2 w-full h-full overflow-hidden"
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          initial={shouldReduceMotion ? undefined : { opacity: 0, x: 100 }}
+          animate={shouldReduceMotion ? undefined : { opacity: 1, x: 0 }}
+          transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.7, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
         >
           <motion.img
             draggable={false}
@@ -141,9 +143,9 @@ function HeroSection({
             alt={altText}
             className="w-full object-cover"
             key={currentImageIndex}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
+            initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+            animate={shouldReduceMotion ? undefined : { opacity: 1 }}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: 0.5, delay: 0.8 }}
           />
           <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
 

@@ -8,24 +8,25 @@ import type {
 } from "../types/pageTypes";
 import { PageService } from "../services/pageService";
 
-export const usePageManagement = () => {
+export const usePageManagement = (options?: { loadTemplates?: boolean }) => {
+  const { loadTemplates = true } = options || {};
   const [customPages, setCustomPages] = useState<CustomPage[]>([]);
   const [pageTemplates, setPageTemplates] = useState<PageTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       const pages = await PageService.getCustomPages();
-      const templates = await PageService.getPageTemplates();
       setCustomPages(pages);
-      setPageTemplates(templates);
+      
+      // Solo cargar templates si se especifica
+      if (loadTemplates) {
+        const templates = await PageService.getPageTemplates();
+        setPageTemplates(templates);
+      }
     } catch (err) {
       setError(
         err instanceof Error
@@ -35,7 +36,11 @@ export const usePageManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [loadTemplates]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   // Pages CRUD Methods
   const createCustomPage = async (

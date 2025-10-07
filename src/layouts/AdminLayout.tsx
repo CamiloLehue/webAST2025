@@ -8,6 +8,7 @@ import {
   FiLogOut,
   FiGrid,
   FiUsers,
+  FiImage,
 } from "react-icons/fi";
 import { getRoleDisplayName } from "../features/admin/user-management/types/userTypes";
 
@@ -35,6 +36,11 @@ const AdminLayout: React.FC = () => {
       to: "/admin/blog",
       icon: FiFileText,
       label: "Blog",
+    },
+    {
+      to: "/admin/multimedia",
+      icon: FiImage,
+      label: "Multimedia",
     },
   ];
 
