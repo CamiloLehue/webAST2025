@@ -253,7 +253,7 @@ const PageEditor: React.FC = () => {
   return (
     <div className="w-full grid grid-cols-12 mx-auto space-y-6  gap-2 h-full">
       <div className="relative col-span-2 bg-bg-100 h-full  shadow p-5">
-        <div className="sticky top-10">
+        <div className="sticky top-10  max-h-screen">
           <h4 className="text-sm text-center font-medium text-white-100 mb-3">
             Agregar Sección
           </h4>
@@ -261,50 +261,50 @@ const PageEditor: React.FC = () => {
             Selecciona el tipo de sección que deseas agregar al contenido de la
             página.
           </p>
-          <div className="flex flex-col gap-1 px-5 mt-5">
-            {sectionTypes.map((sectionType) => {
-              const IconComponent = sectionType.icon;
-              return (
-                <button
-                  key={sectionType.type}
-                  onClick={() => addContentSection(sectionType.type)}
-                  className="flex gap-2 items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
-                >
-                  <span className="text-2xl mb-1">
-                    <IconComponent />
-                  </span>
-                  <span className="text-xs text-center">
-                    {sectionType.name}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="flex flex-col gap-10  mt-5">
+            <div className="flex flex-col gap-1 px-5 mt-5">
+              {sectionTypes.map((sectionType) => {
+                const IconComponent = sectionType.icon;
+                return (
+                  <button
+                    key={sectionType.type}
+                    onClick={() => addContentSection(sectionType.type)}
+                    className="flex gap-2 items-center p-1 border border-bg-300 rounded-lg hover:border-bg-200 hover:bg-bg-200 transition-colors"
+                  >
+                    <span className="text-2xl mb-1">
+                      <IconComponent />
+                    </span>
+                    <span className="text-xs text-center">
+                      {sectionType.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="px-5 space-y-2">
+              <button
+                onClick={handlePreview}
+                disabled={!formData.slug}
+                className="w-full inline-flex items-center justify-center px-4 py-2 border border-bg-300 text-white-100 bg-bg-200 hover:bg-bg-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <FiEye className="mr-2 h-4 w-4" />
+                Vista Previa
+              </button>
+
+              <button
+                onClick={handleSave}
+                disabled={isSaving || !!slugError}
+                className="w-full inline-flex items-center justify-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSaving ? (
+                  <FiLoader className="animate-spin mr-2 h-4 w-4" />
+                ) : (
+                  <FiSave className="mr-2 h-4 w-4" />
+                )}
+                {isSaving ? "Guardando..." : "Guardar"}
+              </button>
+            </div>
           </div>
-
-          {/* Botones de acción */}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 px-5 space-y-2">
-          <button
-            onClick={handlePreview}
-            disabled={!formData.slug}
-            className="w-full inline-flex items-center justify-center px-4 py-2 border border-bg-300 text-white-100 bg-bg-200 hover:bg-bg-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            <FiEye className="mr-2 h-4 w-4" />
-            Vista Previa
-          </button>
-
-          <button
-            onClick={handleSave}
-            disabled={isSaving || !!slugError}
-            className="w-full inline-flex items-center justify-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSaving ? (
-              <FiLoader className="animate-spin mr-2 h-4 w-4" />
-            ) : (
-              <FiSave className="mr-2 h-4 w-4" />
-            )}
-            {isSaving ? "Guardando..." : "Guardar"}
-          </button>
         </div>
       </div>
       <div className="col-span-10 p-5">
