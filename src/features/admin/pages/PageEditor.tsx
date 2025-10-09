@@ -280,6 +280,31 @@ const PageEditor: React.FC = () => {
               );
             })}
           </div>
+
+          {/* Botones de acción */}
+        </div>
+        <div className="absolute bottom-0 left-0 right-0 px-5 space-y-2">
+          <button
+            onClick={handlePreview}
+            disabled={!formData.slug}
+            className="w-full inline-flex items-center justify-center px-4 py-2 border border-bg-300 text-white-100 bg-bg-200 hover:bg-bg-300 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <FiEye className="mr-2 h-4 w-4" />
+            Vista Previa
+          </button>
+
+          <button
+            onClick={handleSave}
+            disabled={isSaving || !!slugError}
+            className="w-full inline-flex items-center justify-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {isSaving ? (
+              <FiLoader className="animate-spin mr-2 h-4 w-4" />
+            ) : (
+              <FiSave className="mr-2 h-4 w-4" />
+            )}
+            {isSaving ? "Guardando..." : "Guardar"}
+          </button>
         </div>
       </div>
       <div className="col-span-10 p-5">
@@ -301,30 +326,6 @@ const PageEditor: React.FC = () => {
                 </p>
               )}
             </div>
-          </div>
-
-          <div className="fixed right-5 top-17 flex items-center space-x-3 bg-white-100 ">
-            <button
-              onClick={handlePreview}
-              disabled={!formData.slug}
-              className="inline-flex items-center px-4 py-2 border border-gray-300 text-bg-300 bg-white hover:bg-gray-50 rounded-md disabled:opacity-50"
-            >
-              <FiEye className="mr-2 h-4 w-4" />
-              Vista Previa
-            </button>
-
-            <button
-              onClick={handleSave}
-              disabled={isSaving || !!slugError}
-              className="inline-flex items-center px-4 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 disabled:opacity-50"
-            >
-              {isSaving ? (
-                <FiLoader className="animate-spin mr-2 h-4 w-4" />
-              ) : (
-                <FiSave className="mr-2 h-4 w-4" />
-              )}
-              {isSaving ? "Guardando..." : "Guardar"}
-            </button>
           </div>
         </div>
 
@@ -836,7 +837,9 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             </label>
             <MultimediaSelector
               value={data.backgroundImage || ""}
-              onChange={(value: string) => updateField("backgroundImage", value)}
+              onChange={(value: string) =>
+                updateField("backgroundImage", value)
+              }
               placeholder="URL de la imagen de fondo o selecciona de la galería"
               acceptedTypes={["image"]}
             />
