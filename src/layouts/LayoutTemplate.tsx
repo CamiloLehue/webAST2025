@@ -13,6 +13,7 @@ function LayoutTemplate() {
 
   return (
     <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
+      <div className="absolute left-0 top-0 w-full h-screen bg-bg-400"></div>
       <Header />
       {shouldReduceMotion ? (
         // Sin AnimatePresence ni transiciones en móviles

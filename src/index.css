@@ -30,6 +30,13 @@
   body {
     @apply relative bg-[#F5F5F5] h-full w-full text-[#181a1f];
   }
+  
+  /* Optimización de GPU para elementos animados */
+  [class*="motion-"] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 
   h1 {
     @apply text-2xl;
@@ -202,6 +209,19 @@ body {
   /* font-family: 'Noto Sans Bengali Variable', sans-serif; */
   /* font-family: 'Lexend Deca Variable', sans-serif; */
   scroll-behavior: smooth;
+  /* Optimización de rendimiento para scroll */
+  overflow-x: hidden;
+}
+
+/* Optimización de rendimiento para elementos con animaciones */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Mejora el rendimiento de scroll */
+body {
+  overscroll-behavior-y: none;
 }
 
 /* Estilo general para el scroll */
@@ -260,13 +280,18 @@ body {
   animation-play-state: paused;
 }
 
-/* Deshabilitar animaciones y transiciones en dispositivos móviles */
+/* Optimización GPU y scroll smooth */
+* {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimizar scroll para todos los dispositivos */
 @media (max-width: 768px) {
+  /* Desactivar animaciones complejas en móviles */
   *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+    animation-duration: 0.2s !important;
+    transition-duration: 0.15s !important;
   }
   
   /* Deshabilitar específicamente las animaciones de carrusel en móviles */
@@ -281,9 +306,14 @@ body {
     animation-play-state: running !important;
   }
   
-  /* Optimizar scroll en móviles */
+  /* Scroll más fluido en móviles */
   html {
     scroll-behavior: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  body {
+    overscroll-behavior-y: none;
   }
   
   /* Reducir sombras y efectos en móviles */
