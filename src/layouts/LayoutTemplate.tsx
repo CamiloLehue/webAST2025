@@ -15,6 +15,19 @@ function LayoutTemplate() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
+  // Bloquear scroll cuando está cargando
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isLoading]);
+
   // Loading inicial - espera a que todo cargue realmente
   useEffect(() => {
     if (isInitialLoad) {
@@ -97,7 +110,7 @@ function LayoutTemplate() {
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed z-[9999] bg-bg-400 left-0 top-0 h-screen flex justify-center items-center w-full overflow-hidden"
+            className="fixed z-[9999] bg-bg-400 left-0 top-0 h-screen w-screen flex justify-center items-center overflow-hidden"
           >
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}

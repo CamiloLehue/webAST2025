@@ -159,6 +159,9 @@ function NewsHeroSection({ posts }: NewsHeroSectionProps) {
             }
             alt={currentPost.title}
             className="w-full h-full object-cover"
+            style={{
+              animation: "slowZoom 10s ease-in-out infinite alternate",
+            }}
           />
           <div className="absolute left-0 top-0 bg-gradient-to-r from-bg-400 to-transparent h-full w-1/3"></div>
 

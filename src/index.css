@@ -280,6 +280,16 @@ body {
   animation-play-state: paused;
 }
 
+/* Animación de zoom suave para imágenes hero */
+@keyframes slowZoom {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
 /* Optimización GPU y scroll smooth */
 * {
   transform: translateZ(0);
