@@ -4,13 +4,10 @@ import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
 import ClientsCarousel from "../../about/components/ClientsCarousel";
 import CardNav from "../components/CardNav";
-import {
-  FadeInSection,
-  SlideInLeft,
-  SlideInRight,
-  ScaleUpSection,
-  StaggerContainer,
-  StaggerItem,
+import { 
+  FadeInSection, 
+  SlideInLeft, 
+  SlideInRight 
 } from "../../../components/animations";
 
 function Home() {
@@ -27,7 +24,7 @@ function Home() {
           <div className="relative object-cover border-b-8 border-b-primary-100">
             <img src="slider/slider04.JPG" alt="Bienvenido a AST" />
             <div className="absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-bg-400"></div>
-            <div className="absolute z-10 top-[70%] -translate-y-1/2 left-[50%] transform -translate-x-1/2 p-5 flex flex-col justify-center items-center ">
+            <div className="absolute z-10 pb-30 top-[70%] -translate-y-1/2 left-[50%] transform -translate-x-1/2 p-5 flex flex-col justify-center items-center ">
               <h2 className="text-5xl font-bold text-white ">
                 Bienvenido a AST
               </h2>
@@ -53,14 +50,14 @@ function Home() {
               clipPath: "ellipse(100% 100% at 50% 100%)",
             }}
           ></div>
-          <FadeInSection className="relative  -top-35">
+          <FadeInSection className="relative  -top-35" animate={true}>
             <CardNav />
           </FadeInSection>
         </section>
       )}
       <section id="aboutUs" className="relative w-full space-y-9 py-10">
-        <FadeInSection
-          className={` border border-dashed border-bg-300/10 rounded-2xl
+        <div
+          className={`  rounded-2xl
           ${
             isSmallDevice
               ? "flex justify-center items-center  max-w-sm mx-auto"
@@ -69,7 +66,7 @@ function Home() {
            `}
         >
           {!isSmallDevice && (
-            <SlideInLeft className="min-h-100">
+            <SlideInLeft className="min-h-100" animate={true}>
               <img
                 src="img/inicio/ia-wisensor.jpg"
                 alt=""
@@ -77,7 +74,12 @@ function Home() {
               />
             </SlideInLeft>
           )}
-          <SlideInRight className="flex flex-col justify-start pt-10 gap-4">
+          <SlideInRight
+            className={`flex flex-col justify-start pt-10 gap-4
+            ${isSmallDevice ? "px-5 text-center" : ""}
+            `}
+            animate={!isSmallDevice}
+          >
             <h3 className="font-bold text-primary-100 text-4xl">
               Implementamos IA
             </h3>
@@ -88,14 +90,14 @@ function Home() {
               optimizar procesos y entregar decisiones más inteligentes en
               tiempo real.
             </p>
-            <ScaleUpSection delay={0.3}>
+            <div>
               <button className="bg-primary-100 hover:bg-primary-100/80 mt-5 text-white px-6 py-3 rounded-full w-40 hover:bg-primary-200 transition">
                 Ver más
               </button>
-            </ScaleUpSection>
+            </div>
           </SlideInRight>
-        </FadeInSection>
-        <FadeInSection
+        </div>
+        <div
           className={` mx-auto  flex flex-col justify-center items-center
             ${isSmallDevice ? "max-w-sm" : "max-w-7xl"}
           `}
@@ -105,7 +107,7 @@ function Home() {
               Puedes ver más sobre nosotros aquí
             </h3>
           </div>
-          <ScaleUpSection className="w-full h-120 bg-black rounded-2xl overflow-hidden">
+          <div className="w-full h-120 bg-black rounded-2xl overflow-hidden">
             <iframe
               width="100%"
               height="100%"
@@ -113,21 +115,26 @@ function Home() {
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             ></iframe>
-          </ScaleUpSection>
-        </FadeInSection>
+          </div>
+        </div>
       </section>
-      <section id="lastNews" className={`relative w-full py-15 bg-primary-100
-        ${isSmallDevice ? "max-w-lg mx-auto px-15" : "max-w-7xl mx-auto"}
-        `}>
+      <section
+        id="lastNews"
+        className={`relative w-full py-15 bg-primary-100
+        ${isSmallDevice ? "max-w-lg mx-auto px-15" : ""}
+        `}
+      >
         <Lastnews />
       </section>
       <section id="contact">
-        <StaggerContainer
+        <div
           className={` gap-10  mx-auto py-10 ${
-            isSmallDevice ? "flex flex-col gap-4 max-w-sm" : "grid grid-cols-2 max-w-7xl"
+            isSmallDevice
+              ? "flex flex-col gap-4 max-w-sm"
+              : "grid grid-cols-2 max-w-7xl"
           }`}
         >
-          <StaggerItem className="bg-white h-80 border border-dashed border-bg-300/10 rounded-2xl mb-4 flex flex-col justify-center items-center gap-5">
+          <div className="bg-white h-80 border border-dashed border-bg-300/10 rounded-2xl mb-4 flex flex-col justify-center items-center gap-5">
             <TbPhoneFilled className="text-8xl text-primary-100" />
 
             <p className="text-center text-xl max-w-lg">
@@ -142,8 +149,8 @@ function Home() {
               . Nuestros expertos están a su disposición 09:30 - 19:30 de lunes
               a viernes.
             </p>
-          </StaggerItem>
-          <StaggerItem className="bg-white h-80 border border-dashed border-bg-300/10 rounded-2lg mb-4 flex flex-col justify-center items-center gap-5">
+          </div>
+          <div className="bg-white h-80 border border-dashed border-bg-300/10 rounded-2lg mb-4 flex flex-col justify-center items-center gap-5">
             <TbMailFilled className="text-8xl text-primary-100" />
             <p className="text-center text-xl max-w-xl">
               Puede contactarse con nosotros en nuestro email{" "}
@@ -153,8 +160,8 @@ function Home() {
               Nuestros expertos están a su disposición 09:30 - 19:30 de lunes a
               viernes.
             </p>
-          </StaggerItem>
-        </StaggerContainer>
+          </div>
+        </div>
       </section>
       <ClientsCarousel />
     </div>

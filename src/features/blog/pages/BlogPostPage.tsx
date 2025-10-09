@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
-import { FiCalendar, FiUser, FiArrowLeft, FiChevronDown, FiChevronRight } from "react-icons/fi";
+import {
+  FiCalendar,
+  FiUser,
+  FiArrowLeft,
+  FiChevronDown,
+  FiChevronRight,
+} from "react-icons/fi";
 import MarkdownContent from "../../../components/content/MarkdownContent";
 
 const BlogPostPage: React.FC = () => {
@@ -53,38 +59,46 @@ const BlogPostPage: React.FC = () => {
   const navigate = useNavigate();
 
   const toggleCategoryExpansion = (category: string) => {
-    setExpandedCategories(prev => 
-      prev.includes(category) 
-        ? prev.filter(c => c !== category)
+    setExpandedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
   };
 
   const toggleTagExpansion = (tag: string) => {
-    setExpandedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
+    setExpandedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   };
 
   const getPostsByCategory = (category: string) => {
     return (blogPosts || [])
-      .filter(p => p.isPublished && p.category === category && p.id !== post?.id)
-      .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
-      .slice(0, 5); 
+      .filter(
+        (p) => p.isPublished && p.category === category && p.id !== post?.id
+      )
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt || b.createdAt).getTime() -
+          new Date(a.publishedAt || a.createdAt).getTime()
+      )
+      .slice(0, 5);
   };
 
   const getPostsByTag = (tag: string) => {
     return (blogPosts || [])
-      .filter(p => p.isPublished && p.tags.includes(tag) && p.id !== post?.id)
-      .sort((a, b) => new Date(b.publishedAt || b.createdAt).getTime() - new Date(a.publishedAt || a.createdAt).getTime())
-      .slice(0, 5); 
+      .filter((p) => p.isPublished && p.tags.includes(tag) && p.id !== post?.id)
+      .sort(
+        (a, b) =>
+          new Date(b.publishedAt || b.createdAt).getTime() -
+          new Date(a.publishedAt || a.createdAt).getTime()
+      )
+      .slice(0, 5);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 min-w-7xl mt-5">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-300 rounded w-3/4 mb-4"></div>
@@ -153,7 +167,7 @@ const BlogPostPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-white-100">
+    <div className="w-full min-h-screen  bg-white-100 rounded-t-lg min-w-7xl mt-5">
       <div className="">
         <div className="max-w-7xl mx-auto py-4 px-4">
           <button
@@ -208,7 +222,7 @@ const BlogPostPage: React.FC = () => {
                 )}
               </header>
 
-              <MarkdownContent 
+              <MarkdownContent
                 content={post.content}
                 className="prose prose-lg max-w-none"
               />
@@ -293,7 +307,7 @@ const BlogPostPage: React.FC = () => {
                       const totalCount = (blogPosts || []).filter(
                         (p) => p.category === category && p.isPublished
                       ).length;
-                      
+
                       return (
                         <div key={category}>
                           <button
@@ -318,7 +332,7 @@ const BlogPostPage: React.FC = () => {
                               </div>
                             )}
                           </button>
-                          
+
                           {isExpanded && categoryPosts.length > 0 && (
                             <div className="mt-3 ml-4 space-y-2 border-l border-bg-300/20 pl-4">
                               {categoryPosts.map((categoryPost) => (
@@ -343,7 +357,12 @@ const BlogPostPage: React.FC = () => {
                                       </h4>
                                       <span className="text-xs text-bg-200 flex items-center">
                                         <FiCalendar className="w-3 h-3 mr-1" />
-                                        {formatDate(categoryPost.publishedAt || categoryPost.createdAt).split(",")[0]}
+                                        {
+                                          formatDate(
+                                            categoryPost.publishedAt ||
+                                              categoryPost.createdAt
+                                          ).split(",")[0]
+                                        }
                                       </span>
                                     </div>
                                   </div>
@@ -352,7 +371,9 @@ const BlogPostPage: React.FC = () => {
                               {categoryPosts.length === 5 && (
                                 <div className="pt-2">
                                   <Link
-                                    to={`/noticias?category=${encodeURIComponent(category)}`}
+                                    to={`/noticias?category=${encodeURIComponent(
+                                      category
+                                    )}`}
                                     className="text-xs text-primary-100 hover:text-primary-200 font-medium"
                                   >
                                     Ver todos los artículos de {category} →
@@ -395,7 +416,7 @@ const BlogPostPage: React.FC = () => {
                       const count = (blogPosts || [])
                         .filter((p) => p.isPublished)
                         .filter((p) => p.tags.includes(tag)).length;
-                      
+
                       return (
                         <div key={index}>
                           <button
@@ -420,7 +441,7 @@ const BlogPostPage: React.FC = () => {
                               </div>
                             )}
                           </button>
-                          
+
                           {isExpanded && tagPosts.length > 0 && (
                             <div className="mt-3 ml-4 space-y-2 border-l border-bg-300/20 pl-4">
                               {tagPosts.map((tagPost) => (
@@ -446,7 +467,12 @@ const BlogPostPage: React.FC = () => {
                                       <div className="flex items-center gap-2">
                                         <span className="text-xs text-bg-200 flex items-center">
                                           <FiCalendar className="w-3 h-3 mr-1" />
-                                          {formatDate(tagPost.publishedAt || tagPost.createdAt).split(",")[0]}
+                                          {
+                                            formatDate(
+                                              tagPost.publishedAt ||
+                                                tagPost.createdAt
+                                            ).split(",")[0]
+                                          }
                                         </span>
                                         {tagPost.category && (
                                           <span className="text-xs bg-primary-100/10 text-primary-100 px-1 py-0.5 rounded">
@@ -461,7 +487,9 @@ const BlogPostPage: React.FC = () => {
                               {tagPosts.length === 5 && (
                                 <div className="pt-2">
                                   <Link
-                                    to={`/noticias?tag=${encodeURIComponent(tag)}`}
+                                    to={`/noticias?tag=${encodeURIComponent(
+                                      tag
+                                    )}`}
                                     className="text-xs text-accent-100 hover:text-accent-200 font-medium"
                                   >
                                     Ver todos los artículos con #{tag} →

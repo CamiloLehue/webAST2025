@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 const SLIDER_CONFIG = {
   centerSlideWidth: 70,
@@ -18,13 +19,13 @@ const SLIDER_CONFIG = {
   titleSizeInactive: "text-sm",
   descriptionSizeActive: "text-lg",
   descriptionSizeInactive: "text-xs",
-
-  // Container height
-  containerHeight: 580, // Base height in pixels
+  autoPlayInterval: 8000, 
+  containerHeight: 580, 
 };
 
 function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const SLIDER_ITEMS = [
     {
@@ -76,13 +77,31 @@ function Slider() {
     scrollToSlide(newIndex);
   };
 
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % SLIDER_ITEMS.length);
+    }, SLIDER_CONFIG.autoPlayInterval);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, SLIDER_ITEMS.length]);
+
+  const handleUserInteraction = () => {
+    setIsAutoPlaying(false);
+    setTimeout(() => setIsAutoPlaying(true), 10000);
+  };
+
   return (
     <div
       className={`relative w-full p-${SLIDER_CONFIG.padding} ${SLIDER_CONFIG.backgroundColor}`}
     >
       {/* Navigation buttons */}
       <button
-        onClick={prevSlide}
+        onClick={() => {
+          handleUserInteraction();
+          prevSlide();
+        }}
         className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
       >
         <svg
@@ -101,7 +120,10 @@ function Slider() {
       </button>
 
       <button
-        onClick={nextSlide}
+        onClick={() => {
+          handleUserInteraction();
+          nextSlide();
+        }}
         className="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all"
       >
         <svg
@@ -154,30 +176,60 @@ function Slider() {
               height: `${SLIDER_CONFIG.centerSlideHeight}%`,
             }}
           >
-            <div className="relative h-full">
-              <img
-                src={SLIDER_ITEMS[currentIndex].image}
-                alt={SLIDER_ITEMS[currentIndex].title}
-                className="w-full h-full object-cover rounded-2xl shadow-lg"
-              />
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
-                <div className="relative bottom-10 left-10 flex flex-col gap-2 max-w-2xl">
-                  <h2
-                    className={`font-bold text-white mb-1 ${SLIDER_CONFIG.subtitleSizeActive}`}
+            <div className="relative h-full overflow-hidden rounded-2xl bg-gray-900">
+              <AnimatePresence initial={false}>
+                <motion.img
+                  key={currentIndex}
+                  src={SLIDER_ITEMS[currentIndex].image}
+                  alt={SLIDER_ITEMS[currentIndex].title}
+                  className="absolute inset-0 w-full h-full object-cover shadow-lg"
+                  initial={{ scale: 1, opacity: 0 }}
+                  animate={{ 
+                    scale: 1.08, // Zoom gradual del 100% al 108%
+                    opacity: 1 
+                  }}
+                  exit={{ scale: 1.1, opacity: 0 }}
+                  transition={{ 
+                    scale: { 
+                      duration: 8, // Zoom más lento durante todo el ciclo
+                      ease: "linear" 
+                    },
+                    opacity: { duration: 0.8, ease: "easeInOut" }
+                  }}
+                />
+              </AnimatePresence>
+              
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl z-10">
+                <AnimatePresence initial={false}>
+                  <motion.div
+                    key={`content-${currentIndex}`}
+                    className="relative bottom-10 left-10 flex flex-col gap-2 max-w-2xl"
+                    initial={{ y: 30, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -30, opacity: 0 }}
+                    transition={{ 
+                      duration: 0.6, 
+                      ease: [0.4, 0, 0.2, 1],
+                      delay: 0.2 // Pequeño delay para que aparezca después de la imagen
+                    }}
                   >
-                    {SLIDER_ITEMS[currentIndex].subtitle}
-                  </h2>
-                  <h1
-                    className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
-                  >
-                    {SLIDER_ITEMS[currentIndex].title}
-                  </h1>
-                  <p
-                    className={`text-white ${SLIDER_CONFIG.descriptionSizeActive}`}
-                  >
-                    {SLIDER_ITEMS[currentIndex].description}
-                  </p>
-                </div>
+                    <h2
+                      className={`font-bold text-white mb-1 ${SLIDER_CONFIG.subtitleSizeActive}`}
+                    >
+                      {SLIDER_ITEMS[currentIndex].subtitle}
+                    </h2>
+                    <h1
+                      className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
+                    >
+                      {SLIDER_ITEMS[currentIndex].title}
+                    </h1>
+                    <p
+                      className={`text-white ${SLIDER_CONFIG.descriptionSizeActive}`}
+                    >
+                      {SLIDER_ITEMS[currentIndex].description}
+                    </p>
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
           </div>
@@ -204,10 +256,13 @@ function Slider() {
         {SLIDER_ITEMS.map((_, index) => (
           <button
             key={index}
-            onClick={() => scrollToSlide(index)}
+            onClick={() => {
+              handleUserInteraction();
+              scrollToSlide(index);
+            }}
             className={`${
               SLIDER_CONFIG.indicatorSize
-            } rounded-full transition-all ${
+            } rounded-full transition-all duration-300 ${
               index === currentIndex
                 ? "bg-primary-100 w-20"
                 : "bg-gray-300 hover:bg-gray-400"
