@@ -182,7 +182,7 @@ const BlogPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="w-full min-h-screen bg-bg-400">
+      <div className="w-full min-h-screen bg-bg-400 min-w-7xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="animate-pulse">
             <div className="h-8 bg-bg-300 rounded w-1/3 mb-4"></div>
@@ -219,7 +219,7 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="w-full min-h-screen ">
+    <div className="w-full min-h-screen min-w-screen">
       <NewsHeroSection posts={publishedPosts} />
       <div className="bg-white-100 ">
         <div className="max-w-7xl mx-auto px-4  py-8">
@@ -233,7 +233,6 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="lg:hidden mb-6">
           <button
