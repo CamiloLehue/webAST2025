@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useHomeManagement } from "../hooks/useHomeManagement";
-import type { SliderItem, HeroSection, AISection, VideoSection, ContactSection } from "../types/homeTypes";
+import type { SliderItem, SliderSection, HeroSection, IASection, VideoSection, ContactSection } from "../types/homeTypes";
 import MultimediaSelector from "../../../../components/editor/MultimediaSelector";
 import { FiLoader, FiSave, FiEye, FiPlus, FiTrash2, FiChevronUp, FiChevronDown } from "react-icons/fi";
 
@@ -10,29 +10,36 @@ const HomeEditor: React.FC = () => {
   const { homeData, loading, error, isSaving, createHome, updateHome } = useHomeManagement();
 
   const [formData, setFormData] = useState({
-    slider: [] as SliderItem[],
+    sliderSection: {
+      slides: [] as SliderItem[],
+      autoplay: true,
+      interval: 5000,
+    } as SliderSection,
     heroSection: {
       title: "Bienvenido a AST",
       description: "Conectamos tecnología e innovación para transformar sectores productivos clave en Chile y Latinoamérica.",
       backgroundImage: "slider/slider04.JPG",
     } as HeroSection,
-    aiSection: {
+    iaSection: {
       title: "Implementamos IA",
       description: "En AST Networks estamos incorporando inteligencia artificial para potenciar nuestras soluciones de monitoreo, automatización y análisis de datos.",
       image: "img/inicio/ia-wisensor.jpg",
       buttonText: "Ver más",
       buttonLink: "#",
-    } as AISection,
+    } as IASection,
     videoSection: {
       title: "Puedes ver más sobre nosotros aquí",
       videoUrl: "https://www.youtube.com/embed/fI-tzs7NnNE?si=HCiO3OqtZgFZsa4r",
       description: "",
     } as VideoSection,
     contactSection: {
-      phone1: "+56 2 3366 3478",
-      phone2: "+56 2 3366 3478",
-      email: "ventas@ast.cl",
-      schedule: "09:30 - 19:30 de lunes a viernes",
+      title: "Contáctanos",
+      contactInfo: {
+        phone1: "+56 2 3366 3478",
+        phone2: "+56 2 3366 3478",
+        email: "ventas@ast.cl",
+        schedule: "09:30 - 19:30 de lunes a viernes",
+      },
     } as ContactSection,
     isPublished: false,
   });
@@ -40,13 +47,17 @@ const HomeEditor: React.FC = () => {
   useEffect(() => {
     if (homeData) {
       setFormData({
-        slider: homeData.slider || [],
+        sliderSection: homeData.sliderSection || {
+          slides: [],
+          autoplay: true,
+          interval: 5000,
+        },
         heroSection: homeData.heroSection || {
           title: "Bienvenido a AST",
           description: "Conectamos tecnología e innovación para transformar sectores productivos clave en Chile y Latinoamérica.",
           backgroundImage: "slider/slider04.JPG",
         },
-        aiSection: homeData.aiSection || {
+        iaSection: homeData.iaSection || {
           title: "Implementamos IA",
           description: "En AST Networks estamos incorporando inteligencia artificial para potenciar nuestras soluciones de monitoreo, automatización y análisis de datos.",
           image: "img/inicio/ia-wisensor.jpg",
@@ -59,10 +70,13 @@ const HomeEditor: React.FC = () => {
           description: "",
         },
         contactSection: homeData.contactSection || {
-          phone1: "+56 2 3366 3478",
-          phone2: "+56 2 3366 3478",
-          email: "ventas@ast.cl",
-          schedule: "09:30 - 19:30 de lunes a viernes",
+          title: "Contáctanos",
+          contactInfo: {
+            phone1: "+56 2 3366 3478",
+            phone2: "+56 2 3366 3478",
+            email: "ventas@ast.cl",
+            schedule: "09:30 - 19:30 de lunes a viernes",
+          },
         },
         isPublished: homeData.isPublished || false,
       });
@@ -94,43 +108,58 @@ const HomeEditor: React.FC = () => {
       image: "",
       title: "",
       description: "",
-      order: formData.slider.length,
+      order: formData.sliderSection.slides.length,
       isActive: true,
     };
     setFormData((prev) => ({
       ...prev,
-      slider: [...prev.slider, newItem],
+      sliderSection: {
+        ...prev.sliderSection,
+        slides: [...prev.sliderSection.slides, newItem],
+      },
     }));
   };
 
   const updateSlideItem = (index: number, field: keyof SliderItem, value: string | number | boolean) => {
     setFormData((prev) => ({
       ...prev,
-      slider: prev.slider.map((item, i) =>
-        i === index ? { ...item, [field]: value } : item
-      ),
+      sliderSection: {
+        ...prev.sliderSection,
+        slides: prev.sliderSection.slides.map((item, i) =>
+          i === index ? { ...item, [field]: value } : item
+        ),
+      },
     }));
   };
 
   const removeSlideItem = (index: number) => {
     setFormData((prev) => ({
       ...prev,
-      slider: prev.slider.filter((_, i) => i !== index),
+      sliderSection: {
+        ...prev.sliderSection,
+        slides: prev.sliderSection.slides.filter((_, i) => i !== index),
+      },
     }));
   };
 
   const moveSlideItem = (index: number, direction: "up" | "down") => {
-    const newSlider = [...formData.slider];
+    const newSlides = [...formData.sliderSection.slides];
     const newIndex = direction === "up" ? index - 1 : index + 1;
 
-    if (newIndex < 0 || newIndex >= newSlider.length) return;
+    if (newIndex < 0 || newSlides.length) return;
 
-    [newSlider[index], newSlider[newIndex]] = [newSlider[newIndex], newSlider[index]];
-    newSlider.forEach((item, idx) => {
+    [newSlides[index], newSlides[newIndex]] = [newSlides[newIndex], newSlides[index]];
+    newSlides.forEach((item, idx) => {
       item.order = idx;
     });
 
-    setFormData((prev) => ({ ...prev, slider: newSlider }));
+    setFormData((prev) => ({ 
+      ...prev, 
+      sliderSection: {
+        ...prev.sliderSection,
+        slides: newSlides,
+      },
+    }));
   };
 
   if (loading) {
@@ -268,8 +297,50 @@ const HomeEditor: React.FC = () => {
             <span>Agregar Slide</span>
           </button>
         </div>
+        <div className="space-y-4 mb-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  checked={formData.sliderSection.autoplay}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      sliderSection: {
+                        ...prev.sliderSection,
+                        autoplay: e.target.checked,
+                      },
+                    }))
+                  }
+                  className="h-4 w-4 text-accent-100"
+                />
+                <span className="text-sm text-bg-300">Autoplay</span>
+              </label>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-bg-300 mb-1">Intervalo (ms)</label>
+              <input
+                type="number"
+                value={formData.sliderSection.interval}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    sliderSection: {
+                      ...prev.sliderSection,
+                      interval: parseInt(e.target.value) || 5000,
+                    },
+                  }))
+                }
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md"
+                min="1000"
+                step="1000"
+              />
+            </div>
+          </div>
+        </div>
         <div className="space-y-4">
-          {formData.slider.map((slide, index) => (
+          {formData.sliderSection.slides.map((slide, index) => (
             <div key={slide.id} className="border border-gray-300 rounded-md p-4 space-y-3 bg-gray-50">
               <div className="flex justify-between items-center">
                 <span className="font-medium text-bg-300">Slide #{index + 1}</span>
@@ -283,7 +354,7 @@ const HomeEditor: React.FC = () => {
                   </button>
                   <button
                     onClick={() => moveSlideItem(index, "down")}
-                    disabled={index === formData.slider.length - 1}
+                    disabled={index === formData.sliderSection.slides.length - 1}
                     className="p-1 text-gray-400 hover:text-bg-200 disabled:opacity-30"
                   >
                     <FiChevronDown className="h-5 w-5" />
@@ -336,7 +407,7 @@ const HomeEditor: React.FC = () => {
               </div>
             </div>
           ))}
-          {formData.slider.length === 0 && (
+          {formData.sliderSection.slides.length === 0 && (
             <p className="text-center text-gray-500 py-4">No hay slides configurados</p>
           )}
         </div>
@@ -349,11 +420,11 @@ const HomeEditor: React.FC = () => {
           <label className="block text-sm font-medium text-bg-300 mb-2">Título</label>
           <input
             type="text"
-            value={formData.aiSection.title}
+            value={formData.iaSection.title}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                aiSection: { ...prev.aiSection, title: e.target.value },
+                iaSection: { ...prev.iaSection, title: e.target.value },
               }))
             }
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -362,11 +433,11 @@ const HomeEditor: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-bg-300 mb-2">Descripción</label>
           <textarea
-            value={formData.aiSection.description}
+            value={formData.iaSection.description}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                aiSection: { ...prev.aiSection, description: e.target.value },
+                iaSection: { ...prev.iaSection, description: e.target.value },
               }))
             }
             rows={4}
@@ -376,11 +447,11 @@ const HomeEditor: React.FC = () => {
         <div>
           <label className="block text-sm font-medium text-bg-300 mb-2">Imagen</label>
           <MultimediaSelector
-            value={formData.aiSection.image}
+            value={formData.iaSection.image}
             onChange={(value: string) =>
               setFormData((prev) => ({
                 ...prev,
-                aiSection: { ...prev.aiSection, image: value },
+                iaSection: { ...prev.iaSection, image: value },
               }))
             }
             placeholder="Selecciona la imagen"
@@ -392,11 +463,11 @@ const HomeEditor: React.FC = () => {
             <label className="block text-sm font-medium text-bg-300 mb-2">Texto del Botón</label>
             <input
               type="text"
-              value={formData.aiSection.buttonText}
+              value={formData.iaSection.buttonText}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  aiSection: { ...prev.aiSection, buttonText: e.target.value },
+                  iaSection: { ...prev.iaSection, buttonText: e.target.value },
                 }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -406,11 +477,11 @@ const HomeEditor: React.FC = () => {
             <label className="block text-sm font-medium text-bg-300 mb-2">Link del Botón</label>
             <input
               type="text"
-              value={formData.aiSection.buttonLink}
+              value={formData.iaSection.buttonLink}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  aiSection: { ...prev.aiSection, buttonLink: e.target.value },
+                  iaSection: { ...prev.iaSection, buttonLink: e.target.value },
                 }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -456,16 +527,39 @@ const HomeEditor: React.FC = () => {
       {/* Contact Section */}
       <div className="bg-white rounded-lg shadow p-6 space-y-4">
         <h2 className="text-xl font-semibold text-bg-300">Sección de Contacto</h2>
+        <div>
+          <label className="block text-sm font-medium text-bg-300 mb-2">Título</label>
+          <input
+            type="text"
+            value={formData.contactSection.title}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                contactSection: { 
+                  ...prev.contactSection, 
+                  title: e.target.value 
+                },
+              }))
+            }
+            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+          />
+        </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-bg-300 mb-2">Teléfono 1</label>
             <input
               type="text"
-              value={formData.contactSection.phone1}
+              value={formData.contactSection.contactInfo.phone1}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  contactSection: { ...prev.contactSection, phone1: e.target.value },
+                  contactSection: { 
+                    ...prev.contactSection, 
+                    contactInfo: {
+                      ...prev.contactSection.contactInfo,
+                      phone1: e.target.value 
+                    }
+                  },
                 }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -475,11 +569,17 @@ const HomeEditor: React.FC = () => {
             <label className="block text-sm font-medium text-bg-300 mb-2">Teléfono 2</label>
             <input
               type="text"
-              value={formData.contactSection.phone2}
+              value={formData.contactSection.contactInfo.phone2}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
-                  contactSection: { ...prev.contactSection, phone2: e.target.value },
+                  contactSection: { 
+                    ...prev.contactSection, 
+                    contactInfo: {
+                      ...prev.contactSection.contactInfo,
+                      phone2: e.target.value 
+                    }
+                  },
                 }))
               }
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -490,11 +590,17 @@ const HomeEditor: React.FC = () => {
           <label className="block text-sm font-medium text-bg-300 mb-2">Email</label>
           <input
             type="email"
-            value={formData.contactSection.email}
+            value={formData.contactSection.contactInfo.email}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                contactSection: { ...prev.contactSection, email: e.target.value },
+                contactSection: { 
+                  ...prev.contactSection, 
+                  contactInfo: {
+                    ...prev.contactSection.contactInfo,
+                    email: e.target.value 
+                  }
+                },
               }))
             }
             className="w-full px-3 py-2 border border-gray-300 rounded-md"
@@ -504,11 +610,17 @@ const HomeEditor: React.FC = () => {
           <label className="block text-sm font-medium text-bg-300 mb-2">Horario de Atención</label>
           <input
             type="text"
-            value={formData.contactSection.schedule}
+            value={formData.contactSection.contactInfo.schedule}
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                contactSection: { ...prev.contactSection, schedule: e.target.value },
+                contactSection: { 
+                  ...prev.contactSection, 
+                  contactInfo: {
+                    ...prev.contactSection.contactInfo,
+                    schedule: e.target.value 
+                  }
+                },
               }))
             }
             className="w-full px-3 py-2 border border-gray-300 rounded-md"

@@ -1,8 +1,8 @@
 export interface HomeData {
   id: string;
-  slider: SliderItem[];
   heroSection: HeroSection;
-  aiSection: AISection;
+  sliderSection: SliderSection;
+  iaSection: IASection;
   videoSection: VideoSection;
   contactSection: ContactSection;
   isPublished: boolean;
@@ -19,13 +19,19 @@ export interface SliderItem {
   isActive: boolean;
 }
 
+export interface SliderSection {
+  slides: SliderItem[];
+  autoplay: boolean;
+  interval: number;
+}
+
 export interface HeroSection {
   title: string;
   description: string;
   backgroundImage: string;
 }
 
-export interface AISection {
+export interface IASection {
   title: string;
   description: string;
   image: string;
@@ -40,16 +46,19 @@ export interface VideoSection {
 }
 
 export interface ContactSection {
-  phone1: string;
-  phone2: string;
-  email: string;
-  schedule: string;
+  title: string;
+  contactInfo: {
+    phone1: string;
+    phone2: string;
+    email: string;
+    schedule: string;
+  };
 }
 
 export interface HomeUpdateSchema {
-  slider?: SliderItem[];
   heroSection?: HeroSection;
-  aiSection?: AISection;
+  sliderSection?: SliderSection;
+  iaSection?: IASection;
   videoSection?: VideoSection;
   contactSection?: ContactSection;
   isPublished?: boolean;

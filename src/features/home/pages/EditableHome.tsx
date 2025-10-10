@@ -49,7 +49,7 @@ function EditableHome() {
           <>
             <div className="absolute -top-40 -right-20 bg-primary-100 blur-3xl w-125 h-130 rounded-full opacity-40"></div>
             <div className="absolute -bottom-20 -left-20 bg-primary-100 blur-3xl w-130 h-130 rounded-full opacity-30"></div>
-            {homeData.slider && homeData.slider.length > 0 ? (
+            {homeData.sliderSection && homeData.sliderSection.slides && homeData.sliderSection.slides.length > 0 ? (
               <Slider />
             ) : (
               <div className="relative w-full h-96 flex items-center justify-center">
@@ -85,9 +85,9 @@ function EditableHome() {
               isSmallDevice ? "py-12" : "py-24"
             }`}
           >
-            <h2 className="text-5xl font-bold">{homeData.aiSection.title}</h2>
+            <h2 className="text-5xl font-bold">{homeData.iaSection.title}</h2>
             <p className="text-lg text-balance">
-              {homeData.aiSection.description}
+              {homeData.iaSection.description}
             </p>
           </div>
         </FadeInSection>
@@ -100,8 +100,8 @@ function EditableHome() {
           <SlideInLeft>
             <div className="flex items-center justify-center flex-1">
               <img
-                src={homeData.aiSection.image}
-                alt={homeData.aiSection.title}
+                src={homeData.iaSection.image}
+                alt={homeData.iaSection.title}
                 className={`${
                   isSmallDevice ? "w-full" : "w-150"
                 } object-cover rounded-lg shadow-lg`}
@@ -112,17 +112,17 @@ function EditableHome() {
           <SlideInRight>
             <div className="flex-1 flex flex-col gap-8">
               <div className="flex flex-col gap-4">
-                <h3 className="text-3xl font-bold">{homeData.aiSection.title}</h3>
+                <h3 className="text-3xl font-bold">{homeData.iaSection.title}</h3>
                 <p className="text-lg text-balance">
-                  {homeData.aiSection.description}
+                  {homeData.iaSection.description}
                 </p>
               </div>
-              {homeData.aiSection.buttonLink && (
+              {homeData.iaSection.buttonLink && (
                 <a
-                  href={homeData.aiSection.buttonLink}
+                  href={homeData.iaSection.buttonLink}
                   className="bg-primary-100 text-white-100 px-6 py-3 rounded-lg hover:bg-primary-200 transition-colors duration-300 w-fit"
                 >
-                  {homeData.aiSection.buttonText || "Ver más"}
+                  {homeData.iaSection.buttonText || "Ver más"}
                 </a>
               )}
             </div>
@@ -200,7 +200,7 @@ function EditableHome() {
       >
         <FadeInSection>
           <div className="container mx-auto flex flex-col gap-4 text-center">
-            <h2 className="text-5xl font-bold">Contáctanos</h2>
+            <h2 className="text-5xl font-bold">{homeData.contactSection.title}</h2>
             <p className="text-lg text-balance">
               Si tienes alguna pregunta, no dudes en contactarnos.
             </p>
@@ -213,9 +213,9 @@ function EditableHome() {
                 <TbPhoneFilled className="text-4xl" />
                 <div className="flex flex-col items-start">
                   <span className="text-lg font-bold">Teléfono</span>
-                  <span className="text-sm">{homeData.contactSection.phone1}</span>
-                  {homeData.contactSection.phone2 && (
-                    <span className="text-sm">{homeData.contactSection.phone2}</span>
+                  <span className="text-sm">{homeData.contactSection.contactInfo.phone1}</span>
+                  {homeData.contactSection.contactInfo.phone2 && (
+                    <span className="text-sm">{homeData.contactSection.contactInfo.phone2}</span>
                   )}
                 </div>
               </div>
@@ -223,12 +223,12 @@ function EditableHome() {
                 <TbMailFilled className="text-4xl" />
                 <div className="flex flex-col items-start">
                   <span className="text-lg font-bold">Email</span>
-                  <span className="text-sm">{homeData.contactSection.email}</span>
+                  <span className="text-sm">{homeData.contactSection.contactInfo.email}</span>
                 </div>
               </div>
             </div>
-            {homeData.contactSection.schedule && (
-              <p className="text-sm mt-4">{homeData.contactSection.schedule}</p>
+            {homeData.contactSection.contactInfo.schedule && (
+              <p className="text-sm mt-4">{homeData.contactSection.contactInfo.schedule}</p>
             )}
           </div>
         </FadeInSection>
