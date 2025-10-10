@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
+interface SliderItem {
+  id: string;
+  image: string;
+  title: string;
+  description: string;
+  order: number;
+  isActive: boolean;
+}
+
+interface SliderProps {
+  slides?: SliderItem[];
+  autoplay?: boolean;
+  interval?: number;
+}
+
 const SLIDER_CONFIG = {
   centerSlideWidth: 70,
   sideSlideWidth: 20, 
@@ -23,44 +38,58 @@ const SLIDER_CONFIG = {
   containerHeight: 580, 
 };
 
-function Slider() {
+function Slider({ slides, autoplay = true, interval = 8000 }: SliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(autoplay);
 
-  const SLIDER_ITEMS = [
+  // Datos por defecto si no se proporcionan slides
+  const DEFAULT_SLIDER_ITEMS = [
     {
-      image: "public/slider/slider04.JPG",
+      id: "default-1",
+      image: "slider/slider04.JPG",
       title: "Te damos la bienvenida a AST Networks",
-      subtitle: "Bienvenido",
       description:
         "Conectamos tecnología e innovación para transformar sectores productivos clave en Chile y Latinoamérica.",
     },
     {
-      image: "public/slider/slider01.JPG",
+      id: "default-2",
+      image: "slider/slider01.JPG",
       title: "Sostenibilidad",
-      subtitle: "AST - Soluciones de vanguardia",
       description: "Comprometidos con el medio ambiente",
+      order: 1,
+      isActive: true,
     },
     {
-      image: "public/slider/slider01.JPG",
+      id: "default-3",
+      image: "slider/slider02.JPG",
       title: "Soluciones Tecnológicas a tu Medida",
-      subtitle: "Servicios",
       description:
         "Ofrecemos soluciones en conectividad, seguridad, monitoreo y datacenter, potenciadas con inteligencia artificial para optimizar procesos y mejorar la eficiencia de tu operación en Chile y Latinoamérica.",
+      order: 2,
+      isActive: true,
     },
     {
-      image: "public/slider/slider01.JPG",
+      id: "default-4",
+      image: "slider/slider03.JPG",
       title: "Equipo Profesional",
-      subtitle: "AST - Soluciones de vanguardia",
       description: "Expertos dedicados a tu éxito",
+      order: 3,
+      isActive: true,
     },
     {
-      image: "public/slider/slider01.JPG",
+      id: "default-5",
+      image: "slider/slider05.JPG",
       title: "Resultados",
-      subtitle: "AST - Soluciones de vanguardia",
       description: "Entregando valor real a nuestros clientes",
+      order: 4,
+      isActive: true,
     },
   ];
+
+  // Usar slides proporcionados o datos por defecto, filtrar solo activos y ordenar
+  const SLIDER_ITEMS = slides && slides.length > 0
+    ? slides.filter(slide => slide.isActive).sort((a, b) => a.order - b.order)
+    : DEFAULT_SLIDER_ITEMS;
 
   const scrollToSlide = (index: number) => {
     setCurrentIndex(index);
@@ -80,12 +109,12 @@ function Slider() {
   useEffect(() => {
     if (!isAutoPlaying) return;
 
-    const interval = setInterval(() => {
+    const autoplayInterval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % SLIDER_ITEMS.length);
-    }, SLIDER_CONFIG.autoPlayInterval);
+    }, interval);
 
-    return () => clearInterval(interval);
-  }, [isAutoPlaying, SLIDER_ITEMS.length]);
+    return () => clearInterval(autoplayInterval);
+  }, [isAutoPlaying, SLIDER_ITEMS.length, interval]);
 
   const handleUserInteraction = () => {
     setIsAutoPlaying(false);
@@ -213,11 +242,6 @@ function Slider() {
                       delay: 0.2 // Pequeño delay para que aparezca después de la imagen
                     }}
                   >
-                    <h2
-                      className={`font-bold text-white mb-1 ${SLIDER_CONFIG.subtitleSizeActive}`}
-                    >
-                      {SLIDER_ITEMS[currentIndex].subtitle}
-                    </h2>
                     <h1
                       className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
                     >

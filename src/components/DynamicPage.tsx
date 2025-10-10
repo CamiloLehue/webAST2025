@@ -10,6 +10,7 @@ import type {
   ContentSection,
   CustomPage,
 } from "../features/admin/page-management/types/pageTypes";
+import { TbMail, TbPhone } from "react-icons/tb";
 
 const DynamicPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -222,6 +223,10 @@ const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
       return <CTASection data={section.data} />;
     case "spacer":
       return <SpacerSection data={section.data} />;
+    case "clients-carousel":
+      return <ClientsCarouselSection data={section.data} />;
+    case "team-cards":
+      return <TeamCardsSection data={section.data} />;
     default:
       return <div>Tipo de sección no soportado: {section.type}</div>;
   }
@@ -378,10 +383,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
             "text-left"
           }`}
         >
-          <MarkdownContent 
-            content={content} 
-            allowHtml={true}
-          />
+          <MarkdownContent content={content} allowHtml={true} />
         </div>
       </div>
     </section>
@@ -696,7 +698,10 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                 </div>
               </div>
               <div className="text-bg-300 mb-4">
-                <MarkdownContent content={testimonial.content} allowHtml={true} />
+                <MarkdownContent
+                  content={testimonial.content}
+                  allowHtml={true}
+                />
               </div>
               {testimonial.rating && (
                 <div className="flex">
@@ -802,7 +807,10 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <div className="text-bg-200">
-                  <MarkdownContent content={feature.description} allowHtml={true} />
+                  <MarkdownContent
+                    content={feature.description}
+                    allowHtml={true}
+                  />
                 </div>
               </div>
             </div>
@@ -1013,6 +1021,189 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
               />
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Clients Carousel Section Component
+const ClientsCarouselSection: React.FC<{ data: any }> = ({ data }) => {
+  const clients = (data.clients || []) as Array<{
+    id: string;
+    name: string;
+    logo: string;
+  }>;
+
+  if (clients.length === 0) {
+    return (
+      <section className="py-16 px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-gray-500">
+            Carrusel de clientes (sin clientes configurados)
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      className="relative overflow-hidden max-w-screen py-10"
+      style={{ backgroundColor: data.backgroundColor || "transparent" }}
+    >
+      <div className="absolute bottom-0 left-0 right-0 h-full pointer-events-none"></div>
+      <div className="relative mx-auto py-10 flex flex-col justify-center items-center gap-10">
+        {data.title && (
+          <h2 className="text-xl sm:text-2xl lg:text-5xl xl:text-5xl font-bold text-primary-100 mb-5 border-b-4 border-primary-100">
+            {data.title}
+          </h2>
+        )}
+        <div className="w-full overflow-hidden relative">
+          <div className="absolute left-0 top-0 bottom-0 w-100 bg-gradient-to-r from-white-100 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-100 bg-gradient-to-l from-white-100 to-transparent z-10 pointer-events-none"></div>
+
+          <div className="flex animate-infinite-scroll-seamless gap-10">
+            {/* Primera copia */}
+            {clients.map((client) => (
+              <div
+                key={`copy1-${client.id}`}
+                className="flex justify-center items-center h-50 w-50 rounded-2xl flex-shrink-0 hover:scale-90 transition-transform duration-300"
+              >
+                <img
+                  src={processImageUrl(client.logo)}
+                  alt={client.name}
+                  className="h-20 object-contain mix-blend-multiply"
+                />
+              </div>
+            ))}
+
+            {clients.map((client) => (
+              <div
+                key={`copy2-${client.id}`}
+                className="flex justify-center items-center h-50 w-50 rounded-2xl flex-shrink-0 hover:scale-90 transition-transform duration-300"
+              >
+                <img
+                  src={processImageUrl(client.logo)}
+                  alt={client.name}
+                  className="h-20 object-contain mix-blend-multiply"
+                />
+              </div>
+            ))}
+
+            {clients.map((client) => (
+              <div
+                key={`copy3-${client.id}`}
+                className="flex justify-center items-center h-50 w-50 rounded-2xl flex-shrink-0 hover:scale-90 transition-transform duration-300"
+              >
+                <img
+                  src={processImageUrl(client.logo)}
+                  alt={client.name}
+                  className="h-20 object-contain mix-blend-multiply"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// Team Cards Section Component
+const TeamCardsSection: React.FC<{ data: any }> = ({ data }) => {
+  const members = (data.members || []) as Array<{
+    id: string;
+    name: string;
+    role: string;
+    image: string;
+    phone?: string;
+    email?: string;
+  }>;
+
+  const columns = data.columns || 5;
+
+  if (members.length === 0) {
+    return (
+      <section className="py-16 px-6 lg:px-8">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-gray-500">
+            Sección de equipo (sin miembros configurados)
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const columnsClasses = {
+    3: "grid-cols-3",
+    4: "grid-cols-4",
+    5: "grid-cols-5",
+  };
+
+  return (
+    <section className="relative h-110 min-w-screen">
+      <div
+        className="absolute left-0 -bottom-0 w-full h-80"
+        style={{
+          backgroundColor: data.backgroundColor || "#ff3030",
+          clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
+        }}
+      ></div>
+      <div className="relative w-full max-w-7xl mx-auto -top-20">
+        {data.title && (
+          <h2 className="text-2xl font-bold text-center text-bg-200 mb-10">
+            {data.title}
+          </h2>
+        )}
+        <div
+          className={`grid ${
+            columnsClasses[columns as keyof typeof columnsClasses] ||
+            "grid-cols-5"
+          } gap-2`}
+        >
+          {members.map((member) => (
+            <article
+              key={member.id}
+              className="relative bg-slate-800 shadow w-full h-100 rounded-2xl overflow-hidden"
+            >
+              <div
+                className="absolute left-0 -top-10 w-full h-95 bg-white"
+                style={{
+                  clipPath: "ellipse(90% 45% at 50% 45%)",
+                }}
+              ></div>
+              <div className="relative w-full h-full bg-gradient-to-b from-white to-transparent p-5">
+                <div className="w-full h-45">
+                  <img
+                    src={processImageUrl(member.image)}
+                    alt={member.name}
+                    className="w-full h-full object-cover rounded-xl"
+                  />
+                </div>
+                <div className="flex flex-col justify-center items-center py-5">
+                  <h3 className="text-xl font-bold text-primary-100">
+                    {member.name}
+                  </h3>
+                  <p className="text-lg">{member.role}</p>
+                </div>
+                <div className="flex flex-col justify-center items-start gap-1 text-white py-5 ps-3">
+                  {member.phone && (
+                    <p className="leading-6 text-lg flex justify-center items-center gap-1">
+                      <TbPhone />
+                      {member.phone}
+                    </p>
+                  )}
+                  {member.email && (
+                    <p className="leading-6 text-lg flex justify-center items-center gap-2">
+                      <TbMail />
+                      {member.email}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

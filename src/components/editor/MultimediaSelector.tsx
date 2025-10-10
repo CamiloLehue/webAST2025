@@ -223,9 +223,9 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
       )}
 
       {showSelector && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div className="fixed bottom-0 right-0 z-50 rounded-xl bg-black/50  flex items-center justify-center p-1">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b">
+            <div className="flex items-center justify-between p-4 border-b border-white-100">
               <h3 className="text-lg font-semibold">Seleccionar Multimedia</h3>
               <button
                 onClick={handleCloseSelector}
@@ -235,7 +235,7 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
               </button>
             </div>
 
-            <div className="p-4 border-b">
+            <div className="p-4 border-b ">
               <div className="relative">
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
@@ -290,7 +290,7 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
               )}
             </div>
 
-            <div className="p-4 border-t bg-gray-50">
+            <div className="p-4 border-t bg-gray-50 rounded-b-lg">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">
                   {filteredFiles.length} archivos encontrados

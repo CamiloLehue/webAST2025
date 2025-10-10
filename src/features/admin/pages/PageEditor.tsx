@@ -259,17 +259,17 @@ const PageEditor: React.FC = () => {
   }
 
   return (
-    <div className="w-full grid grid-cols-12 mx-auto space-y-6  gap-2 h-full">
+    <div className="w-full grid grid-cols-12 mx-auto space-y-2  gap-2 h-full">
       <div className="relative col-span-2 bg-bg-100 h-full  shadow p-5">
-        <div className="sticky top-10  max-h-screen">
-          <h4 className="text-sm text-center font-medium text-white-100 mb-3">
+        <div className="sticky top-5  max-h-screen">
+          <h4 className="text-sm text-center font-medium text-white-100 ">
             Agregar Sección
           </h4>
           <p className="text-white-100/80 text-center text-xs leading-3">
             Selecciona el tipo de sección que deseas agregar al contenido de la
             página.
           </p>
-          <div className="flex flex-col gap-10  mt-5">
+          <div className="flex flex-col gap-5 mt-1">
             <div className="flex flex-col gap-1 px-5 mt-5">
               {sectionTypes.map((sectionType) => {
                 const IconComponent = sectionType.icon;
@@ -530,6 +530,12 @@ const sectionTypes: {
   { type: "features", name: "Características", icon: TbStar },
   { type: "cta", name: "Call to Action", icon: TbTarget },
   { type: "spacer", name: "Espaciador", icon: TbSquare },
+  {
+    type: "clients-carousel",
+    name: "Carrusel de Clientes",
+    icon: TbBuildingStore,
+  },
+  { type: "team-cards", name: "Tarjetas de Equipo", icon: TbMessage },
 ];
 
 const getDefaultSectionData = (
@@ -663,6 +669,22 @@ const getDefaultSectionData = (
       return {
         height: "medium" as const,
       };
+    case "clients-carousel":
+      return {
+        title: "Nuestros Clientes",
+        clients: [],
+        backgroundColor: "",
+        autoplay: true,
+        speed: "medium" as const,
+      };
+    case "team-cards":
+      return {
+        title: "Nuestro Equipo",
+        backgroundColor: "#4a90e2",
+        clipPath: "ellipse(100% 100% at 50% 100%)",
+        members: [],
+        columns: 5 as const,
+      };
     default:
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return {} as any;
@@ -706,6 +728,8 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
     features: { name: "Características", icon: TbStar },
     cta: { name: "Call to Action", icon: TbTarget },
     spacer: { name: "Espaciador", icon: TbSquare },
+    "clients-carousel": { name: "Carrusel de Clientes", icon: TbBuildingStore },
+    "team-cards": { name: "Tarjetas de Equipo", icon: TbMessage },
   };
 
   const getSectionInfo = (type: string) => {
@@ -2096,6 +2120,379 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
               <option value="large">Grande (6rem)</option>
               <option value="xl">Extra Grande (8rem)</option>
             </select>
+          </div>
+        </div>
+      );
+
+    case "clients-carousel":
+      return (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Nuestros Clientes"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Color de Fondo (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.backgroundColor || ""}
+              onChange={(e) => updateField("backgroundColor", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="#ffffff o transparent"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Velocidad del Carrusel
+            </label>
+            <select
+              value={data.speed || "medium"}
+              onChange={(e) => updateField("speed", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value="slow">Lento</option>
+              <option value="medium">Medio</option>
+              <option value="fast">Rápido</option>
+            </select>
+          </div>
+          <div className="flex items-center">
+            <input
+              id="autoplay-carousel"
+              type="checkbox"
+              checked={data.autoplay !== false}
+              onChange={(e) => updateField("autoplay", e.target.checked)}
+              className="h-4 w-4 text-accent-100 focus:ring-accent-100 border-gray-300 rounded"
+            />
+            <label
+              htmlFor="autoplay-carousel"
+              className="ml-2 block text-sm text-bg-300"
+            >
+              Reproducción automática
+            </label>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300 mb-2">
+              Clientes
+            </label>
+            <div className="space-y-3">
+              {(data.clients || []).map(
+                (
+                  client: { id: string; name: string; logo: string },
+                  index: number
+                ) => (
+                  <div
+                    key={client.id}
+                    className="border border-gray-300 rounded-md p-4 space-y-3 bg-gray-50"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-bg-300">
+                        Cliente #{index + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newClients = (data.clients || []).filter(
+                            (
+                              _: { id: string; name: string; logo: string },
+                              i: number
+                            ) => i !== index
+                          );
+                          updateField("clients", newClients);
+                        }}
+                        className="text-red-600 hover:text-red-800 text-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">
+                        Nombre del Cliente
+                      </label>
+                      <input
+                        type="text"
+                        value={client.name}
+                        onChange={(e) => {
+                          const newClients = [...(data.clients || [])];
+                          newClients[index] = {
+                            ...client,
+                            name: e.target.value,
+                          };
+                          updateField("clients", newClients);
+                        }}
+                        className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                        placeholder="Nombre de la empresa"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">
+                        Logo
+                      </label>
+                      <MultimediaSelector
+                        value={client.logo || ""}
+                        onChange={(value: string) => {
+                          const newClients = [...(data.clients || [])];
+                          newClients[index] = { ...client, logo: value };
+                          updateField("clients", newClients);
+                        }}
+                        placeholder="Selecciona el logo del cliente"
+                        acceptedTypes={["image"]}
+                      />
+                    </div>
+                  </div>
+                )
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  const newClients = [
+                    ...(data.clients || []),
+                    {
+                      id: `client-${Date.now()}`,
+                      name: "",
+                      logo: "",
+                    },
+                  ];
+                  updateField("clients", newClients);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
+              >
+                + Agregar Cliente
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+
+    case "team-cards":
+      return (
+        <div className="space-y-4 relative z-0">
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Título (Opcional)
+            </label>
+            <input
+              type="text"
+              value={data.title || ""}
+              onChange={(e) => updateField("title", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="Nuestro Equipo"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Color de Fondo
+            </label>
+            <input
+              type="text"
+              value={data.backgroundColor || "#4a90e2"}
+              onChange={(e) => updateField("backgroundColor", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="#4a90e2"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Número de Columnas
+            </label>
+            <select
+              value={data.columns || 5}
+              onChange={(e) => updateField("columns", parseInt(e.target.value))}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value={3}>3 columnas</option>
+              <option value={4}>4 columnas</option>
+              <option value={5}>5 columnas</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300">
+              Clip Path (Forma del fondo)
+            </label>
+            <input
+              type="text"
+              value={data.clipPath || "ellipse(100% 100% at 50% 100%)"}
+              onChange={(e) => updateField("clipPath", e.target.value)}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              placeholder="ellipse(100% 100% at 50% 100%)"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-bg-300 mb-2">
+              Miembros del Equipo
+            </label>
+            <div className="space-y-4">
+              {(data.members || []).map(
+                (
+                  member: {
+                    id: string;
+                    name: string;
+                    role: string;
+                    image: string;
+                    phone?: string;
+                    email?: string;
+                  },
+                  index: number
+                ) => (
+                  <div
+                    key={member.id}
+                    className="border border-gray-300 rounded-md p-4 space-y-3 bg-gray-50"
+                  >
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-bg-300">
+                        Miembro #{index + 1}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newMembers = (data.members || []).filter(
+                            (
+                              _: {
+                                id: string;
+                                name: string;
+                                role: string;
+                                image: string;
+                                phone?: string;
+                                email?: string;
+                              },
+                              i: number
+                            ) => i !== index
+                          );
+                          updateField("members", newMembers);
+                        }}
+                        className="text-red-600 hover:text-red-800 text-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-bg-300 mb-1">
+                          Nombre Completo *
+                        </label>
+                        <input
+                          type="text"
+                          value={member.name}
+                          onChange={(e) => {
+                            const newMembers = [...(data.members || [])];
+                            newMembers[index] = {
+                              ...member,
+                              name: e.target.value,
+                            };
+                            updateField("members", newMembers);
+                          }}
+                          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                          placeholder="Ej: Luis Pérez"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-bg-300 mb-1">
+                          Cargo *
+                        </label>
+                        <input
+                          type="text"
+                          value={member.role}
+                          onChange={(e) => {
+                            const newMembers = [...(data.members || [])];
+                            newMembers[index] = {
+                              ...member,
+                              role: e.target.value,
+                            };
+                            updateField("members", newMembers);
+                          }}
+                          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                          placeholder="Ej: Gerente General"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">
+                        Foto de Perfil *
+                      </label>
+                      <MultimediaSelector
+                        value={member.image || ""}
+                        onChange={(value: string) => {
+                          const newMembers = [...(data.members || [])];
+                          newMembers[index] = { ...member, image: value };
+                          updateField("members", newMembers);
+                        }}
+                        placeholder="Selecciona la foto del miembro"
+                        acceptedTypes={["image"]}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-bg-300 mb-1">
+                          Teléfono (Opcional)
+                        </label>
+                        <input
+                          type="tel"
+                          value={member.phone || ""}
+                          onChange={(e) => {
+                            const newMembers = [...(data.members || [])];
+                            newMembers[index] = {
+                              ...member,
+                              phone: e.target.value,
+                            };
+                            updateField("members", newMembers);
+                          }}
+                          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                          placeholder="+56 9 9999 9999"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-bg-300 mb-1">
+                          Email (Opcional)
+                        </label>
+                        <input
+                          type="email"
+                          value={member.email || ""}
+                          onChange={(e) => {
+                            const newMembers = [...(data.members || [])];
+                            newMembers[index] = {
+                              ...member,
+                              email: e.target.value,
+                            };
+                            updateField("members", newMembers);
+                          }}
+                          className="block w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                          placeholder="email@empresa.cl"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  const newMembers = [
+                    ...(data.members || []),
+                    {
+                      id: `member-${Date.now()}`,
+                      name: "",
+                      role: "",
+                      image: "",
+                      phone: "",
+                      email: "",
+                    },
+                  ];
+                  updateField("members", newMembers);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400"
+              >
+                + Agregar Miembro del Equipo
+              </button>
+            </div>
           </div>
         </div>
       );
