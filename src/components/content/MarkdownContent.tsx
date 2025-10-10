@@ -9,15 +9,65 @@ interface MarkdownContentProps {
   content: string;
   className?: string;
   allowHtml?: boolean;
+  pureHtmlMode?: boolean; // Nueva opción para HTML puro con estilos inline
 }
+
+// Función para detectar si el contenido tiene HTML (con o sin estilos/clases)
+const hasHtmlContent = (content: string): boolean => {
+  if (!content) return false;
+  
+  // Detectar si hay tags HTML
+  const hasHtmlTags = /<[^>]+>/i.test(content);
+  
+  // Detectar si NO tiene sintaxis Markdown común
+  const hasMarkdownSyntax = /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s|^\[.+\]\(.+\)/m.test(content);
+  
+  // Si tiene HTML y no tiene Markdown, usar dangerouslySetInnerHTML
+  // Esto funciona MEJOR para clases de Tailwind y estilos inline
+  if (hasHtmlTags && !hasMarkdownSyntax) return true;
+  
+  // Si empieza con un tag HTML, probablemente es HTML puro
+  if (/^\s*<(div|section|article|main|header|footer|aside|span|p|h[1-6])/i.test(content)) return true;
+  
+  return false;
+};
 
 const MarkdownContent: React.FC<MarkdownContentProps> = ({
   content,
   className = "prose prose-lg max-w-none",
   allowHtml = true,
+  pureHtmlMode = false,
 }) => {
+  // Auto-detectar si debe usar modo HTML puro si no se especificó explícitamente
+  const shouldUsePureHtml = pureHtmlMode || (allowHtml && hasHtmlContent(content));
+  
+  // Log de depuración (temporal)
+  if (content && (content.includes('style=') || content.includes('class='))) {
+    console.log('🔍 MarkdownContent Debug:', {
+      contentPreview: content.substring(0, 100),
+      pureHtmlMode,
+      allowHtml,
+      hasHtmlContent: hasHtmlContent(content),
+      shouldUsePureHtml,
+      usesClasses: /(class|className)\s*=/.test(content),
+      usesInlineStyles: /style\s*=/.test(content),
+    });
+  }
+  
+  // Si es modo HTML puro, usar dangerouslySetInnerHTML
+  // Esto funciona MEJOR para clases de Tailwind y estilos inline
+  if (shouldUsePureHtml) {
+    return (
+      <div 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+
   // Si el contenido contiene HTML y está permitido, usar ReactMarkdown con rehypeRaw
   // Esto permite HTML mezclado con Markdown
+  // NOTA: rehypeRaw procesa HTML pero puede tener limitaciones con estilos inline complejos
   return (
     <div className={className}>
       <ReactMarkdown

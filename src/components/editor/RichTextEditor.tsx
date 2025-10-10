@@ -12,10 +12,7 @@ import {
   FiDroplet,
   FiTag,
 } from "react-icons/fi";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
+import MarkdownContent from "../content/MarkdownContent";
 
 interface RichTextEditorProps {
   value: string;
@@ -270,24 +267,42 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         <label className="block text-sm font-medium text-bg-300">
           Contenido
         </label>
-        <button
-          type="button"
-          onClick={() => setShowPreview(!showPreview)}
-          className="inline-flex items-center px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-        >
-          {showPreview ? (
-            <>
-              <FiEyeOff className="mr-1 h-4 w-4" />
-              Editor
-            </>
-          ) : (
-            <>
-              <FiEye className="mr-1 h-4 w-4" />
-              Vista Previa
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowPreview(!showPreview)}
+            className="inline-flex items-center px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            {showPreview ? (
+              <>
+                <FiEyeOff className="mr-1 h-4 w-4" />
+                Editor
+              </>
+            ) : (
+              <>
+                <FiEye className="mr-1 h-4 w-4" />
+                Vista Previa
+              </>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Información sobre el modo HTML */}
+      {supportHtml && mode === "html" && !showPreview && (
+        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-xs text-blue-800">
+            <strong>💡 Modo HTML:</strong> Puedes usar HTML con estilos inline como{" "}
+            <code className="bg-blue-100 px-1 rounded">
+              &lt;div style="background-color:red;"&gt;
+            </code>{" "}
+            o mejor aún, usa clases de Tailwind:{" "}
+            <code className="bg-blue-100 px-1 rounded">
+              &lt;div className="bg-red-500 p-4"&gt;
+            </code>
+          </p>
+        </div>
+      )}
 
       {!showPreview && (
         <>
@@ -483,127 +498,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
       {showPreview && (
         <div className="border border-gray-300 rounded-md p-4 min-h-[400px] bg-white">
-          {mode === "html" ? (
-            /* Vista previa HTML */
-            <div
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{
-                __html:
-                  value ||
-                  "<p><em>Escribe contenido HTML para ver la vista previa...</em></p>",
-              }}
-            />
-          ) : (
-            /* Vista previa Markdown */
-            <div className="prose prose-lg max-w-none">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  code({ className, children, ...props }: any) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    const isInline = !className || !match;
-
-                    return !isInline && match ? (
-                      <SyntaxHighlighter
-                        style={oneDark}
-                        language={match[1]}
-                        PreTag="div"
-                        {...props}
-                      >
-                        {String(children).replace(/\n$/, "")}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code
-                        className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm"
-                        {...props}
-                      >
-                        {children}
-                      </code>
-                    );
-                  },
-                  h1: ({ children }) => (
-                    <h1 className="text-3xl font-bold text-bg-100 mb-4 mt-8 first:mt-0">
-                      {children}
-                    </h1>
-                  ),
-                  h2: ({ children }) => (
-                    <h2 className="text-2xl font-semibold text-bg-100 mb-3 mt-6">
-                      {children}
-                    </h2>
-                  ),
-                  h3: ({ children }) => (
-                    <h3 className="text-xl font-semibold text-bg-100 mb-2 mt-4">
-                      {children}
-                    </h3>
-                  ),
-                  h4: ({ children }) => (
-                    <h4 className="text-lg font-medium text-bg-100 mb-2 mt-3">
-                      {children}
-                    </h4>
-                  ),
-                  p: ({ children }) => (
-                    <p className="mb-4 text-bg-300 leading-relaxed">
-                      {children}
-                    </p>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="font-bold text-bg-100">
-                      {children}
-                    </strong>
-                  ),
-                  em: ({ children }) => (
-                    <em className="italic text-bg-200">{children}</em>
-                  ),
-                  blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-accent-100 pl-4 py-2 my-4 bg-white-100 italic text-bg-200">
-                      {children}
-                    </blockquote>
-                  ),
-                  ul: ({ children }) => (
-                    <ul className="list-disc list-inside mb-4 text-bg-300 space-y-1">
-                      {children}
-                    </ul>
-                  ),
-                  ol: ({ children }) => (
-                    <ol className="list-decimal list-inside mb-4 text-bg-300 space-y-1">
-                      {children}
-                    </ol>
-                  ),
-                  li: ({ children }) => (
-                    <li className="text-bg-300">{children}</li>
-                  ),
-                  a: ({ href, children }) => (
-                    <a
-                      href={href}
-                      className="text-accent-100 hover:text-accent-200 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {children}
-                    </a>
-                  ),
-                  table: ({ children }) => (
-                    <table className="w-full border-collapse border border-gray-300 mb-4">
-                      {children}
-                    </table>
-                  ),
-                  th: ({ children }) => (
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-bg-100">
-                      {children}
-                    </th>
-                  ),
-                  td: ({ children }) => (
-                    <td className="border border-gray-300 px-4 py-2 text-bg-300">
-                      {children}
-                    </td>
-                  ),
-                }}
-              >
-                {value || "*Escribe contenido para ver la vista previa...*"}
-              </ReactMarkdown>
-            </div>
-          )}
+          {/* Usar el mismo componente MarkdownContent que se usa en la página final */}
+          {/* Si el modo es HTML, usar pureHtmlMode para soportar estilos inline */}
+          <MarkdownContent
+            content={value || "*Escribe contenido para ver la vista previa...*"}
+            allowHtml={true}
+            pureHtmlMode={mode === "html"}
+          />
         </div>
       )}
     </div>
