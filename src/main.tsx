@@ -4,7 +4,7 @@ import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import LayoutTemplate from "./layouts/LayoutTemplate";
 import AdminLayout from "./layouts/AdminLayout";
-import Home from "./features/home/pages/Home";
+import DynamicHome from "./features/home/pages/DynamicHome";
 import BlogPage from "./features/blog/pages/BlogPage";
 import BlogPostPage from "./features/blog/pages/BlogPostPage";
 import DynamicPage from "./components/DynamicPage";
@@ -18,6 +18,7 @@ import PageManagement from "./features/admin/pages/PageManagement";
 import PageEditor from "./features/admin/pages/PageEditor";
 import UserManagement from "./features/admin/pages/UserManagement";
 import MultimediaManagement from "./features/admin/multimedia-management/pages/MultimediaManagement";
+import HomeEditor from "./features/admin/home-management/pages/HomeEditor";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
@@ -55,6 +56,7 @@ createRoot(document.getElementById("root")!).render(
                 }
               >
                 <Route index element={<AdminDashboard />} />
+                <Route path="home" element={<HomeEditor />} />
                 <Route path="menu" element={<MenuManagement />} />
                 <Route path="blog" element={<BlogManagement />} />
                 <Route path="blog/new" element={<BlogEditor />} />
@@ -67,7 +69,7 @@ createRoot(document.getElementById("root")!).render(
               </Route>
 
               <Route element={<LayoutTemplate />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<DynamicHome />} />
                 <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
                 <Route path="/datacenter" element={<Datacenter />} />

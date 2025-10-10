@@ -23,6 +23,11 @@ const AdminLayout: React.FC = () => {
       end: true,
     },
     {
+      to: "/admin/home",
+      icon: FiHome,
+      label: "Inicio",
+    },
+    {
       to: "/admin/menu",
       icon: FiMenu,
       label: "Gestionar Menú",
