@@ -118,12 +118,12 @@ function EditableHome() {
           </SlideInLeft>
 
           <SlideInRight>
-            <div className="flex-1 flex flex-col gap-8 bg-accent-100 h-full">
+            <div className="flex-1 flex flex-col gap-8 justify-evenly h-full">
               <div className="flex flex-col gap-4 h-full">
                 <h3 className="text-3xl font-bold text-primary-100">
                   {homeData.iaSection.title}
                 </h3>
-                <p className="text-lg text-balance">
+                <p className="text-xl text-balance">
                   {homeData.iaSection.description}
                 </p>
               </div>
