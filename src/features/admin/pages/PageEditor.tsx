@@ -115,6 +115,14 @@ const PageEditor: React.FC = () => {
       ...prev,
       content: [...prev.content, newSection],
     }));
+
+    // Hacer scroll a la nueva sección después de que se renderice
+    setTimeout(() => {
+      const element = document.getElementById(newSection.id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 100);
   };
 
   const updateContentSection = (
@@ -209,7 +217,7 @@ const PageEditor: React.FC = () => {
         }
       }
 
-      navigate("/admin/pages");
+      // navigate("/admin/pages"); //Comentado para no redirigir después de guardar
     } catch (err) {
       console.error("Error saving page:", err);
       alert("Error al guardar la página");
@@ -705,11 +713,11 @@ const ContentSectionEditor: React.FC<ContentSectionEditorProps> = ({
   };
 
   return (
-    <div className="border border-white-100 rounded-lg">
-      <div className="flex items-center justify-between p-4 bg-accent-100/20 border-b border-primary-100">
-        <div className="flex items-center space-x-3 ">
+    <div id={section.id} className="border border-black/20 rounded-lg">
+      <div className="flex items-center justify-between px-5 bg-black/5 border-b border-primary-100">
+        <div className="flex items-center space-x-3">
           <h3 className="font-bold text-bg-100 flex items-center gap-2">
-            <span className="bg-gradient-to-bl from-primary-100 to-orange-400 mx-3 px-3 shadow-xl text-white font-black  text-2xl p-2 rounded ">
+            <span className=" text-primary-100 font-black  text-2xl p-2 rounded-full ">
               {index + 1}
             </span>
             <span className="text-xl">
