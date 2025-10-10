@@ -13,7 +13,7 @@ export interface CustomPage {
 export interface ContentSection {
   id: string;
   type: ContentSectionType;
-  data: HeroSection | HeroMultiSection | LogoSection | ContentSectionData | CurvedSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection;
+  data: HeroSection | HeroMultiSection | LogoSection | ContentSectionData | CurvedSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection | ClientsCarouselSection | TeamCardsSection;
   order: number;
   gridWidth?: number; // Ancho en el sistema de grid (1-12), por defecto 12
 }
@@ -32,7 +32,9 @@ export type ContentSectionType =
   | 'testimonials'
   | 'features'
   | 'cta'
-  | 'spacer';
+  | 'spacer'
+  | 'clients-carousel'
+  | 'team-cards';
 
 export interface HeroSection {
   title: string;
@@ -185,6 +187,37 @@ export interface CurvedSection {
   backgroundColor?: string;
   textColor?: string;
   clipPath?: string;
+}
+
+export interface ClientsCarouselSection {
+  title?: string;
+  clients: ClientItem[];
+  backgroundColor?: string;
+  autoplay?: boolean;
+  speed?: 'slow' | 'medium' | 'fast';
+}
+
+export interface ClientItem {
+  id: string;
+  name: string;
+  logo: string;
+}
+
+export interface TeamCardsSection {
+  title?: string;
+  backgroundColor?: string;
+  clipPath?: string;
+  members: TeamMember[];
+  columns?: 3 | 4 | 5;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  image: string;
+  phone?: string;
+  email?: string;
 }
 
 export interface PageTemplate {
