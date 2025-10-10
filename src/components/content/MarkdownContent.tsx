@@ -9,15 +9,73 @@ interface MarkdownContentProps {
   content: string;
   className?: string;
   allowHtml?: boolean;
+  pureHtmlMode?: boolean; // Nueva opción para HTML puro con estilos inline
 }
+
+// Función para detectar si el contenido es HTML PURO (sin Markdown mezclado)
+const isPureHtml = (content: string): boolean => {
+  if (!content) return false;
+  
+  // Detectar si hay tags HTML
+  const hasHtmlTags = /<[^>]+>/i.test(content);
+  if (!hasHtmlTags) return false;
+  
+  // Detectar si tiene sintaxis Markdown
+  const hasMarkdownSyntax = /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s|^\[.+\]\(.+\)/m.test(content);
+  
+  // Si tiene Markdown, NO es HTML puro → usar ReactMarkdown para procesar ambos
+  if (hasMarkdownSyntax) return false;
+  
+  // Contar líneas con contenido
+  const lines = content.trim().split('\n').filter(line => line.trim());
+  
+  // Contar cuántas líneas son HTML
+  const htmlLines = lines.filter(line => /<[^>]+>/.test(line));
+  
+  // Si más del 80% de las líneas tienen HTML y no hay Markdown, es HTML puro
+  if (htmlLines.length / lines.length > 0.8 && !hasMarkdownSyntax) return true;
+  
+  return false;
+};
 
 const MarkdownContent: React.FC<MarkdownContentProps> = ({
   content,
   className = "prose prose-lg max-w-none",
   allowHtml = true,
+  pureHtmlMode = false,
 }) => {
+  // Auto-detectar si debe usar modo HTML puro si no se especificó explícitamente
+  const shouldUsePureHtml = pureHtmlMode || (allowHtml && isPureHtml(content));
+  
+  // Log de depuración (temporal)
+  if (content && (content.includes('style=') || content.includes('class='))) {
+    console.log('🔍 MarkdownContent Debug:', {
+      contentPreview: content.substring(0, 150),
+      fullContentLength: content.length,
+      pureHtmlMode,
+      allowHtml,
+      isPureHtml: isPureHtml(content),
+      shouldUsePureHtml,
+      usesClasses: /(class|className)\s*=/.test(content),
+      usesInlineStyles: /style\s*=/.test(content),
+      hasMarkdown: /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s/m.test(content),
+    });
+  }
+  
+  // Si es modo HTML puro (sin Markdown mezclado), usar dangerouslySetInnerHTML
+  // Esto funciona MEJOR para clases de Tailwind y estilos inline
+  if (shouldUsePureHtml) {
+    return (
+      <div 
+        className={className}
+        dangerouslySetInnerHTML={{ __html: content }}
+      />
+    );
+  }
+
   // Si el contenido contiene HTML y está permitido, usar ReactMarkdown con rehypeRaw
   // Esto permite HTML mezclado con Markdown
+  // NOTA: rehypeRaw procesa HTML pero puede tener limitaciones con estilos inline complejos
   return (
     <div className={className}>
       <ReactMarkdown
@@ -159,6 +217,19 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
               />
             );
           },
+          // Preservar elementos HTML con sus clases intactas
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          div: ({ className, ...props }: any) => (
+            <div className={className} {...props} />
+          ),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          section: ({ className, ...props }: any) => (
+            <section className={className} {...props} />
+          ),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          span: ({ className, ...props }: any) => (
+            <span className={className} {...props} />
+          ),
         }}
       >
         {content}

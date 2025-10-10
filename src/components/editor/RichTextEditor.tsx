@@ -12,10 +12,7 @@ import {
   FiDroplet,
   FiTag,
 } from "react-icons/fi";
-import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import remarkGfm from "remark-gfm";
+import MarkdownContent from "../content/MarkdownContent";
 
 interface RichTextEditorProps {
   value: string;
@@ -33,28 +30,28 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   supportHtml = true, // Por defecto habilitado
 }) => {
   const [showPreview, setShowPreview] = useState(false);
-  const [mode, setMode] = useState<'markdown' | 'html'>('markdown');
+  const [mode, setMode] = useState<"markdown" | "html">("markdown");
   const [showColorPalette, setShowColorPalette] = useState(false);
   const [customColor, setCustomColor] = useState("#000000");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Paleta de colores predefinida
   const colorPalette = [
-    { name: 'Rojo', hex: '#ef4444', class: 'text-red-500' },
-    { name: 'Azul', hex: '#3b82f6', class: 'text-blue-500' },
-    { name: 'Verde', hex: '#10b981', class: 'text-green-500' },
-    { name: 'Amarillo', hex: '#f59e0b', class: 'text-yellow-500' },
-    { name: 'Púrpura', hex: '#8b5cf6', class: 'text-purple-500' },
-    { name: 'Rosa', hex: '#ec4899', class: 'text-pink-500' },
-    { name: 'Naranja', hex: '#f97316', class: 'text-orange-500' },
-    { name: 'Índigo', hex: '#6366f1', class: 'text-indigo-500' },
-    { name: 'Gris', hex: '#6b7280', class: 'text-gray-500' },
-    { name: 'Negro', hex: '#000000', class: 'text-black' },
-    { name: 'Blanco', hex: '#ffffff', class: 'text-white' },
-    { name: 'Rojo Oscuro', hex: '#dc2626', class: 'text-red-600' },
-    { name: 'Azul Oscuro', hex: '#2563eb', class: 'text-blue-600' },
-    { name: 'Verde Oscuro', hex: '#059669', class: 'text-green-600' },
-    { name: 'Cian', hex: '#06b6d4', class: 'text-cyan-500' },
+    { name: "Rojo", hex: "#ef4444", class: "text-red-500" },
+    { name: "Azul", hex: "#3b82f6", class: "text-blue-500" },
+    { name: "Verde", hex: "#10b981", class: "text-green-500" },
+    { name: "Amarillo", hex: "#f59e0b", class: "text-yellow-500" },
+    { name: "Púrpura", hex: "#8b5cf6", class: "text-purple-500" },
+    { name: "Rosa", hex: "#ec4899", class: "text-pink-500" },
+    { name: "Naranja", hex: "#f97316", class: "text-orange-500" },
+    { name: "Índigo", hex: "#6366f1", class: "text-indigo-500" },
+    { name: "Gris", hex: "#6b7280", class: "text-gray-500" },
+    { name: "Negro", hex: "#000000", class: "text-black" },
+    { name: "Blanco", hex: "#ffffff", class: "text-white" },
+    { name: "Rojo Oscuro", hex: "#dc2626", class: "text-red-600" },
+    { name: "Azul Oscuro", hex: "#2563eb", class: "text-blue-600" },
+    { name: "Verde Oscuro", hex: "#059669", class: "text-green-600" },
+    { name: "Cian", hex: "#06b6d4", class: "text-cyan-500" },
   ];
 
   const insertText = useCallback(
@@ -66,7 +63,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       const end = textarea.selectionEnd;
       const selectedText = value.slice(start, end);
       const textToInsert = selectedText || placeholder;
-      
+
       const newText =
         value.slice(0, start) +
         before +
@@ -121,42 +118,47 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const selectedText = value.slice(start, end);
-      
+
       if (!selectedText) {
         // Si no hay texto seleccionado, insertar ejemplo
-        insertText(`<span style="color: ${color.hex}">`, `</span>`, "texto con color");
+        insertText(
+          `<span style="color: ${color.hex}">`,
+          `</span>`,
+          "texto con color"
+        );
       } else {
         // Si hay texto seleccionado, aplicar color
         insertText(`<span style="color: ${color.hex}">`, `</span>`, "");
       }
-      
+
       setShowColorPalette(false);
     },
     [value, insertText]
   );
 
   // Función para aplicar color personalizado
-  const applyCustomColor = useCallback(
-    () => {
-      const textarea = textareaRef.current;
-      if (!textarea) return;
+  const applyCustomColor = useCallback(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-      const selectedText = value.slice(start, end);
-      
-      if (!selectedText) {
-        // Si no hay texto seleccionado, insertar ejemplo
-        insertText(`<span style="color: ${customColor}">`, `</span>`, "texto con color");
-      } else {
-        // Si hay texto seleccionado, aplicar color
-        insertText(`<span style="color: ${customColor}">`, `</span>`, "");
-      }
-      
-      setShowColorPalette(false);
-    },
-    [value, customColor, insertText]
-  );
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selectedText = value.slice(start, end);
+
+    if (!selectedText) {
+      // Si no hay texto seleccionado, insertar ejemplo
+      insertText(
+        `<span style="color: ${customColor}">`,
+        `</span>`,
+        "texto con color"
+      );
+    } else {
+      // Si hay texto seleccionado, aplicar color
+      insertText(`<span style="color: ${customColor}">`, `</span>`, "");
+    }
+
+    setShowColorPalette(false);
+  }, [value, customColor, insertText]);
 
   // Función para insertar HTML
   const insertHtmlTag = useCallback(
@@ -167,10 +169,10 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
       const selectedText = value.slice(start, end);
-      
+
       const openTag = attributes ? `<${tag} ${attributes}>` : `<${tag}>`;
       const closeTag = `</${tag}>`;
-      
+
       if (!selectedText) {
         insertText(openTag, closeTag, `contenido ${tag}`);
       } else {
@@ -199,7 +201,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     {
       icon: FiLink,
       title: "Enlace",
-      action: () => insertText("[", "](https://ejemplo.com)", "texto del enlace"),
+      action: () =>
+        insertText("[", "](https://ejemplo.com)", "texto del enlace"),
     },
     {
       icon: FiList,
@@ -264,24 +267,42 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         <label className="block text-sm font-medium text-bg-300">
           Contenido
         </label>
-        <button
-          type="button"
-          onClick={() => setShowPreview(!showPreview)}
-          className="inline-flex items-center px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
-        >
-          {showPreview ? (
-            <>
-              <FiEyeOff className="mr-1 h-4 w-4" />
-              Editor
-            </>
-          ) : (
-            <>
-              <FiEye className="mr-1 h-4 w-4" />
-              Vista Previa
-            </>
-          )}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowPreview(!showPreview)}
+            className="inline-flex items-center px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+          >
+            {showPreview ? (
+              <>
+                <FiEyeOff className="mr-1 h-4 w-4" />
+                Editor
+              </>
+            ) : (
+              <>
+                <FiEye className="mr-1 h-4 w-4" />
+                Vista Previa
+              </>
+            )}
+          </button>
+        </div>
       </div>
+
+      {/* Información sobre el modo HTML */}
+      {supportHtml && mode === "html" && !showPreview && (
+        <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+          <p className="text-xs text-blue-800">
+            <strong>💡 Modo HTML:</strong> Puedes usar HTML con estilos inline como{" "}
+            <code className="bg-blue-100 px-1 rounded">
+              &lt;div style="background-color:red;"&gt;
+            </code>{" "}
+            o mejor aún, usa clases de Tailwind:{" "}
+            <code className="bg-blue-100 px-1 rounded">
+              &lt;div className="bg-red-500 p-4"&gt;
+            </code>
+          </p>
+        </div>
+      )}
 
       {!showPreview && (
         <>
@@ -333,7 +354,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                 title="Bloque de código"
                 className="px-2 py-1 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded transition-colors font-mono"
               >
-                {'{ }'}
+                {"{ }"}
               </button>
               <button
                 type="button"
@@ -359,27 +380,27 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                     <button.icon className="h-4 w-4" />
                   </button>
                 ))}
-                
+
                 {/* Selector de modo */}
                 <div className="flex border border-gray-300 rounded ml-2">
                   <button
                     type="button"
-                    onClick={() => setMode('markdown')}
+                    onClick={() => setMode("markdown")}
                     className={`px-2 py-1 text-xs rounded-l ${
-                      mode === 'markdown' 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-white text-gray-600 hover:bg-gray-100'
+                      mode === "markdown"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-100"
                     }`}
                   >
                     MD
                   </button>
                   <button
                     type="button"
-                    onClick={() => setMode('html')}
+                    onClick={() => setMode("html")}
                     className={`px-2 py-1 text-xs rounded-r ${
-                      mode === 'html' 
-                        ? 'bg-blue-500 text-white' 
-                        : 'bg-white text-gray-600 hover:bg-gray-100'
+                      mode === "html"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-gray-600 hover:bg-gray-100"
                     }`}
                   >
                     HTML
@@ -393,7 +414,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           {showColorPalette && (
             <div className="border border-gray-300 rounded-md p-3 mt-2 bg-white shadow-lg relative">
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-sm font-medium text-gray-700">Seleccionar Color</h4>
+                <h4 className="text-sm font-medium text-gray-700">
+                  Seleccionar Color
+                </h4>
                 <button
                   type="button"
                   onClick={() => setShowColorPalette(false)}
@@ -402,10 +425,12 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                   ✕
                 </button>
               </div>
-              
+
               {/* Colores predefinidos */}
               <div className="mb-3">
-                <p className="text-xs text-gray-600 mb-2">Colores predefinidos:</p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Colores predefinidos:
+                </p>
                 <div className="grid grid-cols-5 gap-2 max-w-xs">
                   {colorPalette.map((color, index) => (
                     <button
@@ -414,9 +439,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                       onClick={() => applyColor(color)}
                       title={`${color.name} (${color.hex})`}
                       className="w-8 h-8 rounded border-2 border-gray-300 hover:border-gray-500 transition-colors flex items-center justify-center text-white text-xs font-bold shadow-sm"
-                      style={{ 
+                      style={{
                         backgroundColor: color.hex,
-                        color: color.hex === '#ffffff' ? '#000000' : '#ffffff'
+                        color: color.hex === "#ffffff" ? "#000000" : "#ffffff",
                       }}
                     >
                       A
@@ -427,7 +452,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
               {/* Selector de color personalizado */}
               <div className="border-t border-gray-200 pt-3">
-                <p className="text-xs text-gray-600 mb-2">Color personalizado:</p>
+                <p className="text-xs text-gray-600 mb-2">
+                  Color personalizado:
+                </p>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
@@ -448,7 +475,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
                   </span>
                 </div>
               </div>
-              
+
               <div className="mt-3 pt-2 border-t border-gray-200">
                 <p className="text-xs text-gray-500">
                   Selecciona texto y luego elige un color para aplicarlo
@@ -471,136 +498,15 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
       {showPreview && (
         <div className="border border-gray-300 rounded-md p-4 min-h-[400px] bg-white">
-          {mode === 'html' ? (
-            /* Vista previa HTML */
-            <div 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={{ __html: value || "<p><em>Escribe contenido HTML para ver la vista previa...</em></p>" }}
-            />
-          ) : (
-            /* Vista previa Markdown */
-            <div className="prose prose-lg max-w-none">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  code({ className, children, ...props }: any) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    const isInline = !className || !match;
-                    
-                    return !isInline && match ? (
-                      <SyntaxHighlighter
-                        style={oneDark}
-                        language={match[1]}
-                        PreTag="div"
-                        {...props}
-                      >
-                        {String(children).replace(/\n$/, "")}
-                      </SyntaxHighlighter>
-                    ) : (
-                      <code
-                        className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm"
-                        {...props}
-                      >
-                        {children}
-                      </code>
-                    );
-                  },
-                  h1: ({ children }) => (
-                    <h1 className="text-3xl font-bold text-bg-100 mb-4 mt-8 first:mt-0">
-                      {children}
-                    </h1>
-                  ),
-                  h2: ({ children }) => (
-                    <h2 className="text-2xl font-semibold text-bg-100 mb-3 mt-6">
-                      {children}
-                    </h2>
-                  ),
-                  h3: ({ children }) => (
-                    <h3 className="text-xl font-semibold text-bg-100 mb-2 mt-4">
-                      {children}
-                    </h3>
-                  ),
-                  h4: ({ children }) => (
-                    <h4 className="text-lg font-medium text-bg-100 mb-2 mt-3">
-                      {children}
-                    </h4>
-                  ),
-                  p: ({ children }) => (
-                    <p className="mb-4 text-bg-300 leading-relaxed">{children}</p>
-                  ),
-                  strong: ({ children }) => (
-                    <strong className="font-bold text-bg-100">{children}</strong>
-                  ),
-                  em: ({ children }) => (
-                    <em className="italic text-bg-200">{children}</em>
-                  ),
-                  blockquote: ({ children }) => (
-                    <blockquote className="border-l-4 border-accent-100 pl-4 py-2 my-4 bg-white-100 italic text-bg-200">
-                      {children}
-                    </blockquote>
-                  ),
-                  ul: ({ children }) => (
-                    <ul className="list-disc list-inside mb-4 text-bg-300 space-y-1">
-                      {children}
-                    </ul>
-                  ),
-                  ol: ({ children }) => (
-                    <ol className="list-decimal list-inside mb-4 text-bg-300 space-y-1">
-                      {children}
-                    </ol>
-                  ),
-                  li: ({ children }) => (
-                    <li className="text-bg-300">{children}</li>
-                  ),
-                  a: ({ href, children }) => (
-                    <a
-                      href={href}
-                      className="text-accent-100 hover:text-accent-200 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {children}
-                    </a>
-                  ),
-                  table: ({ children }) => (
-                    <table className="w-full border-collapse border border-gray-300 mb-4">
-                      {children}
-                    </table>
-                  ),
-                  th: ({ children }) => (
-                    <th className="border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-bg-100">
-                      {children}
-                    </th>
-                  ),
-                  td: ({ children }) => (
-                    <td className="border border-gray-300 px-4 py-2 text-bg-300">
-                      {children}
-                    </td>
-                  ),
-                }}
-              >
-                {value || "*Escribe contenido para ver la vista previa...*"}
-              </ReactMarkdown>
-            </div>
-          )}
+          {/* Usar el mismo componente MarkdownContent que se usa en la página final */}
+          {/* Si el modo es HTML, usar pureHtmlMode para soportar estilos inline */}
+          <MarkdownContent
+            content={value || "*Escribe contenido para ver la vista previa...*"}
+            allowHtml={true}
+            pureHtmlMode={mode === "html"}
+          />
         </div>
       )}
-
-      <div className="mt-2 text-xs text-gray-500 space-y-1">
-        <p>
-          <strong>Ayuda rápida:</strong> **negrita**, *cursiva*, `código`,
-          [enlace](url)
-        </p>
-        <p>
-          Encabezados: # H1, ## H2, ### H3. Listas: - item. Citas: {'>'}
-        </p>
-        {supportHtml && (
-          <p>
-            <strong>HTML:</strong> Usa los botones de colores para destacar texto o cambia a modo HTML para escribir código HTML directamente.
-          </p>
-        )}
-      </div>
     </div>
   );
 };

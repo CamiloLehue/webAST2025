@@ -28,10 +28,8 @@ function LayoutTemplate() {
     };
   }, [isLoading]);
 
-  // Loading inicial - espera a que todo cargue realmente
   useEffect(() => {
     if (isInitialLoad) {
-      // Simular progreso mientras carga
       const progressInterval = setInterval(() => {
         setLoadingProgress((prev) => {
           if (prev >= 90) return prev;
@@ -39,10 +37,8 @@ function LayoutTemplate() {
         });
       }, 200);
 
-      // Verificar si el documento ya está completamente cargado
       if (document.readyState === "complete") {
         setLoadingProgress(100);
-        // Si ya está cargado, esperar un mínimo de 800ms para mostrar el logo
         const minDelay = setTimeout(() => {
           setIsLoading(false);
           setIsInitialLoad(false);
@@ -53,10 +49,8 @@ function LayoutTemplate() {
         };
       }
 
-      // Si no está cargado, esperar al evento load
       const handleLoad = () => {
         setLoadingProgress(100);
-        // Pequeño delay adicional para asegurar que todo se renderizó
         setTimeout(() => {
           setIsLoading(false);
           setIsInitialLoad(false);
@@ -65,7 +59,6 @@ function LayoutTemplate() {
 
       window.addEventListener("load", handleLoad);
 
-      // Timeout de seguridad: máximo 5 segundos de loading
       const maxTimeout = setTimeout(() => {
         setLoadingProgress(100);
         setIsLoading(false);
@@ -80,15 +73,12 @@ function LayoutTemplate() {
     }
   }, [isInitialLoad]);
 
-  // Loading al cambiar de página
   useEffect(() => {
     if (!isInitialLoad) {
       setIsLoading(true);
 
-      // Esperar a que React termine de renderizar
       const timer = requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          // Mínimo 500ms para mostrar el loading
           setTimeout(() => {
             setIsLoading(false);
           }, 500);
@@ -100,10 +90,7 @@ function LayoutTemplate() {
   }, [location.pathname, isInitialLoad]);
 
   return (
-    <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
-      <div className="absolute -z-5 left-0 top-0 w-full h-35 bg-bg-400"></div>
-
-      {/* Loading Screen con animación */}
+    <>
       <AnimatePresence>
         {isLoading && (
           <motion.div
@@ -166,21 +153,28 @@ function LayoutTemplate() {
 
       <Header />
 
-      {shouldReduceMotion ? (
-        // Sin AnimatePresence ni transiciones en móviles
-        <PageTransition key={location.pathname}>
-          <Outlet />
-        </PageTransition>
-      ) : (
-        // Con AnimatePresence y transiciones en desktop
-        <AnimatePresence mode="wait">
+      {/* Contenedor principal con fondo y contenido */}
+      <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
+        <div className="absolute -z-5 left-0 top-0 w-full h-35 bg-bg-400"></div>
+
+        {/* Espaciador para compensar el header fijo */}
+
+        {shouldReduceMotion ? (
+          // Sin AnimatePresence ni transiciones en móviles
           <PageTransition key={location.pathname}>
             <Outlet />
           </PageTransition>
-        </AnimatePresence>
-      )}
-      <Footer />
-    </div>
+        ) : (
+          // Con AnimatePresence y transiciones en desktop
+          <AnimatePresence mode="wait">
+            <PageTransition key={location.pathname}>
+              <Outlet />
+            </PageTransition>
+          </AnimatePresence>
+        )}
+        <Footer />
+      </div>
+    </>
   );
 }
 

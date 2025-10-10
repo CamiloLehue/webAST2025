@@ -303,6 +303,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
             <MarkdownContent
               content={subtitle}
               className="prose prose-lg max-w-none text-inherit"
+              allowHtml={true}
             />
           </div>
         )}
@@ -377,7 +378,10 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
             "text-left"
           }`}
         >
-          <MarkdownContent content={content} />
+          <MarkdownContent 
+            content={content} 
+            allowHtml={true}
+          />
         </div>
       </div>
     </section>
@@ -692,7 +696,7 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
                 </div>
               </div>
               <div className="text-bg-300 mb-4">
-                <MarkdownContent content={testimonial.content} />
+                <MarkdownContent content={testimonial.content} allowHtml={true} />
               </div>
               {testimonial.rating && (
                 <div className="flex">
@@ -759,7 +763,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {description && (
           <div className="text-center text-bg-200 mb-12">
-            <MarkdownContent content={description} />
+            <MarkdownContent content={description} allowHtml={true} />
           </div>
         )}
         <div
@@ -798,7 +802,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
               <div className={layout === "list" ? "flex-1" : ""}>
                 <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
                 <div className="text-bg-200">
-                  <MarkdownContent content={feature.description} />
+                  <MarkdownContent content={feature.description} allowHtml={true} />
                 </div>
               </div>
             </div>
@@ -847,7 +851,7 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
             className="text-lg mb-8"
             style={{ color: textColor || "#d1d5db" }}
           >
-            <MarkdownContent content={description} />
+            <MarkdownContent content={description} allowHtml={true} />
           </div>
         )}
         {buttonText && buttonLink && (
@@ -946,6 +950,7 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
     <MarkdownContent
       content={data.description}
       className="prose prose-lg max-w-none text-inherit"
+      allowHtml={true}
     />
   ) : (
     ""
@@ -1004,6 +1009,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
               <MarkdownContent
                 content={data.content || ""}
                 className="prose prose-lg max-w-none text-inherit"
+                allowHtml={true}
               />
             </div>
           </article>

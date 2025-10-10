@@ -57,7 +57,7 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
         .map((item, index) => (
           <li
             key={item.id}
-            className="relative  py-8 border-t-4 border-t-transparent hover:border-t-primary-100 transition-colors duration-300"
+            className="relative  py-9 border-t-4 border-t-transparent hover:border-t-primary-100 transition-colors duration-300"
             onMouseEnter={() => setOpenIndex(index)}
             onMouseLeave={() => setOpenIndex(null)}
           >
@@ -91,7 +91,7 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
                       .map((subItem, subIndex) => (
                       <motion.li
                         key={subItem.id}
-                        className="py-5 px-8 w-full hover:bg-bg-400 transition-all duration-300 hover:text-primary-100"
+                        className="py-3 px-8 w-full hover:bg-bg-400 transition-all duration-300 hover:text-primary-100"
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 0 }}
