@@ -85,24 +85,11 @@ function EditableHome() {
       )}
 
       <section id="wiseIA" className="relative min-w-screen">
-        {/* <FadeInSection>
-          <div
-            className={`container mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12" : "py-24"
-            }`}
-          >
-            <h2 className="text-5xl font-bold">{homeData.iaSection.title}</h2>
-            <p className="text-lg text-balance">
-              {homeData.iaSection.description}
-            </p>
-          </div>
-        </FadeInSection> */}
-
         <div
-          className={`max-w-7xl mx-auto  ${
+          className={` ${
             isSmallDevice
-              ? "flex flex-col items-center justify-between gap-8"
-              : "grid grid-cols-2 gap-20"
+              ? "flex flex-col items-center justify-between gap-8 w-100 mx-auto mt-10"
+              : "grid grid-cols-2 gap-20 max-w-7xl mx-auto "
           }  `}
         >
           <SlideInLeft>
@@ -142,7 +129,7 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={`container mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12" : "py-24"
+              isSmallDevice ? " w-100 mt-10" : "py-24"
             }`}
           >
             <h2 className="text-5xl font-bold">
@@ -169,20 +156,14 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
-      <section id="clients" className="relative min-w-screen ">
+      <section id="clients" className="relative min-w-screen  ">
         <FadeInSection>
           <div
             className={` mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12" : "py-24"
+              isSmallDevice ? "py-12 w-100 " : "py-24"
             }`}
           >
-            <h2 className="text-5xl font-bold text-white-100">
-              Nuestros Clientes
-            </h2>
-            <p className="text-lg text-white-100 text-balance">
-              Conoce a nuestros clientes y descubre cómo les hemos ayudado a
-              alcanzar sus objetivos.
-            </p>
+           
             <ClientsCarousel />
           </div>
         </FadeInSection>
@@ -192,7 +173,7 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={`container mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12" : "py-24"
+              isSmallDevice ? "py-12 w-100" : "py-24"
             }`}
           >
             <Lastnews />
