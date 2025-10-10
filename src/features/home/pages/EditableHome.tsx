@@ -169,10 +169,10 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
-      <section id="clients" className="relative bg-bg-400">
+      <section id="clients" className="relative min-w-screen ">
         <FadeInSection>
           <div
-            className={`container mx-auto flex flex-col gap-4 text-center ${
+            className={` mx-auto flex flex-col gap-4 text-center ${
               isSmallDevice ? "py-12" : "py-24"
             }`}
           >
@@ -188,17 +188,13 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
-      <section id="news" className="relative">
+      <section id="news" className="relative bg-primary-100">
         <FadeInSection>
           <div
             className={`container mx-auto flex flex-col gap-4 text-center ${
               isSmallDevice ? "py-12" : "py-24"
             }`}
           >
-            <h2 className="text-5xl font-bold">Últimas Noticias</h2>
-            <p className="text-lg text-balance">
-              Conoce las últimas noticias y novedades de AST Networks.
-            </p>
             <Lastnews />
           </div>
         </FadeInSection>
@@ -206,9 +202,7 @@ function EditableHome() {
 
       <section
         id="contacto"
-        className={`relative bg-primary-100 text-white-100 ${
-          isSmallDevice ? "py-12" : "py-24"
-        }`}
+        className={`relative  text-bg-400 ${isSmallDevice ? "py-12" : "py-24"}`}
       >
         <FadeInSection>
           <div className="container mx-auto flex flex-col gap-4 text-center">

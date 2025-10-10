@@ -7,7 +7,7 @@ import { FiLoader, FiSave, FiEye, FiPlus, FiTrash2, FiChevronUp, FiChevronDown }
 
 const HomeEditor: React.FC = () => {
   const navigate = useNavigate();
-  const { homeData, loading, error, isSaving, createHome, updateHome } = useHomeManagement();
+  const { homeData, loading, error, isSaving, createHome, updateHome, loadHomeData } = useHomeManagement();
 
   const [formData, setFormData] = useState({
     sliderSection: {
@@ -85,15 +85,27 @@ const HomeEditor: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      if (homeData?.id) {
-        await updateHome(homeData.id, formData);
+      console.log("HomeData antes de guardar:", homeData);
+      console.log("HomeData ID:", homeData?.id);
+      
+      let savedHome;
+      
+      if (homeData?.id && homeData.id !== "" && homeData.id !== "undefined") {
+        console.log("Actualizando con ID:", homeData.id);
+        savedHome = await updateHome(homeData.id, formData);
       } else {
-        await createHome(formData);
+        console.log("Creando nuevo home");
+        savedHome = await createHome(formData);
       }
+      
+      console.log("Home guardado:", savedHome);
       alert("Guardado exitosamente");
+      
+      // Recargar los datos para asegurar que tenemos el ID correcto
+      await loadHomeData();
     } catch (err) {
       console.error("Error saving:", err);
-      alert("Error al guardar");
+      alert("Error al guardar: " + (err instanceof Error ? err.message : "Error desconocido"));
     }
   };
 

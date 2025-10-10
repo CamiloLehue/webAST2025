@@ -60,14 +60,14 @@ function ClientsCarousel() {
 
   return (
     <section id="partner" className="relative overflow-hidden max-w-screen ">
-      <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white  to-transparent  pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white-100  to-transparent  pointer-events-none"></div>
       <div className="relative mx-auto py-10 flex flex-col justify-center items-center gap-10">
         <h2 className="text-5xl font-bold text-primary-100 mb-5 border-b-4 border-primary-100">
           Nuestros Clientes
         </h2>
         <div className="w-full overflow-hidden relative">
-          <div className="absolute left-0 top-0 bottom-0 w-100 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-100 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-100 bg-gradient-to-r from-white-100 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-100 bg-gradient-to-l from-white-100 to-transparent z-10 pointer-events-none"></div>
 
           <div className="flex animate-infinite-scroll-seamless gap-10">
             {partners.map((item) => (
