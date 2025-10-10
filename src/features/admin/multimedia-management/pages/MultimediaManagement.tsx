@@ -35,9 +35,11 @@ const MultimediaManagement: React.FC = () => {
 
   const [showUploader, setShowUploader] = useState(false);
 
+  // Solo cargar datos una vez al montar el componente
   useEffect(() => {
     refreshData();
-  }, [refreshData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intencionalmente vacío para ejecutar solo al montar
 
   const handleFiltersChange = useCallback(
     (newFilters: MultimediaFilters) => {

@@ -24,8 +24,15 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
 
   const [searchTimeout, setSearchTimeout] = useState<number | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   useEffect(() => {
+    // Evitar la llamada inicial en el primer render
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return;
+    }
+
     // Clear existing timeout
     if (searchTimeout) {
       clearTimeout(searchTimeout);
@@ -47,6 +54,11 @@ const MultimediaFiltersComponent: React.FC<MultimediaFiltersProps> = ({
   }, [filters.search]);
 
   useEffect(() => {
+    // Evitar la llamada inicial en el primer render
+    if (isFirstRender) {
+      return;
+    }
+
     // For non-search filters, apply immediately
     if (searchTimeout) {
       clearTimeout(searchTimeout);

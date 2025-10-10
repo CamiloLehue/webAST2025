@@ -78,6 +78,10 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
 
   // Referencias
   const abortControllerRef = useRef<AbortController | null>(null);
+  const filtersRef = useRef<MultimediaFilters>(defaultFilters);
+
+  // Mantener la ref sincronizada con el estado
+  filtersRef.current = filters;
 
   // Cargar archivos
   const loadFiles = useCallback(async (newFilters?: MultimediaFilters) => {
@@ -90,7 +94,8 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       setLoading(true);
       setError(null);
 
-      const filtersToUse = newFilters || filters;
+      // Usar newFilters si se proporciona, sino usar la referencia actual
+      const filtersToUse = newFilters || filtersRef.current;
       const response: MultimediaListResponse = await multimediaService.getMultimediaFiles(filtersToUse);
 
       setFiles(response.files);
@@ -110,7 +115,7 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
     } finally {
       setLoading(false);
     }
-  }, [filters]);
+  }, []);
 
   // Subir archivo único
   const uploadFile = useCallback(async (request: CreateMultimediaRequest): Promise<MultimediaFile> => {
@@ -246,9 +251,9 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
 
   // Navegación de páginas
   const goToPage = useCallback(async (page: number) => {
-    const newFilters = { ...filters, page };
+    const newFilters = { ...filtersRef.current, page };
     await loadFiles(newFilters);
-  }, [filters, loadFiles]);
+  }, [loadFiles]);
 
   const nextPage = useCallback(async () => {
     if (hasNextPage) {
@@ -265,18 +270,18 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
   // Ordenamiento
   const sortBy = useCallback(async (field: SortField, order: SortOrder = 'asc') => {
     const newFilters = {
-      ...filters,
+      ...filtersRef.current,
       sortField: field,
       sortOrder: order,
       page: 1 
     };
     await loadFiles(newFilters);
-  }, [filters, loadFiles]);
+  }, [loadFiles]);
 
   const setFilters = useCallback((newFilters: Partial<MultimediaFilters>) => {
-    const updatedFilters = { ...filters, ...newFilters, page: 1 };
+    const updatedFilters = { ...filtersRef.current, ...newFilters, page: 1 };
     setFiltersState(updatedFilters);
-  }, [filters]);
+  }, []);
 
   const clearFilters = useCallback(() => {
     setFiltersState(defaultFilters);
