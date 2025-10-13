@@ -53,7 +53,7 @@ function Lastnews() {
   if (loading) {
     return (
       <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-2xl text-white font-bold">Últimas noticias</h3>
+        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
         <div className="relative h-full flex gap-5">
           {Array.from({ length: itemsPerView }).map((_, index) => (
             <div
@@ -69,7 +69,7 @@ function Lastnews() {
   if (error) {
     return (
       <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-2xl text-white font-bold">Últimas noticias</h3>
+        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
         <div className="relative h-full flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-4xl mb-4">⚠️</div>
@@ -83,7 +83,7 @@ function Lastnews() {
   if (NEWS_ITEMS.length === 0) {
     return (
       <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-2xl text-white font-bold">Últimas noticias</h3>
+        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
         <div className="relative h-full flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-6xl mb-4">📰</div>
@@ -98,7 +98,7 @@ function Lastnews() {
 
   return (
     <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-      <h3 className="text-2xl text-white font-bold">Últimas noticias</h3>
+      <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
       <div className="relative h-full ">
         <button
           onClick={prevSlide}
