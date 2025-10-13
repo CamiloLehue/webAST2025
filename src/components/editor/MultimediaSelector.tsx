@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiImage, FiLink, FiX, FiSearch } from "react-icons/fi";
+import { FiImage, FiLink, FiX, FiSearch, FiTag } from "react-icons/fi";
 import { TbPhoto, TbVideo, TbFileCode, TbFile } from "react-icons/tb";
 import { multimediaService } from "../../features/admin/multimedia-management/services/multimediaService";
 import type { MultimediaFile } from "../../features/admin/multimedia-management/types/multimediaTypes";
@@ -81,9 +81,19 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
   useEffect(() => {
     const filtered = files.filter((file: MultimediaFile) => {
       const matchesType = acceptedTypes.includes(file.category);
-      const matchesSearch = searchTerm === "" || 
-        file.original_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        file.filename.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      if (searchTerm === "") {
+        return matchesType;
+      }
+      
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = 
+        file.original_name.toLowerCase().includes(searchLower) ||
+        file.filename.toLowerCase().includes(searchLower) ||
+        file.category.toLowerCase().includes(searchLower) ||
+        file.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        (file.description && file.description.toLowerCase().includes(searchLower)) ||
+        (file.alt && file.alt.toLowerCase().includes(searchLower));
       
       return matchesType && matchesSearch;
     });
@@ -271,7 +281,7 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
                 <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Buscar archivos..."
+                  placeholder="Buscar por nombre, categoría, etiqueta o descripción..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
@@ -294,7 +304,7 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
                     {filteredFiles.map((file) => (
                       <div
                         key={file.id}
@@ -303,11 +313,30 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
                       >
                         {renderPreview(file)}
                         <div className="mt-2">
-                          <div className="flex items-center gap-1 mb-1">
+                          <div className="flex flex-wrap items-center gap-1 mb-1">
                             <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(file.category)}`}>
                               {getCategoryIcon(file.category)}
                               {file.category}
                             </span>
+                            {file.tags && file.tags.length > 0 && file.tags.slice(0, 2).map((tag, index) => (
+                              <span 
+                                key={index}
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800"
+                                title={file.tags.join(', ')}
+                              >
+                                <FiTag className="w-3 h-3" />
+                                {tag}
+                              </span>
+                            ))}
+                            {file.tags && file.tags.length > 2 && (
+                              <span 
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                                title={file.tags.join(', ')}
+                              >
+                                <FiTag className="w-3 h-3" />
+                                +{file.tags.length - 2}
+                              </span>
+                            )}
                           </div>
                           <p className="text-xs text-gray-600 truncate" title={file.original_name}>
                             {file.original_name}
