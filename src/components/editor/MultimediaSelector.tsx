@@ -22,35 +22,63 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [files, setFiles] = useState<MultimediaFile[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filteredFiles, setFilteredFiles] = useState<MultimediaFile[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalFiles, setTotalFiles] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const itemsPerPage = 24;
 
-  // Cargar archivos cuando se abre el selector
   useEffect(() => {
     if (showSelector && !hasLoaded && !loading) {
       loadFiles();
     }
   }, [showSelector, hasLoaded, loading]);
 
-  // Función para cargar archivos directamente desde el servicio
-  const loadFiles = async () => {
+  const loadFiles = async (page: number = 1, append: boolean = false) => {
     try {
-      setLoading(true);
+      if (append) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
       setError(null);
-      const response = await multimediaService.getMultimediaFiles({ limit: 50 });
-      setFiles(response.files);
+      
+      const response = await multimediaService.getMultimediaFiles({ 
+        page,
+        limit: itemsPerPage,
+        sortField: 'created_at',
+        sortOrder: 'desc'
+      });
+      
+      if (append) {
+        setFiles(prev => [...prev, ...response.files]);
+      } else {
+        setFiles(response.files);
+      }
+      
+      setTotalFiles(response.total);
+      setHasMore(page * itemsPerPage < response.total);
+      setCurrentPage(page);
       setHasLoaded(true);
     } catch (err) {
       setError("Error al cargar archivos");
       console.error("Error loading files:", err);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  const loadMoreFiles = () => {
+    if (!loadingMore && hasMore) {
+      loadFiles(currentPage + 1, true);
     }
   };
 
   useEffect(() => {
-    // Filtrar archivos por tipo y término de búsqueda
     const filtered = files.filter((file: MultimediaFile) => {
       const matchesType = acceptedTypes.includes(file.category);
       const matchesSearch = searchTerm === "" || 
@@ -80,12 +108,15 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
     const url = getImageUrl(file);
     onChange(url);
     setShowSelector(false);
-    setSearchTerm(""); // Limpiar búsqueda al cerrar
+    setSearchTerm(""); 
   };
 
   const handleCloseSelector = () => {
     setShowSelector(false);
-    setSearchTerm(""); // Limpiar búsqueda al cerrar
+    setSearchTerm("");
+    setCurrentPage(1);
+    setFiles([]);
+    setHasLoaded(false);
   };
 
   const handleUrlChange = (url: string) => {
@@ -262,38 +293,60 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
                   <p>No se encontraron archivos</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {filteredFiles.map((file) => (
-                    <div
-                      key={file.id}
-                      className="border border-gray-200 rounded-lg p-2 hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => handleFileSelect(file)}
-                    >
-                      {renderPreview(file)}
-                      <div className="mt-2">
-                        <div className="flex items-center gap-1 mb-1">
-                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(file.category)}`}>
-                            {getCategoryIcon(file.category)}
-                            {file.category}
-                          </span>
+                <>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    {filteredFiles.map((file) => (
+                      <div
+                        key={file.id}
+                        className="border border-gray-200 rounded-lg p-2 hover:shadow-md transition-shadow cursor-pointer"
+                        onClick={() => handleFileSelect(file)}
+                      >
+                        {renderPreview(file)}
+                        <div className="mt-2">
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${getCategoryColor(file.category)}`}>
+                              {getCategoryIcon(file.category)}
+                              {file.category}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-600 truncate" title={file.original_name}>
+                            {file.original_name}
+                          </p>
+                          <p className="text-xs text-gray-400 truncate" title={file.filename}>
+                            {file.filename}
+                          </p>
                         </div>
-                        <p className="text-xs text-gray-600 truncate" title={file.original_name}>
-                          {file.original_name}
-                        </p>
-                        <p className="text-xs text-gray-400 truncate" title={file.filename}>
-                          {file.filename}
-                        </p>
                       </div>
+                    ))}
+                  </div>
+                  
+                  {hasMore && (
+                    <div className="flex justify-center mt-6">
+                      <button
+                        onClick={loadMoreFiles}
+                        disabled={loadingMore}
+                        className="px-6 py-2 bg-accent-100 text-white rounded-md hover:bg-accent-200 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+                      >
+                        {loadingMore ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                            Cargando...
+                          </>
+                        ) : (
+                          `Cargar más (${filteredFiles.length} de ${totalFiles})`
+                        )}
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
             </div>
 
             <div className="p-4 border-t bg-gray-50 rounded-b-lg">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">
-                  {filteredFiles.length} archivos encontrados
+                  Mostrando {filteredFiles.length} de {totalFiles} archivos
+                  {searchTerm && ` (filtrados)`}
                 </span>
                 <div className="flex gap-2">
                   <button
