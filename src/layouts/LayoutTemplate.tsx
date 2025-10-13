@@ -1,11 +1,12 @@
 import { Outlet, useLocation } from "react-router";
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { AnimatePresence } from "motion/react";
 import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import { useScrollToTopInstant } from "../hooks/useScrollToTop";
 import { PageTransition } from "../components/transitions/PageTransition";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { LoadingScreen } from "../components/loading";
 
 function LayoutTemplate() {
   useScrollToTopInstant();
@@ -77,79 +78,56 @@ function LayoutTemplate() {
     if (!isInitialLoad) {
       setIsLoading(true);
 
-      const timer = requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+      // Observador para el atributo data-dynamic-page-loading
+      const checkDynamicPageLoading = () => {
+        const isDynamicPageLoading = document.body.getAttribute('data-dynamic-page-loading') === 'true';
+        
+        if (!isDynamicPageLoading) {
+          // Pequeño delay para asegurar que el contenido esté renderizado
           setTimeout(() => {
             setIsLoading(false);
-          }, 500);
+          }, 200);
+        }
+      };
+
+      // Observer para detectar cambios en el atributo
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-dynamic-page-loading') {
+            checkDynamicPageLoading();
+          }
         });
       });
 
-      return () => cancelAnimationFrame(timer);
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['data-dynamic-page-loading']
+      });
+
+      // Timeout de seguridad: si después de 3 segundos aún está cargando, forzar ocultar
+      const maxTimeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+
+      // Verificación inicial después de un corto delay
+      const initialCheck = setTimeout(checkDynamicPageLoading, 100);
+
+      return () => {
+        observer.disconnect();
+        clearTimeout(maxTimeout);
+        clearTimeout(initialCheck);
+      };
     }
   }, [location.pathname, isInitialLoad]);
 
   return (
     <>
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="fixed z-[9999] bg-bg-400 left-0 top-0 h-screen w-screen flex justify-center items-center overflow-hidden"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="flex flex-col justify-center gap-5 items-center"
-            >
-              <motion.img
-                src="/AST-Logo-white.png"
-                alt="Logo"
-                className="w-40"
-                animate={{
-                  scale: [1, 1.05, 1],
-                  opacity: [0.8, 1, 0.8],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-
-              {/* Barra de progreso */}
-              {isInitialLoad && (
-                <div className="w-64 h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-primary-100"
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${loadingProgress}%` }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                  />
-                </div>
-              )}
-
-              <motion.small
-                className="text-white"
-                animate={{ opacity: [0.5, 1, 0.5] }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                {isInitialLoad
-                  ? `Cargando... ${Math.round(loadingProgress)}%`
-                  : "Cargando..."}
-              </motion.small>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <LoadingScreen
+        isVisible={isLoading}
+        progress={loadingProgress}
+        showProgress={isInitialLoad}
+        message="Cargando..."
+      />
 
       <Header />
 

@@ -1,4 +1,3 @@
-import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
 import ClientsCarousel from "../../about/components/ClientsCarousel";
@@ -10,6 +9,7 @@ import {
 } from "../../../components/animations";
 import { useHomeManagement } from "../../admin/home-management/hooks/useHomeManagement";
 import Slider from "../../../components/slider/Slider";
+import { SlEnvolope, SlPhone } from "react-icons/sl";
 
 function EditableHome() {
   const { isSmallDevice } = useBreakpoints();
@@ -26,7 +26,7 @@ function EditableHome() {
       <section
         id="slider"
         className={`relative flex justify-start items-start w-full bg-bg-400
-        ${isSmallDevice ? "h-auto" : "py-12 pb-54"}
+        ${isSmallDevice ? "h-auto " : "py-12 pb-54"}
         `}
       >
         {isSmallDevice ? (
@@ -36,8 +36,8 @@ function EditableHome() {
               alt={homeData.heroSection.title}
             />
             <div className="absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-bg-400"></div>
-            <div className="absolute z-10 pb-30 top-[70%] -translate-y-1/2 left-[50%] transform -translate-x-1/2 p-5 flex flex-col justify-center items-center ">
-              <h2 className="text-5xl font-bold text-white ">
+            <div className="absolute z-10 w-full pb-30 top-[50%] -translate-y-1/2 left-[50%] transform -translate-x-1/2 p-5 flex flex-col justify-center items-center ">
+              <h2 className="text-2xl font-bold text-white ">
                 {homeData.heroSection.title}
               </h2>
               <p className="text-white text-center text-balance">
@@ -99,7 +99,7 @@ function EditableHome() {
                 alt={homeData.iaSection.title}
                 className={`${
                   isSmallDevice ? "w-full" : "w-150"
-                } object-cover rounded-lg shadow-lg`}
+                } object-cover rounded-2xl shadow-lg`}
               />
             </div>
           </SlideInLeft>
@@ -107,32 +107,34 @@ function EditableHome() {
           <SlideInRight>
             <div className="flex-1 flex flex-col gap-8 justify-evenly h-full">
               <div className="flex flex-col gap-4 h-full">
-                <h3 className="text-3xl font-bold text-primary-100">
+                <h2 className="text-4xl font-bold text-primary-100">
                   {homeData.iaSection.title}
-                </h3>
+                </h2>
                 <p className="text-xl text-balance">
                   {homeData.iaSection.description}
                 </p>
               </div>
-              {homeData.iaSection.buttonLink && (
-                <a
-                  href={homeData.iaSection.buttonLink}
-                  className="bg-primary-100 text-white-100 px-10 py-2 rounded-lg hover:bg-primary-200 transition-colors duration-300 w-fit"
-                >
-                  {homeData.iaSection.buttonText || "Ver más"}
-                </a>
-              )}
+              <div className="flex justify-center items-center">
+                {homeData.iaSection.buttonLink && (
+                  <a
+                    href={homeData.iaSection.buttonLink}
+                    className="border border-primary-100 text-primary-100 px-10 py-2 rounded-lg hover:bg-primary-100/90 hover:text-white transition-colors duration-300 w-full flex justify-center items-center"
+                  >
+                    {homeData.iaSection.buttonText || "Ver más"}
+                  </a>
+                )}
+              </div>
             </div>
           </SlideInRight>
         </div>
 
         <FadeInSection>
           <div
-            className={`container mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? " w-100 mt-10" : "py-24"
+            className={`max-w-7xl mx-auto flex flex-col gap-4 text-center  rounded-2xl ${
+              isSmallDevice ? " w-100 mt-10" : "  my-20"
             }`}
           >
-            <h2 className="text-5xl font-bold">
+            <h2 className="text-4xl font-bold text-primary-100">
               {homeData.videoSection.title}
             </h2>
             {homeData.videoSection.description && (
@@ -143,7 +145,7 @@ function EditableHome() {
             <div className="flex justify-center items-center">
               <iframe
                 className={`${
-                  isSmallDevice ? "w-full h-64" : "w-200 h-100"
+                  isSmallDevice ? "w-full h-64" : "w-full h-150"
                 } rounded-lg shadow-lg`}
                 src={homeData.videoSection.videoUrl}
                 title="YouTube video player"
@@ -155,20 +157,6 @@ function EditableHome() {
           </div>
         </FadeInSection>
       </section>
-
-      <section id="clients" className="relative min-w-screen  ">
-        <FadeInSection>
-          <div
-            className={` mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12 w-100 " : "py-24"
-            }`}
-          >
-           
-            <ClientsCarousel />
-          </div>
-        </FadeInSection>
-      </section>
-
       <section id="news" className="relative bg-primary-100">
         <FadeInSection>
           <div
@@ -181,52 +169,82 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
+      <section id="clients" className="relative min-w-screen  ">
+        <FadeInSection>
+          <div
+            className={` mx-auto flex flex-col gap-4 text-center ${
+              isSmallDevice ? "py-12 w-100 " : "py-24"
+            }`}
+          >
+            <ClientsCarousel />
+          </div>
+        </FadeInSection>
+      </section>
+
       <section
         id="contacto"
         className={`relative  text-bg-400 ${isSmallDevice ? "py-12" : "py-24"}`}
       >
+        <div
+          className="absolute left-0 -bottom-0 w-full h-120"
+          style={{
+            backgroundColor: "#ff3030",
+            clipPath: "ellipse(100% 100% at 50% 100%)",
+          }}
+        ></div>
         <FadeInSection>
-          <div className="container mx-auto flex flex-col gap-4 text-center">
-            <h2 className="text-5xl font-bold">
+          <div
+            className={`  rounded-2xl py-10 mx-auto flex flex-col gap-4 text-center bg-white
+          ${isSmallDevice ? "w-100 max-w-3xl" : "max-w-7xl"}
+          `}
+          >
+            <h2 className="text-4xl font-bold text-primary-100">
               {homeData.contactSection.title}
             </h2>
-            <p className="text-lg text-balance">
-              Si tienes alguna pregunta, no dudes en contactarnos.
-            </p>
             <div
-              className={`flex ${
-                isSmallDevice ? "flex-col" : "flex-row"
-              } gap-8 justify-center items-center mt-8`}
+              className={` ${
+                isSmallDevice ? "flex flex-col" : "grid grid-cols-2"
+              } gap-8 justify-center items-center mt-8 w-full p-5 h-80`}
             >
-              <div className="flex items-center gap-4">
-                <TbPhoneFilled className="text-4xl" />
+              <div className="flex items-center flex-col justify-center gap-6 bg-white-100  rounded-2xl h-full py-5 w-full">
+                <SlPhone className="text-7xl text-primary-100" />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg font-bold">Teléfono</span>
-                  <span className="text-sm">
-                    {homeData.contactSection.contactInfo.phone1}
-                  </span>
-                  {homeData.contactSection.contactInfo.phone2 && (
-                    <span className="text-sm">
-                      {homeData.contactSection.contactInfo.phone2}
-                    </span>
-                  )}
+                  <p className="text-balance text-center">
+                    Llámenos al{" "}
+                    <span className="text-primary-100">
+                      {homeData.contactSection.contactInfo.phone1}
+                    </span>{" "}
+                    ||{" "}
+                    {homeData.contactSection.contactInfo.phone2 && (
+                      <span className="text-primary-100">
+                        {homeData.contactSection.contactInfo.phone2}
+                      </span>
+                    )}
+                    . Nuestros expertos estan preparados para aclarar sus dudas.
+                  </p>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <TbMailFilled className="text-4xl" />
+              <div className="flex items-center flex-col justify-center gap-6 bg-white-100  rounded-2xl h-full py-5 w-full">
+                <SlEnvolope className="text-7xl text-primary-100" />
                 <div className="flex flex-col items-start">
-                  <span className="text-lg font-bold">Email</span>
-                  <span className="text-sm">
-                    {homeData.contactSection.contactInfo.email}
-                  </span>
+                  <p className="text-balance text-center">
+                    Puede contactarse con nosotros en nuestro email{" "}
+                    <span className="text-primary-100">
+                      {homeData.contactSection.contactInfo.email}
+                    </span>
+                    . Nuestros expertos le proporcionaran mas información
+                    detallada.
+                  </p>
                 </div>
               </div>
             </div>
-            {homeData.contactSection.contactInfo.schedule && (
-              <p className="text-sm mt-4">
-                {homeData.contactSection.contactInfo.schedule}
-              </p>
-            )}
+            <div className="flex justify-center items-center">
+              {homeData.contactSection.contactInfo.schedule && (
+                <p className="text-sm mt-4 bg-white rounded-2xl px-10 py-2 text-bg-300 shadow-xl">
+                  {homeData.contactSection.contactInfo.schedule}
+                </p>
+              )}
+            </div>
           </div>
         </FadeInSection>
       </section>

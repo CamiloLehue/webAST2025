@@ -62,7 +62,7 @@ function ClientsCarousel() {
     <section id="partner" className="relative overflow-hidden max-w-screen ">
       <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white-100  to-transparent  pointer-events-none"></div>
       <div className="relative mx-auto py-10 flex flex-col justify-center items-center gap-10">
-        <h2 className="text-5xl font-bold text-primary-100 mb-5 border-b-4 border-primary-100">
+        <h2 className="text-4xl font-bold text-primary-100">
           Nuestros Clientes
         </h2>
         <div className="w-full overflow-hidden relative">
