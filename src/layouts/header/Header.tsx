@@ -1,8 +1,10 @@
 import { motion } from "motion/react";
 import NavBar from "./NavBar";
 import TopHeader from "./TopHeader";
+import { useNavigate } from "react-router";
 
 function Header() {
+  const navigate = useNavigate();
   return (
     <header className="sticky top-0 left-0 right-0 w-full z-[100] flex flex-col bg-bg-100 text-white-100 shadow-lg">
       <motion.div
@@ -20,7 +22,12 @@ function Header() {
         </div>
         <div className="max-w-7xl min-h-24 mx-auto flex justify-between items-center px-5 h-full w-full">
           <div className="">
-            <img src="/AST-Logo-white.png" alt="Logo AST" className="w-30" />
+            <img
+              onClick={() => navigate("/")}
+              src="/AST-Logo-white.png"
+              alt="Logo AST"
+              className="w-30 cursor-pointer"
+            />
           </div>
           <div className="relative">
             <NavBar />
