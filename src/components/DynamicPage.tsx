@@ -37,7 +37,6 @@ const DynamicPage: React.FC = () => {
 
       try {
         setLoading(true);
-        // Notificar al LayoutTemplate que DynamicPage está cargando
         document.body.setAttribute("data-dynamic-page-loading", "true");
 
         const foundPage = await PageService.getCustomPageBySlug(slug);
@@ -56,7 +55,6 @@ const DynamicPage: React.FC = () => {
         setError("Error al cargar la página");
       } finally {
         setLoading(false);
-        // Notificar que terminó de cargar
         document.body.setAttribute("data-dynamic-page-loading", "false");
       }
     };
@@ -64,7 +62,6 @@ const DynamicPage: React.FC = () => {
     fetchPage();
   }, [slug]);
 
-  // Mostrar errores de manera visible
   if (error && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -76,7 +73,6 @@ const DynamicPage: React.FC = () => {
     );
   }
 
-  // Mostrar página no encontrada solo si terminó de cargar
   if (!page && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -92,8 +88,6 @@ const DynamicPage: React.FC = () => {
     );
   }
 
-  // Renderizar el contenido pero oculto mientras carga
-  // Esto permite que las imágenes y el contenido se carguen en segundo plano
   return (
     <div
       className="w-full transition-opacity duration-300"
@@ -111,7 +105,6 @@ const DynamicPage: React.FC = () => {
   );
 };
 
-// Grid Layout Renderer Component
 interface GridLayoutRendererProps {
   sections: ContentSection[];
 }
@@ -119,17 +112,14 @@ interface GridLayoutRendererProps {
 const GridLayoutRenderer: React.FC<GridLayoutRendererProps> = ({
   sections,
 }) => {
-  // Agrupar secciones en filas según su ancho de grid
   const groupSectionsIntoRows = (sections: ContentSection[]) => {
     const rows: ContentSection[][] = [];
     let currentRow: ContentSection[] = [];
     let currentRowWidth = 0;
 
     sections.forEach((section) => {
-      // Obtener el ancho de grid de la sección (por defecto 12 = ancho completo)
       const sectionWidth = (section as any).gridWidth || 12;
 
-      // Si la sección no cabe en la fila actual, crear nueva fila
       if (currentRowWidth + sectionWidth > 12) {
         if (currentRow.length > 0) {
           rows.push(currentRow);
@@ -143,7 +133,6 @@ const GridLayoutRenderer: React.FC<GridLayoutRendererProps> = ({
       }
     });
 
-    // Agregar la última fila si tiene contenido
     if (currentRow.length > 0) {
       rows.push(currentRow);
     }
@@ -160,7 +149,6 @@ const GridLayoutRenderer: React.FC<GridLayoutRendererProps> = ({
           {row.map((section) => {
             const gridWidth = (section as any).gridWidth || 12;
 
-            // Mapear los anchos a clases CSS específicas para asegurar que Tailwind las incluya
             const colSpanClasses: Record<number, string> = {
               1: "col-span-1",
               2: "col-span-2",
@@ -235,7 +223,6 @@ const ContentSectionRenderer: React.FC<ContentSectionRendererProps> = ({
   }
 };
 
-// Hero Section Component
 const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const subtitle = data.subtitle as string;
@@ -330,7 +317,6 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Text Section Component
 const TextSection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const content = data.content as string;
@@ -393,7 +379,6 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Image Section Component
 const ImageSection: React.FC<{ data: any }> = ({ data }) => {
   const src = data.src as string;
   const alt = data.alt as string;
@@ -446,7 +431,6 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Gallery Section Component
 const GallerySection: React.FC<{ data: any }> = ({ data }) => {
   const images =
     (data.images as Array<{ src: string; alt: string; caption?: string }>) ||
@@ -510,7 +494,6 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Video Section Component
 const VideoSection: React.FC<{ data: any }> = ({ data }) => {
   const src = data.src as string;
   const title = data.title as string;
@@ -561,7 +544,6 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Contact Form Section Component
 const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const description = data.description as string;
@@ -637,7 +619,6 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Testimonials Section Component
 const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const testimonials =
@@ -730,7 +711,6 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Features Section Component
 const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const description = data.description as string;
@@ -824,7 +804,6 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// CTA Section Component
 const CTASection: React.FC<{ data: any }> = ({ data }) => {
   const title = data.title as string;
   const description = data.description as string;
@@ -878,7 +857,6 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Spacer Section Component
 const SpacerSection: React.FC<{ data: any }> = ({ data }) => {
   const height = data.height as string;
 
@@ -896,9 +874,7 @@ const SpacerSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// New Section Components
 
-// Hero Multi Section Component (uses existing HeroSection component)
 const HeroMultiSection: React.FC<{ data: any }> = ({ data }) => {
   return (
     <ExistingHeroSection
@@ -917,7 +893,6 @@ const HeroMultiSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Logo Section Component
 const LogoSection: React.FC<{ data: any }> = ({ data }) => {
   const height = data.height || "medium";
   const heightClasses = {
@@ -954,9 +929,7 @@ const LogoSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Content Section Component (uses existing ContentSection component)
 const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
-  // Procesar la descripción con MarkdownContent si contiene Markdown/HTML
   const processedDescription = data.description ? (
     <MarkdownContent
       content={data.description}
@@ -984,7 +957,6 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Curved Section Component
 const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
   return (
     <section className="relative h-100 mt-50">
@@ -1030,7 +1002,6 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Clients Carousel Section Component
 const ClientsCarouselSection: React.FC<{ data: any }> = ({ data }) => {
   const clients = (data.clients || []) as Array<{
     id: string;
@@ -1113,7 +1084,6 @@ const ClientsCarouselSection: React.FC<{ data: any }> = ({ data }) => {
   );
 };
 
-// Team Cards Section Component
 const TeamCardsSection: React.FC<{ data: any }> = ({ data }) => {
   const members = (data.members || []) as Array<{
     id: string;
