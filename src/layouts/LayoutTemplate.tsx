@@ -90,7 +90,6 @@ function LayoutTemplate() {
         }
       };
 
-      // Observer para detectar cambios en el atributo
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'data-dynamic-page-loading') {
@@ -104,12 +103,10 @@ function LayoutTemplate() {
         attributeFilter: ['data-dynamic-page-loading']
       });
 
-      // Timeout de seguridad: si después de 3 segundos aún está cargando, forzar ocultar
       const maxTimeout = setTimeout(() => {
         setIsLoading(false);
       }, 3000);
 
-      // Verificación inicial después de un corto delay
       const initialCheck = setTimeout(checkDynamicPageLoading, 100);
 
       return () => {
