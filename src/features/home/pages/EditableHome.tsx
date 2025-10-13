@@ -160,8 +160,8 @@ function EditableHome() {
       <section id="news" className="relative bg-primary-100">
         <FadeInSection>
           <div
-            className={`container mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12 w-100" : "py-24"
+            className={` text-center ${
+              isSmallDevice ? "py-12 w-100 px-5 my-5" : "py-24 max-w-7xl mx-auto flex flex-col"
             }`}
           >
             <Lastnews />
