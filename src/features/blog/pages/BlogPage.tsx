@@ -10,6 +10,7 @@ import {
   FiX,
 } from "react-icons/fi";
 import NewsHeroSection from "../../../components/hero/NewsHeroSection";
+import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 
 interface BlogFilters {
   search: string;
@@ -23,7 +24,7 @@ interface BlogFilters {
 const BlogPage: React.FC = () => {
   const { blogPosts, loading, error } = useBlogManagement();
   const [searchParams] = useSearchParams();
-
+  const { isSmallDevice } = useBreakpoints();
   const [filters, setFilters] = useState<BlogFilters>({
     search: "",
     category: "",
@@ -220,7 +221,7 @@ const BlogPage: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen min-w-screen">
-      <NewsHeroSection posts={publishedPosts} />
+      {!isSmallDevice && <NewsHeroSection posts={publishedPosts} />}
       <div className="bg-white-100 ">
         <div className="max-w-7xl mx-auto px-4  py-8">
           <div className="text-center">
