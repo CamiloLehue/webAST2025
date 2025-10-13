@@ -9,6 +9,7 @@ import {
   FiGrid,
   FiUsers,
   FiImage,
+  FiLayers,
 } from "react-icons/fi";
 import { getRoleDisplayName } from "../features/admin/user-management/types/userTypes";
 
@@ -18,7 +19,7 @@ const AdminLayout: React.FC = () => {
   const menuItems = [
     {
       to: "/admin",
-      icon: FiHome,
+      icon: FiGrid,
       label: "Dashboard",
       end: true,
     },
@@ -34,7 +35,7 @@ const AdminLayout: React.FC = () => {
     },
     {
       to: "/admin/pages",
-      icon: FiGrid,
+      icon: FiLayers   ,
       label: "Páginas",
     },
     {
