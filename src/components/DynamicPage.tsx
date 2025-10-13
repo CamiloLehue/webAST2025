@@ -361,7 +361,7 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
 
   return (
     <section
-      className={`px-6 lg:px-8  w-full flex flex-col justify-center items-center  ${
+      className={`  w-full flex flex-col justify-center items-center  ${
         paddingClasses[padding as keyof typeof paddingClasses] || ""
       }`}
       style={{ backgroundColor: backgroundColor || undefined }}
@@ -420,7 +420,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   return (
-    <section className=" px-6 lg:px-8">
+    <section className=" ">
       <div
         className={`${
           widthClasses[width as keyof typeof widthClasses] || "max-w-7xl"
@@ -456,7 +456,7 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
 
   if (images.length === 0) {
     return (
-      <section className=" px-6 lg:px-8">
+      <section className=" ">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-gray-500">
             Galería de imágenes (sin imágenes configuradas)
@@ -479,7 +479,7 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   return (
-    <section className=" px-6 lg:px-8">
+    <section className=" ">
       <div className="mx-auto max-w-6xl">
         <div
           className={`grid grid-cols-1 ${
@@ -529,7 +529,7 @@ const VideoSection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   return (
-    <section className=" px-6 lg:px-8">
+    <section className=" ">
       <div
         className={`mx-auto ${
           widthClasses[width as keyof typeof widthClasses] || "max-w-4xl"
@@ -577,10 +577,10 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
   const submitButtonText = data.submitButtonText as string;
 
   return (
-    <section className=" px-6 lg:px-8 w-full py-5 ">
+    <section className="  w-full py-5 ">
       <div className="mx-auto ">
         {title && (
-          <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
+          <h2 className="text-3xl font-bold text-center mb-4 text-white pt-5">{title}</h2>
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
@@ -654,7 +654,7 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (testimonials.length === 0) {
     return (
-      <section className=" px-6 lg:px-8">
+      <section className=" ">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-gray-500">
             Sección de testimonios (sin testimonios configurados)
@@ -665,7 +665,7 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
   }
 
   return (
-    <section className=" px-6 lg:px-8 bg-gray-50">
+    <section className="  bg-gray-50">
       <div className="mx-auto max-w-6xl">
         {title && (
           <h2 className="text-3xl font-bold text-center mb-12">{title}</h2>
@@ -747,7 +747,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (features.length === 0) {
     return (
-      <section className=" px-6 lg:px-8">
+      <section className=" ">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-gray-500">
             Sección de características (sin características configuradas)
@@ -764,7 +764,7 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   return (
-    <section className=" px-6 lg:px-8">
+    <section className=" ">
       <div className="mx-auto max-w-6xl">
         {title && (
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
@@ -842,7 +842,7 @@ const CTASection: React.FC<{ data: any }> = ({ data }) => {
 
   return (
     <section
-      className=" px-6 lg:px-8"
+      className=" "
       style={{ backgroundColor: backgroundColor || "#1f2937" }}
     >
       <div
@@ -1040,7 +1040,7 @@ const ClientsCarouselSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (clients.length === 0) {
     return (
-      <section className=" px-6 lg:px-8">
+      <section className=" ">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-gray-500">
             Carrusel de clientes (sin clientes configurados)
@@ -1128,7 +1128,7 @@ const TeamCardsSection: React.FC<{ data: any }> = ({ data }) => {
 
   if (members.length === 0) {
     return (
-      <section className=" px-6 lg:px-8">
+      <section className=" ">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-gray-500">
             Sección de equipo (sin miembros configurados)
