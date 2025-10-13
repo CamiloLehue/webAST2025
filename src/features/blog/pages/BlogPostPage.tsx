@@ -166,14 +166,12 @@ const BlogPostPage: React.FC = () => {
       minute: "2-digit",
     });
   };
-  // isSmallDevice
   return (
     <div
       className={`w-full min-h-screen  bg-white-100 rounded-t-lg  mt-5
-        
         ${isSmallDevice ? "" : "min-w-7xl"}`}
     >
-      <div className="">
+      <div className="px-5">
         <div className="max-w-7xl mx-auto py-4 px-4">
           <button
             onClick={() => navigate(-1)}
@@ -216,7 +214,11 @@ const BlogPostPage: React.FC = () => {
                   )}
                 </div>
 
-                <h1 className="text-4xl font-bold text-bg-100 mb-4">
+                <h1
+                  className={` font-bold text-bg-100 mb-4
+                  ${isSmallDevice ? "text-xl text-balance" : "text-4xl"}
+                `}
+                >
                   {post.title}
                 </h1>
 

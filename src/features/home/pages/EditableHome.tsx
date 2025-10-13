@@ -88,7 +88,7 @@ function EditableHome() {
         <div
           className={` ${
             isSmallDevice
-              ? "flex flex-col items-center justify-between gap-8 w-100 mx-auto mt-10"
+              ? "flex flex-col items-center justify-between gap-8 w-100 mx-auto mt-10 px-5"
               : "grid grid-cols-2 gap-20 max-w-7xl mx-auto "
           }  `}
         >
@@ -131,7 +131,7 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={`max-w-7xl mx-auto flex flex-col gap-4 text-center  rounded-2xl ${
-              isSmallDevice ? " w-100 mt-10" : "  my-20"
+              isSmallDevice ? "w-100 mt-10 p-5" : "  my-20"
             }`}
           >
             <h2 className="text-4xl font-bold text-primary-100">
@@ -145,7 +145,7 @@ function EditableHome() {
             <div className="flex justify-center items-center">
               <iframe
                 className={`${
-                  isSmallDevice ? "w-full h-64" : "w-full h-150"
+                  isSmallDevice ? "w-full h-64 " : "w-full h-150"
                 } rounded-lg shadow-lg`}
                 src={homeData.videoSection.videoUrl}
                 title="YouTube video player"
@@ -161,7 +161,9 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={` text-center ${
-              isSmallDevice ? "py-12 w-100 px-5 my-5" : "py-24 max-w-7xl mx-auto flex flex-col"
+              isSmallDevice
+                ? "py-12 w-100 px-5 my-5"
+                : "py-24 max-w-7xl mx-auto flex flex-col"
             }`}
           >
             <Lastnews />
