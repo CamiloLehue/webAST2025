@@ -37,6 +37,9 @@ const DynamicPage: React.FC = () => {
 
       try {
         setLoading(true);
+        // Notificar al LayoutTemplate que DynamicPage está cargando
+        document.body.setAttribute('data-dynamic-page-loading', 'true');
+        
         const foundPage = await PageService.getCustomPageBySlug(slug);
 
         console.log("Page found:", foundPage);
@@ -53,24 +56,16 @@ const DynamicPage: React.FC = () => {
         setError("Error al cargar la página");
       } finally {
         setLoading(false);
+        // Notificar que terminó de cargar
+        document.body.setAttribute('data-dynamic-page-loading', 'false');
       }
     };
 
     fetchPage();
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accent-100 mx-auto mb-4"></div>
-          <p className="text-bg-200">Cargando página...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
+  // Mostrar errores de manera visible
+  if (error && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -81,7 +76,8 @@ const DynamicPage: React.FC = () => {
     );
   }
 
-  if (!page) {
+  // Mostrar página no encontrada solo si terminó de cargar
+  if (!page && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -96,14 +92,21 @@ const DynamicPage: React.FC = () => {
     );
   }
 
+  // Renderizar el contenido pero oculto mientras carga
+  // Esto permite que las imágenes y el contenido se carguen en segundo plano
   return (
-    <div className="w-full">
+    <div 
+      className="w-full transition-opacity duration-300"
+      style={{ opacity: loading ? 0 : 1 }}
+    >
       {/* SEO Meta Tags (estas se pueden manejar con un hook o biblioteca como React Helmet) */}
-      <title>{page.metaTitle || page.title}</title>
+      {page && <title>{page.metaTitle || page.title}</title>}
 
-      <GridLayoutRenderer
-        sections={page.content.sort((a, b) => a.order - b.order)}
-      />
+      {page && (
+        <GridLayoutRenderer
+          sections={page.content.sort((a, b) => a.order - b.order)}
+        />
+      )}
     </div>
   );
 };
