@@ -9,13 +9,14 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import MarkdownContent from "../../../components/content/MarkdownContent";
+import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { blogPosts, loading, error } = useBlogManagement();
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [expandedTags, setExpandedTags] = useState<string[]>([]);
-
+  const { isSmallDevice } = useBreakpoints();
   const post = (blogPosts || []).find((p) => p.slug === slug && p.isPublished);
 
   const allCategories = [
@@ -165,9 +166,13 @@ const BlogPostPage: React.FC = () => {
       minute: "2-digit",
     });
   };
-
+  // isSmallDevice
   return (
-    <div className="w-full min-h-screen  bg-white-100 rounded-t-lg min-w-7xl mt-5">
+    <div
+      className={`w-full min-h-screen  bg-white-100 rounded-t-lg  mt-5
+        
+        ${isSmallDevice ? "" : "min-w-7xl"}`}
+    >
       <div className="">
         <div className="max-w-7xl mx-auto py-4 px-4">
           <button
