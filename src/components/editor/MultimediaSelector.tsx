@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FiImage, FiLink, FiX, FiSearch, FiTag } from "react-icons/fi";
 import { TbPhoto, TbVideo, TbFileCode, TbFile } from "react-icons/tb";
 import { multimediaService } from "../../features/admin/multimedia-management/services/multimediaService";
@@ -8,7 +8,7 @@ interface MultimediaSelectorProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  acceptedTypes?: string[]; // Para filtrar tipos de archivo
+  acceptedTypes?: string[]; 
 }
 
 const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
@@ -24,20 +24,23 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [filteredFiles, setFilteredFiles] = useState<MultimediaFile[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalFiles, setTotalFiles] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const itemsPerPage = 24;
 
-  useEffect(() => {
-    if (showSelector && !hasLoaded && !loading) {
-      loadFiles();
-    }
-  }, [showSelector, hasLoaded, loading]);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
-  const loadFiles = async (page: number = 1, append: boolean = false) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const loadFiles = useCallback(async (page: number = 1, append: boolean = false) => {
     try {
       if (append) {
         setLoadingMore(true);
@@ -50,7 +53,8 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
         page,
         limit: itemsPerPage,
         sortField: 'created_at',
-        sortOrder: 'desc'
+        sortOrder: 'desc',
+        search: debouncedSearchTerm || undefined
       });
       
       if (append) {
@@ -70,7 +74,19 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
       setLoading(false);
       setLoadingMore(false);
     }
-  };
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (showSelector && !hasLoaded && !loading) {
+      loadFiles();
+    }
+  }, [showSelector, hasLoaded, loading, loadFiles]);
+
+  useEffect(() => {
+    if (showSelector && hasLoaded) {
+      loadFiles(1, false);
+    }
+  }, [debouncedSearchTerm, showSelector, hasLoaded, loadFiles]);
 
   const loadMoreFiles = () => {
     if (!loadingMore && hasMore) {
@@ -78,27 +94,9 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
     }
   };
 
-  useEffect(() => {
-    const filtered = files.filter((file: MultimediaFile) => {
-      const matchesType = acceptedTypes.includes(file.category);
-      
-      if (searchTerm === "") {
-        return matchesType;
-      }
-      
-      const searchLower = searchTerm.toLowerCase();
-      const matchesSearch = 
-        file.original_name.toLowerCase().includes(searchLower) ||
-        file.filename.toLowerCase().includes(searchLower) ||
-        file.category.toLowerCase().includes(searchLower) ||
-        file.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
-        (file.description && file.description.toLowerCase().includes(searchLower)) ||
-        (file.alt && file.alt.toLowerCase().includes(searchLower));
-      
-      return matchesType && matchesSearch;
-    });
-    setFilteredFiles(filtered);
-  }, [files, acceptedTypes, searchTerm]);
+  const filteredFiles = files.filter((file: MultimediaFile) => {
+    return acceptedTypes.includes(file.category);
+  });
 
   const getImageUrl = (file: MultimediaFile) => {
     const baseUrl = import.meta.env.VITE_API_IMG_URL?.replace("/api", "") || "http://10.30.7.14:8001";
@@ -284,8 +282,21 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
                   placeholder="Buscar por nombre, categoría, etiqueta o descripción..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                  className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
                 />
+                {searchTerm !== debouncedSearchTerm && (
+                  <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-accent-100"></div>
+                  </div>
+                )}
+                {searchTerm && searchTerm === debouncedSearchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <FiX className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -374,8 +385,11 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
             <div className="p-4 border-t bg-gray-50 rounded-b-lg">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">
-                  Mostrando {filteredFiles.length} de {totalFiles} archivos
-                  {searchTerm && ` (filtrados)`}
+                  {searchTerm ? (
+                    <>Resultados: {filteredFiles.length} de {totalFiles} archivos encontrados</>
+                  ) : (
+                    <>Mostrando {filteredFiles.length} de {totalFiles} archivos</>
+                  )}
                 </span>
                 <div className="flex gap-2">
                   <button
