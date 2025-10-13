@@ -38,8 +38,8 @@ const DynamicPage: React.FC = () => {
       try {
         setLoading(true);
         // Notificar al LayoutTemplate que DynamicPage está cargando
-        document.body.setAttribute('data-dynamic-page-loading', 'true');
-        
+        document.body.setAttribute("data-dynamic-page-loading", "true");
+
         const foundPage = await PageService.getCustomPageBySlug(slug);
 
         console.log("Page found:", foundPage);
@@ -57,7 +57,7 @@ const DynamicPage: React.FC = () => {
       } finally {
         setLoading(false);
         // Notificar que terminó de cargar
-        document.body.setAttribute('data-dynamic-page-loading', 'false');
+        document.body.setAttribute("data-dynamic-page-loading", "false");
       }
     };
 
@@ -95,7 +95,7 @@ const DynamicPage: React.FC = () => {
   // Renderizar el contenido pero oculto mientras carga
   // Esto permite que las imágenes y el contenido se carguen en segundo plano
   return (
-    <div 
+    <div
       className="w-full transition-opacity duration-300"
       style={{ opacity: loading ? 0 : 1 }}
     >
@@ -577,8 +577,8 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
   const submitButtonText = data.submitButtonText as string;
 
   return (
-    <section className=" px-6 lg:px-8 bg-gray-50">
-      <div className="mx-auto max-w-2xl">
+    <section className=" px-6 lg:px-8 w-full py-5 ">
+      <div className="mx-auto ">
         {title && (
           <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
         )}
@@ -590,7 +590,7 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
             />
           </div>
         )}
-        <div className="bg-white rounded-lg shadow p-8">
+        <div className="bg-white rounded-lg shadow p-8 max-w-7xl mx-auto">
           <form className="space-y-4">
             {fields.map((field) => (
               <div key={field.id}>
