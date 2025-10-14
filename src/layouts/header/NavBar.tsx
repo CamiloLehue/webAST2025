@@ -52,7 +52,7 @@ const NavDesktopDevice = ({ menuItems }: { menuItems: MenuItem[] }) => {
             onMouseLeave={() => setOpenIndex(null)}
           >
             <NavLink
-              to={item.path}
+              to={item.path !== "/none" ? item.path : "//"}
               className="text-sm tracking-wider py-8 font-normal uppercase text-nowrap h-full hover:text-white-100/90 transition-colors duration-300"
               style={({ isActive }) => ({
                 borderTopColor: isActive ? "var(--color-primary-100)" : "",
