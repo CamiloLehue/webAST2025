@@ -17,7 +17,6 @@ function LayoutTemplate() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  // Bloquear scroll cuando está cargando
   useEffect(() => {
     if (isLoading) {
       document.body.style.overflow = "hidden";
@@ -34,14 +33,12 @@ function LayoutTemplate() {
     };
   }, [isLoading]);
 
-  // CARGA INICIAL - Esperar a que todo el DOM y recursos estén listos
   useEffect(() => {
     if (!isInitialLoad) return;
 
-    const minLoadingTime = 800; // Tiempo mínimo visible
+    const minLoadingTime = 800; 
     const startTime = Date.now();
 
-    // Actualizar progreso visual
     const progressInterval = setInterval(() => {
       setLoadingProgress((prev) => {
         if (prev >= 90) return prev;
@@ -59,19 +56,15 @@ function LayoutTemplate() {
       setTimeout(() => {
         setIsLoading(false);
         setIsInitialLoad(false);
-      }, remainingTime + 300); // +300ms para animación suave
+      }, remainingTime + 300); 
     };
 
-    // Esperar a que el DOM esté completamente cargado
     if (document.readyState === "complete") {
-      // Ya está todo cargado
       setTimeout(completeLoading, 200);
     } else {
-      // Esperar al evento load
       window.addEventListener("load", completeLoading);
     }
 
-    // Timeout de seguridad (máximo 4 segundos)
     const maxTimeout = setTimeout(completeLoading, 4000);
 
     return () => {
@@ -81,17 +74,13 @@ function LayoutTemplate() {
     };
   }, [isInitialLoad]);
 
-  // ESCUCHAR EVENTOS DE CARGA DE CONTENIDO
   useEffect(() => {
     const unsubscribe = subscribeToContentLoading((isContentLoading) => {
       console.log('[LayoutTemplate] Content loading state:', isContentLoading);
       
       if (isContentLoading) {
-        // El contenido empieza a cargar
         setIsLoading(true);
       } else {
-        // El contenido terminó de cargar
-        // Pequeño delay para asegurar que el DOM se actualizó
         setTimeout(() => {
           setIsLoading(false);
         }, 100);
@@ -101,11 +90,9 @@ function LayoutTemplate() {
     return unsubscribe;
   }, []);
 
-  // NAVEGACIÓN - Detectar cambio de ruta (sin controlar loading aquí)
   useEffect(() => {
-    if (isInitialLoad) return; // Solo después de la carga inicial
+    if (isInitialLoad) return; 
     
-    // El loading lo controla el evento de DynamicPage
     console.log('[LayoutTemplate] Route changed to:', location.pathname);
     
   }, [location.pathname, isInitialLoad]);
@@ -121,11 +108,9 @@ function LayoutTemplate() {
 
       <Header />
 
-      {/* Contenedor principal con fondo y contenido */}
-      <div className="relative w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
+      <div className="relative  w-full min-h-screen h-full flex flex-col justify-between items-center overflow-x-hidden">
         <div className="absolute -z-5 left-0 top-0 w-full h-35 bg-bg-400"></div>
 
-        {/* Espaciador para compensar el header fijo */}
 
         {shouldReduceMotion ? (
           // Sin AnimatePresence ni transiciones en móviles

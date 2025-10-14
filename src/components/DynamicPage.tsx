@@ -6,7 +6,10 @@ import ExistingHeroSection from "./hero/HeroSection";
 import ExistingContentSection from "./content/ContentSection";
 import MarkdownContent from "./content/MarkdownContent";
 import { processImageUrl } from "../utils/imageUrlUtils";
-import { notifyContentLoading, notifyContentReady } from "../utils/contentLoadingEvents";
+import {
+  notifyContentLoading,
+  notifyContentReady,
+} from "../utils/contentLoadingEvents";
 import type {
   ContentSection,
   CustomPage,
@@ -63,7 +66,7 @@ const DynamicPage: React.FC = () => {
             setPage(foundPage);
             setLoading(false);
             document.body.setAttribute("data-dynamic-page-loading", "false");
-            
+
             // Esperar un frame para que el DOM se actualice antes de notificar
             requestAnimationFrame(() => {
               notifyContentReady(); // 🔥 NOTIFICAR QUE TERMINÓ DE CARGAR
@@ -469,18 +472,7 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
     [];
   const columns = data.columns as number;
   const spacing = data.spacing as string;
-
-  if (images.length === 0) {
-    return (
-      <section className=" ">
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="text-gray-500">
-            Galería de imágenes (sin imágenes configuradas)
-          </p>
-        </div>
-      </section>
-    );
-  }
+  const [selectedImage, setSelectedImage] = React.useState<number | null>(null);
 
   const columnsClasses = {
     2: "md:grid-cols-2",
@@ -494,35 +486,216 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
     large: "gap-8",
   };
 
-  return (
-    <section className=" ">
-      <div className="mx-auto max-w-6xl">
-        <div
-          className={`grid grid-cols-1 ${
-            columnsClasses[columns as keyof typeof columnsClasses] ||
-            "md:grid-cols-2 lg:grid-cols-3"
-          } ${
-            spacingClasses[spacing as keyof typeof spacingClasses] || "gap-6"
-          }`}
-        >
-          {images.map((image, index) => (
-            <figure key={index}>
-              <img
-                src={processImageUrl(image.src)}
-                alt={image.alt}
-                className="w-full h-64 object-cover rounded-lg shadow"
-                loading="lazy"
-              />
-              {image.caption && (
-                <figcaption className="mt-2 text-center text-bg-200 text-sm">
-                  {image.caption}
-                </figcaption>
-              )}
-            </figure>
-          ))}
+  const handleImageClick = (index: number) => {
+    setSelectedImage(index);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+  };
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedImage !== null) {
+      setSelectedImage(
+        selectedImage === 0 ? images.length - 1 : selectedImage - 1
+      );
+    }
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedImage !== null) {
+      setSelectedImage(
+        selectedImage === images.length - 1 ? 0 : selectedImage + 1
+      );
+    }
+  };
+
+  // Manejar teclas de navegación
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (selectedImage === null) return;
+
+      if (e.key === "Escape") {
+        handleCloseModal();
+      } else if (e.key === "ArrowLeft") {
+        setSelectedImage(
+          selectedImage === 0 ? images.length - 1 : selectedImage - 1
+        );
+      } else if (e.key === "ArrowRight") {
+        setSelectedImage(
+          selectedImage === images.length - 1 ? 0 : selectedImage + 1
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedImage, images.length]);
+
+  if (images.length === 0) {
+    return (
+      <section className=" ">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-gray-500">
+            Galería de imágenes (sin imágenes configuradas)
+          </p>
         </div>
-      </div>
-    </section>
+      </section>
+    );
+  }
+
+  return (
+    <>
+      <section className=" py-10">
+        <div className="mx-auto max-w-6xl px-4">
+          <div
+            className={`grid grid-cols-1 ${
+              columnsClasses[columns as keyof typeof columnsClasses] ||
+              "md:grid-cols-2 lg:grid-cols-3"
+            } ${
+              spacingClasses[spacing as keyof typeof spacingClasses] || "gap-6"
+            }`}
+          >
+            {images.map((image, index) => (
+              <figure
+                key={index}
+                className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
+                onClick={() => handleImageClick(index)}
+              >
+                <div className="relative overflow-hidden">
+                  <img
+                    src={processImageUrl(image.src)}
+                    alt={image.alt}
+                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/40 hover:bg-transparent  group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-100 scale-90">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-12 w-12 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                {image.caption && (
+                  <figcaption className="mt-3 text-center text-bg-300 text-sm font-medium px-2 group-hover:text-accent-100 transition-colors duration-300">
+                    {image.caption}
+                  </figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Modal de imagen expandida */}
+      {selectedImage !== null && (
+        <div
+          className="fixed inset-0 z-50  flex items-center justify-center p-4 animate-fadeIn"
+          onClick={handleCloseModal}
+        >
+          {/* Botón cerrar */}
+          <button
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-50"
+            onClick={handleCloseModal}
+            aria-label="Cerrar"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          {/* Botón anterior */}
+          <button
+            className="absolute left-4 text-white hover:text-gray-300 transition-colors z-50 p-2 hover:bg-white hover:bg-opacity-10 rounded-full"
+            onClick={handlePrevImage}
+            aria-label="Imagen anterior"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          {/* Botón siguiente */}
+          <button
+            className="absolute right-4 text-white hover:text-gray-300 transition-colors z-50 p-2 hover:bg-white hover:bg-opacity-10 rounded-full"
+            onClick={handleNextImage}
+            aria-label="Imagen siguiente"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
+          {/* Contenedor de imagen */}
+          <div
+            className="relative max-w-7xl max-h-full flex flex-col items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={processImageUrl(images[selectedImage].src)}
+              alt={images[selectedImage].alt}
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+            />
+            {images[selectedImage].caption && (
+              <div className="mt-4 text-white text-center bg-black bg-opacity-50 px-6 py-3 rounded-lg max-w-2xl">
+                <p className="text-lg">{images[selectedImage].caption}</p>
+              </div>
+            )}
+            {/* Contador de imágenes */}
+            <div className="mt-4 text-white text-sm bg-black bg-opacity-50 px-4 py-2 rounded-full">
+              {selectedImage + 1} / {images.length}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -594,7 +767,9 @@ const ContactFormSection: React.FC<{ data: any }> = ({ data }) => {
     <section className="  w-full py-5 ">
       <div className="mx-auto ">
         {title && (
-          <h2 className="text-3xl font-bold text-center mb-4 text-white pt-5">{title}</h2>
+          <h2 className="text-3xl font-bold text-center mb-4 text-white pt-5">
+            {title}
+          </h2>
         )}
         {description && (
           <div className="text-center text-bg-200 mb-8">
@@ -905,7 +1080,6 @@ const SpacerSection: React.FC<{ data: any }> = ({ data }) => {
     />
   );
 };
-
 
 const HeroMultiSection: React.FC<{ data: any }> = ({ data }) => {
   return (
