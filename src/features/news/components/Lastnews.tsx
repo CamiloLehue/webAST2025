@@ -1,10 +1,13 @@
 import { useState, memo } from "react";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { Link } from "react-router-dom";
+import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 
 const Lastnews = memo(function Lastnews() {
+  const { isSmallDevice } = useBreakpoints();
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerView = 5;
+  const mobileItemsToShow = 3;
   const maxNewsItems = 10;
 
   const { blogPosts, loading, error } = useBlogManagement();
@@ -52,13 +55,13 @@ const Lastnews = memo(function Lastnews() {
 
   if (loading) {
     return (
-      <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
-        <div className="relative h-full flex gap-5">
-          {Array.from({ length: itemsPerView }).map((_, index) => (
+      <div className={`relative mx-auto flex flex-col gap-5 ${isSmallDevice ? 'w-full' : 'max-w-7xl h-109'}`}>
+        <h3 className={`${isSmallDevice ? 'text-2xl' : 'text-4xl'} text-white font-bold`}>Últimas noticias</h3>
+        <div className={`relative h-full flex gap-5 ${isSmallDevice ? 'flex-col items-center' : ''}`}>
+          {Array.from({ length: isSmallDevice ? mobileItemsToShow : itemsPerView }).map((_, index) => (
             <div
               key={index}
-              className="w-80 h-96 bg-white/10 rounded-2xl animate-pulse flex-shrink-0"
+              className={`${isSmallDevice ? 'w-full h-80' : 'w-80 h-96'} bg-white/10 rounded-2xl animate-pulse flex-shrink-0`}
             />
           ))}
         </div>
@@ -68,8 +71,8 @@ const Lastnews = memo(function Lastnews() {
 
   if (error) {
     return (
-      <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
+      <div className={`relative mx-auto flex flex-col gap-5 ${isSmallDevice ? 'w-full' : 'max-w-7xl h-109'}`}>
+        <h3 className={`${isSmallDevice ? 'text-2xl' : 'text-4xl'} text-white font-bold`}>Últimas noticias</h3>
         <div className="relative h-full flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-4xl mb-4">⚠️</div>
@@ -82,8 +85,8 @@ const Lastnews = memo(function Lastnews() {
 
   if (NEWS_ITEMS.length === 0) {
     return (
-      <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
+      <div className={`relative mx-auto flex flex-col gap-5 ${isSmallDevice ? 'w-full' : 'max-w-7xl h-109'}`}>
+        <h3 className={`${isSmallDevice ? 'text-2xl' : 'text-4xl'} text-white font-bold`}>Últimas noticias</h3>
         <div className="relative h-full flex items-center justify-center">
           <div className="text-white text-center">
             <div className="text-6xl mb-4">📰</div>
@@ -97,65 +100,69 @@ const Lastnews = memo(function Lastnews() {
   }
 
   return (
-    <div className="relative mx-auto flex flex-col items-center gap-5  ">
+    <div className={`relative mx-auto flex flex-col items-center gap-5 ${isSmallDevice ? 'w-full px-0' : ''}`}>
       <div className="bg-bg-400/25 px-5 py-2 rounded-xl border-t border-t-white/30">
-        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
+        <h3 className={`${isSmallDevice ? 'text-2xl' : 'text-4xl'} text-white font-bold`}>Últimas noticias</h3>
       </div>
-      <div className="relative h-full ">
-        <button
-          onClick={prevSlide}
-          disabled={currentIndex === 0}
-          className={`absolute left-4 top-1/2 transform -translate-y-1/2 z-50 rounded-full p-3 shadow-lg transition-all w-12 h-12 flex items-center justify-center ${
-            currentIndex === 0
-              ? "bg-white/50 cursor-not-allowed text-black/50"
-              : "border-4 border-white text-white hover:bg-white hover:text-black"
-          }`}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+      <div className={`relative h-full ${isSmallDevice ? 'w-full' : ''}`}>
+        {!isSmallDevice && (
+          <>
+            <button
+              onClick={prevSlide}
+              disabled={currentIndex === 0}
+              className={`absolute left-4 top-1/2 transform -translate-y-1/2 z-50 rounded-full p-3 shadow-lg transition-all w-12 h-12 flex items-center justify-center ${
+                currentIndex === 0
+                  ? "bg-white/50 cursor-not-allowed text-black/50"
+                  : "border-4 border-white text-white hover:bg-white hover:text-black"
+              }`}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
 
-        <button
-          onClick={nextSlide}
-          disabled={currentIndex >= maxIndex}
-          className={`absolute right-4 top-1/2 transform -translate-y-1/2 z-50 rounded-full p-3 shadow-lg transition-all w-12 h-12 flex items-center justify-center ${
-            currentIndex >= maxIndex
-              ? "bg-white/50 cursor-not-allowed text-black/50"
-              : "border-4 border-white  hover:bg-white text-white hover:text-black"
-          }`}
-        >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
+            <button
+              onClick={nextSlide}
+              disabled={currentIndex >= maxIndex}
+              className={`absolute right-4 top-1/2 transform -translate-y-1/2 z-50 rounded-full p-3 shadow-lg transition-all w-12 h-12 flex items-center justify-center ${
+                currentIndex >= maxIndex
+                  ? "bg-white/50 cursor-not-allowed text-black/50"
+                  : "border-4 border-white  hover:bg-white text-white hover:text-black"
+              }`}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </>
+        )}
 
-        <div className="relative left-0 top-0 flex gap-5 transition-transform duration-300 ease-in-out ">
-          {getVisibleItems().map((item) => (
+        <div className={`relative left-0 top-0 flex gap-5 transition-transform duration-300 ease-in-out ${isSmallDevice ? 'flex-col items-center w-full' : ''}`}>
+          {(isSmallDevice ? NEWS_ITEMS.slice(0, mobileItemsToShow) : getVisibleItems()).map((item) => (
             <Link
               key={item.id}
               to={`/noticias/${item.slug}`}
-              className="group relative w-80  transition-all duration-500 rounded-2xl border-t border-t-white/40 shadow-2xl shadow-red-400  overflow-hidden h-96 flex-shrink-0  hover:shadow-xl  block"
+              className={`group relative ${isSmallDevice ? 'w-full h-80' : 'w-80 h-96'} transition-all duration-500 rounded-2xl border-t border-t-white/40 shadow-2xl shadow-red-400 overflow-hidden flex-shrink-0 hover:shadow-xl block`}
             >
               <div className="relative h-full w-full overflow-hidden ">
                 <img
@@ -187,19 +194,21 @@ const Lastnews = memo(function Lastnews() {
           ))}
         </div>
 
-        <div className="flex justify-center mt-6 gap-2">
-          {Array.from({ length: maxIndex + 1 }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex
-                  ? "bg-black w-20"
-                  : "border-2 border-white/70 hover:bg-white"
-              }`}
-            />
-          ))}
-        </div>
+        {!isSmallDevice && (
+          <div className="flex justify-center mt-6 gap-2">
+            {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-colors ${
+                  index === currentIndex
+                    ? "bg-black w-20"
+                    : "border-2 border-white/70 hover:bg-white"
+                }`}
+              />
+            ))}
+          </div>
+        )}
 
         {(blogPosts?.length || 0) > maxNewsItems && (
           <div className="flex justify-center mt-6">
