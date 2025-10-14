@@ -14,13 +14,16 @@ function LoadingScreen({
   message = "Cargando...",
 }: LoadingScreenProps) {
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       {isVisible && (
         <motion.div
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          exit={{ 
+            opacity: 0,
+            transition: { duration: 0.6, ease: "easeInOut" }
+          }}
           className="fixed z-[9999] bg-bg-400 left-0 top-0 h-screen w-screen flex justify-center items-center overflow-hidden"
+          style={{ pointerEvents: 'none' }} // Permite clicks durante fade-out
         >
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}

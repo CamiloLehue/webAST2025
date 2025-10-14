@@ -1,4 +1,5 @@
 import type { HomeData, HomeUpdateSchema } from "../types/homeTypes";
+import { apiCache } from "../../../../utils/apiCache";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,40 +10,42 @@ export class HomeService {
    * Obtiene la configuración actual del Home
    */
   static async getHomeData(): Promise<HomeData | null> {
-    try {
-      const response = await fetch(this.BASE_URL);
-      
-      if (!response.ok) {
-        if (response.status === 404) {
-          return null;
+    return apiCache.get('home-data', async () => {
+      try {
+        const response = await fetch(this.BASE_URL);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            return null;
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
 
-      const data = await response.json();
-      const rawHomeData = data.data || data;
-      
-      console.log("HomeData recibido del backend:", rawHomeData);
-      
-      // Si el backend usa _id (MongoDB), mapearlo a id
-      const homeData = rawHomeData && rawHomeData._id && !rawHomeData.id
-        ? { ...rawHomeData, id: rawHomeData._id }
-        : rawHomeData;
-      
-      if (rawHomeData && rawHomeData._id && !rawHomeData.id) {
-        console.log("Mapeando _id a id:", rawHomeData._id);
+        const data = await response.json();
+        const rawHomeData = data.data || data;
+        
+        console.log("HomeData recibido del backend:", rawHomeData);
+        
+        // Si el backend usa _id (MongoDB), mapearlo a id
+        const homeData = rawHomeData && rawHomeData._id && !rawHomeData.id
+          ? { ...rawHomeData, id: rawHomeData._id }
+          : rawHomeData;
+        
+        if (rawHomeData && rawHomeData._id && !rawHomeData.id) {
+          console.log("Mapeando _id a id:", rawHomeData._id);
+        }
+        
+        // Verificar que el ID esté presente
+        if (homeData && !homeData.id) {
+          console.warn("El backend no devolvió un ID para home data");
+        }
+        
+        return homeData;
+      } catch (error) {
+        console.error("Error fetching home data:", error);
+        throw error;
       }
-      
-      // Verificar que el ID esté presente
-      if (homeData && !homeData.id) {
-        console.warn("El backend no devolvió un ID para home data");
-      }
-      
-      return homeData;
-    } catch (error) {
-      console.error("Error fetching home data:", error);
-      throw error;
-    }
+    });
   }
 
   /**
@@ -77,6 +80,9 @@ export class HomeService {
       if (rawHomeData && rawHomeData._id && !rawHomeData.id) {
         console.log("Mapeando _id a id en respuesta de creación:", rawHomeData._id);
       }
+      
+      // Invalidar cache después de crear
+      apiCache.invalidate('home-data');
       
       return createdHomeData;
     } catch (error) {
@@ -125,6 +131,9 @@ export class HomeService {
       if (rawHomeData && rawHomeData._id && !rawHomeData.id) {
         console.log("Mapeando _id a id en respuesta de actualización:", rawHomeData._id);
       }
+      
+      // Invalidar cache después de actualizar
+      apiCache.invalidate('home-data');
       
       return updatedHomeData;
     } catch (error) {

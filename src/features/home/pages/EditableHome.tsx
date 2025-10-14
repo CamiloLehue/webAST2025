@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
 import ClientsCarousel from "../../about/components/ClientsCarousel";
@@ -10,10 +11,23 @@ import {
 import { useHomeManagement } from "../../admin/home-management/hooks/useHomeManagement";
 import Slider from "../../../components/slider/Slider";
 import { SlEnvolope, SlPhone } from "react-icons/sl";
+import { notifyContentLoading, notifyContentReady } from "../../../utils/contentLoadingEvents";
 
 function EditableHome() {
   const { isSmallDevice } = useBreakpoints();
   const { homeData, loading, error } = useHomeManagement();
+
+  // Notificar estado de carga
+  useEffect(() => {
+    if (loading) {
+      notifyContentLoading();
+    } else {
+      // Esperar un frame para que el DOM se actualice
+      requestAnimationFrame(() => {
+        notifyContentReady();
+      });
+    }
+  }, [loading]);
 
   // Si está cargando o hay error, mostrar el Home estático
   if (loading || error || !homeData || !homeData.isPublished) {
@@ -22,7 +36,7 @@ function EditableHome() {
   }
 
   return (
-    <div className="relative overflow-hidden min-w-screen">
+    <div className="relative overflow-hidden min-w-screen" data-content-ready="true">
       <section
         id="slider"
         className={`relative flex justify-start items-start w-full bg-bg-400
@@ -34,6 +48,7 @@ function EditableHome() {
             <img
               src={homeData.heroSection.backgroundImage}
               alt={homeData.heroSection.title}
+              data-critical="true"
             />
             <div className="absolute bottom-0 left-0 h-1/2 w-full bg-gradient-to-t from-bg-400"></div>
             <div className="absolute z-10 w-full pb-30 top-[50%] -translate-y-1/2 left-[50%] transform -translate-x-1/2 p-5 flex flex-col justify-center items-center ">

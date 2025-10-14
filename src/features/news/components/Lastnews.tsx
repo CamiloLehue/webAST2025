@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import { Link } from "react-router-dom";
 
-function Lastnews() {
+const Lastnews = memo(function Lastnews() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const itemsPerView = 5;
   const maxNewsItems = 10;
@@ -225,6 +225,6 @@ function Lastnews() {
       </div>
     </div>
   );
-}
+});
 
 export default Lastnews;

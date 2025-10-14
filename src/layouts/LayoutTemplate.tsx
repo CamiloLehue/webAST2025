@@ -7,6 +7,7 @@ import { useScrollToTopInstant } from "../hooks/useScrollToTop";
 import { PageTransition } from "../components/transitions/PageTransition";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { LoadingScreen } from "../components/loading";
+import { subscribeToContentLoading } from "../utils/contentLoadingEvents";
 
 function LayoutTemplate() {
   useScrollToTopInstant();
@@ -15,106 +16,104 @@ function LayoutTemplate() {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [waitingForContent, setWaitingForContent] = useState(false);
 
   // Bloquear scroll cuando está cargando
   useEffect(() => {
     if (isLoading) {
       document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+      document.body.style.width = "100%";
     } else {
       document.body.style.overflow = "unset";
+      document.body.style.position = "static";
     }
 
     return () => {
       document.body.style.overflow = "unset";
+      document.body.style.position = "static";
     };
   }, [isLoading]);
 
+  // CARGA INICIAL - Esperar a que todo el DOM y recursos estén listos
   useEffect(() => {
-    if (isInitialLoad) {
-      const progressInterval = setInterval(() => {
-        setLoadingProgress((prev) => {
-          if (prev >= 90) return prev;
-          return prev + Math.random() * 15;
-        });
-      }, 200);
+    if (!isInitialLoad) return;
 
-      if (document.readyState === "complete") {
-        setLoadingProgress(100);
-        const minDelay = setTimeout(() => {
-          setIsLoading(false);
-          setIsInitialLoad(false);
-        }, 800);
-        return () => {
-          clearTimeout(minDelay);
-          clearInterval(progressInterval);
-        };
-      }
+    const minLoadingTime = 800; // Tiempo mínimo visible
+    const startTime = Date.now();
 
-      const handleLoad = () => {
-        setLoadingProgress(100);
-        setTimeout(() => {
-          setIsLoading(false);
-          setIsInitialLoad(false);
-        }, 300);
-      };
+    // Actualizar progreso visual
+    const progressInterval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 90) return prev;
+        return prev + Math.random() * 12;
+      });
+    }, 150) as unknown as number;
 
-      window.addEventListener("load", handleLoad);
+    const completeLoading = () => {
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
 
-      const maxTimeout = setTimeout(() => {
-        setLoadingProgress(100);
+      clearInterval(progressInterval);
+      setLoadingProgress(100);
+
+      setTimeout(() => {
         setIsLoading(false);
         setIsInitialLoad(false);
-      }, 5000);
+      }, remainingTime + 300); // +300ms para animación suave
+    };
 
-      return () => {
-        window.removeEventListener("load", handleLoad);
-        clearTimeout(maxTimeout);
-        clearInterval(progressInterval);
-      };
+    // Esperar a que el DOM esté completamente cargado
+    if (document.readyState === "complete") {
+      // Ya está todo cargado
+      setTimeout(completeLoading, 200);
+    } else {
+      // Esperar al evento load
+      window.addEventListener("load", completeLoading);
     }
+
+    // Timeout de seguridad (máximo 4 segundos)
+    const maxTimeout = setTimeout(completeLoading, 4000);
+
+    return () => {
+      clearInterval(progressInterval);
+      clearTimeout(maxTimeout);
+      window.removeEventListener("load", completeLoading);
+    };
   }, [isInitialLoad]);
 
+  // ESCUCHAR EVENTOS DE CARGA DE CONTENIDO
   useEffect(() => {
-    if (!isInitialLoad) {
-      setIsLoading(true);
-
-      // Observador para el atributo data-dynamic-page-loading
-      const checkDynamicPageLoading = () => {
-        const isDynamicPageLoading = document.body.getAttribute('data-dynamic-page-loading') === 'true';
+    const unsubscribe = subscribeToContentLoading((isContentLoading) => {
+      console.log('[LayoutTemplate] Content loading state:', isContentLoading);
+      
+      if (isContentLoading) {
+        // El contenido empieza a cargar
+        setWaitingForContent(true);
+        setIsLoading(true);
+      } else {
+        // El contenido terminó de cargar
+        setWaitingForContent(false);
         
-        if (!isDynamicPageLoading) {
-          // Pequeño delay para asegurar que el contenido esté renderizado
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 200);
-        }
-      };
+        // Pequeño delay para asegurar que el DOM se actualizó
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 100);
+      }
+    });
 
-      const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && mutation.attributeName === 'data-dynamic-page-loading') {
-            checkDynamicPageLoading();
-          }
-        });
-      });
+    return unsubscribe;
+  }, []);
 
-      observer.observe(document.body, {
-        attributes: true,
-        attributeFilter: ['data-dynamic-page-loading']
-      });
-
-      const maxTimeout = setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
-
-      const initialCheck = setTimeout(checkDynamicPageLoading, 100);
-
-      return () => {
-        observer.disconnect();
-        clearTimeout(maxTimeout);
-        clearTimeout(initialCheck);
-      };
-    }
+  // NAVEGACIÓN - Detectar cambio de ruta (sin controlar loading aquí)
+  useEffect(() => {
+    if (isInitialLoad) return; // Solo después de la carga inicial
+    
+    // Solo marcamos que esperamos contenido
+    // El loading lo controla el evento de DynamicPage
+    console.log('[LayoutTemplate] Route changed to:', location.pathname);
+    setWaitingForContent(true);
+    
   }, [location.pathname, isInitialLoad]);
 
   return (
