@@ -41,7 +41,10 @@ function EditableHome() {
   }
 
   return (
-    <div className="relative overflow-hidden min-w-screen" data-content-ready="true">
+    <div
+      className="relative overflow-hidden min-w-screen"
+      data-content-ready="true"
+    >
       <section
         id="slider"
         className={`relative flex justify-start items-start w-full bg-bg-400
@@ -104,7 +107,7 @@ function EditableHome() {
         </section>
       )}
 
-      <section id="wiseIA" className="relative min-w-screen">
+      <section id="wiseIA" className="relative min-w-screen bg-white-100 py-5">
         <div
           className={` ${
             isSmallDevice
@@ -113,28 +116,32 @@ function EditableHome() {
           }  `}
         >
           <SlideInLeft>
-            <div className="flex items-center justify-center flex-1">
+            <div className="group flex items-center justify-center flex-1 rounded-2xl overflow-hidden">
               <img
                 src={homeData.iaSection.image}
                 alt={homeData.iaSection.title}
                 className={`${
                   isSmallDevice ? "w-full" : "w-150"
-                } object-cover rounded-2xl shadow-lg`}
+                } object-cover  shadow-lg group-hover:scale-105 transition-all duration-300`}
               />
             </div>
           </SlideInLeft>
 
           <SlideInRight>
-            <div className="flex-1 flex flex-col gap-8 justify-evenly h-full">
-              <div className="flex flex-col gap-4 h-full">
-                <h2 className="text-4xl font-bold text-primary-100">
+            <div className="relative flex-1 flex flex-col   h-full bg-white rounded-2xl p-5">
+              <div className="absolute right-10 top-20 h-30 w-20 rounded-full blur-3xl  bg-gradient-to-br from-primary-100/60 to-white"></div>
+              <div className="absolute left-10 bottom-20 h-50 w-50 rounded-full blur-3xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
+              <div className="relative flex flex-col items-start gap-4 border-b border-bg-300/10 pb-2">
+                <h2 className="text-4xl font-bold text-primary-100 bg-white-100 rounded-xl py-2 px-4">
                   {homeData.iaSection.title}
                 </h2>
-                <p className="text-xl text-balance">
+              </div>
+              <div className="relative h-full p-5 ">
+                <p className="text-lg text-balance font-light">
                   {homeData.iaSection.description}
                 </p>
               </div>
-              <div className="flex justify-center items-center">
+              <div className="relative flex justify-center items-center">
                 {homeData.iaSection.buttonLink && (
                   <a
                     href={homeData.iaSection.buttonLink}
@@ -150,23 +157,25 @@ function EditableHome() {
 
         <FadeInSection>
           <div
-            className={`max-w-7xl mx-auto flex flex-col gap-4 text-center  rounded-2xl ${
+            className={`max-w-7xl mx-auto flex flex-col items-center gap-4 text-center  rounded-2xl ${
               isSmallDevice ? "w-100 mt-10 p-5" : "  my-20"
             }`}
           >
-            <h2 className="text-4xl font-bold text-primary-100">
-              {homeData.videoSection.title}
-            </h2>
+            <div className="bg-white px-5 py-2 rounded-xl">
+              <h2 className="text-4xl font-bold text-primary-100">
+                {homeData.videoSection.title}
+              </h2>
+            </div>
             {homeData.videoSection.description && (
               <p className="text-lg text-balance">
                 {homeData.videoSection.description}
               </p>
             )}
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center w-full rounded-2xl bg-bg-100 p-3 border-t border-t-white shadow-xl">
               <iframe
                 className={`${
                   isSmallDevice ? "w-full h-64 " : "w-full h-150"
-                } rounded-lg shadow-lg`}
+                } rounded-2xl `}
                 src={homeData.videoSection.videoUrl}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -177,13 +186,12 @@ function EditableHome() {
           </div>
         </FadeInSection>
       </section>
-      <section id="news" className="relative bg-primary-100">
+      <section id="news" className="relative bg-primary-100 overflow-hidden">
+        <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
         <FadeInSection>
           <div
             className={` text-center ${
-              isSmallDevice
-                ? "py-12 w-100 px-5 my-5"
-                : "py-24 max-w-7xl mx-auto flex flex-col"
+              isSmallDevice ? "py-12 w-100 px-5 my-5" : "py-10 flex flex-col"
             }`}
           >
             <Lastnews />
@@ -191,11 +199,11 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
-      <section id="clients" className="relative min-w-screen  ">
+      <section id="clients" className="relative min-w-screen bg-white ">
         <FadeInSection>
           <div
             className={` mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12 w-100 " : "py-24"
+              isSmallDevice ? "py-12 w-100 " : "py-10"
             }`}
           >
             <ClientsCarousel />
@@ -205,7 +213,9 @@ function EditableHome() {
 
       <section
         id="contacto"
-        className={`relative  text-bg-400 ${isSmallDevice ? "py-12" : "py-24"}`}
+        className={`relative w-full  text-bg-400 bg-white ${
+          isSmallDevice ? "py-12" : "py-24"
+        }`}
       >
         <div
           className="absolute left-0 -bottom-0 w-full h-120"
@@ -214,22 +224,29 @@ function EditableHome() {
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
         ></div>
+        <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
         <FadeInSection>
           <div
-            className={`  rounded-2xl py-10 mx-auto flex flex-col gap-4 text-center bg-white
+            className={`relative  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center bg-gradient-to-t from-white backdrop-blur-xl border border-white-100
           ${isSmallDevice ? "w-100 max-w-3xl" : "max-w-7xl"}
           `}
           >
-            <h2 className="text-4xl font-bold text-primary-100">
-              {homeData.contactSection.title}
-            </h2>
+            <div className="bg-white/30 border border-white px-5 py-2 rounded-xl">
+              <h2 className="text-4xl font-bold text-primary-100">
+                {homeData.contactSection.title}
+              </h2>
+            </div>
             <div
               className={` ${
                 isSmallDevice ? "flex flex-col" : "grid grid-cols-2"
-              } gap-8 justify-center items-center mt-8 w-full p-5 h-80`}
+              } gap-8 justify-center items-center mt-8 w-full p-5 `}
             >
-              <div className="flex items-center flex-col justify-center gap-6 bg-white-100  rounded-2xl h-full py-5 w-full">
-                <SlPhone className="text-7xl text-primary-100" />
+              <div className="flex items-center flex-col justify-center gap-10   rounded-2xl h-full py-5 w-full">
+                <div className="rounded-full p-0.5 bg-gradient-to-bl from-orange-500 to-primary-100 border-t border-t-orange-300">
+                  <div className="rounded-full p-5 ">
+                    <SlPhone className="text-5xl text-white-100" />
+                  </div>
+                </div>
                 <div className="flex flex-col items-start">
                   <p className="text-balance text-center">
                     Llámenos al{" "}
@@ -246,8 +263,12 @@ function EditableHome() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center flex-col justify-center gap-6 bg-white-100  rounded-2xl h-full py-5 w-full">
-                <SlEnvolope className="text-7xl text-primary-100" />
+              <div className="flex items-center flex-col justify-center gap-10   rounded-2xl h-full py-5 w-full">
+                <div className="rounded-full p-0.5 bg-gradient-to-bl from-orange-500 to-primary-100 border-t border-t-orange-300">
+                  <div className="rounded-full p-5 ">
+                    <SlEnvolope className="text-5xl text-white-100" />
+                  </div>
+                </div>
                 <div className="flex flex-col items-start">
                   <p className="text-balance text-center">
                     Puede contactarse con nosotros en nuestro email{" "}
@@ -262,9 +283,11 @@ function EditableHome() {
             </div>
             <div className="flex justify-center items-center">
               {homeData.contactSection.contactInfo.schedule && (
-                <p className="text-sm mt-4 bg-white rounded-2xl px-10 py-2 text-bg-300 shadow-xl">
-                  {homeData.contactSection.contactInfo.schedule}
-                </p>
+                <div className="bg-primary-100 rounded-2xl px-10 py-2 shadow border-t-2 border-t-orange-400">
+                  <p className="text-sm  text-white ">
+                    {homeData.contactSection.contactInfo.schedule}
+                  </p>
+                </div>
               )}
             </div>
           </div>

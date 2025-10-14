@@ -24,7 +24,7 @@ const DynamicPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true; // Flag para evitar actualizaciones si el componente se desmonta
+    let isMounted = true;
 
     const fetchPage = async () => {
       if (!slug) {
@@ -32,18 +32,16 @@ const DynamicPage: React.FC = () => {
         if (isMounted) {
           setError("No se proporcionó un slug");
           setLoading(false);
-          notifyContentReady(); // Notificar aunque haya error
+          notifyContentReady();
         }
         return;
       }
 
-      // Excluir rutas API y otras rutas del sistema
       if (slug.startsWith("api") || slug === "admin" || slug === "assets") {
-        console.log("System route detected, not handling:", slug);
         if (isMounted) {
           setError("Ruta del sistema");
           setLoading(false);
-          notifyContentReady(); // Notificar aunque sea ruta del sistema
+          notifyContentReady();
         }
         return;
       }
@@ -51,15 +49,15 @@ const DynamicPage: React.FC = () => {
       try {
         if (isMounted) {
           setLoading(true);
-          setError(null); // Limpiar errores previos
-          setPage(null); // Limpiar página previa
-          notifyContentLoading(); // 🔥 NOTIFICAR QUE EMPIEZA A CARGAR
+          setError(null);
+          setPage(null);
+          notifyContentLoading();
         }
         document.body.setAttribute("data-dynamic-page-loading", "true");
 
         const foundPage = await PageService.getCustomPageBySlug(slug);
 
-        console.log("Page found:", foundPage);
+        // console.log("Page found:", foundPage);
 
         if (isMounted) {
           if (foundPage) {
@@ -68,16 +66,15 @@ const DynamicPage: React.FC = () => {
             setLoading(false);
             document.body.setAttribute("data-dynamic-page-loading", "false");
 
-            // Esperar un frame para que el DOM se actualice antes de notificar
             requestAnimationFrame(() => {
-              notifyContentReady(); // 🔥 NOTIFICAR QUE TERMINÓ DE CARGAR
+              notifyContentReady();
             });
           } else {
             console.log("Page not found");
             setPage(null);
             setLoading(false);
             document.body.setAttribute("data-dynamic-page-loading", "false");
-            notifyContentReady(); // Notificar aunque no se encuentre la página
+            notifyContentReady();
           }
         }
       } catch (err) {
@@ -85,7 +82,7 @@ const DynamicPage: React.FC = () => {
         if (isMounted) {
           setError("Error al cargar la página");
           setLoading(false);
-          notifyContentReady(); // Notificar aunque haya error
+          notifyContentReady();
         }
         document.body.setAttribute("data-dynamic-page-loading", "false");
       }
@@ -93,7 +90,6 @@ const DynamicPage: React.FC = () => {
 
     fetchPage();
 
-    // Cleanup function para evitar actualizaciones en componentes desmontados
     return () => {
       isMounted = false;
     };
@@ -125,8 +121,6 @@ const DynamicPage: React.FC = () => {
     );
   }
 
-  // Mostrar contenido inmediatamente cuando esté disponible
-  // La transición de opacidad es manejada por LayoutTemplate
   return (
     <div className="w-full" data-content-ready={!loading ? "true" : "false"}>
       {/* SEO Meta Tags (estas se pueden manejar con un hook o biblioteca como React Helmet) */}
@@ -268,11 +262,6 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
   const buttonText = data.buttonText as string;
   const buttonLink = data.buttonLink as string;
   const alignment = data.alignment as string;
-
-  // Debug logs
-  console.log("Hero Section Data:", data);
-  console.log("Background Image URL:", backgroundImage);
-  console.log("Background Color:", backgroundColor);
 
   const alignmentClasses = {
     left: "text-left",

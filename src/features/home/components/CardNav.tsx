@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 
 function CardNav() {
@@ -5,6 +6,7 @@ function CardNav() {
     {
       title: "Satelital",
       icon: "/svg/inicio/navHome/Satelital.svg",
+      url: "/satelital",
     },
     // {
     //   title: "Drones",
@@ -13,6 +15,7 @@ function CardNav() {
     {
       title: "RoIP",
       icon: "svg/inicio/navHome/cell_tower.svg",
+      url: "/roip",
     },
     // {
     //   title: "Network IP",
@@ -21,14 +24,17 @@ function CardNav() {
     {
       title: "Wisensor",
       icon: "svg/inicio/navHome/Wisensor.svg",
+      url: "/wisensor",
     },
     {
       title: "Seguridad",
       icon: "svg/inicio/navHome/Seguridad.svg",
+      url: "/seguridad",
     },
     {
       title: "Datacenter",
       icon: "svg/inicio/navHome/Data center.svg",
+      url: "/datacenter",
     },
     // {
     //   title: "Energía Renovable",
@@ -37,18 +43,22 @@ function CardNav() {
     {
       title: "Wisensor IA",
       icon: "svg/inicio/navHome/Wisensor.svg",
+      url: "/wisensor-ia",
     },
     {
       title: "Software",
       icon: "svg/inicio/navHome/code_blocks.svg",
+      url: "/software",
     },
     {
       title: "IoT",
       icon: "svg/inicio/navHome/captive_portal.svg",
+      url: "/iot",
     },
   ];
 
   const { isSmallDevice } = useBreakpoints();
+  const navigate = useNavigate();
   return (
     <div
       className={`absolute left-[50%] top-0 -translate-x-1/2 
@@ -65,13 +75,16 @@ function CardNav() {
         {menuItems.map((item, index) => (
           <article
             key={index}
-            className={`relative
+            onClick={() => navigate(item.url)}
+            className={`relative group
                 cursor-pointer flex flex-col gap-5 justify-center items-center hover:scale-105 transition-all duration-300
                 ${!isSmallDevice ? "" : ""}
                 `}
           >
             <div
-              className={` bg-primary-100  font-bold text-white
+              className={`group bg-primary-100 border-t border-t-transparent font-bold transition-colors duration-300 
+                text-white group-hover:bg-gradient-to-bl group-hover:from-primary-100 group-hover:to-orange-500 group-hover:border-t-orange-300
+                group-hover:shadow-xl group-hover:shadow-red-500/20
                  ${
                    !isSmallDevice
                      ? "relative w-25 h-25 rounded-2xl flex justify-center items-center p-3 "
@@ -79,7 +92,11 @@ function CardNav() {
                  }
                 `}
             >
-              <img src={item.icon} alt={item.title} className="w-full h-full object-cover" />
+              <img
+                src={item.icon}
+                alt={item.title}
+                className="w-full h-full object-cover group-hover:scale-85 transition-all duration-500"
+              />
             </div>
             <p className="text-nowrap font-bold">{item.title}</p>
           </article>

@@ -11,7 +11,7 @@ function Footer() {
   const { isSmallDevice } = useBreakpoints();
   return (
     <footer
-      className={`relative bottom-0 w-full min-h-110 bg-bg-200 flex flex-col justify-between items-center
+      className={`relative bottom-0 w-full min-h-110 bg-bg-400 border-t border-t-bg-300 flex flex-col justify-between items-center
     
     `}
     >
@@ -25,22 +25,32 @@ function Footer() {
       }`}
       >
         <StaggerItem className="flex flex-col gap-5">
-          <div className="w-full border-b border-white-100">
-            <h4 className="text-base font-bold py-5">
-              AST Technology Networks
-            </h4>
+          <div className="w-full flex flex-col items-start justify-center ">
+            <div className="bg-bg-200 px-5 rounded-xl py-2 border-t border-t-white/20 shadow">
+              <h4 className="text-base font-bold ">AST Technology Networks</h4>
+            </div>
           </div>
-          <p className="leading-6 text-sm font-light">
+          <p className="leading-6 text-sm font-light border-t border-t-white/30 pt-5">
             Diseñamos e implementamos soluciones de comunicación, conectividad y
             software para sectores exigentes, combinando innovación constante
             con un profundo conocimiento técnico.
           </p>
+
+          <div className="">
+            <img
+              src="AST-Logo-white.png"
+              alt="AST Technology Networks"
+              className="object-cover h-30"
+            />
+          </div>
         </StaggerItem>
         <StaggerItem className="flex flex-col gap-5">
-          <div className="w-full border-b border-white-100">
-            <h4 className="text-base font-bold py-5">Nuestros Servicios</h4>
+          <div className="w-full flex flex-col items-start justify-center ">
+            <div className="bg-bg-200 px-5 rounded-xl py-2 border-t border-t-white/20 shadow">
+              <h4 className="text-base font-bold ">Nuestros Servicios</h4>
+            </div>
           </div>
-          <ul>
+          <ul className="border-t border-t-white/30 pt-5">
             {menuItems.map((item) => (
               <li key={item.path} className="py-1">
                 <a
@@ -55,10 +65,12 @@ function Footer() {
         </StaggerItem>
 
         <StaggerItem className="flex flex-col gap-5">
-          <div className="w-full border-b border-white-100">
-            <h4 className="text-base font-bold py-5">Contáctanos</h4>
+          <div className="w-full flex flex-col items-start justify-center ">
+            <div className="bg-bg-200 px-5 rounded-xl py-2 border-t border-t-white/20 shadow">
+              <h4 className="text-base font-bold ">Contáctanos</h4>
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 border-t border-t-white/30 pt-5">
             <p className="leading-6 text-sm font-light">
               <span className="font-semibold">Dirección:</span> Camino El Tepual
               Km 1 Puerto Monttm, Chile
