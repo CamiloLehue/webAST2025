@@ -22,21 +22,21 @@ import HomeEditor from "./features/admin/home-management/pages/HomeEditor";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
-import About from "./features/about/pages/About";
-import Products from "./features/products/pages/Products";
-import Datacenter from "./features/services/pages/Datacenter";
-import EmpresaSustentable from "./features/services/pages/EmpresaSustentable";
-import Satelital from "./features/services/pages/Satelital";
-import Seguridad from "./features/services/pages/Seguridad";
-import Services from "./features/services/pages/Services";
-import Wireless from "./features/services/pages/Wireless";
-import Wisensor from "./features/services/pages/Wisensor";
-import WisensorIa from "./features/services/pages/WisensorIa";
-import IoT from "./features/services/pages/IoT";
-import RoIp from "./features/services/pages/RoIp";
-import NetworkIp from "./features/services/pages/NetworkIp";
-import Drones from "./features/services/pages/Drones";
-import Software from "./features/services/pages/Software";
+// import About from "./features/about/pages/About";
+// import Products from "./features/products/pages/Products";
+// import Datacenter from "./features/services/pages/Datacenter";
+// import EmpresaSustentable from "./features/services/pages/EmpresaSustentable";
+// import Satelital from "./features/services/pages/Satelital";
+// import Seguridad from "./features/services/pages/Seguridad";
+// import Services from "./features/services/pages/Services";
+// import Wireless from "./features/services/pages/Wireless";
+// import Wisensor from "./features/services/pages/Wisensor";
+// import WisensorIa from "./features/services/pages/WisensorIa";
+// import IoT from "./features/services/pages/IoT";
+// import RoIp from "./features/services/pages/RoIp";
+// import NetworkIp from "./features/services/pages/NetworkIp";
+// import Drones from "./features/services/pages/Drones";
+// import Software from "./features/services/pages/Software";
 
 createRoot(document.getElementById("root")!).render(
   // StrictMode deshabilitado para evitar dobles cargas en desarrollo
@@ -70,14 +70,14 @@ createRoot(document.getElementById("root")!).render(
 
               <Route element={<LayoutTemplate />}>
                 <Route path="/" element={<DynamicHome />} />
-                <Route path="/sobre-nosotros" element={<About />} />
+                {/* <Route path="/sobre-nosotros" element={<About />} />
                 <Route path="/productos" element={<Products />} />
                 <Route path="/datacenter" element={<Datacenter />} />
                 <Route
                   path="/empresa-sustentable"
                   element={<EmpresaSustentable />}
-                />
-                <Route path="/satelital" element={<Satelital />} />
+                /> */}
+                {/* <Route path="/satelital" element={<Satelital />} />
                 <Route path="/seguridad" element={<Seguridad />} />
                 <Route path="/servicios" element={<Services />} />
                 <Route path="/wireless" element={<Wireless />} />
@@ -87,7 +87,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/roip" element={<RoIp />} />
                 <Route path="/network-ip" element={<NetworkIp />} />
                 <Route path="/drones" element={<Drones />} />
-                <Route path="/software" element={<Software />} />
+                <Route path="/software" element={<Software />} /> */}
                 {/* <Route path="/multimedia" element={<Multimedia />} /> */}
 
                 {/* <Route path="/noticias" element={<News />} /> */}
