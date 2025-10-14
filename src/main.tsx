@@ -93,7 +93,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/network-ip" element={<NetworkIp />} />
                 <Route path="/drones" element={<Drones />} />
                 <Route path="/software" element={<Software />} />
-                <Route path="/multimedia" element={<Multimedia />} />
+                {/* <Route path="/multimedia" element={<Multimedia />} /> */}
 
                 {/* <Route path="/noticias" element={<News />} /> */}
                 <Route path="/noticias" element={<BlogPage />} />
