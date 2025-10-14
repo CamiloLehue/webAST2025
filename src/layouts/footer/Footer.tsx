@@ -11,7 +11,7 @@ function Footer() {
   const { isSmallDevice } = useBreakpoints();
   return (
     <footer
-      className={`relative bottom-0 w-full min-h-110 bg-bg-200 flex flex-col justify-between items-center
+      className={`relative bottom-0 w-full min-h-110 bg-bg-400 border-t border-t-bg-300 flex flex-col justify-between items-center
     
     `}
     >
@@ -25,10 +25,12 @@ function Footer() {
       }`}
       >
         <StaggerItem className="flex flex-col gap-5">
-          <div className="w-full border-b border-white-100">
-            <h4 className="text-base font-bold py-5">
-              AST Technology Networks
-            </h4>
+          <div className="w-full flex flex-col items-start justify-center py-5">
+            <div className="bg-bg-200 px-5 rounded-xl py-2 border-t border-t-white/20 shadow">
+              <h4 className="text-base font-bold ">
+                AST Technology Networks
+              </h4>
+            </div>
           </div>
           <p className="leading-6 text-sm font-light">
             Diseñamos e implementamos soluciones de comunicación, conectividad y

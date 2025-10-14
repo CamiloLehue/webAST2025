@@ -97,8 +97,10 @@ const Lastnews = memo(function Lastnews() {
   }
 
   return (
-    <div className="relative max-w-7xl mx-auto flex flex-col gap-5 h-109">
-      <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
+    <div className="relative mx-auto flex flex-col items-center gap-5  ">
+      <div className="bg-bg-400/25 px-5 py-2 rounded-xl border-t border-t-white/30">
+        <h3 className="text-4xl text-white font-bold">Últimas noticias</h3>
+      </div>
       <div className="relative h-full ">
         <button
           onClick={prevSlide}
@@ -153,23 +155,23 @@ const Lastnews = memo(function Lastnews() {
             <Link
               key={item.id}
               to={`/noticias/${item.slug}`}
-              className="relative w-80 rounded-2xl overflow-hidden h-96 flex-shrink-0 shadow-lg hover:shadow-xl transition-shadow duration-300 block"
+              className="group relative w-80  transition-all duration-500 rounded-2xl border-t border-t-white/40 shadow-2xl shadow-red-400  overflow-hidden h-96 flex-shrink-0  hover:shadow-xl  block"
             >
-              <div className="relative h-full w-full overflow-hidden">
+              <div className="relative h-full w-full overflow-hidden ">
                 <img
                   src={
                     item.featuredImage ||
                     "https://via.placeholder.com/320x384.png?text=Noticia"
                   }
                   alt={item.title}
-                  className="absolute inset-0 w-full h-full object-cover scale-135"
+                  className="absolute inset-0 w-full h-full object-cover scale-135 group-hover:scale-150 transition-all duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
               </div>
 
               <div className="absolute bottom-0 left-0 right-0 p-5 h-50 flex flex-col justify-end text-white">
                 <div className="mb-2">
-                  <span className="text-xs bg-primary-100 px-2 py-1 rounded-full">
+                  <span className="text-xs bg-primary-100 border-t border-t-white/30 px-5 py-1 rounded-full">
                     {item.category || "General"}
                   </span>
                 </div>
@@ -177,7 +179,7 @@ const Lastnews = memo(function Lastnews() {
                   {item.title.slice(0, 50)}
                   {item.title.length > 50 ? "..." : ""}
                 </h4>
-                <p className="text-base text-white-100">
+                <p className="text-sm text-white-100 font-light">
                   {formatDate(item.publishedAt || item.createdAt)}
                 </p>
               </div>
