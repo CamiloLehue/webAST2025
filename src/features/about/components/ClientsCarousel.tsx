@@ -64,7 +64,7 @@ const ClientsCarousel = memo(function ClientsCarousel() {
     <section id="partner" className="relative overflow-hidden max-w-screen bg-white h-full ">
       <div className="absolute bottom-0 left-0 right-0 h-full bg-gradient-to-t from-white  to-transparent  pointer-events-none"></div>
       <div className="relative mx-auto  flex flex-col justify-center items-center gap-10">
-        <div className="bg-white px-5 rounded-xl py-2">
+        <div className="bg-white-100 px-5 rounded-xl py-2">
           <h2 className="text-4xl font-bold text-primary-100">
             Nuestros Clientes
           </h2>

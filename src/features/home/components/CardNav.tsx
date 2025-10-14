@@ -84,7 +84,7 @@ function CardNav() {
             <div
               className={`group bg-primary-100 border-t border-t-transparent font-bold transition-colors duration-300 
                 text-white group-hover:bg-gradient-to-bl group-hover:from-primary-100 group-hover:to-orange-500 group-hover:border-t-orange-300
-                group-hover:shadow-xl group-hover:shadow-orange-500/20
+                group-hover:shadow-xl group-hover:shadow-red-500/20
                  ${
                    !isSmallDevice
                      ? "relative w-25 h-25 rounded-2xl flex justify-center items-center p-3 "

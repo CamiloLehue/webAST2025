@@ -12,7 +12,6 @@ import { useHomeManagement } from "../../admin/home-management/hooks/useHomeMana
 import Slider from "../../../components/slider/Slider";
 import { SlEnvolope, SlPhone } from "react-icons/sl";
 import { notifyContentReady } from "../../../utils/contentLoadingEvents";
-import { div } from "motion/react-client";
 
 function EditableHome() {
   const { isSmallDevice } = useBreakpoints();
@@ -192,7 +191,7 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={` text-center ${
-              isSmallDevice ? "py-12 w-100 px-5 my-5" : "py-18 flex flex-col"
+              isSmallDevice ? "py-12 w-100 px-5 my-5" : "py-10 flex flex-col"
             }`}
           >
             <Lastnews />
@@ -200,11 +199,11 @@ function EditableHome() {
         </FadeInSection>
       </section>
 
-      <section id="clients" className="relative min-w-screen  ">
+      <section id="clients" className="relative min-w-screen bg-white ">
         <FadeInSection>
           <div
             className={` mx-auto flex flex-col gap-4 text-center ${
-              isSmallDevice ? "py-12 w-100 " : ""
+              isSmallDevice ? "py-12 w-100 " : "py-10"
             }`}
           >
             <ClientsCarousel />
