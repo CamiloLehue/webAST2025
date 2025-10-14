@@ -1,5 +1,3 @@
-import { apiCache } from '../utils/apiCache';
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export interface MenuItem {
@@ -82,19 +80,17 @@ class MenuService {
 
 
   async getMenuItems(): Promise<MenuItem[]> {
-    return apiCache.get('menu-items', async () => {
-      try {
-        const response = await fetch(`${API_URL}/menu-items`, {
-          method: 'GET',
-          headers: this.getAuthHeaders(),
-        });
+    try {
+      const response = await fetch(`${API_URL}/menu-items`, {
+        method: 'GET',
+        headers: this.getAuthHeaders(),
+      });
 
-        return this.handleResponse<MenuItem[]>(response);
-      } catch (error) {
-        console.error('Error al obtener elementos del menú:', error);
-        throw error;
-      }
-    });
+      return this.handleResponse<MenuItem[]>(response);
+    } catch (error) {
+      console.error('Error al obtener elementos del menú:', error);
+      throw error;
+    }
   }
 
   async getMenuStructure(): Promise<MenuStructure> {
@@ -121,9 +117,6 @@ class MenuService {
 
       const result = await this.handleResponse<ApiResponse<MenuItem>>(response);
       
-      // Invalidar cache después de crear
-      apiCache.invalidate('menu-items');
-      
       return result.data;
     } catch (error) {
       console.error('Error al crear elemento del menú:', error);
@@ -141,9 +134,6 @@ class MenuService {
 
       const result = await this.handleResponse<ApiResponse<MenuItem>>(response);
       
-      // Invalidar cache después de actualizar
-      apiCache.invalidate('menu-items');
-      
       return result.data;
     } catch (error) {
       console.error('Error al actualizar elemento del menú:', error);
@@ -159,9 +149,6 @@ class MenuService {
       });
 
       await this.handleResponse<ApiResponse<null>>(response);
-      
-      // Invalidar cache después de eliminar
-      apiCache.invalidate('menu-items');
     } catch (error) {
       console.error('Error al eliminar elemento del menú:', error);
       throw error;
