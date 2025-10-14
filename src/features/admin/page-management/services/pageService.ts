@@ -27,6 +27,28 @@ export class PageService {
   }
 
   static async getCustomPageBySlug(slug: string): Promise<CustomPage | undefined> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
+    try {
+      // Intentar obtener directamente por slug (si el backend lo soporta)
+      const response = await fetch(`${API_URL}/paginas?slug=${slug}`);
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Si el backend devuelve un array, buscar en él
+        if (Array.isArray(data)) {
+          return data.find(page => page.slug === slug);
+        }
+        // Si devuelve directamente el objeto
+        return data;
+      }
+    } catch (error) {
+      console.warn('Direct slug query failed, falling back to full list', error);
+    }
+
+    // Fallback: obtener todas las páginas
     const pages = await this.getCustomPages();
     return pages.find(page => page.slug === slug);
   }

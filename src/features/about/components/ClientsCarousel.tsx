@@ -1,4 +1,6 @@
-function ClientsCarousel() {
+import { memo } from "react";
+
+const ClientsCarousel = memo(function ClientsCarousel() {
   const partners = [
     {
       name: "AquaChile",
@@ -113,6 +115,6 @@ function ClientsCarousel() {
       </div>
     </section>
   );
-}
+});
 
 export default ClientsCarousel;

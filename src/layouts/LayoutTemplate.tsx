@@ -83,10 +83,10 @@ function LayoutTemplate() {
         const isDynamicPageLoading = document.body.getAttribute('data-dynamic-page-loading') === 'true';
         
         if (!isDynamicPageLoading) {
-          // Pequeño delay para asegurar que el contenido esté renderizado
+          // Reducir delay a 50ms para transición más rápida
           setTimeout(() => {
             setIsLoading(false);
-          }, 200);
+          }, 50);
         }
       };
 
@@ -103,11 +103,12 @@ function LayoutTemplate() {
         attributeFilter: ['data-dynamic-page-loading']
       });
 
+      // Reducir timeout máximo a 2000ms
       const maxTimeout = setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 2000);
 
-      const initialCheck = setTimeout(checkDynamicPageLoading, 100);
+      const initialCheck = setTimeout(checkDynamicPageLoading, 50);
 
       return () => {
         observer.disconnect();

@@ -1,22 +1,26 @@
 import type { BlogPost, BlogCategory } from "../types/blogTypes";
+import { apiCache } from "../../../../utils/apiCache";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export class BlogService {
   static async getBlogPosts(): Promise<BlogPost[]> {
-    if (!API_URL) {
-      throw new Error("API_URL not defined");
-    }
+    return apiCache.get('blog-posts', async () => {
+      if (!API_URL) {
+        throw new Error("API_URL not defined");
+      }
 
-    const response = await fetch(`${API_URL}/noticias`);
+      const response = await fetch(`${API_URL}/noticias`);
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch blog posts from API: ${response.status} ${response.statusText}`
-      );
-    }
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch blog posts from API: ${response.status} ${response.statusText}`
+        );
+      }
 
-    const posts: BlogPost[] = await response.json();
-    return posts;
+      const posts: BlogPost[] = await response.json();
+      return posts;
+    });
   }
 
   static async createBlogPost(
@@ -50,6 +54,10 @@ export class BlogService {
     }
 
     const createdPost: BlogPost = await response.json();
+    
+    // Invalidar cache después de crear
+    apiCache.invalidate('blog-posts');
+    
     return createdPost;
   }
 
@@ -80,6 +88,9 @@ export class BlogService {
         `Failed to update blog post via API: ${response.status} ${response.statusText}`
       );
     }
+    
+    // Invalidar cache después de actualizar
+    apiCache.invalidate('blog-posts');
   }
 
   static async deleteBlogPost(id: string): Promise<void> {
@@ -96,6 +107,9 @@ export class BlogService {
         `Failed to delete blog post via API: ${response.status} ${response.statusText}`
       );
     }
+    
+    // Invalidar cache después de eliminar
+    apiCache.invalidate('blog-posts');
   }
 
   static async getBlogPostBySlug(slug: string): Promise<BlogPost | undefined> {

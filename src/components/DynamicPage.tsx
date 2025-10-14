@@ -19,47 +19,70 @@ const DynamicPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true; // Flag para evitar actualizaciones si el componente se desmonta
+
     const fetchPage = async () => {
       if (!slug) {
         console.log("No slug provided");
-        setError("No se proporcionó un slug");
-        setLoading(false);
+        if (isMounted) {
+          setError("No se proporcionó un slug");
+          setLoading(false);
+        }
         return;
       }
 
       // Excluir rutas API y otras rutas del sistema
       if (slug.startsWith("api") || slug === "admin" || slug === "assets") {
         console.log("System route detected, not handling:", slug);
-        setError("Ruta del sistema");
-        setLoading(false);
+        if (isMounted) {
+          setError("Ruta del sistema");
+          setLoading(false);
+        }
         return;
       }
 
       try {
-        setLoading(true);
+        if (isMounted) {
+          setLoading(true);
+          setError(null); // Limpiar errores previos
+          setPage(null); // Limpiar página previa
+        }
         document.body.setAttribute("data-dynamic-page-loading", "true");
 
         const foundPage = await PageService.getCustomPageBySlug(slug);
 
         console.log("Page found:", foundPage);
 
-        if (foundPage) {
-          console.log("Page found, published status:", foundPage.isPublished);
-          setPage(foundPage);
-        } else {
-          console.log("Page not found");
-          setPage(null);
+        if (isMounted) {
+          if (foundPage) {
+            console.log("Page found, published status:", foundPage.isPublished);
+            setPage(foundPage);
+            // Marcar como cargado inmediatamente después de setear la página
+            setLoading(false);
+            document.body.setAttribute("data-dynamic-page-loading", "false");
+          } else {
+            console.log("Page not found");
+            setPage(null);
+            setLoading(false);
+            document.body.setAttribute("data-dynamic-page-loading", "false");
+          }
         }
       } catch (err) {
         console.error("Error fetching page:", err);
-        setError("Error al cargar la página");
-      } finally {
-        setLoading(false);
+        if (isMounted) {
+          setError("Error al cargar la página");
+          setLoading(false);
+        }
         document.body.setAttribute("data-dynamic-page-loading", "false");
       }
     };
 
     fetchPage();
+
+    // Cleanup function para evitar actualizaciones en componentes desmontados
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   if (error && !loading) {
@@ -88,11 +111,10 @@ const DynamicPage: React.FC = () => {
     );
   }
 
+  // Mostrar contenido inmediatamente cuando esté disponible
+  // La transición de opacidad es manejada por LayoutTemplate
   return (
-    <div
-      className="w-full transition-opacity duration-300"
-      style={{ opacity: loading ? 0 : 1 }}
-    >
+    <div className="w-full">
       {/* SEO Meta Tags (estas se pueden manejar con un hook o biblioteca como React Helmet) */}
       {page && <title>{page.metaTitle || page.title}</title>}
 

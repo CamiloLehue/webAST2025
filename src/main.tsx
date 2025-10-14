@@ -1,9 +1,13 @@
-import { StrictMode } from "react";
+// import { StrictMode } from "react"; // Deshabilitado para evitar dobles cargas
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import LayoutTemplate from "./layouts/LayoutTemplate";
 import AdminLayout from "./layouts/AdminLayout";
+import { apiCache } from "./utils/apiCache";
+
+// Prewarm cache al iniciar la aplicación
+apiCache.prewarm();
 import DynamicHome from "./features/home/pages/DynamicHome";
 import BlogPage from "./features/blog/pages/BlogPage";
 import BlogPostPage from "./features/blog/pages/BlogPostPage";
@@ -40,7 +44,8 @@ import Software from "./features/services/pages/Software";
 import Multimedia from "./features/multimedia/pages/Multimedia";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // StrictMode deshabilitado para evitar dobles cargas en desarrollo
+  // <StrictMode>
     <AuthProvider>
       <ContentProvider>
         <BreakpointProvider>
@@ -105,5 +110,5 @@ createRoot(document.getElementById("root")!).render(
         </BreakpointProvider>
       </ContentProvider>
     </AuthProvider>
-  </StrictMode>
+  // </StrictMode>
 );

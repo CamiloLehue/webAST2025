@@ -38,8 +38,34 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadMenuItems();
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const items = await menuService.getMenuItems();
+        if (isMounted) {
+          setMenuItems(items);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Error al cargar menús');
+          console.error('Error loading menu items:', err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadData();
     loadPages();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const loadMenuItems = async () => {

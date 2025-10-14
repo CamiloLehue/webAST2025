@@ -14,7 +14,39 @@ export const useBlogManagement = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadData();
+    let isMounted = true;
+
+    const loadDataSafe = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const posts = await BlogService.getBlogPosts();
+        const cats = await BlogService.getBlogCategories();
+        
+        if (isMounted) {
+          setBlogPosts(posts);
+          setCategories(cats);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Error al cargar los datos del blog"
+          );
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadDataSafe();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const loadData = async () => {

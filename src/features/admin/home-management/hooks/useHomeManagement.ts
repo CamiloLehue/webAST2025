@@ -8,6 +8,7 @@ export const useHomeManagement = () => {
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  // Función para refetch manual (expuesta al exterior)
   const loadHomeData = useCallback(async () => {
     try {
       setLoading(true);
@@ -22,9 +23,37 @@ export const useHomeManagement = () => {
     }
   }, []);
 
+  // Carga inicial con cleanup
   useEffect(() => {
-    loadHomeData();
-  }, [loadHomeData]);
+    let isMounted = true;
+
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await HomeService.getHomeData();
+        
+        if (isMounted) {
+          setHomeData(data);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : "Error al cargar los datos del inicio");
+          console.error("Error loading home data:", err);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Dependencias vacías - solo carga una vez al montar
 
   const createHome = useCallback(async (data: Omit<HomeData, "id" | "createdAt" | "updatedAt">) => {
     try {

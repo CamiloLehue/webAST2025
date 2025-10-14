@@ -21,8 +21,33 @@ export const useMenuNavItems = () => {
   }, []);
 
   useEffect(() => {
-    fetchMenuItems();
-  }, [fetchMenuItems]);
+    let isMounted = true;
+
+    const loadMenu = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const items = await getNavMenuItems();
+        if (isMounted) {
+          setMenuItems(items);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError((err as Error).message || "Error al cargar el menú");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadMenu();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return { menuItems, loading, error, refetch: fetchMenuItems };
 };
