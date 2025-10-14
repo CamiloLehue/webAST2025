@@ -1,17 +1,28 @@
+import { useEffect } from "react";
 import { TbMailFilled, TbPhoneFilled } from "react-icons/tb";
 import Slider from "../../../components/slider/Slider";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
 import Lastnews from "../../news/components/Lastnews";
 import ClientsCarousel from "../../about/components/ClientsCarousel";
 import CardNav from "../components/CardNav";
-import { 
-  FadeInSection, 
-  SlideInLeft, 
-  SlideInRight 
+import {
+  FadeInSection,
+  SlideInLeft,
+  SlideInRight,
 } from "../../../components/animations";
+import { notifyContentReady } from "../../../utils/contentLoadingEvents";
 
 function Home() {
   const { isSmallDevice } = useBreakpoints();
+
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        notifyContentReady();
+      });
+    });
+  }, []);
+
   return (
     <div className="relative overflow-hidden">
       <section

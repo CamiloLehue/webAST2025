@@ -1,21 +1,26 @@
+import { useEffect } from "react";
 import { useHomeManagement } from "../../admin/home-management/hooks/useHomeManagement";
 import EditableHome from "./EditableHome";
 import Home from "./Home";
+import { notifyContentLoading } from "../../../utils/contentLoadingEvents";
 
 function DynamicHome() {
   const { homeData, loading } = useHomeManagement();
 
-  // Mientras carga, mostrar el Home estático
+  useEffect(() => {
+    if (loading) {
+      notifyContentLoading();
+    }
+  }, [loading]);
+
   if (loading) {
-    return <Home />;
+    return null;
   }
 
-  // Si hay datos editables y está publicado, mostrar EditableHome
   if (homeData && homeData.isPublished) {
     return <EditableHome />;
   }
 
-  // Por defecto, mostrar Home estático
   return <Home />;
 }
 

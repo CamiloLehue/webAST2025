@@ -11,28 +11,33 @@ import {
 import { useHomeManagement } from "../../admin/home-management/hooks/useHomeManagement";
 import Slider from "../../../components/slider/Slider";
 import { SlEnvolope, SlPhone } from "react-icons/sl";
-import { notifyContentLoading, notifyContentReady } from "../../../utils/contentLoadingEvents";
+import { notifyContentReady } from "../../../utils/contentLoadingEvents";
 
 function EditableHome() {
   const { isSmallDevice } = useBreakpoints();
   const { homeData, loading, error } = useHomeManagement();
 
-  // Notificar estado de carga
+  // Notificar cuando el componente esté completamente renderizado
   useEffect(() => {
-    if (loading) {
-      notifyContentLoading();
-    } else {
-      // Esperar un frame para que el DOM se actualice
+    if (!loading && homeData && homeData.isPublished) {
+      // Esperar a que el DOM se actualice completamente
       requestAnimationFrame(() => {
-        notifyContentReady();
+        requestAnimationFrame(() => {
+          notifyContentReady();
+        });
       });
     }
-  }, [loading]);
+  }, [loading, homeData]);
 
-  // Si está cargando o hay error, mostrar el Home estático
-  if (loading || error || !homeData || !homeData.isPublished) {
-    // Fallback al Home estático importando dinámicamente
-    return null; // Se manejará desde main.tsx
+  // Si está cargando, no renderizar nada (DynamicHome maneja el loading)
+  if (loading) {
+    return null;
+  }
+
+  // Si hay error o no hay datos o no está publicado, mostrar el Home estático
+  if (error || !homeData || !homeData.isPublished) {
+    // DynamicHome manejará el fallback
+    return null;
   }
 
   return (
