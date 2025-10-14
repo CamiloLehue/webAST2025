@@ -16,7 +16,6 @@ function LayoutTemplate() {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  const [waitingForContent, setWaitingForContent] = useState(false);
 
   // Bloquear scroll cuando está cargando
   useEffect(() => {
@@ -89,12 +88,9 @@ function LayoutTemplate() {
       
       if (isContentLoading) {
         // El contenido empieza a cargar
-        setWaitingForContent(true);
         setIsLoading(true);
       } else {
         // El contenido terminó de cargar
-        setWaitingForContent(false);
-        
         // Pequeño delay para asegurar que el DOM se actualizó
         setTimeout(() => {
           setIsLoading(false);
@@ -109,10 +105,8 @@ function LayoutTemplate() {
   useEffect(() => {
     if (isInitialLoad) return; // Solo después de la carga inicial
     
-    // Solo marcamos que esperamos contenido
     // El loading lo controla el evento de DynamicPage
     console.log('[LayoutTemplate] Route changed to:', location.pathname);
-    setWaitingForContent(true);
     
   }, [location.pathname, isInitialLoad]);
 

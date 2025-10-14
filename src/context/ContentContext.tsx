@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import type { MenuItem, PageContent } from "../types/content";
 import { menuService } from "../services/menuService";
+import { subscribeToContentLoading } from "../utils/contentLoadingEvents";
 
 interface ContentContextType {
   menuItems: MenuItem[];
@@ -34,28 +35,28 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
 }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [pages, setPages] = useState<PageContent[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [contentReady, setContentReady] = useState(false);
 
+  // Cargar datos iniciales
   useEffect(() => {
     let isMounted = true;
 
     const loadData = async () => {
       try {
-        setLoading(true);
         setError(null);
         const items = await menuService.getMenuItems();
         if (isMounted) {
           setMenuItems(items);
+          setDataLoaded(true);
         }
       } catch (err) {
         if (isMounted) {
           setError(err instanceof Error ? err.message : 'Error al cargar menús');
           console.error('Error loading menu items:', err);
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
+          setDataLoaded(true); // Marcar como cargado aunque haya error
         }
       }
     };
@@ -67,6 +68,18 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = subscribeToContentLoading((isLoading) => {
+      setContentReady(!isLoading);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    setLoading(!dataLoaded || !contentReady);
+  }, [dataLoaded, contentReady]);
 
   const loadMenuItems = async () => {
     try {
