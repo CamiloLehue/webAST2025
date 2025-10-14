@@ -6,6 +6,7 @@ import ExistingHeroSection from "./hero/HeroSection";
 import ExistingContentSection from "./content/ContentSection";
 import MarkdownContent from "./content/MarkdownContent";
 import { processImageUrl } from "../utils/imageUrlUtils";
+import { notifyContentLoading, notifyContentReady } from "../utils/contentLoadingEvents";
 import type {
   ContentSection,
   CustomPage,
@@ -27,6 +28,7 @@ const DynamicPage: React.FC = () => {
         if (isMounted) {
           setError("No se proporcionó un slug");
           setLoading(false);
+          notifyContentReady(); // Notificar aunque haya error
         }
         return;
       }
@@ -37,6 +39,7 @@ const DynamicPage: React.FC = () => {
         if (isMounted) {
           setError("Ruta del sistema");
           setLoading(false);
+          notifyContentReady(); // Notificar aunque sea ruta del sistema
         }
         return;
       }
@@ -46,6 +49,7 @@ const DynamicPage: React.FC = () => {
           setLoading(true);
           setError(null); // Limpiar errores previos
           setPage(null); // Limpiar página previa
+          notifyContentLoading(); // 🔥 NOTIFICAR QUE EMPIEZA A CARGAR
         }
         document.body.setAttribute("data-dynamic-page-loading", "true");
 
@@ -57,14 +61,19 @@ const DynamicPage: React.FC = () => {
           if (foundPage) {
             console.log("Page found, published status:", foundPage.isPublished);
             setPage(foundPage);
-            // Marcar como cargado inmediatamente después de setear la página
             setLoading(false);
             document.body.setAttribute("data-dynamic-page-loading", "false");
+            
+            // Esperar un frame para que el DOM se actualice antes de notificar
+            requestAnimationFrame(() => {
+              notifyContentReady(); // 🔥 NOTIFICAR QUE TERMINÓ DE CARGAR
+            });
           } else {
             console.log("Page not found");
             setPage(null);
             setLoading(false);
             document.body.setAttribute("data-dynamic-page-loading", "false");
+            notifyContentReady(); // Notificar aunque no se encuentre la página
           }
         }
       } catch (err) {
@@ -72,6 +81,7 @@ const DynamicPage: React.FC = () => {
         if (isMounted) {
           setError("Error al cargar la página");
           setLoading(false);
+          notifyContentReady(); // Notificar aunque haya error
         }
         document.body.setAttribute("data-dynamic-page-loading", "false");
       }
@@ -114,7 +124,7 @@ const DynamicPage: React.FC = () => {
   // Mostrar contenido inmediatamente cuando esté disponible
   // La transición de opacidad es manejada por LayoutTemplate
   return (
-    <div className="w-full">
+    <div className="w-full" data-content-ready={!loading ? "true" : "false"}>
       {/* SEO Meta Tags (estas se pueden manejar con un hook o biblioteca como React Helmet) */}
       {page && <title>{page.metaTitle || page.title}</title>}
 

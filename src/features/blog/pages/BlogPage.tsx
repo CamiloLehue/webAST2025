@@ -11,6 +11,7 @@ import {
 } from "react-icons/fi";
 import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
+import { notifyContentLoading, notifyContentReady } from "../../../utils/contentLoadingEvents";
 
 interface BlogFilters {
   search: string;
@@ -33,6 +34,17 @@ const BlogPage: React.FC = () => {
     sortBy: "date",
     sortOrder: "desc",
   });
+
+  // Notificar estado de carga
+  useEffect(() => {
+    if (loading) {
+      notifyContentLoading();
+    } else {
+      requestAnimationFrame(() => {
+        notifyContentReady();
+      });
+    }
+  }, [loading]);
 
   useEffect(() => {
     const urlCategory = searchParams.get("category");

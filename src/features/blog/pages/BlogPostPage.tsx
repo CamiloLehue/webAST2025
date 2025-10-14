@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useBlogManagement } from "../../admin/blog-management/hooks/useBlogManagement";
 import {
@@ -10,6 +10,7 @@ import {
 } from "react-icons/fi";
 import MarkdownContent from "../../../components/content/MarkdownContent";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
+import { notifyContentLoading, notifyContentReady } from "../../../utils/contentLoadingEvents";
 
 const BlogPostPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -18,6 +19,17 @@ const BlogPostPage: React.FC = () => {
   const [expandedTags, setExpandedTags] = useState<string[]>([]);
   const { isSmallDevice } = useBreakpoints();
   const post = (blogPosts || []).find((p) => p.slug === slug && p.isPublished);
+
+  // Notificar estado de carga
+  useEffect(() => {
+    if (loading) {
+      notifyContentLoading();
+    } else {
+      requestAnimationFrame(() => {
+        notifyContentReady();
+      });
+    }
+  }, [loading]);
 
   const allCategories = [
     ...new Set(
