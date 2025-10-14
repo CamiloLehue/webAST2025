@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useParams } from "react-router-dom";
 import { PageService } from "../features/admin/page-management/services/pageService";
 import ExistingHeroSection from "./hero/HeroSection";
@@ -534,6 +535,22 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedImage, images.length]);
 
+  // Bloquear scroll del body cuando el modal está abierto
+  React.useEffect(() => {
+    if (typeof document === "undefined") return;
+
+    if (selectedImage !== null) {
+      const previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow = previousOverflow;
+      };
+    }
+
+    return undefined;
+  }, [selectedImage]);
+
   if (images.length === 0) {
     return (
       <section className=" ">
@@ -602,99 +619,138 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
       </section>
 
       {/* Modal de imagen expandida */}
-      {selectedImage !== null && (
-        <div
-          className="fixed inset-0 z-50  flex items-center justify-center p-4 animate-fadeIn"
-          onClick={handleCloseModal}
-        >
-          {/* Botón cerrar */}
-          <button
-            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-50"
-            onClick={handleCloseModal}
-            aria-label="Cerrar"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-
-          {/* Botón anterior */}
-          <button
-            className="absolute left-4 text-white hover:text-gray-300 transition-colors z-50 p-2 hover:bg-white hover:bg-opacity-10 rounded-full"
-            onClick={handlePrevImage}
-            aria-label="Imagen anterior"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          {/* Botón siguiente */}
-          <button
-            className="absolute right-4 text-white hover:text-gray-300 transition-colors z-50 p-2 hover:bg-white hover:bg-opacity-10 rounded-full"
-            onClick={handleNextImage}
-            aria-label="Imagen siguiente"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-
-          {/* Contenedor de imagen */}
+      {selectedImage !== null &&
+        typeof document !== "undefined" &&
+        createPortal(
           <div
-            className="relative max-w-7xl max-h-full flex flex-col items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
+            className="fixed inset-0 z-[10050] flex min-h-screen w-full items-center justify-center overflow-y-auto bg-black/95 px-4 py-8 backdrop-blur-sm animate-fadeIn"
+            onClick={handleCloseModal}
+            role="dialog"
+            aria-modal="true"
           >
-            <img
-              src={processImageUrl(images[selectedImage].src)}
-              alt={images[selectedImage].alt}
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-            />
-            {images[selectedImage].caption && (
-              <div className="mt-4 text-white text-center bg-black bg-opacity-50 px-6 py-3 rounded-lg max-w-2xl">
-                <p className="text-lg">{images[selectedImage].caption}</p>
+            {/* Botón cerrar */}
+            <button
+              className="absolute top-6 right-6 text-white transition-colors duration-200 hover:text-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100"
+              onClick={handleCloseModal}
+              aria-label="Cerrar"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            {/* Botón anterior */}
+            <button
+              className="absolute left-6 text-white transition-colors duration-200 hover:text-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100 z-10 p-2 hover:bg-white/10 rounded-full"
+              onClick={handlePrevImage}
+              aria-label="Imagen anterior"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            {/* Botón siguiente */}
+            <button
+              className="absolute right-6 text-white transition-colors duration-200 hover:text-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100 z-10 p-2 hover:bg-white/10 rounded-full"
+              onClick={handleNextImage}
+              aria-label="Imagen siguiente"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+
+            {/* Contenedor de imagen */}
+            <div
+              className="relative flex w-full max-w-7xl flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="relative flex w-full items-center justify-center">
+                <img
+                  src={processImageUrl(images[selectedImage].src)}
+                  alt={images[selectedImage].alt}
+                  className="max-h-[80vh] w-auto max-w-full object-contain rounded-lg shadow-2xl"
+                />
               </div>
-            )}
-            {/* Contador de imágenes */}
-            <div className="mt-4 text-white text-sm bg-black bg-opacity-50 px-4 py-2 rounded-full">
-              {selectedImage + 1} / {images.length}
+
+              <div className="mt-8 w-full max-w-5xl">
+                <div className="flex items-center justify-center gap-3 overflow-x-auto px-2">
+                  {images.map((image, index) => {
+                    const isActive = index === selectedImage;
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedImage(index);
+                        }}
+                        className={`relative h-20 w-28 flex-shrink-0 overflow-hidden rounded-md border transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100 ${
+                          isActive
+                            ? "border-accent-100 ring-2 ring-accent-100"
+                            : "border-white/20 hover:border-white/60"
+                        }`}
+                        aria-label={`Ver imagen ${index + 1}`}
+                        aria-current={isActive}
+                      >
+                        <img
+                          src={processImageUrl(image.src)}
+                          alt={image.alt}
+                          className={`h-full w-full object-cover transition-opacity duration-300 ${
+                            isActive
+                              ? "opacity-100"
+                              : "opacity-70 hover:opacity-100"
+                          }`}
+                          loading="lazy"
+                        />
+                        {isActive && (
+                          <span className="absolute bottom-1 right-1 rounded-full bg-black/70 px-2 py-0.5 text-xs font-medium text-white">
+                            {index + 1} / {images.length}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </>
   );
 };
