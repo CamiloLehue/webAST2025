@@ -44,7 +44,7 @@ function EditableHome() {
       <section
         id="slider"
         className={`relative flex justify-start items-start w-full bg-bg-400
-        ${isSmallDevice ? "h-auto " : "py-12 pb-54"}
+        ${isSmallDevice ? "h-auto " : "py-12 pb-54 min-h-[825px]"}
         `}
       >
         {isSmallDevice ? (
@@ -90,41 +90,41 @@ function EditableHome() {
       </section>
 
       {!isSmallDevice && (
-        <section id="cardNav" className="relative h-20 ">
+        <section id="cardNav" className="relative h-20  ">
           <div
             className="absolute left-0 -top-20 w-full h-90 bg-white-100 "
             style={{
               clipPath: "ellipse(100% 100% at 50% 100%)",
             }}
           ></div>
-          <div className="container mx-auto relative z-10 -top-35">
+          <div className="container mx-auto relative z-10 -top-30">
             <CardNav />
           </div>
         </section>
       )}
 
-      <section id="wiseIA" className="relative min-w-screen bg-white-100 py-5">
+      <section id="wiseIA" className="relative min-w-screen bg-white-100  py-5">
         <div
           className={` ${
             isSmallDevice
-              ? "flex flex-col items-center justify-between gap-8 w-100 mx-auto mt-10 px-5"
-              : "grid grid-cols-2 gap-20 max-w-7xl mx-auto "
+              ? "flex flex-col items-center justify-center  w-100 mx-auto mt-10 px-5"
+              : "grid grid-cols-2  max-w-7xl mx-auto border border-dashed border-zinc-300 p-1 "
           }  `}
         >
           <SlideInLeft>
-            <div className="group flex items-center justify-center flex-1 rounded-2xl overflow-hidden">
+            <div className="group flex items-center justify-center flex-1  overflow-hidden">
               <img
                 src={homeData.iaSection.image}
                 alt={homeData.iaSection.title}
                 className={`${
-                  isSmallDevice ? "w-full" : "w-150"
-                } object-cover  shadow-lg group-hover:scale-105 transition-all duration-300`}
+                  isSmallDevice ? "w-full" : "w-150  h-full"
+                } object-cover scale-120  shadow-lg group-hover:scale-110 transition-all duration-300`}
               />
             </div>
           </SlideInLeft>
 
           <SlideInRight>
-            <div className="relative flex-1 flex flex-col   h-full bg-white rounded-2xl p-5">
+            <div className="relative flex-1 flex flex-col h-full bg-white  p-5">
               <div className="absolute right-10 top-20 h-30 w-20 rounded-full blur-3xl  bg-gradient-to-br from-primary-100/60 to-white"></div>
               <div className="absolute left-10 bottom-20 h-50 w-50 rounded-full blur-3xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
               <div className="relative flex flex-col items-start gap-4 border-b border-bg-300/10 pb-2">
@@ -154,10 +154,10 @@ function EditableHome() {
         <FadeInSection>
           <div
             className={`max-w-7xl mx-auto flex flex-col items-center gap-4 text-center  rounded-2xl ${
-              isSmallDevice ? "w-100 mt-10 p-5" : "  my-20"
+              isSmallDevice ? "w-100 mt-10 p-5" : "  mt-5"
             }`}
           >
-            <div className="bg-white px-5 py-2 rounded-xl">
+            <div className="bg-white px-5 py-2 my-5 rounded-xl">
               <h2 className="text-4xl font-bold text-primary-100">
                 {homeData.videoSection.title}
               </h2>
@@ -167,17 +167,19 @@ function EditableHome() {
                 {homeData.videoSection.description}
               </p>
             )}
-            <div className="flex justify-center items-center w-full rounded-2xl bg-bg-100 p-3 border-t border-t-white shadow-xl">
-              <iframe
-                className={`${
-                  isSmallDevice ? "w-full h-64 " : "w-full h-150"
-                } rounded-2xl `}
-                src={homeData.videoSection.videoUrl}
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              ></iframe>
+            <div className="border border-dashed border-zinc-300 w-full p-1">
+              <div className="flex justify-center items-center w-full  bg-bg-100 p-3 border-t border-t-white shadow-xl">
+                <iframe
+                  className={`${
+                    isSmallDevice ? "w-full h-64 " : "w-full h-150"
+                  } rounded-2xl `}
+                  src={homeData.videoSection.videoUrl}
+                  title="YouTube video player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
+              </div>
             </div>
           </div>
         </FadeInSection>

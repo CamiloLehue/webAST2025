@@ -77,17 +77,17 @@ function CardNav() {
             key={index}
             onClick={() => navigate(item.url)}
             className={`relative group
-                cursor-pointer flex flex-col gap-5 justify-center items-center hover:scale-105 transition-all duration-300
+                cursor-pointer flex flex-col gap-2 justify-center items-center hover:scale-105 transition-all duration-300
                 ${!isSmallDevice ? "" : ""}
                 `}
           >
             <div
-              className={`group bg-primary-100 border-t border-t-transparent font-bold transition-colors duration-300 
+              className={`group bg-primary-100  border-t border-t-transparent font-bold transition-colors duration-300 
                 text-white group-hover:bg-gradient-to-bl group-hover:from-primary-100 group-hover:to-orange-500 group-hover:border-t-orange-300
                 group-hover:shadow-xl group-hover:shadow-red-500/20
                  ${
                    !isSmallDevice
-                     ? "relative w-25 h-25 rounded-2xl flex justify-center items-center p-3 "
+                     ? "relative w-22 h-22 rounded-xl flex justify-center items-center p-6 "
                      : " w-full h-40"
                  }
                 `}
@@ -98,7 +98,7 @@ function CardNav() {
                 className="w-full h-full object-cover group-hover:scale-85 transition-all duration-500"
               />
             </div>
-            <p className="text-nowrap font-bold">{item.title}</p>
+            <p className="text-nowrap font-light px-3 bg-white/30 rounded-full">{item.title}</p>
           </article>
         ))}
       </div>
