@@ -125,7 +125,6 @@ function Slider({ slides, autoplay = true, interval = 8000 }: SliderProps) {
     <div
       className={`relative w-full p-${SLIDER_CONFIG.padding} ${SLIDER_CONFIG.backgroundColor}`}
     >
-      {/* Navigation buttons */}
       <button
         onClick={() => {
           handleUserInteraction();
@@ -214,13 +213,13 @@ function Slider({ slides, autoplay = true, interval = 8000 }: SliderProps) {
                   className="absolute inset-0 w-full h-full object-cover shadow-lg"
                   initial={{ scale: 1, opacity: 0 }}
                   animate={{ 
-                    scale: 1.08, // Zoom gradual del 100% al 108%
+                    scale: 1.08, 
                     opacity: 1 
                   }}
                   exit={{ scale: 1.1, opacity: 0 }}
                   transition={{ 
                     scale: { 
-                      duration: 8, // Zoom más lento durante todo el ciclo
+                      duration: 8, 
                       ease: "linear" 
                     },
                     opacity: { duration: 0.8, ease: "easeInOut" }
@@ -228,32 +227,33 @@ function Slider({ slides, autoplay = true, interval = 8000 }: SliderProps) {
                 />
               </AnimatePresence>
               
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl z-10">
-                <AnimatePresence initial={false}>
-                  <motion.div
-                    key={`content-${currentIndex}`}
-                    className="relative bottom-10 left-10 flex flex-col gap-2 max-w-2xl"
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -30, opacity: 0 }}
-                    transition={{ 
-                      duration: 0.6, 
-                      ease: [0.4, 0, 0.2, 1],
-                      delay: 0.2 // Pequeño delay para que aparezca después de la imagen
-                    }}
-                  >
-                    <h1
-                      className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl z-10 pb-6 pt-12 px-6">
+                <div className="relative bottom-10">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={`content-${currentIndex}`}
+                      className="flex flex-col gap-2 max-w-2xl pl-4"
+                      initial={{ x: -100, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 100, opacity: 0 }}
+                      transition={{ 
+                        duration: 0.5, 
+                        ease: [0.4, 0, 0.2, 1]
+                      }}
                     >
-                      {SLIDER_ITEMS[currentIndex].title}
-                    </h1>
-                    <p
-                      className={`text-white ${SLIDER_CONFIG.descriptionSizeActive}`}
-                    >
-                      {SLIDER_ITEMS[currentIndex].description}
-                    </p>
-                  </motion.div>
-                </AnimatePresence>
+                      <h1
+                        className={`font-bold max-w-xl leading-14 text-white ${SLIDER_CONFIG.titleSizeActive}`}
+                      >
+                        {SLIDER_ITEMS[currentIndex].title}
+                      </h1>
+                      <p
+                        className={`text-white ${SLIDER_CONFIG.descriptionSizeActive}`}
+                      >
+                        {SLIDER_ITEMS[currentIndex].description}
+                      </p>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
           </div>

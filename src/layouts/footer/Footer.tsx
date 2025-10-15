@@ -5,6 +5,7 @@ import {
   FadeInSection,
 } from "../../components/animations";
 import { useBreakpoints } from "../../context/ProviderBreakpoints";
+import { SlEnvolope, SlHome, SlPhone } from "react-icons/sl";
 
 function Footer() {
   const { menuItems } = useMenuNavItems();
@@ -50,14 +51,14 @@ function Footer() {
               <h4 className="text-base font-bold ">Nuestros Servicios</h4>
             </div>
           </div>
-          <ul className="border-t border-t-white/30 pt-5">
+          <ul className="border-t border-t-white/30 pt-5 px-5">
             {menuItems.map((item) => (
               <li key={item.path} className="py-1">
                 <a
                   href={item.path}
                   className="text-sm font-light text-white-100 hover:underline"
                 >
-                  {item.title}
+                  - {item.title}
                 </a>
               </li>
             ))}
@@ -70,15 +71,18 @@ function Footer() {
               <h4 className="text-base font-bold ">Contáctanos</h4>
             </div>
           </div>
-          <div className="flex flex-col gap-1 border-t border-t-white/30 pt-5">
-            <p className="leading-6 text-sm font-light">
+          <div className="flex flex-col gap-3 border-t border-t-white/30 pt-5">
+            <p className="leading-6 text-sm font-light flex gap-1 items-center text-nowrap">
+              <SlHome />
               <span className="font-semibold">Dirección:</span> Camino El Tepual
               Km 1 Puerto Monttm, Chile
             </p>
-            <p className="leading-6 text-sm font-light">
-              <span className="font-semibold">Teléfono:</span> +56 2 3366 3478
+            <p className="leading-6 text-sm font-light flex gap-1 items-center text-nowrap">
+              <SlPhone />
+              <span className="font-semibold">Teléfono:</span> +56 2 3366 3478,
             </p>
-            <p className="leading-6 text-sm font-light">
+            <p className="leading-6 text-sm font-light flex gap-1 items-center text-nowrap">
+              <SlEnvolope />
               <span className="font-semibold">Correo:</span> ventas@ast.cl
             </p>
           </div>

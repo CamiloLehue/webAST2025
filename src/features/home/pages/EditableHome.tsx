@@ -17,10 +17,8 @@ function EditableHome() {
   const { isSmallDevice } = useBreakpoints();
   const { homeData, loading, error } = useHomeManagement();
 
-  // Notificar cuando el componente esté completamente renderizado
   useEffect(() => {
     if (!loading && homeData && homeData.isPublished) {
-      // Esperar a que el DOM se actualice completamente
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           notifyContentReady();
@@ -29,14 +27,12 @@ function EditableHome() {
     }
   }, [loading, homeData]);
 
-  // Si está cargando, no renderizar nada (DynamicHome maneja el loading)
   if (loading) {
     return null;
   }
 
   // Si hay error o no hay datos o no está publicado, mostrar el Home estático
   if (error || !homeData || !homeData.isPublished) {
-    // DynamicHome manejará el fallback
     return null;
   }
 
