@@ -433,7 +433,7 @@ const ImageSection: React.FC<{ data: any }> = ({ data }) => {
     <section className=" ">
       <div
         className={`${
-          widthClasses[width as keyof typeof widthClasses] || "max-w-7xl"
+          widthClasses[width as keyof typeof widthClasses] || "max-w-screen"
         } ${
           alignmentClasses[alignment as keyof typeof alignmentClasses] ||
           "mx-auto"
@@ -552,10 +552,17 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
     );
   }
 
+  const displayImages = images.length > 6 ? images.slice(0, 5) : images;
+  const remainingCount = images.length > 6 ? images.length - 5 : 0;
+
   return (
     <>
-      <section className=" py-10">
-        <div className="mx-auto max-w-6xl px-4">
+      <section className="relative py-10 w-screen">
+        <div className="absolute right-10 top-20 h-30 w-20 rounded-full blur-3xl  bg-gradient-to-t from-primary-100/60 to-white"></div>
+        <div className="absolute left-10 top-20 h-50 w-50 rounded-full blur-3xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
+        <div className="absolute right-[18%] blur top-20 h-30 w-20 rounded-full  bg-gradient-to-br from-primary-100/60 to-white"></div>
+        <div className="absolute left-[17%] bottom-20 h-50 w-50 rounded-full blur-xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
+        <div className="relative mx-auto max-w-7xl p-4 border border-white rounded-xl bg-gradient-to-b from-white">
           <div
             className={`grid grid-cols-1 ${
               columnsClasses[columns as keyof typeof columnsClasses] ||
@@ -564,7 +571,7 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
               spacingClasses[spacing as keyof typeof spacingClasses] || "gap-6"
             }`}
           >
-            {images.map((image, index) => (
+            {displayImages.map((image, index) => (
               <figure
                 key={index}
                 className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
@@ -603,6 +610,30 @@ const GallerySection: React.FC<{ data: any }> = ({ data }) => {
                 )}
               </figure>
             ))}
+
+            {remainingCount > 0 && (
+              <div className="relative">
+                <div className="absolute right-10 top-20 h-30 w-20 rounded-full blur-3xl  bg-gradient-to-t from-primary-100/60 to-white"></div>
+                <div className="absolute left-10 top-20 h-50 w-50 rounded-full blur-3xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
+                <div className="absolute right-[18%] blur top-20 h-30 w-30 rounded-full  bg-gradient-to-br from-sky-500/60 to-white"></div>
+                <div className="absolute left-[17%] bottom-20 h-50 w-50 rounded-full blur-xl  bg-gradient-to-br from-purple-400/40 to-white"></div>
+                <figure
+                  className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer bg-white/50 hover:bg-white/60"
+                  onClick={() => handleImageClick(0)}
+                >
+                  <div className="relative overflow-hidden h-64 flex items-center justify-center">
+                    <div className="text-center">
+                      <span className="text-6xl font-bold text-primary-100">
+                        +{remainingCount}
+                      </span>
+                      <p className="text-primary-100 text-lg mt-2">
+                        {remainingCount === 1 ? "imagen más" : "imágenes más"}
+                      </p>
+                    </div>
+                  </div>
+                </figure>
+              </div>
+            )}
           </div>
         </div>
       </section>
