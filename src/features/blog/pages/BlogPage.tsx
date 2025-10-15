@@ -219,12 +219,12 @@ const BlogPage: React.FC = () => {
   }
 
   return (
-    <div className="w-full min-h-screen min-w-screen">
+    <div className="w-full min-h-screen min-w-screen bg-white-100">
       {!isSmallDevice && <NewsHeroSection posts={publishedPosts} />}
-      <div className="bg-white-100 ">
-        <div className="max-w-7xl mx-auto px-4  py-8">
+      <div className="bg-white-100">
+        <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-bg-100 ">
+            <h1 className="text-4xl font-bold text-bg-100">
               Últimas Noticias
             </h1>
             <p className="text-base text-bg-200">
@@ -233,7 +233,7 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white-100">
         <div className="lg:hidden mb-6">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -507,11 +507,8 @@ const BlogPage: React.FC = () => {
             )}
           </div>
 
-          <div
-            className={`mt-12 lg:mt-0 ${
-              showMobileFilters || "hidden lg:block"
-            }`}
-          >
+          {/* Sidebar - Siempre visible en desktop, toggle en mobile */}
+          <aside className={`mt-12 lg:mt-0 ${showMobileFilters ? 'block' : 'hidden'} lg:!block`}>
             <div className="space-y-6">
               {/* Búsqueda */}
               <div className="bg-white rounded-lg shadow p-6">
@@ -656,7 +653,7 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </div>
