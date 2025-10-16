@@ -372,12 +372,12 @@ const TextSection: React.FC<{ data: any }> = ({ data }) => {
 
   return (
     <section
-      className={`  w-full flex flex-col justify-center items-center   ${
+      className={`  w-full flex flex-col justify-center items-center  ${
         paddingClasses[padding as keyof typeof paddingClasses] || ""
       }`}
       style={{ backgroundColor: backgroundColor || undefined }}
     >
-      <div className="w-full max-w-7xl mx-auto py-5 ">
+      <div className="w-full max-w-7xl mx-auto  ">
         {title && (
           <h2
             className={`text-3xl font-bold mb-8 ${
