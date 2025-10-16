@@ -276,7 +276,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
 
   return (
     <section
-      className={`relative py-24 px-6 sm:py-32 lg:px-8 min-h-[650px] ${
+      className={`relative py-24 px-6 sm:py-32 lg:px-8 w-screen min-h-[650px] ${
         backgroundColor || backgroundImage ? "" : "bg-white"
       }`}
       style={{
@@ -294,14 +294,14 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent " />
       )}
       <div
-        className={`relative mx-auto max-w-7xl ${
+        className={`relative mx-auto max-w-7xl  ${
           alignmentClasses[alignment as keyof typeof alignmentClasses] ||
-          "text-center"
+          "text-start"
         }`}
       >
         {title && (
           <h1
-            className="font-bold tracking-tight text-3xl max-w-2xl"
+            className="font-bold tracking-tight text-3xl max-w-2xl text-start"
             style={{
               color:
                 textColor ||
@@ -313,7 +313,7 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
         )}
         {subtitle && (
           <div
-            className="text-lg leading-8 max-w-2xl mt-5"
+            className="text-lg leading-8 max-w-2xl mt-5 text-start"
             style={{
               color:
                 textColor ||
@@ -328,10 +328,10 @@ const HeroSection: React.FC<{ data: any }> = ({ data }) => {
           </div>
         )}
         {buttonText && buttonLink && (
-          <div className="mt-10">
+          <div className="mt-10 w-full flex">
             <a
               href={buttonLink}
-              className="text-sm font-semibold text-white shadow-sm hover:bg-primary-100"
+              className="text-sm font-semibold text-white shadow-sm hover:bg-white/20 px-4 py-2"
             >
               {buttonText}
             </a>
@@ -1260,7 +1260,9 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           bg-gradient-to-t ${
             data.backgroundColor === "#111111"
               ? `from-bg-100 border-b border-white/20 ${
-                  !data.iconSrc ? "border-t border-t-white" : "border-t border-t-bg-200"
+                  !data.iconSrc
+                    ? "border-t border-t-white"
+                    : "border-t border-t-bg-200"
                 }`
               : "from-white border border-white"
           } backdrop-blur-xl

@@ -516,7 +516,7 @@ const sectionTypes: {
   name: string;
   icon: React.ComponentType;
 }[] = [
-  // { type: "hero", name: "Hero", icon: TbTarget },
+  { type: "hero", name: "Hero", icon: TbTarget },
   { type: "hero-multi", name: "Hero Múltiple", icon: TbPaint },
   { type: "logo-section", name: "Logo/Título", icon: TbBuildingStore },
   { type: "content-section", name: "Contenido", icon: TbFileText },
@@ -547,7 +547,7 @@ const getDefaultSectionData = (
         title: "Título del Hero",
         subtitle: "Subtítulo descriptivo",
         alignment: "center" as const,
-        buttonText: "Call to Action",
+        buttonText: "Ver más",
         buttonLink: "#",
         backgroundImage: "",
         backgroundColor: "",
@@ -570,7 +570,7 @@ const getDefaultSectionData = (
         logoSrc: "AST-Logo-white.png",
         logoAlt: "AST Logo",
         title: "TÍTULO DE LA SECCIÓN",
-        backgroundColor: "#primary-100",
+        backgroundColor: "#ff3030",
         textColor: "white",
         height: "medium" as const,
       };
@@ -590,7 +590,7 @@ const getDefaultSectionData = (
         content: "Contenido de la sección con fondo curvo...",
         iconSrc: "",
         iconAlt: "Ícono",
-        backgroundColor: "#bg-400",
+        backgroundColor: "#181a1f",
         textColor: "black",
         clipPath: "ellipse(100% 100% at 50% 100%)",
       };
