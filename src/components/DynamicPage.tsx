@@ -1259,23 +1259,25 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
         className={`relative w-full  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center 
           bg-gradient-to-t ${
             data.backgroundColor === "#111111"
-              ? "from-black border-b border-white/20 border-t border-t-white"
+              ? `from-bg-100 border-b border-white/20 ${
+                  !data.iconSrc ? "border-t border-t-white" : "border-t border-t-bg-200"
+                }`
               : "from-white border border-white"
-          } backdrop-blur-xl 
+          } backdrop-blur-xl
           max-w-7xl`}
       >
         {data.iconSrc && (
-          <img
-            src={processImageUrl(data.iconSrc)}
-            alt={data.iconAlt || "Ícono"}
-            className="absolute -top-18 w-30 h-30"
-          />
+          <div className="rounded-full bg-gradient-to-bl from-primary-100 border-t border-t-red-400 shadow absolute -top-16">
+            <img
+              src={processImageUrl(data.iconSrc)}
+              alt={data.iconAlt || "Ícono"}
+              className=" w-25 h-25"
+            />
+          </div>
         )}
         {data.title && (
           <div className="bg-white/30 border border-white px-5 py-2 rounded-xl">
-            <h2
-              className="text-4xl font-bold text-primary-100"
-            >
+            <h2 className="text-4xl font-bold text-primary-100">
               {data.title}
             </h2>
           </div>
@@ -1288,6 +1290,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
             content={data.content || ""}
             className="prose prose-lg max-w-none text-inherit"
             allowHtml={true}
+            textColor={data.textColor || "black"}
           />
         </div>
       </article>

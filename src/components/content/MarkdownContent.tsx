@@ -10,31 +10,36 @@ interface MarkdownContentProps {
   className?: string;
   allowHtml?: boolean;
   pureHtmlMode?: boolean; // Nueva opción para HTML puro con estilos inline
+  textColor?: string;
 }
 
 // Función para detectar si el contenido es HTML PURO (sin Markdown mezclado)
 const isPureHtml = (content: string): boolean => {
   if (!content) return false;
-  
+
   // Detectar si hay tags HTML
   const hasHtmlTags = /<[^>]+>/i.test(content);
   if (!hasHtmlTags) return false;
-  
+
   // Detectar si tiene sintaxis Markdown
-  const hasMarkdownSyntax = /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s|^\[.+\]\(.+\)/m.test(content);
-  
+  const hasMarkdownSyntax =
+    /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s|^\[.+\]\(.+\)/m.test(content);
+
   // Si tiene Markdown, NO es HTML puro → usar ReactMarkdown para procesar ambos
   if (hasMarkdownSyntax) return false;
-  
+
   // Contar líneas con contenido
-  const lines = content.trim().split('\n').filter(line => line.trim());
-  
+  const lines = content
+    .trim()
+    .split("\n")
+    .filter((line) => line.trim());
+
   // Contar cuántas líneas son HTML
-  const htmlLines = lines.filter(line => /<[^>]+>/.test(line));
-  
+  const htmlLines = lines.filter((line) => /<[^>]+>/.test(line));
+
   // Si más del 80% de las líneas tienen HTML y no hay Markdown, es HTML puro
   if (htmlLines.length / lines.length > 0.8 && !hasMarkdownSyntax) return true;
-  
+
   return false;
 };
 
@@ -43,13 +48,14 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
   className = "prose prose-lg max-w-none",
   allowHtml = true,
   pureHtmlMode = false,
+  textColor,
 }) => {
   // Auto-detectar si debe usar modo HTML puro si no se especificó explícitamente
   const shouldUsePureHtml = pureHtmlMode || (allowHtml && isPureHtml(content));
-  
+
   // Log de depuración (temporal)
-  if (content && (content.includes('style=') || content.includes('class='))) {
-    console.log('🔍 MarkdownContent Debug:', {
+  if (content && (content.includes("style=") || content.includes("class="))) {
+    console.log("🔍 MarkdownContent Debug:", {
       contentPreview: content.substring(0, 150),
       fullContentLength: content.length,
       pureHtmlMode,
@@ -61,12 +67,12 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
       hasMarkdown: /^#{1,6}\s|^\*\*|^\*|^-\s|^\d+\.\s/m.test(content),
     });
   }
-  
+
   // Si es modo HTML puro (sin Markdown mezclado), usar dangerouslySetInnerHTML
   // Esto funciona MEJOR para clases de Tailwind y estilos inline
   if (shouldUsePureHtml) {
     return (
-      <div 
+      <div
         className={className}
         dangerouslySetInnerHTML={{ __html: content }}
       />
@@ -86,7 +92,7 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
           code({ className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || "");
             const isInline = !className || !match;
-            
+
             return !isInline && match ? (
               <SyntaxHighlighter
                 style={oneDark}
@@ -137,7 +143,10 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
             </h6>
           ),
           p: ({ children }) => (
-            <p className="mb-4 text-bg-300 leading-relaxed text-lg">
+            <p
+              className={`mb-4  leading-relaxed text-lg`}
+              style={{ color: textColor || "black" }}
+            >
               {children}
             </p>
           ),
@@ -195,22 +204,19 @@ const MarkdownContent: React.FC<MarkdownContentProps> = ({
               {children}
             </td>
           ),
-          hr: () => (
-            <hr className="my-8 border-t-2 border-gray-200" />
-          ),
-          pre: ({ children }) => (
-            <div className="my-4">{children}</div>
-          ),
+          hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
+          pre: ({ children }) => <div className="my-4">{children}</div>,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           img: ({ src, alt, ...props }: any) => {
             // Detectar si la imagen es local o externa
-            const isExternal = src?.startsWith('http://') || src?.startsWith('https://');
-            const imageSrc = isExternal ? src : `/${src?.replace(/^\/+/, '')}`;
-            
+            const isExternal =
+              src?.startsWith("http://") || src?.startsWith("https://");
+            const imageSrc = isExternal ? src : `/${src?.replace(/^\/+/, "")}`;
+
             return (
               <img
                 src={imageSrc}
-                alt={alt || ''}
+                alt={alt || ""}
                 className="max-w-full h-auto rounded-lg shadow-md my-6"
                 loading="lazy"
                 {...props}
