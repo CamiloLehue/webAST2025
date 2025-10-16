@@ -1222,16 +1222,21 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
     ""
   );
 
+  // Detecta si la clase contiene un color de fondo (bg-*)
+  const bgMatch = (data.className || "").match(/bg-[\w-]+/);
+  const includeBg = bgMatch ? bgMatch[0] : "bg-white";
   return (
-    <section className="max-screen  w-full  0">
-      <div className="flex flex-col justify-center items-center bg-white w-full max-w-7xl mx-auto p-5 ">
+    <section className="max-screen  w-full">
+      <div
+        className={`flex flex-col justify-center items-center ${includeBg} w-full    `}
+      >
         <ExistingContentSection
           title={data.title || ""}
           description={processedDescription}
           images={data.images || []}
           altText={data.altText || "Content Image"}
           layout={data.layout || "text-left"}
-          className={data.className || "mt-10 h-full"}
+          className={data.className || "h-full max-w-7xl mx-auto"}
           autoSlide={data.autoSlide !== false}
         />
       </div>
