@@ -1259,7 +1259,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
         className={`relative w-full  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center 
           bg-gradient-to-t ${
             data.backgroundColor === "#111111"
-              ? "from-black border-b border-white/20"
+              ? "from-black border-b border-white/20 border-t border-t-white"
               : "from-white border border-white"
           } backdrop-blur-xl 
           max-w-7xl`}
