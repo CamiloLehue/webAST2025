@@ -230,7 +230,7 @@ const BlogPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className=" border-t border-t-gray-200 border-b border-b-gray-200 border-dashed">
+      <div className="">
         <div className="lg:hidden mb-6 max-w-7xl mx-auto bg-white">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
@@ -637,7 +637,10 @@ const BlogPage: React.FC = () => {
                   </h3>
                   <div className="">
                     {publishedPosts.slice(0, 5).map((post) => (
-                      <div key={post.id} className=" border-b border-dashed border-b-zinc-200 hover:bg-white-100 py-3">
+                      <div
+                        key={post.id}
+                        className=" border-b border-dashed border-b-zinc-200 hover:bg-white-100 py-3"
+                      >
                         <Link
                           to={`/noticias/${post.slug}`}
                           className="block hover:text-accent-100 transition-colors"

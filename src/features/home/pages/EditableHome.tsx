@@ -108,7 +108,7 @@ function EditableHome() {
           className={` ${
             isSmallDevice
               ? "flex flex-col items-center justify-center  w-100 mx-auto mt-10 px-5"
-              : "grid grid-cols-2  max-w-7xl mx-auto border border-dashed border-zinc-300 p-1 "
+              : "grid grid-cols-2  max-w-7xl mx-auto border border-dashed border-zinc-200 p-1 "
           }  `}
         >
           <SlideInLeft>
@@ -167,7 +167,7 @@ function EditableHome() {
                 {homeData.videoSection.description}
               </p>
             )}
-            <div className="border border-dashed border-zinc-300 w-full p-1">
+            <div className="border border-dashed border-zinc-200 w-full p-1">
               <div className="flex justify-center items-center w-full  bg-bg-100 p-3 border-t border-t-white shadow-xl">
                 <iframe
                   className={`${
@@ -222,7 +222,7 @@ function EditableHome() {
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
         ></div>
-        
+
         <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
         <FadeInSection>
           <div

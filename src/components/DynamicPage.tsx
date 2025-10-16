@@ -1223,8 +1223,8 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
   );
 
   return (
-    <section className="max-screen  w-full  border-t border-dashed border-t-zinc-200 border-b border-b-zinc-200">
-      <div className="flex flex-col justify-center items-center bg-white w-full max-w-7xl mx-auto p-5 border-s border-s-zinc-200 border-e border-e-zinc-200">
+    <section className="max-screen  w-full  0">
+      <div className="flex flex-col justify-center items-center bg-white w-full max-w-7xl mx-auto p-5 ">
         <ExistingContentSection
           title={data.title || ""}
           description={processedDescription}
