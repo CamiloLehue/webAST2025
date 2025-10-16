@@ -12,7 +12,7 @@ export default defineConfig({
     proxy: {
       // Proxy para rutas API - redirige al backend
       '/api': {
-        target: 'http://10.20.1.42:8000', // URL del backend sin /api
+        target: 'http://10.20.12.20:8000', // URL del backend sin /api
         changeOrigin: true,
         secure: false,
         // No reescribir la ruta, mantener /api
