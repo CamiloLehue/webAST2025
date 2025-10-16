@@ -1223,8 +1223,8 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
   );
 
   return (
-    <section className="max-w-7xl mx-auto w-full py-10">
-      <div className="flex flex-col gap-10 justify-center items-center w-full">
+    <section className="max-screen  w-full  border-t border-dashed border-t-zinc-200 border-b border-b-zinc-200">
+      <div className="flex flex-col justify-center items-center bg-white w-full max-w-7xl mx-auto p-5 border-s border-s-zinc-200 border-e border-e-zinc-200">
         <ExistingContentSection
           title={data.title || ""}
           description={processedDescription}
@@ -1241,45 +1241,47 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
 
 const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <section className="relative h-100 mt-50">
+    <section className="relative w-screen py-24">
       <div
-        className="absolute left-0 -top-0 w-full h-100"
+        className="absolute left-0 -bottom-0 w-full h-120"
         style={{
-          backgroundColor: data.backgroundColor || "#bg-400",
+          backgroundColor: data.backgroundColor || "#ff3030",
           clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
         }}
       ></div>
-      <div className="relative -top-30 z-10 w-full max-w-6xl mx-auto h-full flex flex-col justify-center items-center text-center text-white px-5">
-        <div className="flex justify-center items-center gap-10 w-full py-10 text-black">
-          <article className="relative shadow-lg bg-white rounded-2xl w-full mb-4 flex flex-col justify-center items-center gap-5 py-20">
-            {data.iconSrc && (
-              <img
-                src={processImageUrl(data.iconSrc)}
-                alt={data.iconAlt || "Ícono"}
-                className="absolute -top-18 w-30 h-30"
-              />
-            )}
-            {data.title && (
-              <h3
-                className="text-2xl font-bold mb-4"
-                style={{ color: data.textColor || "black" }}
-              >
-                {data.title}
-              </h3>
-            )}
-            <div
-              className="max-w-4xl text-lg leading-6"
+      <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
+      <article
+        className={`relative w-full  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center bg-gradient-to-t from-white backdrop-blur-xl border border-white
+            max-w-7xl`}
+      >
+        {data.iconSrc && (
+          <img
+            src={processImageUrl(data.iconSrc)}
+            alt={data.iconAlt || "Ícono"}
+            className="absolute -top-18 w-30 h-30"
+          />
+        )}
+        {data.title && (
+          <div className="bg-white/30 border border-white px-5 py-2 rounded-xl">
+            <h2
+              className="text-4xl font-bold text-primary-100"
               style={{ color: data.textColor || "black" }}
             >
-              <MarkdownContent
-                content={data.content || ""}
-                className="prose prose-lg max-w-none text-inherit"
-                allowHtml={true}
-              />
-            </div>
-          </article>
+              {data.title}
+            </h2>
+          </div>
+        )}
+        <div
+          className=" text-lg leading-6 p-5"
+          style={{ color: data.textColor || "black" }}
+        >
+          <MarkdownContent
+            content={data.content || ""}
+            className="prose prose-lg max-w-none text-inherit"
+            allowHtml={true}
+          />
         </div>
-      </div>
+      </article>
     </section>
   );
 };
