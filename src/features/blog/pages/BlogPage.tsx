@@ -11,7 +11,10 @@ import {
 } from "react-icons/fi";
 import NewsHeroSection from "../../../components/hero/NewsHeroSection";
 import { useBreakpoints } from "../../../context/ProviderBreakpoints";
-import { notifyContentLoading, notifyContentReady } from "../../../utils/contentLoadingEvents";
+import {
+  notifyContentLoading,
+  notifyContentReady,
+} from "../../../utils/contentLoadingEvents";
 
 interface BlogFilters {
   search: string;
@@ -194,11 +197,7 @@ const BlogPage: React.FC = () => {
   ).length;
 
   if (loading) {
-    return (
-      <div className=" min-h-screen bg-bg-400 w-screen">
-        
-      </div>
-    );
+    return <div className=" min-h-screen bg-bg-400 w-screen"></div>;
   }
 
   if (error) {
@@ -224,17 +223,15 @@ const BlogPage: React.FC = () => {
       <div className="bg-white-100">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="text-center">
-            <h1 className="text-4xl font-bold text-bg-100">
-              Últimas Noticias
-            </h1>
-            <p className="text-base text-bg-200">
+            <h1 className="text-4xl font-bold text-bg-100">Últimas Noticias</h1>
+            <p className="text-base text-bg-200 font-light">
               Mantente al día con las últimas noticias y artículos
             </p>
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white-100">
-        <div className="lg:hidden mb-6">
+      <div className=" border-t border-t-gray-200 border-b border-b-gray-200 border-dashed">
+        <div className="lg:hidden mb-6 max-w-7xl mx-auto bg-white">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
             className="flex items-center gap-2 bg-primary-100 text-white px-4 py-2 rounded-lg hover:bg-primary-200 transition-colors"
@@ -244,10 +241,10 @@ const BlogPage: React.FC = () => {
           </button>
         </div>
 
-        <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+        <div className="lg:grid lg:grid-cols-4 lg:gap-8 max-w-7xl mx-auto bg-white p-5">
           <div className="lg:col-span-3">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-              <p className="text-bg-200 mb-2 sm:mb-0">
+            <div className="flex sm:flex-row sm:items-center sm:justify-between mb-6">
+              <p className="text-bg-200 font-light mb-2 sm:mb-0 bg-white-100 rounded px-4 py-1">
                 {publishedPosts.length}{" "}
                 {publishedPosts.length === 1
                   ? "artículo encontrado"
@@ -362,11 +359,11 @@ const BlogPage: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                   {paginatedPosts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-white rounded-2xl shadow-md shadow-bg-300/10  overflow-hidden"
+                      className="bg-white border border-dashed border-zinc-200 p-1   overflow-hidden"
                     >
                       {post.featuredImage && (
                         <div className="aspect-video overflow-hidden">
@@ -419,12 +416,13 @@ const BlogPage: React.FC = () => {
                           </div>
                         </div>
 
-                        <h2 className="text-2xl font-bold text-bg-100 mb-3">
+                        <h2 className="text-2xl font-bold text-bg-100 mb-3 h-17">
                           <Link
                             to={`/noticias/${post.slug}`}
                             className="hover:text-primary-100 transition-colors"
                           >
-                            {post.title}
+                            {post.title.slice(0, 50)}
+                            {post.title.length > 50 && "..."}
                           </Link>
                         </h2>
 
@@ -435,7 +433,7 @@ const BlogPage: React.FC = () => {
                         <div className="flex justify-end items-end">
                           <Link
                             to={`/noticias/${post.slug}`}
-                            className="inline-flex items-center text-primary-100 hover:text-white hover:bg-primary-100 transition-colors duration-300 font-medium  px-4 rounded py-1"
+                            className="inline-flex bg-white-100 items-center text-primary-100 hover:text-white hover:bg-primary-100 transition-colors duration-300 font-medium  px-4 rounded py-1"
                           >
                             Leer más
                             <FiArrowRight className="ml-1 h-4 w-4" />
@@ -508,10 +506,14 @@ const BlogPage: React.FC = () => {
           </div>
 
           {/* Sidebar - Siempre visible en desktop, toggle en mobile */}
-          <aside className={`mt-12 lg:mt-0 ${showMobileFilters ? 'block' : 'hidden'} lg:!block`}>
+          <aside
+            className={`mt-12 lg:mt-0 border-s border-s-zinc-200 ps-4 ${
+              showMobileFilters ? "block" : "hidden"
+            } lg:!block`}
+          >
             <div className="space-y-6">
               {/* Búsqueda */}
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                 <h3 className="text-lg font-semibold text-bg-100 mb-4 flex items-center gap-2">
                   <FiSearch className="h-5 w-5" />
                   Buscar
@@ -529,7 +531,7 @@ const BlogPage: React.FC = () => {
               </div>
 
               {categories.length > 0 && (
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
                     Categorías
                   </h3>
@@ -539,7 +541,7 @@ const BlogPage: React.FC = () => {
                       className={`block w-full text-bg-400 text-left px-3 py-2 rounded transition-colors ${
                         filters.category === ""
                           ? "bg-primary-100 text-white"
-                          : "hover:bg-gray-100"
+                          : "hover:bg-white-100"
                       }`}
                     >
                       Todas las categorías
@@ -579,7 +581,7 @@ const BlogPage: React.FC = () => {
               )}
 
               {allTags.length > 0 && (
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                   <h3 className="text-lg font-semibold text-bg-100 mb-4">
                     Etiquetas populares
                   </h3>
@@ -601,7 +603,7 @@ const BlogPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                 <h3 className="text-lg font-semibold text-bg-100 mb-4">
                   Filtrar por fecha
                 </h3>
@@ -619,7 +621,7 @@ const BlogPage: React.FC = () => {
                       className={`block w-full font-light text-left px-3 py-2 rounded transition-colors ${
                         filters.dateRange === option.value
                           ? "bg-primary-100 text-white"
-                          : "hover:bg-bg-300/40 text-bg-300/70 hover:text-white-100 "
+                          : "hover:bg-white-100 text-bg-300/70 hover:text-primary-100 "
                       }`}
                     >
                       {option.label}
@@ -629,13 +631,13 @@ const BlogPage: React.FC = () => {
               </div>
 
               {activeFiltersCount === 0 && publishedPosts.length > 3 && (
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white  p-6">
                   <h3 className="text-lg font-semibold text-bg-300 mb-4">
                     Posts Recientes
                   </h3>
-                  <div className="space-y-4">
-                    {publishedPosts.slice(0, 3).map((post) => (
-                      <div key={post.id}>
+                  <div className="">
+                    {publishedPosts.slice(0, 5).map((post) => (
+                      <div key={post.id} className=" border-b border-dashed border-b-zinc-200 hover:bg-white-100 py-3">
                         <Link
                           to={`/noticias/${post.slug}`}
                           className="block hover:text-accent-100 transition-colors"
