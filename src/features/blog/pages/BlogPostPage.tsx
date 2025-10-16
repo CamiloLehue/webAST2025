@@ -180,14 +180,14 @@ const BlogPostPage: React.FC = () => {
   };
   return (
     <div
-      className={`w-full min-h-screen  bg-white-100 rounded-t-lg  mt-5
+      className={`w-full min-h-screen  bg-white rounded-t-lg  mt-5
         ${isSmallDevice ? "" : "min-w-7xl"}`}
     >
       <div className="px-5">
         <div className="max-w-7xl mx-auto py-4 px-4">
           <button
             onClick={() => navigate(-1)}
-            className="inline-flex items-center text-sm text-primary-100 border border-white font-medium bg-white hover:border-primary-100 px-2 rounded py-1 transition-colors duration-300"
+            className="inline-flex items-center text-sm text-primary-100 border border-white-100 font-medium bg-white-100 hover:border-primary-100 px-2 rounded py-1 transition-colors duration-300"
           >
             <FiArrowLeft className="mr-2 h-4 w-4" />
             Volver
@@ -195,21 +195,21 @@ const BlogPostPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 ">
-        <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+      <div className="border-t border-t-zinc-200 border-dashed ">
+        <div className="lg:grid lg:grid-cols-4 lg:gap-8 max-w-7xl mx-auto">
           <div className="lg:col-span-3">
             <article className=" bg-white rounded-2xl p-10 mb-5">
               {post.featuredImage && (
-                <div className="aspect-video overflow-hidden rounded-lg mb-8">
+                <div className="aspect-video overflow-hidden mb-8 border border-dashed border-zinc-200 p-1">
                   <img
                     src={post.featuredImage}
                     alt={post.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover hover:scale-99 transition-all duration-500"
                   />
                 </div>
               )}
 
-              <header className="mb-8 bg-">
+              <header className="mb-8">
                 <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
                   <div className="flex items-center">
                     <FiCalendar className="mr-1 h-4 w-4" />
@@ -297,10 +297,10 @@ const BlogPostPage: React.FC = () => {
             </article>
           </div>
 
-          <div className="lg:col-span-1 mt-12 lg:mt-0">
+          <div className="lg:col-span-1 mt-12 lg:mt-0 border-s border-s-zinc-200">
             <div className="space-y-8">
               {allCategories.length > 0 && (
-                <div className="bg-white rounded-2xl shadow-md shadow-bg-300/10 p-6">
+                <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                   <h3 className="text-xl font-bold text-bg-100 mb-6 flex items-center">
                     <div className="w-8 h-8 bg-primary-100/10 rounded-lg flex items-center justify-center mr-3">
                       <svg
@@ -409,7 +409,7 @@ const BlogPostPage: React.FC = () => {
               )}
 
               {allTags.length > 0 && (
-                <div className="bg-white rounded-2xl shadow-md shadow-bg-300/10 p-6">
+                <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                   <h3 className="text-xl font-bold text-bg-100 mb-6 flex items-center">
                     <div className="w-8 h-8 bg-accent-100/10 rounded-lg flex items-center justify-center mr-3">
                       <svg
@@ -525,7 +525,7 @@ const BlogPostPage: React.FC = () => {
               )}
 
               {fallbackRelatedPosts.length > 0 && (
-                <div className="bg-white rounded-2xl shadow-md shadow-bg-300/10 p-6">
+                <div className="bg-white border-b border-dashed border-b-zinc-200 p-6">
                   <h3 className="text-xl font-bold text-bg-100 mb-6 text-nowrap flex items-center">
                     <div className="w-8 h-8 bg-primary-200/10 rounded-lg flex items-center justify-center mr-3">
                       <svg
