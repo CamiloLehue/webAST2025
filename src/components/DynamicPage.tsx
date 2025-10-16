@@ -1241,7 +1241,7 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
 
 const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <section className="relative w-screen py-24">
+    <section className="relative w-screen py-24 mt-9">
       <div
         className="absolute left-0 -bottom-0 w-full h-120"
         style={{
@@ -1275,7 +1275,6 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           <div className="bg-white/30 border border-white px-5 py-2 rounded-xl">
             <h2
               className="text-4xl font-bold text-primary-100"
-              style={{ color: data.textColor || "black" }}
             >
               {data.title}
             </h2>
