@@ -59,12 +59,12 @@ function ContentSection({
       ? currentImage
       : `/${currentImage?.replace(/^\/+/, "")}`;
     return (
-      <div className="relative w-full h-full overflow-hidden rounded-2xl">
+      <div className="relative w-full h-full overflow-hidden border border-dashed border-zinc-200 p-1">
         <img
           draggable={false}
           src={imageSrc}
           alt={altText}
-          className="w-full object-cover scale-110 transition-transform duration-300 max-h-[420px] min-h-[420px]"
+          className="w-full object-cover max-h-[420px] min-h-[420px] hover:scale-105 transition-all duration-500 cursor-crosshair"
           loading="lazy"
         />
 
@@ -101,7 +101,7 @@ function ContentSection({
   };
 
   const renderTextContent = () => (
-    <div className="flex flex-col justify-center items-start gap-5">
+    <div className="flex flex-col justify-center items-start gap-5 p-4">
       <h4 className="text-3xl font-black">{title}</h4>
       <div className="text-lg leading-6">{description}</div>
     </div>
