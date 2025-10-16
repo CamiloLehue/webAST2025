@@ -1249,10 +1249,20 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
         }}
       ></div>
-      <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
+      {data.backgroundColor === "#111111" ? (
+        ""
+      ) : (
+        <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
+      )}
+
       <article
-        className={`relative w-full  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center bg-gradient-to-t from-white backdrop-blur-xl border border-white
-            max-w-7xl`}
+        className={`relative w-full  rounded-2xl py-10 mx-auto flex flex-col items-center gap-4 text-center 
+          bg-gradient-to-t ${
+            data.backgroundColor === "#111111"
+              ? "from-black border-b border-white/20"
+              : "from-white border border-white"
+          } backdrop-blur-xl 
+          max-w-7xl`}
       >
         {data.iconSrc && (
           <img

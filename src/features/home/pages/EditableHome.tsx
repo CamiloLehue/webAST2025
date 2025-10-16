@@ -222,6 +222,7 @@ function EditableHome() {
             clipPath: "ellipse(100% 100% at 50% 100%)",
           }}
         ></div>
+        
         <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
         <FadeInSection>
           <div
