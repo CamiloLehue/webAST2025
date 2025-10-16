@@ -59,7 +59,8 @@ function ContentSection({
       ? currentImage
       : `/${currentImage?.replace(/^\/+/, "")}`;
     return (
-      <div className="relative w-full h-full overflow-hidden border border-dashed border-zinc-200 p-1">
+      imageSrc !== "/undefined" ?
+      (<div className={`relative w-full h-full overflow-hidden border border-dashed border-zinc-200 p-1`}>
         <img
           draggable={false}
           src={imageSrc}
@@ -96,7 +97,9 @@ function ContentSection({
             </div>
           </>
         )}
-      </div>
+      </div>)
+      :
+      (<div className={`relative w-full h-96 overflow-hidden p-1`}></div>)
     );
   };
 

@@ -1224,7 +1224,7 @@ const ContentSectionComponent: React.FC<{ data: any }> = ({ data }) => {
 
   // Detecta si la clase contiene un color de fondo (bg-*)
   const bgMatch = (data.className || "").match(/bg-[\w-]+/);
-  const includeBg = bgMatch ? bgMatch[0] : "bg-white";
+  const includeBg = bgMatch ? bgMatch[0] : "bg-white-100";
   return (
     <section className="max-screen  w-full">
       <div
@@ -1254,7 +1254,7 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
         }}
       ></div>
-      {data.backgroundColor === "#111111" ? (
+      {data.backgroundColor === "#111111" || data.backgroundColor === "white" ? (
         ""
       ) : (
         <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>
