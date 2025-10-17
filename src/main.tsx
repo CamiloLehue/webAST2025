@@ -22,6 +22,7 @@ import HomeEditor from "./features/admin/home-management/pages/HomeEditor";
 import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
+import { ToastProvider } from "./context/ToastContext";
 // import About from "./features/about/pages/About";
 // import Products from "./features/products/pages/Products";
 // import Datacenter from "./features/services/pages/Datacenter";
@@ -44,7 +45,8 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <ContentProvider>
         <BreakpointProvider>
-          <BrowserRouter>
+          <ToastProvider>
+            <BrowserRouter>
             <Routes>
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
@@ -102,6 +104,7 @@ createRoot(document.getElementById("root")!).render(
               </Route>
             </Routes>
           </BrowserRouter>
+          </ToastProvider>
         </BreakpointProvider>
       </ContentProvider>
     </AuthProvider>

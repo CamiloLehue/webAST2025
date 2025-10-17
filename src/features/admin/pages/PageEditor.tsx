@@ -10,6 +10,7 @@ import type {
   Feature,
 } from "../page-management/types/pageTypes";
 import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
+import { useToast } from "../../../hooks/useToast";
 import {
   TbArrowNarrowDown,
   TbArrowNarrowUp,
@@ -33,6 +34,7 @@ const PageEditor: React.FC = () => {
   const { id } = useParams();
   const [searchParams] = useSearchParams();
   const template = searchParams.get("template");
+  const { showToast } = useToast();
 
   const {
     customPages,
@@ -186,17 +188,17 @@ const PageEditor: React.FC = () => {
 
   const handleSave = async () => {
     if (!formData.title.trim()) {
-      alert("El título es requerido");
+      showToast("El título es requerido", "error");
       return;
     }
 
     if (!formData.slug.trim()) {
-      alert("El slug es requerido");
+      showToast("El slug es requerido", "error");
       return;
     }
 
     if (slugError) {
-      alert("Por favor corrige los errores antes de guardar");
+      showToast("Por favor corrige los errores antes de guardar", "error");
       return;
     }
 
@@ -204,11 +206,14 @@ const PageEditor: React.FC = () => {
 
     try {
       if (isEditing && existingPage) {
+        // Modo edición: actualizar y permanecer en la página
         await updateCustomPage({
           ...existingPage,
           ...formData,
         });
+        showToast("Página editada con éxito", "success");
       } else {
+        // Modo creación: crear y redirigir a la lista
         if (template) {
           await createPageFromTemplate(template, {
             title: formData.title,
@@ -217,12 +222,16 @@ const PageEditor: React.FC = () => {
         } else {
           await createCustomPage(formData);
         }
+        showToast("Página creada con éxito", "success");
+        
+        // Esperar un momento para que se vea la notificación antes de redirigir
+        setTimeout(() => {
+          navigate("/admin/pages");
+        }, 1500);
       }
-
-      // navigate("/admin/pages"); //Comentado para no redirigir después de guardar
     } catch (err) {
       console.error("Error saving page:", err);
-      alert("Error al guardar la página");
+      showToast("Error al guardar la página", "error");
     } finally {
       setIsSaving(false);
     }
