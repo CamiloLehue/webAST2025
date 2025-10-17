@@ -256,7 +256,7 @@ const MenuManagement: React.FC = () => {
       )}
 
       <div className="bg-bg-300 shadow rounded-lg">
-        <div className="px-6 py-4 border-b border-bg-200">
+        <div className="px-6 py-4 border-b border-bg-200 bg-bg-400">
           <h3 className="text-lg font-medium text-white">Elementos del Menú</h3>
           <p className="text-sm text-white-100/70 mt-1">
             Haz clic en las flechas para expandir/contraer submenús

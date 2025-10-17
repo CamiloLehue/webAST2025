@@ -10,12 +10,22 @@ export interface CustomPage {
   updatedAt: string;
 }
 
+export interface PageListItem {
+  id: string;
+  title: string;
+  slug: string;
+  isPublished: boolean;
+  contentCount: number; 
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ContentSection {
   id: string;
   type: ContentSectionType;
   data: HeroSection | HeroMultiSection | LogoSection | ContentSectionData | CurvedSection | TextSection | ImageSection | GallerySection | VideoSection | ContactFormSection | TestimonialsSection | FeaturesSection | CTASection | SpacerSection | ClientsCarouselSection | TeamCardsSection;
   order: number;
-  gridWidth?: number; // Ancho en el sistema de grid (1-12), por defecto 12
+  gridWidth?: number; 
 }
 
 export type ContentSectionType = 
@@ -98,7 +108,7 @@ export interface FormField {
   label: string;
   placeholder?: string;
   required: boolean;
-  options?: string[]; // For select fields
+  options?: string[]; 
 }
 
 export interface TestimonialsSection {
@@ -147,11 +157,10 @@ export interface SpacerSection {
   height: 'small' | 'medium' | 'large' | 'xl';
 }
 
-// Nuevas interfaces para tipos de secciones específicas
 export interface HeroMultiSection {
   title: string;
   description?: string;
-  images: string[]; // Array de URLs de imágenes
+  images: string[]; 
   altText: string;
   buttonText?: string;
   buttonLink?: string;

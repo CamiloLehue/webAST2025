@@ -1,4 +1,4 @@
-import type { CustomPage, ContentSection, PageTemplate, PageFilters, PageStats } from '../types/pageTypes';
+import type { CustomPage, ContentSection, PageTemplate, PageFilters, PageStats, PageListItem } from '../types/pageTypes';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -19,6 +19,24 @@ export class PageService {
 
     const pages: CustomPage[] = await response.json();
     return pages;
+  }
+
+  // Nuevo método optimizado para obtener lista de páginas sin el contenido completo
+  static async getPageListItems(): Promise<PageListItem[]> {
+    if (!API_URL) {
+      throw new Error("API_URL not defined");
+    }
+
+    const response = await fetch(`${API_URL}/pagesItems`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch page items from API: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const pageItems: PageListItem[] = await response.json();
+    return pageItems;
   }
 
   static async getCustomPageById(id: string): Promise<CustomPage | undefined> {

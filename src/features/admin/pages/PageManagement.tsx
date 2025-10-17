@@ -1,45 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { usePageManagement } from "../page-management/hooks/usePageManagement";
+import { usePageList } from "../page-management/hooks/usePageList";
+import { PageService } from "../page-management/services/pageService";
 import { FiEdit2, FiTrash2, FiPlus, FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PageManagement: React.FC = () => {
   const {
-    customPages: pages,
+    pageItems,
     loading,
     error,
-    deleteCustomPage,
-    filterPages,
-  } = usePageManagement();
+    filterPageItems,
+    removePageItem,
+  } = usePageList();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "published" | "draft"
   >("all");
-  const [filteredPages, setFilteredPages] = useState(pages);
+  const [filteredPages, setFilteredPages] = useState(pageItems);
 
   useEffect(() => {
-    const applyFilters = async () => {
-      if (searchTerm || statusFilter !== "all") {
-        const filtered = await filterPages({
-          search: searchTerm || undefined,
-          status: statusFilter,
-          sortBy: "updated",
-          sortOrder: "desc",
-        });
-        setFilteredPages(filtered);
-      } else {
-        setFilteredPages(pages);
-      }
-    };
-
-    applyFilters();
-  }, [searchTerm, statusFilter, pages, filterPages]);
+    const filtered = filterPageItems({
+      search: searchTerm || undefined,
+      status: statusFilter,
+      sortBy: "updated",
+      sortOrder: "desc",
+    });
+    setFilteredPages(filtered);
+  }, [searchTerm, statusFilter, pageItems, filterPageItems]);
 
   const handleDeletePage = async (id: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar esta página?")) {
       try {
-        await deleteCustomPage(id);
+        await PageService.deleteCustomPage(id);
+        removePageItem(id);
       } catch (err) {
         console.error("Error al eliminar la página:", err);
       }
@@ -200,7 +194,7 @@ const PageManagement: React.FC = () => {
 
                 <div className="mb-4 px-5">
                   <p className="text-sm text-white-100/70">
-                    {page.content.length} bloques de contenido
+                    {page.contentCount} bloques de contenido
                   </p>
                   <p className="text-xs text-white-100/70">
                     Creado el {formatDate(page.createdAt)}

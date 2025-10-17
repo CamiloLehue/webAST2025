@@ -81,7 +81,7 @@ const MultimediaManagement: React.FC = () => {
                 Administra tu biblioteca de archivos multimedia
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+            <div className="flex  sm:flex-row gap-1 w-full justify-center items-end">
               <button
                 onClick={handleToggleUploader}
                 className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white transition-colors ${
@@ -183,7 +183,7 @@ const MultimediaManagement: React.FC = () => {
 
         {/* Información de resultados */}
         <div className="flex items-center justify-between mb-4">
-          <div className="text-sm text-gray-700">
+          <div className="text-sm text-white-100">
             {loading ? (
               "Cargando..."
             ) : (
@@ -202,7 +202,6 @@ const MultimediaManagement: React.FC = () => {
           </div>
         </div>
 
-        {/* Grid de archivos */}
         <div className="bg-bg-300 rounded-lg shadow-sm border border-bg-300 p-6 mb-6">
           <MultimediaGrid
             files={files}
