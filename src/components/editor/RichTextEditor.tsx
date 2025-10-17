@@ -11,6 +11,7 @@ import {
   FiEdit,
   FiDroplet,
   FiTag,
+  FiLayers,
 } from "react-icons/fi";
 import MarkdownContent from "../content/MarkdownContent";
 
@@ -32,6 +33,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const [showPreview, setShowPreview] = useState(false);
   const [mode, setMode] = useState<"markdown" | "html">("markdown");
   const [showColorPalette, setShowColorPalette] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
   const [customColor, setCustomColor] = useState("#000000");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -52,6 +54,202 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     { name: "Azul Oscuro", hex: "#2563eb", class: "text-blue-600" },
     { name: "Verde Oscuro", hex: "#059669", class: "text-green-600" },
     { name: "Cian", hex: "#06b6d4", class: "text-cyan-500" },
+  ];
+
+  // Plantillas HTML predefinidas
+  const htmlTemplates = [
+    {
+      name: "Lista Simple",
+      icon: "📝",
+      description: "Lista con viñetas básica",
+      code: `<ul class="list-disc list-inside space-y-2">
+  <li>Primer elemento</li>
+  <li>Segundo elemento</li>
+  <li>Tercer elemento</li>
+  <li>Cuarto elemento</li>
+</ul>`,
+    },
+    {
+      name: "Lista Numerada",
+      icon: "🔢",
+      description: "Lista ordenada con números",
+      code: `<ol class="list-decimal list-inside space-y-2">
+  <li>Primer paso</li>
+  <li>Segundo paso</li>
+  <li>Tercer paso</li>
+  <li>Cuarto paso</li>
+</ol>`,
+    },
+    {
+      name: "Grid 2 Columnas",
+      icon: "⚏",
+      description: "Grid de 2 columnas responsive",
+      code: `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="p-4 bg-gray-100 rounded-lg">
+    <h3 class="font-bold text-lg mb-2">Columna 1</h3>
+    <p>Contenido de la primera columna</p>
+  </div>
+  <div class="p-4 bg-gray-100 rounded-lg">
+    <h3 class="font-bold text-lg mb-2">Columna 2</h3>
+    <p>Contenido de la segunda columna</p>
+  </div>
+</div>`,
+    },
+    {
+      name: "Grid 3 Columnas",
+      icon: "⚏⚏",
+      description: "Grid de 3 columnas responsive",
+      code: `<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="p-4 bg-blue-50 rounded-lg text-center">
+    <h3 class="font-bold text-lg mb-2">Columna 1</h3>
+    <p>Contenido aquí</p>
+  </div>
+  <div class="p-4 bg-blue-50 rounded-lg text-center">
+    <h3 class="font-bold text-lg mb-2">Columna 2</h3>
+    <p>Contenido aquí</p>
+  </div>
+  <div class="p-4 bg-blue-50 rounded-lg text-center">
+    <h3 class="font-bold text-lg mb-2">Columna 3</h3>
+    <p>Contenido aquí</p>
+  </div>
+</div>`,
+    },
+    {
+      name: "Flex Horizontal",
+      icon: "↔",
+      description: "Elementos en fila horizontal",
+      code: `<div class="flex flex-wrap gap-4 items-center justify-center">
+  <div class="p-4 bg-green-100 rounded-lg">
+    <p class="font-bold">Elemento 1</p>
+  </div>
+  <div class="p-4 bg-green-100 rounded-lg">
+    <p class="font-bold">Elemento 2</p>
+  </div>
+  <div class="p-4 bg-green-100 rounded-lg">
+    <p class="font-bold">Elemento 3</p>
+  </div>
+</div>`,
+    },
+    {
+      name: "Tarjeta",
+      icon: "🎴",
+      description: "Tarjeta con borde y sombra",
+      code: `<div class="border border-gray-200 rounded-lg shadow-lg p-6 bg-white">
+  <h3 class="text-xl font-bold mb-3">Título de la Tarjeta</h3>
+  <p class="text-gray-600 mb-4">
+    Descripción o contenido de la tarjeta. Puedes agregar lo que necesites aquí.
+  </p>
+  <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    Acción
+  </button>
+</div>`,
+    },
+    {
+      name: "Alert/Aviso",
+      icon: "⚠",
+      description: "Cuadro de aviso o alerta",
+      code: `<div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+  <div class="flex">
+    <div class="flex-shrink-0">
+      <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+    </div>
+    <div class="ml-3">
+      <p class="text-sm text-yellow-700">
+        <strong>Atención:</strong> Mensaje importante que debes leer.
+      </p>
+    </div>
+  </div>
+</div>`,
+    },
+    {
+      name: "Box Destacado",
+      icon: "📦",
+      description: "Caja con fondo de color",
+      code: `<div class="bg-blue-500 text-white p-6 rounded-lg">
+  <h3 class="text-2xl font-bold mb-2">Título Destacado</h3>
+  <p class="text-lg">
+    Contenido importante que quieres resaltar con un fondo de color.
+  </p>
+</div>`,
+    },
+    {
+      name: "Dos Columnas",
+      icon: "⚏",
+      description: "Texto en dos columnas",
+      code: `<div class="flex flex-col md:flex-row gap-6">
+  <div class="flex-1">
+    <h3 class="font-bold text-lg mb-3">Columna Izquierda</h3>
+    <p>
+      Contenido de la columna izquierda. Puedes poner texto, imágenes o lo que necesites.
+    </p>
+  </div>
+  <div class="flex-1">
+    <h3 class="font-bold text-lg mb-3">Columna Derecha</h3>
+    <p>
+      Contenido de la columna derecha. También puedes personalizar el contenido aquí.
+    </p>
+  </div>
+</div>`,
+    },
+    {
+      name: "Botón",
+      icon: "🔘",
+      description: "Botón con estilo",
+      code: `<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  Haz clic aquí
+</button>`,
+    },
+    {
+      name: "Lista con Check",
+      icon: "✓",
+      description: "Lista de verificación con iconos",
+      code: `<ul class="space-y-2">
+  <li class="flex items-center">
+    <span class="text-green-500 mr-2">✓</span>
+    Primera característica incluida
+  </li>
+  <li class="flex items-center">
+    <span class="text-green-500 mr-2">✓</span>
+    Segunda característica incluida
+  </li>
+  <li class="flex items-center">
+    <span class="text-green-500 mr-2">✓</span>
+    Tercera característica incluida
+  </li>
+  <li class="flex items-center">
+    <span class="text-green-500 mr-2">✓</span>
+    Cuarta característica incluida
+  </li>
+</ul>`,
+    },
+    {
+      name: "Tabla Básica",
+      icon: "⊞",
+      description: "Tabla simple con estilos",
+      code: `<table class="min-w-full border-collapse border border-gray-300">
+  <thead>
+    <tr class="bg-gray-100">
+      <th class="border border-gray-300 px-4 py-2">Encabezado 1</th>
+      <th class="border border-gray-300 px-4 py-2">Encabezado 2</th>
+      <th class="border border-gray-300 px-4 py-2">Encabezado 3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="border border-gray-300 px-4 py-2">Celda 1</td>
+      <td class="border border-gray-300 px-4 py-2">Celda 2</td>
+      <td class="border border-gray-300 px-4 py-2">Celda 3</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="border border-gray-300 px-4 py-2">Celda 4</td>
+      <td class="border border-gray-300 px-4 py-2">Celda 5</td>
+      <td class="border border-gray-300 px-4 py-2">Celda 6</td>
+    </tr>
+  </tbody>
+</table>`,
+    },
   ];
 
   const insertText = useCallback(
@@ -160,6 +358,15 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     setShowColorPalette(false);
   }, [value, customColor, insertText]);
 
+  // Función para insertar plantilla
+  const insertTemplate = useCallback(
+    (templateCode: string) => {
+      insertAtCursor("\n" + templateCode + "\n");
+      setShowTemplates(false);
+    },
+    [insertAtCursor]
+  );
+
   // Función para insertar HTML
   const insertHtmlTag = useCallback(
     (tag: string, attributes: string = "") => {
@@ -213,6 +420,11 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
   // Botones HTML adicionales
   const htmlButtons = [
+    {
+      icon: FiLayers,
+      title: "Plantillas",
+      action: () => setShowTemplates(!showTemplates),
+    },
     {
       icon: FiTag,
       title: "Span",
@@ -479,6 +691,56 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
               <div className="mt-3 pt-2 border-t border-gray-200">
                 <p className="text-xs text-gray-500">
                   Selecciona texto y luego elige un color para aplicarlo
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Panel de Plantillas */}
+          {showTemplates && (
+            <div className="border border-gray-300 rounded-md p-4 mt-2 bg-white shadow-lg relative max-h-96 overflow-y-auto">
+              <div className="flex relative  items-center justify-between mb-3  bg-white pb-2 border-b border-gray-200">
+                <h4 className="text-sm font-medium text-gray-700">
+                   Plantillas HTML Listas para Usar
+                </h4>
+                <button
+                  type="button"
+                  onClick={() => setShowTemplates(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-600 mb-4">
+                Haz clic en una plantilla para insertarla en tu contenido:
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {htmlTemplates.map((template, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => insertTemplate(template.code)}
+                    className="text-left p-3 border border-gray-200 rounded-lg hover:border-blue-400 hover:bg-blue-50 transition-all group"
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-2xl">{template.icon}</span>
+                      <h5 className="font-semibold text-sm text-gray-800 group-hover:text-blue-600">
+                        {template.name}
+                      </h5>
+                    </div>
+                    <p className="text-xs text-gray-500 leading-tight">
+                      {template.description}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-gray-200">
+                <p className="text-xs text-gray-500">
+                 <strong>Tip:</strong> Todas las plantillas usan clases de Tailwind CSS.
+                  Puedes personalizar colores, tamaños y espaciados cambiando las clases.
                 </p>
               </div>
             </div>
