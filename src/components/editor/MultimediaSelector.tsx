@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { FiImage, FiLink, FiX, FiSearch, FiTag } from "react-icons/fi";
 import { TbPhoto, TbVideo, TbFileCode, TbFile } from "react-icons/tb";
 import { multimediaService } from "../../features/admin/multimedia-management/services/multimediaService";
@@ -261,9 +262,9 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
         </div>
       )}
 
-      {showSelector && (
-        <div className="fixed bottom-0 right-0 z-50 rounded-xl bg-black/50  flex items-center justify-center p-1">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[80vh] flex flex-col">
+      {showSelector && createPortal(
+        <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-white-100">
               <h3 className="text-lg font-semibold">Seleccionar Multimedia</h3>
               <button
@@ -402,7 +403,8 @@ const MultimediaSelector: React.FC<MultimediaSelectorProps> = ({
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
