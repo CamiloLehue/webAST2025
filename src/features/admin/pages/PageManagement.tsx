@@ -140,7 +140,7 @@ const PageManagement: React.FC = () => {
           filteredPages.map((page) => (
             <div
               key={page.id}
-              className="bg-gradient-to-b from-bg-400 to-transparent border border-bg-300 shadow overflow-hidden hover:scale-101 transition-color duration-300"
+              className="bg-gradient-to-b from-bg-400 to-transparent border border-bg-300 shadow overflow-hidden "
             >
               <div className="flex justify-between items-center space-x-2 p-3 bg-bg-400">
                 <span
