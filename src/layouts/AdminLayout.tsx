@@ -10,6 +10,7 @@ import {
   FiUsers,
   FiImage,
   FiLayers,
+  FiEye,
 } from "react-icons/fi";
 import { getRoleDisplayName } from "../features/admin/user-management/types/userTypes";
 
@@ -35,7 +36,7 @@ const AdminLayout: React.FC = () => {
     },
     {
       to: "/admin/pages",
-      icon: FiLayers   ,
+      icon: FiLayers,
       label: "Páginas",
     },
     {
@@ -69,14 +70,22 @@ const AdminLayout: React.FC = () => {
           <img src="/AST-Logo-white.png" alt="AST" className="h-8" />
           <span className="ml-2 text-white font-semibold">AST Technology.</span>
         </div>
-        <div className="px-4 py-3 bg-bg-400 flex  gap-5 items-center justify-center border-t border-t-bg-100">
+        <div className="px-4 py-3 bg-bg-100   gap-2 flex flex-col items-center justify-center border-t border-t-bg-100">
           <div>
-            <p className="text-sm font-medium text-white">{user?.name}</p>
+            <p className="text-sm font-bold text-white">{user?.name}</p>
             <p className="text-xs text-white/50">{user?.email}</p>
           </div>
           <span className="inline-block px-5 py-1 text-xs font-medium text-white-100 border border-bg-300 rounded-full">
             {user?.role ? getRoleDisplayName(user.role) : "Sin rol"}
           </span>
+        </div>
+        <div className="flex justify-center items-center bg-bg-300">
+          <button
+            onClick={() => window.open("/", "_blank")}
+            className="px-4 py-2 text-sm flex justify-center items-center gap-2 font-medium text-white bg-bg-400 border border-bg-300 w-full hover:bg-bg-200 hover:text-white"
+          >
+            <FiEye size={20} /> Ir a la página
+          </button>
         </div>
 
         <nav className="flex-1 px-2 py-4 space-y-1 bg-bg-400">
