@@ -5,13 +5,8 @@ import { FiEdit2, FiTrash2, FiPlus, FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const PageManagement: React.FC = () => {
-  const {
-    pageItems,
-    loading,
-    error,
-    filterPageItems,
-    removePageItem,
-  } = usePageList();
+  const { pageItems, loading, error, filterPageItems, removePageItem } =
+    usePageList();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
@@ -79,49 +74,47 @@ const PageManagement: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6 p-5 bg-bg-200 min-h-full">
-      <div className="flex justify-between items-center">
+    <div className="space-y-2 p-1 bg-bg-200 min-h-full">
+      <div className="flex justify-between items-center  gap-5 bg-bg-100 px-4 ">
         <div>
-          <h2 className="text-2xl font-bold text-white">Gestión de Páginas</h2>
-          <p className="mt-1 text-white-100/70">
-            Administra las páginas personalizadas del sitio web
-          </p>
+          <h2 className="text-2xl font-bold text-white text-center text-nowrap">
+            Gestión de Páginas
+          </h2>
+        </div>
+        <div className="bg-bg-100 w-full p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Buscar páginas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full text-white bg-bg-400 placeholder:text-white-100/70 px-3 py-2 border border-bg-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            />
+          </div>
+          <div>
+            <select
+              value={statusFilter}
+              onChange={(e) =>
+                setStatusFilter(e.target.value as "all" | "published" | "draft")
+              }
+              className="px-3 py-2 border border-bg-300 text-white bg-bg-400 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+            >
+              <option value="all">Todas las páginas</option>
+              <option value="published">Publicadas</option>
+              <option value="draft">Borradores</option>
+            </select>
+          </div>
         </div>
         <Link
           to="/admin/pages/new"
-          className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
+          className="inline-flex text-nowrap items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
         >
           <FiPlus className="mr-2 h-4 w-4" />
           Nueva Página
         </Link>
       </div>
 
-      <div className="bg-bg-100 p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Buscar páginas..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full text-white bg-bg-400 placeholder:text-white-100/70 px-3 py-2 border border-bg-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-          />
-        </div>
-        <div>
-          <select
-            value={statusFilter}
-            onChange={(e) =>
-              setStatusFilter(e.target.value as "all" | "published" | "draft")
-            }
-            className="px-3 py-2 border border-bg-300 text-white bg-bg-400 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-          >
-            <option value="all">Todas las páginas</option>
-            <option value="published">Publicadas</option>
-            <option value="draft">Borradores</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2">
         {filteredPages.length === 0 ? (
           <div className="col-span-full">
             <div className="text-center py-12">
@@ -147,9 +140,9 @@ const PageManagement: React.FC = () => {
           filteredPages.map((page) => (
             <div
               key={page.id}
-              className="bg-bg-300 rounded-lg shadow overflow-hidden"
+              className="bg-gradient-to-b from-bg-400 to-transparent border border-bg-300 shadow overflow-hidden hover:scale-101 transition-color duration-300"
             >
-              <div className="flex justify-between items-center space-x-2 p-3 bg-bg-100">
+              <div className="flex justify-between items-center space-x-2 p-3 bg-bg-400">
                 <span
                   className={`ml-2 px-4 py-1 text-xs font-medium rounded-full ${
                     page.isPublished
@@ -176,28 +169,25 @@ const PageManagement: React.FC = () => {
                   </button>
                 </div>
               </div>
-              <div className="p-4">
+              <div className="p-2">
                 <div className="flex items-center justify-center mb-2">
                   <h3 className="text-lg font-bold text-white-100 truncate border-b-4 border-white/15 px-5 ">
                     {page.title}
                   </h3>
                 </div>
 
-                <div className="mb-4 px-5">
-                  <p className="text-sm text-white-100/90 flex items-center">
-                    slug: /{page.slug}
+                <div className="mb-4 p-3 flex flex-col justify-center items-center space-y-0.5 bg-bg-200 rounded-2xl">
+                  <p className="text-sm text-white-100/70 px-4 bg-bg-200">
+                    <span className="text-sky-300">{page.contentCount}</span>{" "}
+                    bloques de contenido
                   </p>
-                  <p className="text-xs text-white-100/70 mt-1">
-                    Actualizado el {formatDate(page.updatedAt)}
+                  <p className="text-xs text-white-100/70 mt-1 text-nowrap">
+                    <span className="text-amber-200">Actualizado</span> el{" "}
+                    {formatDate(page.updatedAt)}
                   </p>
-                </div>
-
-                <div className="mb-4 px-5">
-                  <p className="text-sm text-white-100/70">
-                    {page.contentCount} bloques de contenido
-                  </p>
-                  <p className="text-xs text-white-100/70">
-                    Creado el {formatDate(page.createdAt)}
+                  <p className="text-xs text-white-100/70 text-nowrap ">
+                    <span className="text-lime-100">Creado</span> el{" "}
+                    {formatDate(page.createdAt)}
                   </p>
                 </div>
 
@@ -205,7 +195,7 @@ const PageManagement: React.FC = () => {
                   <Link
                     to={`/${page.slug}`}
                     target="_blank"
-                    className="text-white/80 bg-bg-200 px-4 py-2 hover:text-white-100/70 transition-colors duration-300 text-sm font-medium"
+                    className="text-white/80 border-t border-bg-300 bg-bg-400 rounded-full px-4 py-2 hover:text-white-100/70 transition-colors duration-300 text-sm font-light"
                   >
                     Ver página en vivo
                   </Link>
