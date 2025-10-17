@@ -4,7 +4,30 @@ import { apiCache } from "../../../../utils/apiCache";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export class BlogService {
-  static async getBlogPosts(): Promise<BlogPost[]> {
+  static async getBlogPosts(skipCache = false): Promise<BlogPost[]> {
+    if (skipCache) {
+      // No usar caché, ir directo a la API
+      if (!API_URL) {
+        throw new Error("API_URL not defined");
+      }
+
+      const response = await fetch(`${API_URL}/noticias`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch blog posts from API: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const posts: BlogPost[] = await response.json();
+      return posts;
+    }
+
     return apiCache.get('blog-posts', async () => {
       if (!API_URL) {
         throw new Error("API_URL not defined");

@@ -4,12 +4,13 @@ import { useAuth } from "../../../hooks/useAuth";
 import { FiSave, FiEye, FiArrowLeft } from "react-icons/fi";
 import { useBlogManagement } from "../blog-management";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
+import MultimediaSelector from "../../../components/editor/MultimediaSelector";
 
 const BlogEditor: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useAuth();
-  const { blogPosts, createBlogPost, updateBlogPost } = useBlogManagement();
+  const { blogPosts, createBlogPost, updateBlogPost, refresh } = useBlogManagement();
 
   const isEditing = !!id;
   const existingPost = isEditing
@@ -113,6 +114,9 @@ const BlogEditor: React.FC = () => {
         createBlogPost(postData);
       }
 
+      // Actualizar la lista de posts
+      await refresh();
+      
       navigate("/admin/blog");
     } catch (error) {
       console.error("Error saving post:", error);
@@ -230,17 +234,16 @@ const BlogEditor: React.FC = () => {
             <label className="block text-sm font-medium text-bg-300 mb-2">
               Imagen Destacada
             </label>
-            <input
-              type="url"
+            <MultimediaSelector
               value={formData.featuredImage}
-              onChange={(e) =>
+              onChange={(value) =>
                 setFormData((prev) => ({
                   ...prev,
-                  featuredImage: e.target.value,
+                  featuredImage: value,
                 }))
               }
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
-              placeholder="https://ejemplo.com/imagen.jpg"
+              placeholder="URL de la imagen o selecciona del multimedia"
+              acceptedTypes={["image", "svg"]}
             />
             {formData.featuredImage && (
               <div className="mt-3">
