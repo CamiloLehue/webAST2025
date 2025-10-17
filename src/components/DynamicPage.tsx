@@ -929,49 +929,56 @@ const TestimonialsSection: React.FC<{ data: any }> = ({ data }) => {
   }
 
   return (
-    <section className="  bg-gray-50">
-      <div className="mx-auto max-w-6xl">
+    <section className="w-screen py-10  bg-white-100">
+      <div className="mx-auto max-w-7xl flex flex-col justify-center items-center">
         {title && (
-          <h2 className="text-3xl font-bold text-center mb-12">{title}</h2>
+          <div className="bg-white flex justify-center items-center py-1 px-5 rounded ">
+            <h2 className="text-3xl font-bold text-primary-100 ">{title}</h2>
+          </div>
         )}
         <div
-          className={`${
+          className={` py-15 ${
             layout === "carousel"
               ? "flex overflow-x-auto gap-6"
-              : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
           }`}
         >
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="bg-white rounded-lg shadow-md p-6 flex-shrink-0 w-80"
+              className="bg-white rounded-lg p-6 flex-shrink-0 w-80"
             >
-              <div className="flex items-center mb-4">
+              <div className="relative flex flex-col justify-end items-center mb-4  border-b border-b-zinc-200 pb-3 h-35">
                 {testimonial.avatar && (
-                  <img
-                    src={processImageUrl(testimonial.avatar)}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4"
-                  />
+                  <div className="absolute left-[50%] -translate-x-1/2 -top-15 rounded-full p-2 bg-white">
+                    <img
+                      src={processImageUrl(testimonial.avatar)}
+                      alt={testimonial.name}
+                      className="w-30 h-30 rounded-full"
+                    />
+                  </div>
                 )}
-                <div>
+                <div className="flex flex-col justify-center items-center">
                   <h4 className="font-semibold">{testimonial.name}</h4>
                   {testimonial.role && (
                     <p className="text-bg-200 text-sm">
                       {testimonial.role}
-                      {testimonial.company && ` at ${testimonial.company}`}
+                      {testimonial.company && ` de ${testimonial.company}`}
                     </p>
                   )}
                 </div>
               </div>
               <div className="text-bg-300 mb-4">
                 <MarkdownContent
-                  content={testimonial.content}
+                  content={
+                    testimonial.content.slice(0, 150) +
+                    (testimonial.content.length > 150 ? "..." : "")
+                  }
                   allowHtml={true}
                 />
               </div>
               {testimonial.rating && (
-                <div className="flex">
+                <div className="flex justify-center items-center rounded-full px-5 py-1 bg-white-100">
                   {[...Array(5)].map((_, i) => (
                     <span
                       key={i}
@@ -1027,18 +1034,20 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
   };
 
   return (
-    <section className=" ">
-      <div className="mx-auto max-w-6xl">
+    <section className="relative  w-screen py-5">
+      <div className="mx-auto max-w-7xl">
         {title && (
-          <h2 className="text-3xl font-bold text-center mb-4">{title}</h2>
+          <h2 className="text-3xl text-white font-bold text-center mb-4">
+            {title}
+          </h2>
         )}
         {description && (
-          <div className="text-center text-bg-200 mb-12">
+          <div className="text-center text-white-100  bg-white-100 rounded-t-xl p-5">
             <MarkdownContent content={description} allowHtml={true} />
           </div>
         )}
         <div
-          className={`${
+          className={` bg-white-100 ${
             layout === "list"
               ? "space-y-8"
               : `grid grid-cols-1 ${
@@ -1050,15 +1059,21 @@ const FeaturesSection: React.FC<{ data: any }> = ({ data }) => {
           {features.map((feature) => (
             <div
               key={feature.id}
-              className={`${
-                layout === "list" ? "flex items-start space-x-4" : "text-center"
-              }`}
+              className={`
+                bg-white rounded-lg
+                ${
+                  layout === "list"
+                    ? "flex items-start space-x-4"
+                    : "text-center flex justify-center items-center flex-col p-5 overflow-hidden"
+                }`}
             >
               {feature.icon && (
                 <div
-                  className={`text-3xl mb-4 ${layout === "list" ? "mt-1" : ""}`}
+                  className={`text-3xl flex bg-gradient-to-bl rounded-full p-1 from-primary-100 justify-center items-center mb-4 ${
+                    layout === "list" ? "mt-1" : ""
+                  }`}
                 >
-                  {feature.icon}
+                  <img src={feature.icon} alt="" className="w-8 h-8" />
                 </div>
               )}
               {feature.image && (
@@ -1254,7 +1269,8 @@ const CurvedSection: React.FC<{ data: any }> = ({ data }) => {
           clipPath: data.clipPath || "ellipse(100% 100% at 50% 100%)",
         }}
       ></div>
-      {data.backgroundColor === "#111111" || data.backgroundColor === "white" ? (
+      {data.backgroundColor === "#111111" ||
+      data.backgroundColor === "white" ? (
         ""
       ) : (
         <div className="absolute  bottom-10 w-100   left-[50%] blur-3xl -translate-x-1/2 h-40 bg-orange-300  rounded-full"></div>

@@ -6,6 +6,8 @@ import MultimediaSelector from "../../../components/editor/MultimediaSelector";
 import type {
   ContentSection,
   ContentSectionType,
+  Testimonial,
+  Feature,
 } from "../page-management/types/pageTypes";
 import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
 import {
@@ -590,8 +592,8 @@ const getDefaultSectionData = (
         content: "Contenido de la sección con fondo curvo...",
         iconSrc: "",
         iconAlt: "Ícono",
-        backgroundColor: "#181a1f",
-        textColor: "black",
+        backgroundColor: "#ff3030",
+        textColor: "white",
         clipPath: "ellipse(100% 100% at 50% 100%)",
       };
     case "text":
@@ -1999,23 +2001,139 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Testimonios
             </label>
-            <p className="text-sm text-gray-500 mb-2">
-              Gestión avanzada de testimonios disponible próximamente
-            </p>
-            <textarea
-              rows={6}
-              value={JSON.stringify(data.testimonials || [], null, 2)}
-              onChange={(e) => {
-                try {
-                  const testimonials = JSON.parse(e.target.value);
-                  updateField("testimonials", testimonials);
-                } catch {
-                  // json invalido porsiacaso
-                }
-              }}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
-              placeholder="Array de testimonios en formato JSON"
-            />
+            <div className="mt-2 space-y-4">
+              {(data.testimonials || []).map((testimonial: Testimonial, index: number) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-sm font-medium text-bg-100">Testimonio {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newTestimonials = (data.testimonials || []).filter((_: Testimonial, i: number) => i !== index);
+                        updateField("testimonials", newTestimonials);
+                      }}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Nombre *</label>
+                      <input
+                        type="text"
+                        value={testimonial.name || ""}
+                        onChange={(e) => {
+                          const newTestimonials = [...(data.testimonials || [])];
+                          newTestimonials[index] = { ...testimonial, name: e.target.value };
+                          updateField("testimonials", newTestimonials);
+                        }}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                        placeholder="Nombre del cliente"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Cargo</label>
+                      <input
+                        type="text"
+                        value={testimonial.role || ""}
+                        onChange={(e) => {
+                          const newTestimonials = [...(data.testimonials || [])];
+                          newTestimonials[index] = { ...testimonial, role: e.target.value };
+                          updateField("testimonials", newTestimonials);
+                        }}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                        placeholder="Director, CEO..."
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Empresa</label>
+                      <input
+                        type="text"
+                        value={testimonial.company || ""}
+                        onChange={(e) => {
+                          const newTestimonials = [...(data.testimonials || [])];
+                          newTestimonials[index] = { ...testimonial, company: e.target.value };
+                          updateField("testimonials", newTestimonials);
+                        }}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                        placeholder="Nombre de la empresa"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Calificación (1-5)</label>
+                      <select
+                        value={testimonial.rating || 5}
+                        onChange={(e) => {
+                          const newTestimonials = [...(data.testimonials || [])];
+                          newTestimonials[index] = { ...testimonial, rating: parseInt(e.target.value) };
+                          updateField("testimonials", newTestimonials);
+                        }}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                      >
+                        <option value={1}>1 estrella</option>
+                        <option value={2}>2 estrellas</option>
+                        <option value={3}>3 estrellas</option>
+                        <option value={4}>4 estrellas</option>
+                        <option value={5}>5 estrellas</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-bg-300 mb-1">Avatar</label>
+                    <MultimediaSelector
+                      value={testimonial.avatar || ""}
+                      onChange={(value: string) => {
+                        const newTestimonials = [...(data.testimonials || [])];
+                        newTestimonials[index] = { ...testimonial, avatar: value };
+                        updateField("testimonials", newTestimonials);
+                      }}
+                      placeholder="Foto del cliente (opcional)"
+                      acceptedTypes={["image"]}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-bg-300 mb-1">Testimonio *</label>
+                    <RichTextEditor
+                      value={testimonial.content || ""}
+                      onChange={(value) => {
+                        const newTestimonials = [...(data.testimonials || [])];
+                        newTestimonials[index] = { ...testimonial, content: value };
+                        updateField("testimonials", newTestimonials);
+                      }}
+                      placeholder="Escribe el testimonio del cliente..."
+                      rows={4}
+                    />
+                  </div>
+                </div>
+              ))}
+              
+              <button
+                type="button"
+                onClick={() => {
+                  const newTestimonial = {
+                    id: `testimonial-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    name: "",
+                    role: "",
+                    company: "",
+                    avatar: "",
+                    content: "",
+                    rating: 5
+                  };
+                  const newTestimonials = [...(data.testimonials || []), newTestimonial];
+                  updateField("testimonials", newTestimonials);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400 transition-colors"
+              >
+                + Agregar testimonio
+              </button>
+            </div>
           </div>
         </div>
       );
@@ -2039,12 +2157,11 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Descripción
             </label>
-            <textarea
-              rows={3}
+            <RichTextEditor
               value={data.description || ""}
-              onChange={(e) => updateField("description", e.target.value)}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+              onChange={(value) => updateField("description", value)}
               placeholder="Descripción de la sección"
+              rows={3}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -2082,23 +2199,101 @@ const ContentSectionForm: React.FC<ContentSectionFormProps> = ({
             <label className="block text-sm font-medium text-bg-300">
               Características
             </label>
-            <p className="text-sm text-gray-500 mb-2">
-              Gestión avanzada de características disponible próximamente
-            </p>
-            <textarea
-              rows={6}
-              value={JSON.stringify(data.features || [], null, 2)}
-              onChange={(e) => {
-                try {
-                  const features = JSON.parse(e.target.value);
-                  updateField("features", features);
-                } catch {
-                  // json invalido porsiacaso
-                }
-              }}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-sm font-mono"
-              placeholder="Array de características en formato JSON"
-            />
+            <div className="mt-2 space-y-4">
+              {(data.features || []).map((feature: Feature, index: number) => (
+                <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-sm font-medium text-bg-100">Característica {index + 1}</h4>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newFeatures = (data.features || []).filter((_: Feature, i: number) => i !== index);
+                        updateField("features", newFeatures);
+                      }}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FiTrash2 size={16} />
+                    </button>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-xs font-medium text-bg-300 mb-1">Título *</label>
+                    <input
+                      type="text"
+                      value={feature.title || ""}
+                      onChange={(e) => {
+                        const newFeatures = [...(data.features || [])];
+                        newFeatures[index] = { ...feature, title: e.target.value };
+                        updateField("features", newFeatures);
+                      }}
+                      className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-accent-100 focus:border-accent-100"
+                      placeholder="Título de la característica"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-bg-300 mb-1">Descripción *</label>
+                    <RichTextEditor
+                      value={feature.description || ""}
+                      onChange={(value) => {
+                        const newFeatures = [...(data.features || [])];
+                        newFeatures[index] = { ...feature, description: value };
+                        updateField("features", newFeatures);
+                      }}
+                      placeholder="Descripción de la característica..."
+                      rows={3}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Ícono (URL)</label>
+                      <MultimediaSelector
+                        value={feature.icon || ""}
+                        onChange={(value: string) => {
+                          const newFeatures = [...(data.features || [])];
+                          newFeatures[index] = { ...feature, icon: value };
+                          updateField("features", newFeatures);
+                        }}
+                        placeholder="Ícono o imagen pequeña"
+                        acceptedTypes={["image", "svg"]}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-bg-300 mb-1">Imagen (URL)</label>
+                      <MultimediaSelector
+                        value={feature.image || ""}
+                        onChange={(value: string) => {
+                          const newFeatures = [...(data.features || [])];
+                          newFeatures[index] = { ...feature, image: value };
+                          updateField("features", newFeatures);
+                        }}
+                        placeholder="Imagen ilustrativa (opcional)"
+                        acceptedTypes={["image"]}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              
+              <button
+                type="button"
+                onClick={() => {
+                  const newFeature = {
+                    id: `feature-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                    title: "",
+                    description: "",
+                    icon: "",
+                    image: ""
+                  };
+                  const newFeatures = [...(data.features || []), newFeature];
+                  updateField("features", newFeatures);
+                }}
+                className="w-full px-3 py-2 text-sm border-2 border-dashed border-gray-300 rounded-md text-bg-200 hover:border-gray-400 transition-colors"
+              >
+                + Agregar característica
+              </button>
+            </div>
           </div>
         </div>
       );
