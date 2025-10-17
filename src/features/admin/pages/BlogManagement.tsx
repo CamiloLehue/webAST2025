@@ -8,32 +8,45 @@ import {
   FiCalendar,
   FiUser,
   FiFileText,
+  FiRefreshCw,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const BlogManagement: React.FC = () => {
-  const { blogPosts, deleteBlogPost, loading, error } = useBlogManagement();
+  const { blogPosts, deleteBlogPost, loading, error, refresh } = useBlogManagement();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "published" | "draft"
   >("all");
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Verificar que blogPosts esté definido antes de hacer filter
-  const filteredPosts = (blogPosts || []).filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" ||
-      (statusFilter === "published" && post.isPublished) ||
-      (statusFilter === "draft" && !post.isPublished);
-    return matchesSearch && matchesStatus;
-  });
+  const filteredPosts = (blogPosts || [])
+    .filter((post) => {
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.content.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "published" && post.isPublished) ||
+        (statusFilter === "draft" && !post.isPublished);
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.publishedAt || a.updatedAt || a.createdAt).getTime();
+      const dateB = new Date(b.publishedAt || b.updatedAt || b.createdAt).getTime();
+      return dateB - dateA;
+    });
 
   const handleDeletePost = (id: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar este post?")) {
       deleteBlogPost(id);
     }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    await refresh();
+    setIsRefreshing(false);
   };
 
   const formatDate = (dateString: string) => {
@@ -54,16 +67,25 @@ const BlogManagement: React.FC = () => {
             Administra los posts y contenido del blog
           </p>
         </div>
-        <Link
-          to="/admin/blog/new"
-          className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
-        >
-          <FiPlus className="mr-2 h-4 w-4" />
-          Nuevo Post
-        </Link>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="inline-flex items-center px-4 py-2 bg-bg-300 text-white text-sm font-medium rounded-md hover:bg-bg-400 disabled:opacity-50"
+            title="Actualizar lista"
+          >
+            <FiRefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          </button>
+          <Link
+            to="/admin/blog/new"
+            className="inline-flex items-center px-4 py-2 bg-accent-100 text-white text-sm font-medium rounded-md hover:bg-accent-200"
+          >
+            <FiPlus className="mr-2 h-4 w-4" />
+            Nuevo Post
+          </Link>
+        </div>
       </div>
 
-      {/* Error Message */}
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-md p-4">
           <div className="flex">
@@ -74,7 +96,6 @@ const BlogManagement: React.FC = () => {
         </div>
       )}
 
-      {/* Loading State */}
       {loading ? (
         <div className="bg-bg-200 min-h-screen h-full rounded-lg shadow p-6">
           <div className="animate-pulse">
@@ -88,7 +109,6 @@ const BlogManagement: React.FC = () => {
         </div>
       ) : (
         <div className="space-y-4">
-          {/* Filters */}
           <div className="bg-bg-100 p-4 rounded-lg shadow space-y-4 sm:space-y-0 sm:flex sm:items-center sm:space-x-4">
             <div className="flex-1">
               <input
@@ -116,7 +136,6 @@ const BlogManagement: React.FC = () => {
             </div>
           </div>
 
-          {/* Posts List */}
           <div className="bg-bg-300 shadow rounded-lg">
             {filteredPosts.length === 0 ? (
               <div className="p-12 text-center">

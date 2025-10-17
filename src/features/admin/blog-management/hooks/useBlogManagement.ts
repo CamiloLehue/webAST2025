@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type {
   BlogPost,
   BlogCategory,
@@ -20,7 +20,8 @@ export const useBlogManagement = () => {
       try {
         setLoading(true);
         setError(null);
-        const posts = await BlogService.getBlogPosts();
+        // Usar skipCache en admin para obtener datos frescos siempre
+        const posts = await BlogService.getBlogPosts(true);
         const cats = await BlogService.getBlogCategories();
         
         if (isMounted) {
@@ -49,11 +50,12 @@ export const useBlogManagement = () => {
     };
   }, []);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const posts = await BlogService.getBlogPosts();
+      // Siempre obtener datos frescos sin caché en el admin
+      const posts = await BlogService.getBlogPosts(true);
       const cats = await BlogService.getBlogCategories();
       setBlogPosts(posts);
       setCategories(cats);
@@ -66,7 +68,7 @@ export const useBlogManagement = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Blog Posts Methods
   const createBlogPost = async (
@@ -75,7 +77,8 @@ export const useBlogManagement = () => {
     try {
       setError(null);
       const newPost = await BlogService.createBlogPost(postData);
-      setBlogPosts((prev) => [...prev, newPost]);
+      // Recargar todos los posts para asegurar orden correcto
+      await loadData();
       return newPost;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al crear el post");
@@ -87,9 +90,8 @@ export const useBlogManagement = () => {
     try {
       setError(null);
       await BlogService.updateBlogPost(updatedPost);
-      setBlogPosts((prev) =>
-        prev.map((post) => (post.id === updatedPost.id ? updatedPost : post))
-      );
+      // Recargar todos los posts para asegurar orden correcto
+      await loadData();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al actualizar el post"
@@ -102,7 +104,8 @@ export const useBlogManagement = () => {
     try {
       setError(null);
       await BlogService.deleteBlogPost(id);
-      setBlogPosts((prev) => prev.filter((post) => post.id !== id));
+      // Recargar todos los posts para asegurar lista actualizada
+      await loadData();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Error al eliminar el post"
