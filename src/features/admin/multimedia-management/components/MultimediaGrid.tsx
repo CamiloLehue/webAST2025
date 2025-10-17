@@ -164,7 +164,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
             >
               <div className="text-center">
                 <div className="text-3xl mb-2 flex justify-center">{getCategoryIcon()}</div>
-                <div className="text-xs text-white-100">Error al cargar</div>
+                <div className="text-xs text-white-100">No hay vista previa</div>
                 <div className="text-xs text-blue-500">
                   Click para reintentar
                 </div>
