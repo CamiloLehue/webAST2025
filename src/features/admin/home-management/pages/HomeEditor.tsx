@@ -4,10 +4,12 @@ import { useHomeManagement } from "../hooks/useHomeManagement";
 import type { SliderItem, SliderSection, HeroSection, IASection, VideoSection, ContactSection } from "../types/homeTypes";
 import MultimediaSelector from "../../../../components/editor/MultimediaSelector";
 import { FiLoader, FiSave, FiEye, FiPlus, FiTrash2, FiChevronUp, FiChevronDown } from "react-icons/fi";
+import { useToast } from "../../../../hooks/useToast";
 
 const HomeEditor: React.FC = () => {
   const navigate = useNavigate();
   const { homeData, loading, error, isSaving, createHome, updateHome, loadHomeData } = useHomeManagement();
+  const { showToast } = useToast();
 
   const [formData, setFormData] = useState({
     sliderSection: {
@@ -99,13 +101,13 @@ const HomeEditor: React.FC = () => {
       }
       
       console.log("Home guardado:", savedHome);
-      alert("Guardado exitosamente");
+      showToast("Guardado exitosamente", "success");
       
       // Recargar los datos para asegurar que tenemos el ID correcto
       await loadHomeData();
     } catch (err) {
       console.error("Error saving:", err);
-      alert("Error al guardar: " + (err instanceof Error ? err.message : "Error desconocido"));
+      showToast("Error al guardar: " + (err instanceof Error ? err.message : "Error desconocido"), "error");
     }
   };
 
