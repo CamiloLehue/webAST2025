@@ -5,6 +5,8 @@ import { FiSave, FiEye, FiArrowLeft } from "react-icons/fi";
 import { useBlogManagement } from "../blog-management";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
 import MultimediaSelector from "../../../components/editor/MultimediaSelector";
+import { useUnsavedChanges } from "../../../hooks/useUnsavedChanges";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 
 const BlogEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +18,10 @@ const BlogEditor: React.FC = () => {
   const existingPost = isEditing
     ? blogPosts.find((post) => post.id === id)
     : null;
+
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [initialData, setInitialData] = useState<string>("");
+  const { showConfirmDialog, confirmNavigation, cancelNavigation } = useUnsavedChanges(hasUnsavedChanges);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -33,7 +39,7 @@ const BlogEditor: React.FC = () => {
 
   useEffect(() => {
     if (existingPost) {
-      setFormData({
+      const data = {
         title: existingPost.title,
         slug: existingPost.slug,
         excerpt: existingPost.excerpt,
@@ -42,9 +48,21 @@ const BlogEditor: React.FC = () => {
         category: existingPost.category,
         tags: existingPost.tags,
         isPublished: existingPost.isPublished,
-      });
+      };
+      
+      setFormData(data);
+      setInitialData(JSON.stringify(data));
+      setHasUnsavedChanges(false);
     }
   }, [existingPost]);
+
+  // Detectar cambios en el formulario
+  useEffect(() => {
+    if (initialData) {
+      const currentData = JSON.stringify(formData);
+      setHasUnsavedChanges(currentData !== initialData);
+    }
+  }, [formData, initialData]);
 
   const generateSlug = (title: string) => {
     return title
@@ -117,6 +135,9 @@ const BlogEditor: React.FC = () => {
       // Actualizar la lista de posts
       await refresh();
       
+      // Resetear el estado de cambios sin guardar antes de navegar
+      setHasUnsavedChanges(false);
+      
       navigate("/admin/blog");
     } catch (error) {
       console.error("Error saving post:", error);
@@ -127,7 +148,7 @@ const BlogEditor: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-5">
+    <div className="w-full  space-y-6 p-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <button
@@ -347,6 +368,17 @@ const BlogEditor: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <ConfirmDialog
+        isOpen={showConfirmDialog}
+        title="Cambios sin guardar"
+        message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+        confirmText="Salir sin guardar"
+        cancelText="Continuar editando"
+        type="warning"
+        onConfirm={confirmNavigation}
+        onCancel={cancelNavigation}
+      />
     </div>
   );
 };
