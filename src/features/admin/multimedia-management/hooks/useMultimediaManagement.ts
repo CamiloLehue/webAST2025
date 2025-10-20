@@ -11,6 +11,7 @@ import type {
   MultimediaCategory
 } from '../types/multimediaTypes';
 import { multimediaService } from '../services/multimediaService';
+import { useToast } from '../../../../hooks/useToast';
 
 interface UseMultimediaManagementReturn {
   // Estado
@@ -60,6 +61,8 @@ const defaultFilters: MultimediaFilters = {
 };
 
 export function useMultimediaManagement(): UseMultimediaManagementReturn {
+  const { showToast } = useToast();
+  
   // Estado principal
   const [files, setFiles] = useState<MultimediaFile[]>([]);
   const [loading, setLoading] = useState(false);
@@ -152,6 +155,7 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       // Recargar archivos
       await loadFiles();
 
+      showToast('Archivo subido exitosamente', 'success');
       return result;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al subir archivo';
@@ -163,9 +167,10 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
           : item
       ));
 
+      showToast(errorMessage, 'error');
       throw err;
     }
-  }, [loadFiles]);
+  }, [loadFiles, showToast]);
 
   // Subir múltiples archivos
   const uploadMultipleFiles = useCallback(async (fileRequests: CreateMultimediaRequest[]): Promise<MultimediaFile[]> => {
@@ -192,15 +197,17 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
         file.id === id ? updatedFile : file
       ));
 
+      showToast('Archivo actualizado exitosamente', 'success');
       return updatedFile;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al actualizar archivo';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   // Eliminar archivo
   const deleteFile = useCallback(async (id: string): Promise<void> => {
@@ -214,14 +221,16 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       setFiles(prev => prev.filter(file => file.id !== id));
       setTotalFiles(prev => prev - 1);
 
+      showToast('Archivo eliminado exitosamente', 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al eliminar archivo';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   // Eliminar múltiples archivos
   const deleteMultipleFiles = useCallback(async (ids: string[]): Promise<void> => {
@@ -235,14 +244,16 @@ export function useMultimediaManagement(): UseMultimediaManagementReturn {
       setFiles(prev => prev.filter(file => !ids.includes(file.id)));
       setTotalFiles(prev => prev - ids.length);
 
+      showToast(`${ids.length} archivos eliminados exitosamente`, 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al eliminar archivos';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   // Refrescar datos
   const refreshData = useCallback(async () => {

@@ -9,6 +9,7 @@ import {
   FiChevronDown,
   FiChevronRight,
 } from "react-icons/fi";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 
 const MenuManagement: React.FC = () => {
   const {
@@ -26,6 +27,12 @@ const MenuManagement: React.FC = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
   const [addingSubmenuTo, setAddingSubmenuTo] = useState<string | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ 
+    show: boolean; 
+    id: string; 
+    title: string; 
+    parentId?: string 
+  } | null>(null);
 
   const toggleExpanded = (itemId: string) => {
     const newExpanded = new Set(expandedItems);
@@ -54,16 +61,19 @@ const MenuManagement: React.FC = () => {
     }
   };
 
-  const handleDeleteItem = async (id: string, parentId?: string) => {
-    if (
-      confirm("¿Estás seguro de que quieres eliminar este elemento del menú?")
-    ) {
+  const handleDeleteItem = async (id: string, title: string, parentId?: string) => {
+    setConfirmDelete({ show: true, id, title, parentId });
+  };
+
+  const confirmDeleteItem = async () => {
+    if (confirmDelete) {
       try {
-        if (parentId) {
-          await deleteSubmenuItem(parentId, id);
+        if (confirmDelete.parentId) {
+          await deleteSubmenuItem(confirmDelete.parentId, confirmDelete.id);
         } else {
-          await deleteMenuItem(id);
+          await deleteMenuItem(confirmDelete.id);
         }
+        setConfirmDelete(null);
       } catch (error) {
         console.error("Error al eliminar elemento:", error);
       }
@@ -175,7 +185,7 @@ const MenuManagement: React.FC = () => {
                   <FiEdit2 className="h-4 w-4" />
                 </button>
                 <button
-                  onClick={() => handleDeleteItem(item.id, parentId)}
+                  onClick={() => handleDeleteItem(item.id, item.title, parentId)}
                   className="p-2 text-white hover:text-primary-100"
                 >
                   <FiTrash2 className="h-4 w-4" />
@@ -268,6 +278,17 @@ const MenuManagement: React.FC = () => {
             .map((item) => renderMenuItem(item))}
         </div>
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmDelete?.show ?? false}
+        title="Eliminar Elemento del Menú"
+        message={`¿Está seguro de que desea eliminar "${confirmDelete?.title}"? ${confirmDelete?.parentId ? 'Este submenú' : 'Este elemento y todos sus submenús'} se eliminarán permanentemente.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeleteItem}
+        onCancel={() => setConfirmDelete(null)}
+      />
     </div>
   );
 };

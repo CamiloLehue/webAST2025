@@ -8,8 +8,10 @@ import type {
   ChangePasswordRequest
 } from '../types/userTypes';
 import { userService } from '../services/userService';
+import { useToast } from '../../../../hooks/useToast';
 
 export const useUserManagement = () => {
+  const { showToast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,15 +41,17 @@ export const useUserManagement = () => {
     try {
       const newUser = await userService.createUser(userData);
       setUsers(prevUsers => [newUser, ...prevUsers]);
+      showToast('Usuario creado exitosamente', 'success');
       return newUser;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al crear usuario';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   const updateUser = useCallback(async (id: string, userData: UpdateUserRequest): Promise<User> => {
     setLoading(true);
@@ -59,15 +63,17 @@ export const useUserManagement = () => {
           user.id === id ? updatedUser : user
         )
       );
+      showToast('Usuario actualizado exitosamente', 'success');
       return updatedUser;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al actualizar usuario';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   const deleteUser = useCallback(async (id: string): Promise<void> => {
     setLoading(true);
@@ -75,28 +81,32 @@ export const useUserManagement = () => {
     try {
       await userService.deleteUser(id);
       setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
+      showToast('Usuario eliminado exitosamente', 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al eliminar usuario';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   const changePassword = useCallback(async (id: string, passwordData: ChangePasswordRequest): Promise<void> => {
     setLoading(true);
     setError(null);
     try {
       await userService.changePassword(id, passwordData);
+      showToast('Contraseña cambiada exitosamente', 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al cambiar contraseña';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   const toggleUserStatus = useCallback(async (id: string): Promise<void> => {
     setLoading(true);
@@ -108,14 +118,16 @@ export const useUserManagement = () => {
           user.id === id ? updatedUser : user
         )
       );
+      showToast('Estado del usuario actualizado', 'success');
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Error al cambiar estado del usuario';
       setError(errorMessage);
+      showToast(errorMessage, 'error');
       throw err;
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showToast]);
 
   const getCurrentUser = useCallback(async (): Promise<User> => {
     setLoading(true);

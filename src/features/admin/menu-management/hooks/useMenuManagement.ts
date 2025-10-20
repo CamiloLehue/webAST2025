@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import type { MenuItem } from "../types/menuTypes";
 import { MenuService } from "../services/menuService";
+import { useToast } from "../../../../hooks/useToast";
 
 export const useMenuManagement = () => {
+  const { showToast } = useToast();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,11 +31,12 @@ export const useMenuManagement = () => {
       setError(null);
       const newItem = MenuService.addMenuItem(item);
       setMenuItems((prev) => [...prev, newItem]);
+      showToast("Elemento del menú agregado exitosamente", "success");
       return newItem;
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al agregar elemento"
-      );
+      const errorMsg = err instanceof Error ? err.message : "Error al agregar elemento";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };
@@ -45,10 +48,11 @@ export const useMenuManagement = () => {
       setMenuItems((prev) =>
         prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
       );
+      showToast("Elemento del menú actualizado exitosamente", "success");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al actualizar elemento"
-      );
+      const errorMsg = err instanceof Error ? err.message : "Error al actualizar elemento";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };
@@ -58,10 +62,11 @@ export const useMenuManagement = () => {
       setError(null);
       MenuService.deleteMenuItem(id);
       setMenuItems((prev) => prev.filter((item) => item.id !== id));
+      showToast("Elemento del menú eliminado exitosamente", "success");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al eliminar elemento"
-      );
+      const errorMsg = err instanceof Error ? err.message : "Error al eliminar elemento";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };

@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import type { MenuItem, PageContent } from "../types/content";
 import { menuService } from "../services/menuService";
+import { useToast } from "../hooks/useToast";
 
 interface ContentContextType {
   menuItems: MenuItem[];
@@ -32,6 +33,7 @@ interface ContentProviderProps {
 export const ContentProvider: React.FC<ContentProviderProps> = ({
   children,
 }) => {
+  const { showToast } = useToast();
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [pages, setPages] = useState<PageContent[]>([]);
   const [loading, setLoading] = useState(true);
@@ -99,8 +101,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
       setMenuItems((prev) =>
         prev.map((menuItem) => (menuItem.id === item.id ? updatedItem : menuItem))
       );
+      showToast('Elemento del menú actualizado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar menú');
+      const errorMsg = err instanceof Error ? err.message : 'Error al actualizar menú';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };
@@ -110,8 +115,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
       setError(null);
       await menuService.deleteMenuItem(id);
       setMenuItems((prev) => prev.filter((item) => item.id !== id));
+      showToast('Elemento del menú eliminado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al eliminar menú');
+      const errorMsg = err instanceof Error ? err.message : 'Error al eliminar menú';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };
@@ -127,8 +135,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
       setMenuItems((prev) =>
         [...prev, newItem].sort((a, b) => a.order - b.order)
       );
+      showToast('Elemento del menú agregado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear menú');
+      const errorMsg = err instanceof Error ? err.message : 'Error al crear menú';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };
@@ -153,8 +164,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
           return menuItem;
         })
       );
+      showToast('Submenú agregado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear submenu');
+      const errorMsg = err instanceof Error ? err.message : 'Error al crear submenu';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };
@@ -177,8 +191,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
           return menuItem;
         })
       );
+      showToast('Submenú actualizado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al actualizar submenu');
+      const errorMsg = err instanceof Error ? err.message : 'Error al actualizar submenu';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };
@@ -199,8 +216,11 @@ export const ContentProvider: React.FC<ContentProviderProps> = ({
           return menuItem;
         })
       );
+      showToast('Submenú eliminado exitosamente', 'success');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al eliminar submenu');
+      const errorMsg = err instanceof Error ? err.message : 'Error al eliminar submenu';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
       throw err;
     }
   };

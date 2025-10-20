@@ -15,6 +15,7 @@ import {
   TbTrash,
   TbX
 } from "react-icons/tb";
+import ConfirmDialog from "../../../../components/common/ConfirmDialog";
 
 interface MultimediaGridProps {
   files: MultimediaFile[];
@@ -56,6 +57,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
     tags: file.tags.join(", "),
   });
   const [showPreview, setShowPreview] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const { imageSrc, isLoading, hasError, retryLoad } = useMultimediaImage(file);
 
@@ -91,9 +93,16 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
     setIsEditing(false);
   };
 
-  const handleDelete = async () => {
-    if (confirm("¿Estás seguro de que quieres eliminar este archivo?")) {
+  const handleDelete = () => {
+    setConfirmDelete(true);
+  };
+
+  const confirmDeleteFile = async () => {
+    try {
       await onDelete(file.id);
+      setConfirmDelete(false);
+    } catch (error) {
+      console.error('Error deleting file:', error);
     }
   };
 
@@ -401,6 +410,17 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmDelete}
+        title="Eliminar Archivo"
+        message={`¿Está seguro de que desea eliminar "${file.filename}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeleteFile}
+        onCancel={() => setConfirmDelete(false)}
+      />
     </div>
   );
 };
@@ -414,6 +434,7 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
   formatFileSize,
 }) => {
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
+  const [confirmDeleteMultiple, setConfirmDeleteMultiple] = useState(false);
 
   const toggleFileSelection = (fileId: string) => {
     setSelectedFiles((prev) =>
@@ -431,13 +452,18 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
     }
   };
 
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = () => {
     if (selectedFiles.length === 0) return;
+    setConfirmDeleteMultiple(true);
+  };
 
-    const confirmMessage = `¿Estás seguro de que quieres eliminar ${selectedFiles.length} archivo(s)?`;
-    if (confirm(confirmMessage)) {
+  const confirmDeleteSelectedFiles = async () => {
+    try {
       await onDeleteMultiple(selectedFiles);
       setSelectedFiles([]);
+      setConfirmDeleteMultiple(false);
+    } catch (error) {
+      console.error('Error deleting files:', error);
     }
   };
 
@@ -530,6 +556,17 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
           </div>
         ))}
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmDeleteMultiple}
+        title="Eliminar Archivos Seleccionados"
+        message={`¿Está seguro de que desea eliminar ${selectedFiles.length} archivo(s)? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeleteSelectedFiles}
+        onCancel={() => setConfirmDeleteMultiple(false)}
+      />
     </div>
   );
 };
