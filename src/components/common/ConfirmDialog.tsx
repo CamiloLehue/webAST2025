@@ -26,13 +26,13 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
   const typeStyles = {
     danger: "bg-red-200 text-red-600",
-    warning: "bg-yellow-100 text-yellow-600",
+    warning: "bg-yellow-100 text-yellow-500",
     info: "bg-blue-100 text-blue-600",
   };
 
   const buttonStyles = {
     danger: "bg-red-600 hover:bg-red-700",
-    warning: "bg-yellow-600 hover:bg-yellow-700",
+    warning: "bg-yellow-500 hover:bg-yellow-600",
     info: "bg-blue-600 hover:bg-blue-700",
   };
 
