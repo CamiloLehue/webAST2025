@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FiSave, FiEye, FiX, FiImage, FiTag } from 'react-icons/fi';
 import type { BlogPost, BlogCategory } from '../types/blogTypes';
 import { useUnsavedChanges } from '../../../../hooks/useUnsavedChanges';
@@ -448,16 +449,19 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         </div>
       </div>
       
-      <ConfirmDialog
-        isOpen={showConfirmDialog}
-        title="Cambios sin guardar"
-        message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
-        confirmText="Salir sin guardar"
-        cancelText="Continuar editando"
-        type="warning"
-        onConfirm={confirmNavigation}
-        onCancel={cancelNavigation}
-      />
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
@@ -30,6 +31,7 @@ import {
   TbTarget,
   TbSquare,
 } from "react-icons/tb";
+import { LoadingScreen } from "../../../components/loading";
 
 const PageEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -274,12 +276,7 @@ const PageEditor: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="flex items-center space-x-2">
-          <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
-          <span className="text-bg-200">Cargando...</span>
-        </div>
-      </div>
+      <LoadingScreen  isVisible={loading} />
     );
   }
 
@@ -548,16 +545,19 @@ const PageEditor: React.FC = () => {
         </div>
       </div>
       
-      <ConfirmDialog
-        isOpen={showConfirmDialog}
-        title="Cambios sin guardar"
-        message="Tienes cambios sin guardar en esta página. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
-        confirmText="Salir sin guardar"
-        cancelText="Continuar editando"
-        type="warning"
-        onConfirm={confirmNavigation}
-        onCancel={cancelNavigation}
-      />
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar en esta página. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
     </div>
   );
 };

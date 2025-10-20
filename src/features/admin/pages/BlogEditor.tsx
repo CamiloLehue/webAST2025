@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import { FiSave, FiEye, FiArrowLeft } from "react-icons/fi";
@@ -369,16 +370,19 @@ const BlogEditor: React.FC = () => {
         </div>
       </div>
       
-      <ConfirmDialog
-        isOpen={showConfirmDialog}
-        title="Cambios sin guardar"
-        message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
-        confirmText="Salir sin guardar"
-        cancelText="Continuar editando"
-        type="warning"
-        onConfirm={confirmNavigation}
-        onCancel={cancelNavigation}
-      />
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
     </div>
   );
 };
