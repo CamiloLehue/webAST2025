@@ -6,8 +6,10 @@ import type {
   BlogStats,
 } from "../types/blogTypes";
 import { BlogService } from "../services/blogService";
+import { useToast } from "../../../../hooks/useToast";
 
 export const useBlogManagement = () => {
+  const { showToast } = useToast();
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,9 +81,12 @@ export const useBlogManagement = () => {
       const newPost = await BlogService.createBlogPost(postData);
       // Recargar todos los posts para asegurar orden correcto
       await loadData();
+      showToast("Post creado exitosamente", "success");
       return newPost;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al crear el post");
+      const errorMsg = err instanceof Error ? err.message : "Error al crear el post";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };
@@ -92,10 +97,11 @@ export const useBlogManagement = () => {
       await BlogService.updateBlogPost(updatedPost);
       // Recargar todos los posts para asegurar orden correcto
       await loadData();
+      showToast("Post actualizado exitosamente", "success");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al actualizar el post"
-      );
+      const errorMsg = err instanceof Error ? err.message : "Error al actualizar el post";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };
@@ -106,10 +112,11 @@ export const useBlogManagement = () => {
       await BlogService.deleteBlogPost(id);
       // Recargar todos los posts para asegurar lista actualizada
       await loadData();
+      showToast("Post eliminado exitosamente", "success");
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Error al eliminar el post"
-      );
+      const errorMsg = err instanceof Error ? err.message : "Error al eliminar el post";
+      setError(errorMsg);
+      showToast(errorMsg, "error");
       throw err;
     }
   };

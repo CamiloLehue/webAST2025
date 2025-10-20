@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import {
@@ -13,9 +13,11 @@ import {
   FiEye,
 } from "react-icons/fi";
 import { getRoleDisplayName } from "../features/admin/user-management/types/userTypes";
+import ConfirmDialog from "../components/common/ConfirmDialog";
 
 const AdminLayout: React.FC = () => {
   const { user, logout, hasPermission } = useAuth();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const menuItems = [
     {
@@ -60,7 +62,12 @@ const AdminLayout: React.FC = () => {
   }
 
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
     logout();
+    setShowLogoutConfirm(false);
   };
 
   return (
@@ -136,6 +143,17 @@ const AdminLayout: React.FC = () => {
           <Outlet />
         </main>
       </div>
+
+      <ConfirmDialog
+        isOpen={showLogoutConfirm}
+        title="Cerrar Sesión"
+        message="¿Está seguro de que desea cerrar sesión? Se le redirigirá a la página de inicio de sesión."
+        confirmText="Cerrar Sesión"
+        cancelText="Cancelar"
+        type="warning"
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutConfirm(false)}
+      />
     </div>
   );
 };

@@ -43,9 +43,9 @@ createRoot(document.getElementById("root")!).render(
   // StrictMode deshabilitado para evitar dobles cargas en desarrollo
   // <StrictMode>
     <AuthProvider>
-      <ContentProvider>
-        <BreakpointProvider>
-          <ToastProvider>
+      <ToastProvider>
+        <ContentProvider>
+          <BreakpointProvider>
             <BrowserRouter>
             <Routes>
               <Route path="/admin/login" element={<AdminLogin />} />
@@ -103,10 +103,10 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>
             </Routes>
-          </BrowserRouter>
-          </ToastProvider>
-        </BreakpointProvider>
-      </ContentProvider>
+            </BrowserRouter>
+          </BreakpointProvider>
+        </ContentProvider>
+      </ToastProvider>
     </AuthProvider>
   // </StrictMode>
 );

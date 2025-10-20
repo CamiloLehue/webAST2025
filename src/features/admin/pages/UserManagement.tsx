@@ -3,6 +3,7 @@ import type { User, UserFilters, CreateUserRequest, UpdateUserRequest } from '..
 import { useUserManagement } from '../user-management/hooks/useUserManagement';
 import { UserTable, UserForm, Pagination } from '../user-management/components';
 import UserFiltersComponent from '../user-management/components/UserFilters';
+import ConfirmDialog from '../../../components/common/ConfirmDialog';
 
 const UserManagement: React.FC = () => {
   const {
@@ -27,6 +28,10 @@ const UserManagement: React.FC = () => {
     limit: 10,
     sortBy: 'created_at',
     sortOrder: 'desc'
+  });
+  const [confirmDelete, setConfirmDelete] = useState<{ show: boolean; user: User | null }>({
+    show: false,
+    user: null
   });
 
   // Fetch users on component mount and when filters change
@@ -76,9 +81,14 @@ const UserManagement: React.FC = () => {
   };
 
   const handleDeleteUser = async (user: User) => {
-    if (window.confirm(`¿Está seguro de que desea eliminar al usuario "${user.name}"?`)) {
+    setConfirmDelete({ show: true, user });
+  };
+
+  const confirmDeleteUser = async () => {
+    if (confirmDelete.user) {
       try {
-        await deleteUser(user.id);
+        await deleteUser(confirmDelete.user.id);
+        setConfirmDelete({ show: false, user: null });
         // Refresh the list
         fetchUsers(filters);
       } catch (err) {
@@ -172,6 +182,17 @@ const UserManagement: React.FC = () => {
           />
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={confirmDelete.show}
+        title="Eliminar Usuario"
+        message={`¿Está seguro de que desea eliminar al usuario "${confirmDelete.user?.name}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeleteUser}
+        onCancel={() => setConfirmDelete({ show: false, user: null })}
+      />
     </div>
   );
 };

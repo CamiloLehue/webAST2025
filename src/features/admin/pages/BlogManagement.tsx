@@ -11,6 +11,7 @@ import {
   FiRefreshCw,
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 
 const BlogManagement: React.FC = () => {
   const { blogPosts, deleteBlogPost, loading, error, refresh } = useBlogManagement();
@@ -19,6 +20,7 @@ const BlogManagement: React.FC = () => {
     "all" | "published" | "draft"
   >("all");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState<{ show: boolean; postId: string; postTitle: string } | null>(null);
 
   const filteredPosts = (blogPosts || [])
     .filter((post) => {
@@ -37,9 +39,18 @@ const BlogManagement: React.FC = () => {
       return dateB - dateA;
     });
 
-  const handleDeletePost = (id: string) => {
-    if (confirm("¿Estás seguro de que quieres eliminar este post?")) {
-      deleteBlogPost(id);
+  const handleDeletePost = (id: string, title: string) => {
+    setConfirmDelete({ show: true, postId: id, postTitle: title });
+  };
+
+  const confirmDeletePost = async () => {
+    if (confirmDelete) {
+      try {
+        await deleteBlogPost(confirmDelete.postId);
+        setConfirmDelete(null);
+      } catch (err) {
+        console.error('Error deleting post:', err);
+      }
     }
   };
 
@@ -226,7 +237,7 @@ const BlogManagement: React.FC = () => {
                           <FiEdit2 className="h-4 w-4" />
                         </Link>
                         <button
-                          onClick={() => handleDeletePost(post.id)}
+                          onClick={() => handleDeletePost(post.id, post.title)}
                           className="p-2 text-white hover:text-red-600"
                           title="Eliminar post"
                         >
@@ -241,6 +252,17 @@ const BlogManagement: React.FC = () => {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmDelete?.show ?? false}
+        title="Eliminar Post"
+        message={`¿Está seguro de que desea eliminar el post "${confirmDelete?.postTitle}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeletePost}
+        onCancel={() => setConfirmDelete(null)}
+      />
     </div>
   );
 };

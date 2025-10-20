@@ -3,16 +3,24 @@ import { usePageList } from "../page-management/hooks/usePageList";
 import { PageService } from "../page-management/services/pageService";
 import { FiEdit2, FiTrash2, FiPlus, FiLoader } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
+import { useToast } from "../../../hooks/useToast";
 
 const PageManagement: React.FC = () => {
   const { pageItems, loading, error, filterPageItems, removePageItem } =
     usePageList();
+  const { showToast } = useToast();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<
     "all" | "published" | "draft"
   >("all");
   const [filteredPages, setFilteredPages] = useState(pageItems);
+  const [confirmDelete, setConfirmDelete] = useState<{
+    show: boolean;
+    pageId: string;
+    pageTitle: string;
+  } | null>(null);
 
   useEffect(() => {
     const filtered = filterPageItems({
@@ -24,13 +32,20 @@ const PageManagement: React.FC = () => {
     setFilteredPages(filtered);
   }, [searchTerm, statusFilter, pageItems, filterPageItems]);
 
-  const handleDeletePage = async (id: string) => {
-    if (confirm("¿Estás seguro de que quieres eliminar esta página?")) {
+  const handleDeletePage = (id: string, title: string) => {
+    setConfirmDelete({ show: true, pageId: id, pageTitle: title });
+  };
+
+  const confirmDeletePage = async () => {
+    if (confirmDelete) {
       try {
-        await PageService.deleteCustomPage(id);
-        removePageItem(id);
+        await PageService.deleteCustomPage(confirmDelete.pageId);
+        removePageItem(confirmDelete.pageId);
+        setConfirmDelete(null);
+        showToast("Página eliminada exitosamente", "success");
       } catch (err) {
         console.error("Error al eliminar la página:", err);
+        showToast("Error al eliminar la página", "error");
       }
     }
   };
@@ -161,7 +176,7 @@ const PageManagement: React.FC = () => {
                     <FiEdit2 className="h-4 w-4" />
                   </Link>
                   <button
-                    onClick={() => handleDeletePage(page.id)}
+                    onClick={() => handleDeletePage(page.id, page.title)}
                     className="p-2 text-white-100/80 hover:text-primary-100"
                     title="Eliminar página"
                   >
@@ -240,6 +255,17 @@ const PageManagement: React.FC = () => {
           </Link>
         </div>
       </div> */}
+
+      <ConfirmDialog
+        isOpen={confirmDelete?.show ?? false}
+        title="Eliminar Página"
+        message={`¿Está seguro de que desea eliminar la página "${confirmDelete?.pageTitle}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        type="danger"
+        onConfirm={confirmDeletePage}
+        onCancel={() => setConfirmDelete(null)}
+      />
     </div>
   );
 };
