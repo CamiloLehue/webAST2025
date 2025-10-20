@@ -1,15 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useHomeManagement } from "../hooks/useHomeManagement";
 import type { SliderItem, SliderSection, HeroSection, IASection, VideoSection, ContactSection } from "../types/homeTypes";
 import MultimediaSelector from "../../../../components/editor/MultimediaSelector";
 import { FiLoader, FiSave, FiEye, FiPlus, FiTrash2, FiChevronUp, FiChevronDown } from "react-icons/fi";
 import { useToast } from "../../../../hooks/useToast";
+import { useUnsavedChanges } from "../../../../hooks/useUnsavedChanges";
+import ConfirmDialog from "../../../../components/common/ConfirmDialog";
 
 const HomeEditor: React.FC = () => {
   const navigate = useNavigate();
   const { homeData, loading, error, isSaving, createHome, updateHome, loadHomeData } = useHomeManagement();
   const { showToast } = useToast();
+
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [initialData, setInitialData] = useState<string>("");
+  const { showConfirmDialog, confirmNavigation, cancelNavigation } = useUnsavedChanges(hasUnsavedChanges);
 
   const [formData, setFormData] = useState({
     sliderSection: {
@@ -48,7 +55,7 @@ const HomeEditor: React.FC = () => {
 
   useEffect(() => {
     if (homeData) {
-      setFormData({
+      const data = {
         sliderSection: homeData.sliderSection || {
           slides: [],
           autoplay: true,
@@ -81,9 +88,21 @@ const HomeEditor: React.FC = () => {
           },
         },
         isPublished: homeData.isPublished || false,
-      });
+      };
+      
+      setFormData(data);
+      setInitialData(JSON.stringify(data));
+      setHasUnsavedChanges(false);
     }
   }, [homeData]);
+
+  // Detectar cambios en el formulario
+  useEffect(() => {
+    if (initialData) {
+      const currentData = JSON.stringify(formData);
+      setHasUnsavedChanges(currentData !== initialData);
+    }
+  }, [formData, initialData]);
 
   const handleSave = async () => {
     try {
@@ -102,6 +121,10 @@ const HomeEditor: React.FC = () => {
       
       console.log("Home guardado:", savedHome);
       showToast("Guardado exitosamente", "success");
+      
+      // Resetear el estado de cambios sin guardar
+      setInitialData(JSON.stringify(formData));
+      setHasUnsavedChanges(false);
       
       // Recargar los datos para asegurar que tenemos el ID correcto
       await loadHomeData();
@@ -201,7 +224,8 @@ const HomeEditor: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6 p-6">
+    <>
+      <div className="w-full max-w-7xl mx-auto space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
@@ -641,7 +665,22 @@ const HomeEditor: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+      </div>
+
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
+    </>
   );
 };
 

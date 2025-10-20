@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FiSave, FiEye, FiX, FiImage, FiTag } from 'react-icons/fi';
 import type { BlogPost, BlogCategory } from '../types/blogTypes';
+import { useUnsavedChanges } from '../../../../hooks/useUnsavedChanges';
+import ConfirmDialog from '../../../../components/common/ConfirmDialog';
 
 interface BlogEditorProps {
   post?: BlogPost;
@@ -19,6 +22,10 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
   onGenerateSlug,
   onValidateSlug
 }) => {
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [initialData, setInitialData] = useState<string>("");
+  const { showConfirmDialog, confirmNavigation, cancelNavigation } = useUnsavedChanges(hasUnsavedChanges);
+  
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -39,7 +46,7 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
 
   useEffect(() => {
     if (post) {
-      setFormData({
+      const data = {
         title: post.title,
         slug: post.slug,
         content: post.content,
@@ -50,9 +57,21 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
         featuredImage: post.featuredImage || '',
         isPublished: post.isPublished,
         publishedAt: post.publishedAt || null
-      });
+      };
+      
+      setFormData(data);
+      setInitialData(JSON.stringify(data));
+      setHasUnsavedChanges(false);
     }
   }, [post]);
+
+  // Detectar cambios en el formulario
+  useEffect(() => {
+    if (initialData) {
+      const currentData = JSON.stringify(formData);
+      setHasUnsavedChanges(currentData !== initialData);
+    }
+  }, [formData, initialData]);
 
   const handleInputChange = (field: string, value: string | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -141,6 +160,10 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
       };
 
       await onSave(postData);
+      
+      // Resetear el estado de cambios sin guardar
+      setInitialData(JSON.stringify(postData));
+      setHasUnsavedChanges(false);
     } catch (error) {
       console.error('Error saving post:', error);
     } finally {
@@ -425,6 +448,20 @@ export const BlogEditor: React.FC<BlogEditorProps> = ({
           )}
         </div>
       </div>
+      
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar en este post. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
     </div>
   );
 };

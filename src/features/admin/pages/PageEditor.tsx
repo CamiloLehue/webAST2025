@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { usePageManagement } from "../page-management/hooks/usePageManagement";
 import RichTextEditor from "../../../components/editor/RichTextEditor";
@@ -11,6 +12,8 @@ import type {
 } from "../page-management/types/pageTypes";
 import { FiSave, FiEye, FiArrowLeft, FiLoader, FiTrash2 } from "react-icons/fi";
 import { useToast } from "../../../hooks/useToast";
+import { useUnsavedChanges } from "../../../hooks/useUnsavedChanges";
+import ConfirmDialog from "../../../components/common/ConfirmDialog";
 import {
   TbArrowNarrowDown,
   TbArrowNarrowUp,
@@ -28,6 +31,7 @@ import {
   TbTarget,
   TbSquare,
 } from "react-icons/tb";
+import { LoadingScreen } from "../../../components/loading";
 
 const PageEditor: React.FC = () => {
   const navigate = useNavigate();
@@ -52,6 +56,10 @@ const PageEditor: React.FC = () => {
     ? customPages.find((page) => page.id === id)
     : null;
 
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [initialData, setInitialData] = useState<string>("");
+  const { showConfirmDialog, confirmNavigation, cancelNavigation } = useUnsavedChanges(hasUnsavedChanges);
+
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
@@ -66,28 +74,44 @@ const PageEditor: React.FC = () => {
 
   useEffect(() => {
     if (existingPage) {
-      setFormData({
+      const data = {
         title: existingPage.title,
         slug: existingPage.slug,
         metaTitle: existingPage.metaTitle || "",
         metaDescription: existingPage.metaDescription || "",
         isPublished: existingPage.isPublished,
         content: existingPage.content,
-      });
+      };
+      
+      setFormData(data);
+      setInitialData(JSON.stringify(data));
+      setHasUnsavedChanges(false);
     } else if (template) {
       const tempTitle = "Nueva Página";
       const tempSlug = generateSlug(tempTitle);
 
-      setFormData({
+      const data = {
         title: tempTitle,
         slug: tempSlug,
         metaTitle: "",
         metaDescription: "",
         isPublished: false,
         content: [],
-      });
+      };
+      
+      setFormData(data);
+      setInitialData(JSON.stringify(data));
+      setHasUnsavedChanges(false);
     }
   }, [existingPage, template, generateSlug]);
+
+  // Detectar cambios en el formulario
+  useEffect(() => {
+    if (initialData) {
+      const currentData = JSON.stringify(formData);
+      setHasUnsavedChanges(currentData !== initialData);
+    }
+  }, [formData, initialData]);
 
   const handleTitleChange = (title: string) => {
     setFormData((prev) => ({ ...prev, title }));
@@ -212,6 +236,10 @@ const PageEditor: React.FC = () => {
           ...formData,
         });
         showToast("Página editada con éxito", "success");
+        
+        // Resetear el estado de cambios sin guardar
+        setInitialData(JSON.stringify(formData));
+        setHasUnsavedChanges(false);
       } else {
         // Modo creación: crear y redirigir a la lista
         if (template) {
@@ -223,6 +251,9 @@ const PageEditor: React.FC = () => {
           await createCustomPage(formData);
         }
         showToast("Página creada con éxito", "success");
+        
+        // Resetear el estado de cambios sin guardar antes de redirigir
+        setHasUnsavedChanges(false);
         
         // Esperar un momento para que se vea la notificación antes de redirigir
         setTimeout(() => {
@@ -245,12 +276,7 @@ const PageEditor: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        <div className="flex items-center space-x-2">
-          <FiLoader className="animate-spin h-5 w-5 text-accent-100" />
-          <span className="text-bg-200">Cargando...</span>
-        </div>
-      </div>
+      <LoadingScreen  isVisible={loading} />
     );
   }
 
@@ -518,6 +544,20 @@ const PageEditor: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {createPortal(
+        <ConfirmDialog
+          isOpen={showConfirmDialog}
+          title="Cambios sin guardar"
+          message="Tienes cambios sin guardar en esta página. Si sales ahora, se perderán todos los cambios. ¿Estás seguro de que quieres salir?"
+          confirmText="Salir sin guardar"
+          cancelText="Continuar editando"
+          type="warning"
+          onConfirm={confirmNavigation}
+          onCancel={cancelNavigation}
+        />,
+        document.body
+      )}
     </div>
   );
 };
