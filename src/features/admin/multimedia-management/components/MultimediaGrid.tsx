@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import type {
   MultimediaFile,
   UpdateMultimediaRequest,
@@ -13,7 +14,7 @@ import {
   TbEye,
   TbEdit,
   TbTrash,
-  TbX
+  TbX,
 } from "react-icons/tb";
 import ConfirmDialog from "../../../../components/common/ConfirmDialog";
 
@@ -102,7 +103,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
       await onDelete(file.id);
       setConfirmDelete(false);
     } catch (error) {
-      console.error('Error deleting file:', error);
+      console.error("Error deleting file:", error);
     }
   };
 
@@ -172,8 +173,12 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
               onClick={retryLoad}
             >
               <div className="text-center">
-                <div className="text-3xl mb-2 flex justify-center">{getCategoryIcon()}</div>
-                <div className="text-xs text-white-100">No hay vista previa</div>
+                <div className="text-3xl mb-2 flex justify-center">
+                  {getCategoryIcon()}
+                </div>
+                <div className="text-xs text-white-100">
+                  No hay vista previa
+                </div>
                 <div className="text-xs text-blue-500">
                   Click para reintentar
                 </div>
@@ -206,7 +211,9 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
       return (
         <div className="w-full h-32 bg-bg-300 flex items-center justify-center">
           <div className="text-center">
-            <div className="text-3xl mb-2 flex justify-center">{getCategoryIcon()}</div>
+            <div className="text-3xl mb-2 flex justify-center">
+              {getCategoryIcon()}
+            </div>
             <div className="text-xs text-white-100">{file.mime_type}</div>
           </div>
         </div>
@@ -216,7 +223,7 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
 
   return (
     <div
-      className={`bg-bg-200 min-h-70 rounded-2xl overflow-hidden border-2 transition-all  border-t-white-100/20 ${
+      className={`bg-bg-200 min-h-70 rounded-2xl  border-2 transition-all  border-t-white-100/20 ${
         isSelected
           ? "border-accent-100 shadow-md"
           : "border-bg-300 hover:border-bg-300"
@@ -364,63 +371,72 @@ const MultimediaItem: React.FC<MultimediaItemProps> = ({
         )}
       </div>
 
-      {/* Modal de preview */}
-      {showPreview && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-4xl max-h-full overflow-auto">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-lg font-semibold">{file.filename}</h3>
-              <button
-                onClick={() => setShowPreview(false)}
-                className="text-gray-500 hover:text-white-100"
-              >
-                <TbX className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="p-4">
-              {file.category === "image" || file.category === "svg" ? (
-                <img
-                  src={getImageUrl()}
-                  alt={file.alt || file.filename}
-                  className="max-w-full max-h-96 mx-auto"
-                />
-              ) : file.category === "video" ? (
-                <video
-                  src={getImageUrl()}
-                  controls
-                  className="max-w-full max-h-96 mx-auto"
+      {showPreview &&
+        createPortal(
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="rounded-lg max-w-4xl bg-bg-400/50 max-h-full overflow-auto border border-white-100/10">
+              <div className="flex justify-between bg-bg-400 items-center p-4 border-b border-b-white-100/10">
+                <h3 className="text-lg font-semibold text-white/80">
+                  {file.filename}
+                </h3>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-gray-500 hover:text-white-100"
                 >
-                  Tu navegador no soporta el elemento video.
-                </video>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="text-4xl mb-4 flex justify-center">{getCategoryIcon()}</div>
-                  <p className="text-white-100">Vista previa no disponible</p>
-                  <a
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 underline"
+                  <TbX className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-4">
+                {file.category === "image" || file.category === "svg" ? (
+                  <img
+                    src={getImageUrl()}
+                    alt={file.alt || file.filename}
+                    className="max-w-full max-h-1/2 mx-auto"
+                  />
+                ) : file.category === "video" ? (
+                  <video
+                    src={getImageUrl()}
+                    controls
+                    className="max-w-full max-h-96 mx-auto"
                   >
-                    Descargar archivo
-                  </a>
-                </div>
-              )}
+                    Tu navegador no soporta el elemento video.
+                  </video>
+                ) : (
+                  <div className="text-center py-8">
+                    <div className="text-4xl mb-4 flex justify-center">
+                      {getCategoryIcon()}
+                    </div>
+                    <p className="text-white-100">Vista previa no disponible</p>
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline"
+                    >
+                      Descargar archivo
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
 
-      <ConfirmDialog
-        isOpen={confirmDelete}
-        title="Eliminar Archivo"
-        message={`¿Está seguro de que desea eliminar "${file.filename}"? Esta acción no se puede deshacer.`}
-        confirmText="Eliminar"
-        cancelText="Cancelar"
-        type="danger"
-        onConfirm={confirmDeleteFile}
-        onCancel={() => setConfirmDelete(false)}
-      />
+      {/* ConfirmDialog - Renderizado usando Portal */}
+      {createPortal(
+        <ConfirmDialog
+          isOpen={confirmDelete}
+          title="Eliminar Archivo"
+          message={`¿Está seguro de que desea eliminar "${file.filename}"? Esta acción no se puede deshacer.`}
+          confirmText="Eliminar"
+          cancelText="Cancelar"
+          type="danger"
+          onConfirm={confirmDeleteFile}
+          onCancel={() => setConfirmDelete(false)}
+        />,
+        document.body
+      )}
     </div>
   );
 };
@@ -463,7 +479,7 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
       setSelectedFiles([]);
       setConfirmDeleteMultiple(false);
     } catch (error) {
-      console.error('Error deleting files:', error);
+      console.error("Error deleting files:", error);
     }
   };
 
@@ -504,7 +520,7 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
   return (
     <div>
       {files.length > 0 && (
-        <div className="flex items-center justify-between mb-4 p-3 bg-bg-200 rounded-lg">
+        <div className="flex items-center justify-between mb-4 p-3 bg-bg-200 ">
           <div className="flex items-center space-x-4">
             <label className="flex items-center">
               <input
@@ -542,9 +558,9 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
         {files.map((file) => (
-          <div key={file.id} className="relative">
+          <div key={file.id}>
             <MultimediaItem
               file={file}
               isSelected={selectedFiles.includes(file.id)}
@@ -557,16 +573,20 @@ const MultimediaGridComponent: React.FC<MultimediaGridProps> = ({
         ))}
       </div>
 
-      <ConfirmDialog
-        isOpen={confirmDeleteMultiple}
-        title="Eliminar Archivos Seleccionados"
-        message={`¿Está seguro de que desea eliminar ${selectedFiles.length} archivo(s)? Esta acción no se puede deshacer.`}
-        confirmText="Eliminar"
-        cancelText="Cancelar"
-        type="danger"
-        onConfirm={confirmDeleteSelectedFiles}
-        onCancel={() => setConfirmDeleteMultiple(false)}
-      />
+      {/* ConfirmDialog para eliminación múltiple - Renderizado usando Portal */}
+      {createPortal(
+        <ConfirmDialog
+          isOpen={confirmDeleteMultiple}
+          title="Eliminar Archivos Seleccionados"
+          message={`¿Está seguro de que desea eliminar ${selectedFiles.length} archivo(s)? Esta acción no se puede deshacer.`}
+          confirmText="Eliminar"
+          cancelText="Cancelar"
+          type="danger"
+          onConfirm={confirmDeleteSelectedFiles}
+          onCancel={() => setConfirmDeleteMultiple(false)}
+        />,
+        document.body
+      )}
     </div>
   );
 };
