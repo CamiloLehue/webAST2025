@@ -23,6 +23,7 @@ import { BreakpointProvider } from "./context/ProviderBreakpoints";
 import { AuthProvider } from "./context/AuthContext";
 import { ContentProvider } from "./context/ContentContext";
 import { ToastProvider } from "./context/ToastContext";
+import Documentation from "./features/admin/documentation/page/Documentation";
 // import About from "./features/about/pages/About";
 // import Products from "./features/products/pages/Products";
 // import Datacenter from "./features/services/pages/Datacenter";
@@ -42,11 +43,11 @@ import { ToastProvider } from "./context/ToastContext";
 createRoot(document.getElementById("root")!).render(
   // StrictMode deshabilitado para evitar dobles cargas en desarrollo
   // <StrictMode>
-    <AuthProvider>
-      <ToastProvider>
-        <ContentProvider>
-          <BreakpointProvider>
-            <BrowserRouter>
+  <AuthProvider>
+    <ToastProvider>
+      <ContentProvider>
+        <BreakpointProvider>
+          <BrowserRouter>
             <Routes>
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
@@ -68,6 +69,7 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="pages/edit/:id" element={<PageEditor />} />
                 <Route path="multimedia" element={<MultimediaManagement />} />
                 <Route path="users" element={<UserManagement />} />
+                <Route path="documentacion" element={<Documentation />} />
               </Route>
 
               <Route element={<LayoutTemplate />}>
@@ -103,10 +105,10 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/:slug" element={<DynamicPage />} />
               </Route>
             </Routes>
-            </BrowserRouter>
-          </BreakpointProvider>
-        </ContentProvider>
-      </ToastProvider>
-    </AuthProvider>
+          </BrowserRouter>
+        </BreakpointProvider>
+      </ContentProvider>
+    </ToastProvider>
+  </AuthProvider>
   // </StrictMode>
 );
