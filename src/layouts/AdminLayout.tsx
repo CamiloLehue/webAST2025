@@ -131,11 +131,21 @@ const AdminLayout: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-bg-400 shadow-sm ">
+        <header className="bg-bg-400 shadow-sm flex items-center justify-between">
           <div className="px-6 py-4">
             <h1 className="text-2xl font-semibold text-white-100">
               Panel de Administración
             </h1>
+          </div>
+          <div className="px-5 mx-5">
+            <a
+              href="/admin/documentacion"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white-100/80 hover:text-primary-100 border p-2"
+            >
+              Documentación
+            </a>
           </div>
         </header>
 
