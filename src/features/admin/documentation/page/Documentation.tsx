@@ -317,7 +317,7 @@ const Documentation: React.FC = () => {
       )}
 
       {/* Barra lateral de navegación */}
-      <nav className={`fixed top-0 lg:relative w-64 bg-white shadow-lg h-screen transition-transform duration-300 transform ${
+      <nav className={`fixed top-0 lg:relative w-100 bg-white shadow-lg h-screen transition-transform duration-300 transform ${
         showMobileMenu ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`} style={{ zIndex: 40 }}>
         <div className="p-6 h-full overflow-y-auto">
@@ -331,7 +331,7 @@ const Documentation: React.FC = () => {
             <h3 className="text-sm font-semibold text-blue-800 mb-2">Tu Progreso</h3>
             {(() => {
               const totalSections = sections.reduce(
-                (total, section) => total + section.subsections.length + 1,
+                (total, section) => total + section.subsections.length,
                 0
               );
               return (
@@ -358,14 +358,14 @@ const Documentation: React.FC = () => {
                   onClick={() => scrollToSection(section.id)}
                   className={`flex items-center w-full p-2 rounded-lg transition-colors cursor-pointer transform hover:scale-102 relative z-50 ${
                     activeSection === section.id
-                      ? 'bg-bg-100 text-white shadow-md'
+                      ? 'border border-accent-100 text-white shadow-md'
                       : 'hover:bg-gray-100'
                   }`}
                   role="menuitem"
                   aria-expanded={activeSection === section.id}
                 >
-                  <span className="mr-3 transition-transform duration-200">{section.icon}</span>
-                  <span className="flex-1 text-left font-medium">{section.title}</span>
+                  <span className="mr-3 transition-transform duration-200 text-accent-100">{section.icon}</span>
+                  <span className="flex-1 text-left font-medium text-accent-100">{section.title}</span>
                   {completedSections.includes(section.id) && (
                     <FiCheckCircle className="text-green-500 ml-2" />
                   )}
@@ -388,7 +388,7 @@ const Documentation: React.FC = () => {
                         hover:pl-3 hover:bg-gray-50`}
                       role="menuitem"
                     >
-                      <span className="flex-1 text-left">{subsection.title}</span>
+                      <span className="flex-1 text-left text-nowrap">{subsection.title}</span>
                       {completedSections.includes(subsection.id) && (
                         <FiCheckCircle className="text-green-500 w-4 h-4 ml-2" />
                       )}
@@ -1824,7 +1824,7 @@ const Documentation: React.FC = () => {
                     </thead>
                     <tbody>
                       <tr>
-                        <td className="px-4 py-2 border-t font-medium" colSpan="3">Usuarios</td>
+                        <td className="px-4 py-2 border-t font-medium" colSpan={3}>Usuarios</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 border-t">canCreateUsers</td>
@@ -1852,7 +1852,7 @@ const Documentation: React.FC = () => {
                         <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
                       </tr>
                       <tr>
-                        <td className="px-4 py-2 border-t font-medium" colSpan="3">Contenido</td>
+                        <td className="px-4 py-2 border-t font-medium" colSpan={3}>Contenido</td>
                       </tr>
                       <tr>
                         <td className="px-4 py-2 border-t">canAccessAdmin</td>
@@ -2013,252 +2013,6 @@ getRolePermissions(user.role)`}
                     <li>Desactivar usuarios inactivos o que ya no requieren acceso</li>
                     <li>Mantener actualizada la información de contacto</li>
                   </ul>
-                </div>
-              </div>
-            </div>
-
-            {/* Crear Usuarios */}
-            <div id="usuarios-crear" className="bg-white rounded-lg shadow-sm p-8 mb-8">
-              <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Crear Usuarios</h3>
-                <button
-                  onClick={() => markSectionComplete('usuarios-crear')}
-                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
-                    completedSections.includes('usuarios-crear')
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-bg-100 text-white hover:bg-bg-200'
-                  }`}
-                >
-                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
-                    completedSections.includes('usuarios-crear') ? 'text-green-500' : ''
-                  }`} />
-                  {completedSections.includes('usuarios-crear') ? 'Completado' : 'Marcar como completado'}
-                </button>
-              </div>
-
-              <div className="space-y-8">
-                {/* Proceso de creación */}
-                <div className="border-l-4 border-blue-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Proceso de Creación</h4>
-                  <ol className="list-decimal list-inside space-y-4">
-                    <li className="text-gray-700">
-                      Información básica
-                      <ul className="list-disc list-inside ml-6 mt-2">
-                        <li>Nombre completo</li>
-                        <li>Correo electrónico</li>
-                        <li>Nombre de usuario</li>
-                        <li>Contraseña segura</li>
-                      </ul>
-                    </li>
-                    <li className="text-gray-700">
-                      Asignación de roles
-                      <ul className="list-disc list-inside ml-6 mt-2">
-                        <li>Administrador</li>
-                        <li>Editor</li>
-                        <li>Autor</li>
-                        <li>Colaborador</li>
-                      </ul>
-                    </li>
-                    <li className="text-gray-700">
-                      Configuración adicional
-                      <ul className="list-disc list-inside ml-6 mt-2">
-                        <li>Zona horaria</li>
-                        <li>Idioma preferido</li>
-                        <li>Notificaciones</li>
-                      </ul>
-                    </li>
-                  </ol>
-                </div>
-
-                {/* Validación y seguridad */}
-                <div className="border-l-4 border-green-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Validación y Seguridad</h4>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium mb-2">Requisitos de Contraseña</h5>
-                      <ul className="list-disc list-inside space-y-2">
-                        <li>Mínimo 8 caracteres</li>
-                        <li>Mayúsculas y minúsculas</li>
-                        <li>Números y símbolos</li>
-                        <li>Sin información personal</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium mb-2">Verificación</h5>
-                      <ul className="list-disc list-inside space-y-2">
-                        <li>Correo de confirmación</li>
-                        <li>Validación de datos</li>
-                        <li>Captcha anti-spam</li>
-                        <li>Revisión de permisos</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Roles y Permisos */}
-            <div id="usuarios-roles" className="bg-white rounded-lg shadow-sm p-8 mb-8">
-              <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Roles y Permisos</h3>
-                <button
-                  onClick={() => markSectionComplete('usuarios-roles')}
-                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
-                    completedSections.includes('usuarios-roles')
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-bg-100 text-white hover:bg-bg-200'
-                  }`}
-                >
-                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
-                    completedSections.includes('usuarios-roles') ? 'text-green-500' : ''
-                  }`} />
-                  {completedSections.includes('usuarios-roles') ? 'Completado' : 'Marcar como completado'}
-                </button>
-              </div>
-
-              <div className="space-y-6">
-                {/* Tipos de roles */}
-                <div className="border-l-4 border-purple-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Tipos de Roles</h4>
-                  <div className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <h5 className="font-medium mb-2">Roles Predefinidos</h5>
-                        <ul className="list-disc list-inside space-y-2">
-                          <li>Super Administrador
-                            <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
-                              <li>Control total del sistema</li>
-                              <li>Gestión de roles</li>
-                            </ul>
-                          </li>
-                          <li>Administrador
-                            <ul className="list-disc list-inside ml-4 text-sm text-gray-600">
-                              <li>Gestión de contenidos</li>
-                              <li>Gestión de usuarios</li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
-                      <div>
-                        <h5 className="font-medium mb-2">Roles Personalizados</h5>
-                        <ul className="list-disc list-inside space-y-2">
-                          <li>Creación de roles</li>
-                          <li>Asignación de permisos</li>
-                          <li>Restricciones específicas</li>
-                          <li>Herencia de roles</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Matriz de permisos */}
-                <div className="border-l-4 border-yellow-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Matriz de Permisos</h4>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full bg-white border border-gray-200">
-                      <thead>
-                        <tr className="bg-gray-50">
-                          <th className="px-4 py-2 text-left">Permiso</th>
-                          <th className="px-4 py-2 text-center">Admin</th>
-                          <th className="px-4 py-2 text-center">Editor</th>
-                          <th className="px-4 py-2 text-center">Autor</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td className="px-4 py-2 border-t">Crear páginas</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                          <td className="px-4 py-2 border-t text-center">-</td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 py-2 border-t">Editar usuarios</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                          <td className="px-4 py-2 border-t text-center">-</td>
-                          <td className="px-4 py-2 border-t text-center">-</td>
-                        </tr>
-                        <tr>
-                          <td className="px-4 py-2 border-t">Gestionar medios</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                          <td className="px-4 py-2 border-t text-center">✓</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Seguridad */}
-            <div id="usuarios-seguridad" className="bg-white rounded-lg shadow-sm p-8 mb-8">
-              <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Seguridad</h3>
-                <button
-                  onClick={() => markSectionComplete('usuarios-seguridad')}
-                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
-                    completedSections.includes('usuarios-seguridad')
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-bg-100 text-white hover:bg-bg-200'
-                  }`}
-                >
-                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
-                    completedSections.includes('usuarios-seguridad') ? 'text-green-500' : ''
-                  }`} />
-                  {completedSections.includes('usuarios-seguridad') ? 'Completado' : 'Marcar como completado'}
-                </button>
-              </div>
-
-              <div className="space-y-6">
-                {/* Medidas de seguridad */}
-                <div className="border-l-4 border-red-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Medidas de Seguridad</h4>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <h5 className="font-medium mb-2">Autenticación</h5>
-                      <ul className="list-disc list-inside space-y-2">
-                        <li>Doble factor (2FA)</li>
-                        <li>Contraseñas seguras</li>
-                        <li>Bloqueo por intentos</li>
-                        <li>Recuperación segura</li>
-                      </ul>
-                    </div>
-                    <div>
-                      <h5 className="font-medium mb-2">Monitoreo</h5>
-                      <ul className="list-disc list-inside space-y-2">
-                        <li>Registro de actividades</li>
-                        <li>Detección de amenazas</li>
-                        <li>Alertas de seguridad</li>
-                        <li>Auditorías periódicas</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Políticas de seguridad */}
-                <div className="bg-red-50 p-6 rounded-lg">
-                  <h4 className="text-red-800 font-semibold mb-3">
-                    Políticas de Seguridad
-                  </h4>
-                  <div className="space-y-4">
-                    <ul className="list-disc list-inside text-red-700">
-                      <li>Actualización regular de contraseñas</li>
-                      <li>Sesiones con tiempo límite</li>
-                      <li>Restricción de IPs sospechosas</li>
-                      <li>Cifrado de datos sensibles</li>
-                      <li>Backups automáticos</li>
-                    </ul>
-                    <div className="bg-white p-4 rounded border border-red-200 mt-4">
-                      <h5 className="font-medium text-red-800 mb-2">Recomendaciones</h5>
-                      <ul className="list-disc list-inside text-red-600">
-                        <li>Habilitar autenticación de dos factores</li>
-                        <li>Usar contraseñas únicas y complejas</li>
-                        <li>Mantener el software actualizado</li>
-                        <li>Revisar registros regularmente</li>
-                      </ul>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
