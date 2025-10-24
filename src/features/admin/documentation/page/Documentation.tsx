@@ -1,5 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { FiBook, FiMenu, FiUser, FiImage, FiLayout, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import React, { useState, useEffect, useMemo } from 'react';
+import { 
+  FiBook, 
+  FiMenu, 
+  FiUser, 
+  FiImage, 
+  FiLayout, 
+  FiCheckCircle, 
+  FiAlertCircle, 
+  FiSearch, 
+  FiX, 
+  FiRotateCcw, 
+  FiMoon, 
+  FiSun, 
+  FiPrinter, 
+  FiChevronUp,
+  FiZap
+} from 'react-icons/fi';
 
 
 interface Section {
@@ -205,6 +221,10 @@ const Documentation: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [completedSections, setCompletedSections] = useState<string[]>([]);
   const [showCompletionMessage, setShowCompletionMessage] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showSearch, setShowSearch] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
 
 
@@ -255,13 +275,81 @@ const Documentation: React.FC = () => {
     }
   };
 
-  // Recuperar progreso guardado
   useEffect(() => {
     const savedSections = localStorage.getItem('completedSections');
     if (savedSections) {
       setCompletedSections(JSON.parse(savedSections));
     }
+    
+    const savedTheme = localStorage.getItem('docTheme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+    }
   }, []);
+
+  const filteredSections = useMemo(() => {
+    if (!searchQuery.trim()) return sections;
+    
+    const query = searchQuery.toLowerCase();
+    return sections.map(section => ({
+      ...section,
+      subsections: section.subsections.filter(sub => 
+        sub.title.toLowerCase().includes(query) ||
+        sub.description.toLowerCase().includes(query)
+      )
+    })).filter(section => 
+      section.title.toLowerCase().includes(query) ||
+      section.description.toLowerCase().includes(query) ||
+      section.subsections.length > 0
+    );
+  }, [searchQuery]);
+
+  const resetProgress = () => {
+    if (window.confirm('¿Estás seguro de que quieres resetear todo tu progreso? Esta acción no se puede deshacer.')) {
+      setCompletedSections([]);
+      localStorage.removeItem('completedSections');
+      setShowCompletionMessage(true);
+      setTimeout(() => setShowCompletionMessage(false), 3000);
+    }
+  };
+
+  const toggleDarkMode = () => {
+    const newMode = !darkMode;
+    setDarkMode(newMode);
+    localStorage.setItem('docTheme', newMode ? 'dark' : 'light');
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.pageYOffset > 500);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const printDocumentation = () => {
+    window.print();
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setShowSearch(true);
+      }
+      if (e.key === 'Escape' && showSearch) {
+        setShowSearch(false);
+        setSearchQuery('');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [showSearch]);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -300,8 +388,7 @@ const Documentation: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      {/* Botón de menú móvil */}
+    <div className={`flex min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <button
         onClick={toggleMobileMenu}
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-bg-100 text-white rounded-lg shadow-lg"
@@ -309,26 +396,131 @@ const Documentation: React.FC = () => {
         <FiMenu className="w-6 h-6" />
       </button>
 
-      {/* Mensaje de completado */}
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <button
+          onClick={() => setShowSearch(!showSearch)}
+          className={`p-2 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} rounded-lg shadow-lg hover:scale-105 transition-transform`}
+          title="Buscar (Ctrl+K)"
+        >
+          <FiSearch className="w-5 h-5" />
+        </button>
+
+        <button
+          onClick={toggleDarkMode}
+          className={`p-2 ${darkMode ? 'bg-gray-800 text-yellow-400' : 'bg-white text-gray-800'} rounded-lg shadow-lg hover:scale-105 transition-transform`}
+          title="Cambiar tema"
+        >
+          {darkMode ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
+        </button>
+
+        <button
+          onClick={printDocumentation}
+          className={`p-2 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'} rounded-lg shadow-lg hover:scale-105 transition-transform hidden md:block`}
+          title="Imprimir documentación"
+        >
+          <FiPrinter className="w-5 h-5" />
+        </button>
+
+        <button
+          onClick={resetProgress}
+          className={`p-2 ${darkMode ? 'bg-gray-800 text-red-400' : 'bg-white text-red-600'} rounded-lg shadow-lg hover:scale-105 transition-transform`}
+          title="Resetear progreso"
+        >
+          <FiRotateCcw className="w-5 h-5" />
+        </button>
+      </div>
+
+      {showSearch && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
+          <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-2xl w-full max-w-2xl mx-4`}>
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center gap-2">
+                <FiSearch className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                <input
+                  type="text"
+                  placeholder="Buscar en la documentación..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={`flex-1 outline-none ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}
+                  autoFocus
+                />
+                <button onClick={() => { setShowSearch(false); setSearchQuery(''); }}>
+                  <FiX className={`w-5 h-5 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                </button>
+              </div>
+            </div>
+            <div className="max-h-96 overflow-y-auto p-4">
+              {filteredSections.length === 0 ? (
+                <p className={`text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'} py-8`}>
+                  No se encontraron resultados
+                </p>
+              ) : (
+                filteredSections.map(section => (
+                  <div key={section.id} className="mb-4">
+                    <h3 className={`font-semibold ${darkMode ? 'text-white' : 'text-gray-800'} mb-2`}>
+                      {section.title}
+                    </h3>
+                    {section.subsections.map(sub => (
+                      <button
+                        key={sub.id}
+                        onClick={() => {
+                          scrollToSection(sub.id);
+                          setShowSearch(false);
+                          setSearchQuery('');
+                        }}
+                        className={`block w-full text-left px-4 py-2 rounded hover:bg-blue-50 ${darkMode ? 'hover:bg-gray-700 text-gray-300' : 'text-gray-600'} transition-colors`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{sub.title}</span>
+                          {completedSections.includes(sub.id) && (
+                            <FiCheckCircle className="w-4 h-4 text-green-500" />
+                          )}
+                        </div>
+                        <p className={`text-sm ${darkMode ? 'text-gray-500' : 'text-gray-400'} mt-1`}>
+                          {sub.description}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                ))
+              )}
+            </div>
+            <div className={`p-4 border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <p className={`text-xs ${darkMode ? 'text-gray-500' : 'text-gray-400'} text-center`}>
+                Presiona ESC para cerrar • Ctrl+K para abrir
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 z-40 p-3 bg-bg-100 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
+          title="Volver arriba"
+        >
+          <FiChevronUp className="w-6 h-6" />
+        </button>
+      )}
+
       {showCompletionMessage && (
-        <div className="fixed top-4 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-fade-in-out">
           ¡Sección completada!
         </div>
       )}
 
-      {/* Barra lateral de navegación */}
-      <nav className={`fixed top-0 lg:relative w-90 bg-white shadow-lg h-screen transition-transform duration-300 transform ${
+      <nav className={`fixed top-0 lg:relative w-64 ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-lg h-screen transition-transform duration-300 transform ${
         showMobileMenu ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`} style={{ zIndex: 40 }}>
         <div className="p-6 h-full overflow-y-auto">
-          <h2 className="text-2xl font-bold text-bg-200 mb-2">Guía del Panel</h2>
-          <p className="text-sm text-gray-600 mb-6">
+          <h2 className={`text-2xl font-bold ${darkMode ? 'text-blue-400' : 'text-bg-200'} mb-2`}>Guía del Panel</h2>
+          <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'} mb-6`}>
             Documentación completa para usuarios principiantes
           </p>
 
-          {/* Progreso general */}
-          <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-            <h3 className="text-sm font-semibold text-blue-800 mb-2">Tu Progreso</h3>
+          <div className={`mb-6 p-4 ${darkMode ? 'bg-gray-700' : 'bg-blue-50'} rounded-lg`}>
+            <h3 className={`text-sm font-semibold ${darkMode ? 'text-blue-400' : 'text-blue-800'} mb-2`}>Tu Progreso</h3>
             {(() => {
               const totalSections = sections.reduce(
                 (total, section) => total + section.subsections.length,
@@ -350,7 +542,6 @@ const Documentation: React.FC = () => {
             })()}
           </div>
 
-          {/* Menú de navegación */}
           <div className="space-y-6">
             {sections.map((section) => (
               <div key={section.id} className="space-y-2">
@@ -371,7 +562,6 @@ const Documentation: React.FC = () => {
                   )}
                 </button>
                 
-                {/* Subsecciones */}
                 <div className="ml-8 space-y-1 transition-all duration-200">
                   {section.subsections.map((subsection) => (
                     <button
@@ -401,16 +591,12 @@ const Documentation: React.FC = () => {
         </div>
       </nav>
 
-      {/* Contenido principal */}
-
-      {/* Contenido principal */}
-      <main className="flex-1 p-6 lg:p-8 h-screen overflow-y-scroll">
+      <main className={`flex-1 p-6 lg:p-8 h-screen overflow-y-scroll ${darkMode ? 'bg-gray-900' : ''}`}>
         <div className="max-w-4xl mx-auto">
-          {/* Introducción */}
           <section id="introduccion" className="mb-16">
-            <div className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-8 mb-8`}>
               <div className="flex justify-between items-start mb-6">
-                <h1 className="text-4xl font-bold text-bg-200">
+                <h1 className={`text-4xl font-bold ${darkMode ? 'text-blue-400' : 'text-bg-200'}`}>
                   Bienvenido al Panel de Administración
                 </h1>
                 <button
@@ -427,10 +613,44 @@ const Documentation: React.FC = () => {
                   {completedSections.includes('introduccion') ? 'Completado' : 'Marcar como completado'}
                 </button>
               </div>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className={`text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'} mb-6`}>
                 Esta guía te ayudará a aprender paso a paso cómo gestionar tu sitio web. 
                 Cada sección incluye ejemplos prácticos y consejos útiles.
               </p>
+              
+              <div className={`${darkMode ? 'bg-blue-900 border-blue-700' : 'bg-blue-50 border-blue-200'} border-l-4 border-blue-500 p-4 mb-6 rounded`}>
+                <div className="flex items-start">
+                  <FiZap className="w-5 h-5 text-blue-500 mr-3 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <h4 className={`font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-800'} mb-2 flex items-center gap-2`}>
+                      <FiAlertCircle className="w-5 h-5" />
+                      Funcionalidades Mejoradas
+                    </h4>
+                    <ul className={`text-sm ${darkMode ? 'text-blue-200' : 'text-blue-700'} space-y-2`}>
+                      <li className="flex items-start gap-2">
+                        <FiSearch className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span><strong>Buscador:</strong> Presiona <kbd className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs">Ctrl+K</kbd> para buscar en toda la documentación</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FiMoon className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span><strong>Modo Oscuro:</strong> Cambia entre tema claro y oscuro para mayor comodidad</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FiPrinter className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span><strong>Imprimir:</strong> Exporta la documentación para leerla offline</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FiRotateCcw className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span><strong>Resetear:</strong> Limpia tu progreso cuando quieras empezar de nuevo</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <FiChevronUp className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                        <span><strong>Volver arriba:</strong> Botón flotante para navegar rápidamente</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-blue-50 rounded-lg p-6">
                   <h3 className="text-xl font-semibold text-blue-800 mb-3">

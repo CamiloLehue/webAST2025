@@ -1095,7 +1095,7 @@ body {
   .text-bg-300 { color: var(--color-bg-300); }
 
 
-  .-top-10 { top:-10rem}
+  /* .-top-10 { top:-10rem}
   .-top-20 { top:-20rem}
   .-top-30 { top:-30rem}
   .-top-40 { top:-40rem}
@@ -1115,7 +1115,7 @@ body {
   .top-70 { top:70rem}
   .top-80 { top:80rem}
   .top-90 { top:90rem}
-  .top-100 { top:100rem}
+  .top-100 { top:100rem} */
 
   
   /* Animación para galería de imágenes */
