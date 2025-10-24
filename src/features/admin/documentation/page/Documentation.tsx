@@ -317,7 +317,7 @@ const Documentation: React.FC = () => {
       )}
 
       {/* Barra lateral de navegación */}
-      <nav className={`fixed top-0 lg:relative w-100 bg-white shadow-lg h-screen transition-transform duration-300 transform ${
+      <nav className={`fixed top-0 lg:relative w-90 bg-white shadow-lg h-screen transition-transform duration-300 transform ${
         showMobileMenu ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`} style={{ zIndex: 40 }}>
         <div className="p-6 h-full overflow-y-auto">
