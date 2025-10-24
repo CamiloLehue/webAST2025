@@ -44,17 +44,22 @@ const sections: Section[] = [
     id: 'paginas',
     title: 'Gestión de Páginas',
     icon: <FiLayout className="w-5 h-5" />,
-    description: 'Administra las páginas principales de tu sitio web.',
+    description: 'Administra las páginas personalizadas con sistema de secciones modulares.',
     subsections: [
       {
         id: 'paginas-crear',
         title: 'Crear Páginas',
-        description: 'Crea nuevas páginas para tu sitio'
+        description: 'Crea páginas con secciones personalizables'
+      },
+      {
+        id: 'paginas-secciones',
+        title: 'Tipos de Secciones',
+        description: 'Conoce los 16 tipos de secciones disponibles'
       },
       {
         id: 'paginas-editar',
-        title: 'Editar Páginas',
-        description: 'Modifica el contenido existente'
+        title: 'Editar y Reordenar',
+        description: 'Gestiona el contenido y orden de secciones'
       },
       {
         id: 'paginas-seo',
@@ -67,27 +72,27 @@ const sections: Section[] = [
     id: 'blog',
     title: 'Gestión de Blog',
     icon: <FiBook className="w-5 h-5" />,
-    description: 'Aprende a crear y gestionar contenido en el blog de tu sitio.',
+    description: 'Sistema completo de blog con categorías automáticas y editor rico en funciones.',
     subsections: [
       { 
         id: 'blog-crear', 
         title: 'Crear Entradas',
-        description: 'Guía paso a paso para crear nuevas publicaciones'
+        description: 'Guía paso a paso para crear publicaciones'
       },
       { 
         id: 'blog-editar', 
         title: 'Editar Entradas',
-        description: 'Cómo modificar y actualizar publicaciones existentes'
+        description: 'Cómo modificar publicaciones existentes'
       },
       { 
         id: 'blog-categorias', 
         title: 'Gestión de Categorías',
-        description: 'Organiza tu contenido eficientemente'
+        description: 'Sistema automático de categorías por contenido'
       },
       { 
-        id: 'blog-media', 
-        title: 'Gestión de Medios',
-        description: 'Maneja imágenes y archivos multimedia'
+        id: 'blog-estados', 
+        title: 'Publicación y Estados',
+        description: 'Maneja borradores y publicaciones'
       }
     ]
   },
@@ -95,22 +100,27 @@ const sections: Section[] = [
     id: 'multimedia',
     title: 'Gestión Multimedia',
     icon: <FiImage className="w-5 h-5" />,
-    description: 'Administra todos los archivos multimedia de tu sitio.',
+    description: 'Sistema avanzado de gestión de archivos multimedia con categorización y filtros.',
     subsections: [
       {
         id: 'multimedia-subir',
         title: 'Subir Archivos',
-        description: 'Aprende a subir y organizar archivos'
+        description: 'Carga individual y masiva con progreso en tiempo real'
       },
       {
-        id: 'multimedia-galeria',
-        title: 'Gestión de Galería',
-        description: 'Organiza y edita tus imágenes'
+        id: 'multimedia-categorias',
+        title: 'Categorías y Filtros',
+        description: 'Organiza por imágenes, videos, SVG y documentos'
+      },
+      {
+        id: 'multimedia-editar',
+        title: 'Editar Metadatos',
+        description: 'Modifica nombres, tags y descripciones'
       },
       {
         id: 'multimedia-optimizacion',
-        title: 'Optimización',
-        description: 'Optimiza tus archivos multimedia'
+        title: 'Límites y Validación',
+        description: 'Tamaños máximos y tipos permitidos'
       }
     ]
   },
@@ -118,7 +128,7 @@ const sections: Section[] = [
     id: 'usuarios',
     title: 'Gestión de Usuarios',
     icon: <FiUser className="w-5 h-5" />,
-    description: 'Administra los usuarios y sus permisos.',
+    description: 'Sistema de usuarios con roles y permisos diferenciados (Admin y Editor).',
     subsections: [
       {
         id: 'usuarios-crear',
@@ -128,12 +138,63 @@ const sections: Section[] = [
       {
         id: 'usuarios-roles',
         title: 'Roles y Permisos',
-        description: 'Gestiona los niveles de acceso'
+        description: 'Administrador vs Editor - Diferencias clave'
+      },
+      {
+        id: 'usuarios-editar',
+        title: 'Editar y Estado',
+        description: 'Gestiona información y activa/desactiva usuarios'
       },
       {
         id: 'usuarios-seguridad',
-        title: 'Seguridad',
-        description: 'Configuraciones de seguridad'
+        title: 'Seguridad y Contraseñas',
+        description: 'Cambio de contraseñas y buenas prácticas'
+      }
+    ]
+  },
+  {
+    id: 'menu',
+    title: 'Gestión de Menú',
+    icon: <FiMenu className="w-5 h-5" />,
+    description: 'Administra la navegación principal del sitio web con submenús anidados.',
+    subsections: [
+      {
+        id: 'menu-estructura',
+        title: 'Estructura del Menú',
+        description: 'Comprende la organización jerárquica'
+      },
+      {
+        id: 'menu-editar',
+        title: 'Crear y Editar Items',
+        description: 'Añade y modifica elementos del menú'
+      },
+      {
+        id: 'menu-reordenar',
+        title: 'Reordenar Elementos',
+        description: 'Cambia el orden de navegación'
+      }
+    ]
+  },
+  {
+    id: 'home',
+    title: 'Gestión del Home',
+    icon: <FiLayout className="w-5 h-5" />,
+    description: 'Personaliza completamente la página principal del sitio web.',
+    subsections: [
+      {
+        id: 'home-hero',
+        title: 'Sección Hero',
+        description: 'Configura el banner principal'
+      },
+      {
+        id: 'home-slider',
+        title: 'Slider de Contenido',
+        description: 'Gestiona el carrusel de imágenes y textos'
+      },
+      {
+        id: 'home-secciones',
+        title: 'Secciones Especiales',
+        description: 'IA, Video y Contacto'
       }
     ]
   }
@@ -655,10 +716,135 @@ const Documentation: React.FC = () => {
               </div>
             </div>
 
+            {/* Tipos de Secciones */}
+            <div id="paginas-secciones" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Tipos de Secciones Disponibles</h3>
+                <button
+                  onClick={() => markSectionComplete('paginas-secciones')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('paginas-secciones')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('paginas-secciones') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('paginas-secciones') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              
+              <div className="space-y-8">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Secciones de Contenido Básico */}
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Contenido Básico</h4>
+                    <ul className="space-y-3">
+                      <li>
+                        <strong>Hero:</strong> Banner principal con título, subtítulo, imagen y botón
+                      </li>
+                      <li>
+                        <strong>Hero Multi:</strong> Hero con múltiples variantes
+                      </li>
+                      <li>
+                        <strong>Logo Section:</strong> Sección para mostrar logos
+                      </li>
+                      <li>
+                        <strong>Text:</strong> Bloques de texto con formato
+                      </li>
+                      <li>
+                        <strong>Spacer:</strong> Espaciado personalizable entre secciones
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Secciones Multimedia */}
+                  <div className="border-l-4 border-green-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Multimedia</h4>
+                    <ul className="space-y-3">
+                      <li>
+                        <strong>Image:</strong> Imagen individual con opciones de alineación
+                      </li>
+                      <li>
+                        <strong>Gallery:</strong> Galería de imágenes con columnas configurables
+                      </li>
+                      <li>
+                        <strong>Video:</strong> Reproductor de video con controles
+                      </li>
+                      <li>
+                        <strong>Clients Carousel:</strong> Carrusel de clientes/logos
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Secciones Interactivas */}
+                  <div className="border-l-4 border-purple-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Interactivas</h4>
+                    <ul className="space-y-3">
+                      <li>
+                        <strong>Contact Form:</strong> Formulario de contacto personalizable
+                      </li>
+                      <li>
+                        <strong>CTA:</strong> Llamadas a la acción destacadas
+                      </li>
+                      <li>
+                        <strong>Features:</strong> Características con íconos y descripciones
+                      </li>
+                      <li>
+                        <strong>Testimonials:</strong> Testimonios de clientes
+                      </li>
+                    </ul>
+                  </div>
+
+                  {/* Secciones Especiales */}
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Especiales</h4>
+                    <ul className="space-y-3">
+                      <li>
+                        <strong>Content Section:</strong> Sección de contenido compleja
+                      </li>
+                      <li>
+                        <strong>Curved Section:</strong> Sección con bordes curvos
+                      </li>
+                      <li>
+                        <strong>Team Cards:</strong> Tarjetas de equipo/personal
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* Configuración de Secciones */}
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h4 className="text-blue-800 font-semibold mb-3">Configuración Común</h4>
+                  <div className="grid md:grid-cols-2 gap-4 text-blue-700">
+                    <div>
+                      <h5 className="font-medium mb-2">Propiedades</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Orden de visualización</li>
+                        <li>Ancho de grid (columnas)</li>
+                        <li>ID único de sección</li>
+                        <li>Tipo de contenido</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Gestión</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Reordenar arrastrando</li>
+                        <li>Editar en modal</li>
+                        <li>Duplicar sección</li>
+                        <li>Eliminar sección</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Edición de Páginas */}
             <div id="paginas-editar" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Editar Páginas Existentes</h3>
+                <h3 className="text-2xl font-semibold">Editar y Reordenar Páginas</h3>
                 <button
                   onClick={() => markSectionComplete('paginas-editar')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
@@ -677,11 +863,44 @@ const Documentation: React.FC = () => {
                 <div className="border-l-4 border-blue-500 pl-4">
                   <h4 className="text-xl font-medium mb-4">Proceso de Edición</h4>
                   <ol className="list-decimal list-inside space-y-3">
-                    <li>Seleccionar la página a editar</li>
-                    <li>Realizar modificaciones necesarias</li>
-                    <li>Previsualizar cambios</li>
-                    <li>Publicar actualizaciones</li>
+                    <li>
+                      <strong>Acceder a la edición:</strong> Click en el ícono de editar en la lista de páginas
+                    </li>
+                    <li>
+                      <strong>Información básica:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>Título de la página</li>
+                        <li>Slug (URL amigable)</li>
+                        <li>Estado de publicación</li>
+                        <li>Meta título y descripción</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Gestionar secciones:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>Añadir nueva sección desde el selector</li>
+                        <li>Editar sección existente (modal con formulario)</li>
+                        <li>Reordenar arrastrando las secciones</li>
+                        <li>Eliminar secciones no deseadas</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Guardar cambios:</strong> Los cambios se envían a la API y se actualizan en tiempo real
+                    </li>
                   </ol>
+                </div>
+
+                <div className="bg-yellow-50 p-6 rounded-lg">
+                  <h4 className="text-yellow-800 font-semibold mb-3">
+                    Consejos Importantes
+                  </h4>
+                  <ul className="list-disc list-inside text-yellow-700 space-y-2">
+                    <li>El slug debe ser único y no contener espacios (usa guiones)</li>
+                    <li>Las páginas en borrador no son visibles públicamente</li>
+                    <li>Cada sección tiene su propio formulario de configuración</li>
+                    <li>El orden de las secciones se actualiza automáticamente al reordenar</li>
+                    <li>Puedes previsualizar la página antes de publicar</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -935,11 +1154,47 @@ const Documentation: React.FC = () => {
                 <div className="border-l-4 border-blue-500 pl-4">
                   <h4 className="text-xl font-medium mb-4">Proceso de Edición</h4>
                   <ol className="list-decimal list-inside space-y-3">
-                    <li>Localizar la entrada</li>
-                    <li>Realizar cambios</li>
-                    <li>Previsualizar</li>
-                    <li>Actualizar</li>
+                    <li>
+                      <strong>Localizar la entrada:</strong> Busca en la lista o usa filtros
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>Búsqueda por título o contenido</li>
+                        <li>Filtro por estado (publicado/borrador)</li>
+                        <li>Filtro por categoría</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Realizar cambios:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>Editar título, slug, contenido</li>
+                        <li>Cambiar imagen destacada</li>
+                        <li>Modificar categoría y tags</li>
+                        <li>Actualizar extracto</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Validación automática:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>El slug se valida para ser único</li>
+                        <li>Se actualiza automáticamente updatedAt</li>
+                        <li>Si se publica, se establece publishedAt</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Guardar:</strong> Los cambios se envían a la API y se invalida el caché
+                    </li>
                   </ol>
+                </div>
+
+                <div className="bg-purple-50 p-6 rounded-lg">
+                  <h4 className="text-purple-800 font-semibold mb-3">Sistema de Caché</h4>
+                  <p className="text-purple-700 mb-2">
+                    El sistema utiliza un <strong>sistema de caché inteligente</strong>:
+                  </p>
+                  <ul className="list-disc list-inside text-purple-700 space-y-2">
+                    <li>En el admin, siempre se obtienen datos frescos (skipCache=true)</li>
+                    <li>Al crear, actualizar o eliminar, se invalida el caché automáticamente</li>
+                    <li>Esto asegura que siempre veas la información más actualizada</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -947,7 +1202,7 @@ const Documentation: React.FC = () => {
             {/* Gestión de Categorías */}
             <div id="blog-categorias" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Gestión de Categorías</h3>
+                <h3 className="text-2xl font-semibold">Sistema de Categorías Automático</h3>
                 <button
                   onClick={() => markSectionComplete('blog-categorias')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
@@ -964,52 +1219,131 @@ const Documentation: React.FC = () => {
               </div>
               <div className="space-y-6">
                 <div className="border-l-4 border-purple-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Organización de Contenido</h4>
-                  <ul className="list-disc list-inside space-y-3">
-                    <li>Crear categorías</li>
-                    <li>Asignar etiquetas</li>
-                    <li>Organizar jerarquías</li>
-                  </ul>
+                  <h4 className="text-xl font-medium mb-4">Cómo Funciona</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Extracción Automática</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Las categorías se extraen automáticamente de los posts existentes</li>
+                        <li>No requiere gestión manual de categorías</li>
+                        <li>Se actualizan dinámicamente al crear/editar posts</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Propiedades de Categoría</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>ID:</strong> Generado automáticamente desde el slug</li>
+                        <li><strong>Nombre:</strong> Texto de la categoría</li>
+                        <li><strong>Slug:</strong> Versión URL-friendly del nombre</li>
+                        <li><strong>Descripción:</strong> Generada automáticamente</li>
+                        <li><strong>Color:</strong> Asignado por hash del nombre</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Función de Generación de Slug</h5>
+                      <div className="bg-gray-50 p-4 rounded-md">
+                        <p className="text-sm text-gray-600 mb-2">Convierte texto a formato URL:</p>
+                        <ul className="list-disc list-inside text-sm text-gray-600">
+                          <li>Minúsculas</li>
+                          <li>Sin caracteres especiales</li>
+                          <li>Espacios reemplazados por guiones</li>
+                          <li>Guiones múltiples simplificados</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h4 className="text-blue-800 font-semibold mb-3">
+                    Tags vs Categorías
+                  </h4>
+                  <div className="grid md:grid-cols-2 gap-4 text-blue-700">
+                    <div>
+                      <h5 className="font-medium mb-2">Tags</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Array de strings en cada post</li>
+                        <li>Múltiples tags por post</li>
+                        <li>Se gestionan individualmente</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Categorías</h5>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Una categoría por post</li>
+                        <li>Se extraen automáticamente</li>
+                        <li>Colores generados por hash</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Gestión de Medios */}
-            <div id="blog-media" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            {/* Estados y Publicación */}
+            <div id="blog-estados" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Gestión de Medios</h3>
+                <h3 className="text-2xl font-semibold">Publicación y Estados</h3>
                 <button
-                  onClick={() => markSectionComplete('blog-media')}
+                  onClick={() => markSectionComplete('blog-estados')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
-                    completedSections.includes('blog-media')
+                    completedSections.includes('blog-estados')
                       ? 'bg-green-100 text-green-700'
                       : 'bg-bg-100 text-white hover:bg-bg-200'
                   }`}
                 >
                   <FiCheckCircle className={`w-5 h-5 mr-2 ${
-                    completedSections.includes('blog-media') ? 'text-green-500' : ''
+                    completedSections.includes('blog-estados') ? 'text-green-500' : ''
                   }`} />
-                  {completedSections.includes('blog-media') ? 'Completado' : 'Marcar como completado'}
+                  {completedSections.includes('blog-estados') ? 'Completado' : 'Marcar como completado'}
                 </button>
               </div>
               <div className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="border-l-4 border-blue-500 pl-4">
-                    <h4 className="text-xl font-medium mb-4">Gestión de Archivos</h4>
-                    <ul className="list-disc list-inside space-y-2">
-                      <li>Subir archivos</li>
-                      <li>Organizar medios</li>
-                      <li>Optimizar imágenes</li>
-                    </ul>
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Estados de Publicación</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Borrador (isPublished: false)</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>No visible públicamente</li>
+                        <li>Solo accesible desde el admin</li>
+                        <li>publishedAt está vacío o null</li>
+                        <li>Se puede editar libremente</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Publicado (isPublished: true)</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Visible públicamente</li>
+                        <li>publishedAt se establece automáticamente</li>
+                        <li>Aparece en listados públicos</li>
+                        <li>Indexado para SEO</li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="text-xl font-medium mb-4">Mejores Prácticas</h4>
-                    <ul className="list-disc list-inside space-y-2">
-                      <li>Nombrar archivos</li>
-                      <li>Establecer metadatos</li>
-                      <li>Organizar bibliotecas</li>
-                    </ul>
-                  </div>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Fechas de Gestión</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li><strong>createdAt:</strong> Fecha de creación (se establece una vez)</li>
+                    <li><strong>updatedAt:</strong> Última modificación (se actualiza en cada edición)</li>
+                    <li><strong>publishedAt:</strong> Fecha de publicación (se establece al publicar)</li>
+                  </ul>
+                </div>
+
+                <div className="bg-yellow-50 p-6 rounded-lg">
+                  <h4 className="text-yellow-800 font-semibold mb-3">
+                    Flujo de Trabajo Recomendado
+                  </h4>
+                  <ol className="list-decimal list-inside text-yellow-700 space-y-2">
+                    <li>Crear post en estado borrador</li>
+                    <li>Escribir y revisar contenido</li>
+                    <li>Añadir imágenes y formato</li>
+                    <li>Verificar SEO y metadatos</li>
+                    <li>Cambiar a publicado cuando esté listo</li>
+                    <li>Sistema establece publishedAt automáticamente</li>
+                  </ol>
                 </div>
               </div>
             </div>
@@ -1103,76 +1437,166 @@ const Documentation: React.FC = () => {
               </div>
             </div>
 
-            {/* Gestión de Galería */}
-            <div id="multimedia-galeria" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+            {/* Categorías y Filtros */}
+            <div id="multimedia-categorias" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Gestión de Galería</h3>
+                <h3 className="text-2xl font-semibold">Categorías y Sistema de Filtros</h3>
                 <button
-                  onClick={() => markSectionComplete('multimedia-galeria')}
+                  onClick={() => markSectionComplete('multimedia-categorias')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
-                    completedSections.includes('multimedia-galeria')
+                    completedSections.includes('multimedia-categorias')
                       ? 'bg-green-100 text-green-700'
                       : 'bg-bg-100 text-white hover:bg-bg-200'
                   }`}
                 >
                   <FiCheckCircle className={`w-5 h-5 mr-2 ${
-                    completedSections.includes('multimedia-galeria') ? 'text-green-500' : ''
+                    completedSections.includes('multimedia-categorias') ? 'text-green-500' : ''
                   }`} />
-                  {completedSections.includes('multimedia-galeria') ? 'Completado' : 'Marcar como completado'}
+                  {completedSections.includes('multimedia-categorias') ? 'Completado' : 'Marcar como completado'}
                 </button>
               </div>
 
               <div className="space-y-6">
-                {/* Funciones de galería */}
                 <div className="border-l-4 border-purple-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Funciones de Galería</h4>
+                  <h4 className="text-xl font-medium mb-4">Categorías Disponibles</h4>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h5 className="font-medium mb-2">Organización</h5>
+                      <h5 className="font-medium mb-2">image (Imágenes)</h5>
                       <ul className="list-disc list-inside space-y-2">
-                        <li>Crear álbumes</li>
-                        <li>Ordenar por fecha</li>
-                        <li>Filtrar por tipo</li>
-                        <li>Búsqueda avanzada</li>
+                        <li>JPEG, JPG, PNG, GIF</li>
+                        <li>WebP, AVIF, BMP, TIFF</li>
+                        <li>Tamaño máximo: 10MB</li>
+                        <li>Dimensiones automáticas (width/height)</li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="font-medium mb-2">Edición</h5>
+                      <h5 className="font-medium mb-2">video (Videos)</h5>
                       <ul className="list-disc list-inside space-y-2">
-                        <li>Recortar imágenes</li>
-                        <li>Ajustar tamaño</li>
-                        <li>Aplicar filtros</li>
-                        <li>Edición en lote</li>
+                        <li>MP4, WebM, OGG, AVI</li>
+                        <li>MOV, WMV, FLV, MKV</li>
+                        <li>Tamaño máximo: 100MB</li>
+                        <li>Duración automática</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">svg (Gráficos Vectoriales)</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Solo SVG+XML</li>
+                        <li>Tamaño máximo: 1MB</li>
+                        <li>Escalable sin pérdida</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">document (Documentos)</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>PDF, Word (DOC/DOCX)</li>
+                        <li>Excel (XLS/XLSX)</li>
+                        <li>Tamaño máximo: 20MB</li>
                       </ul>
                     </div>
                   </div>
                 </div>
 
-                {/* Tips de optimización */}
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Sistema de Filtros</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li><strong>Búsqueda:</strong> Por nombre de archivo o descripción</li>
+                    <li><strong>Categoría:</strong> Filtra por tipo de archivo</li>
+                    <li><strong>Tags:</strong> Busca por etiquetas asignadas</li>
+                    <li><strong>Ordenamiento:</strong> Por nombre, fecha, tamaño o categoría</li>
+                    <li><strong>Orden:</strong> Ascendente o descendente</li>
+                    <li><strong>Paginación:</strong> Límite configurable por página</li>
+                  </ul>
+                </div>
+
                 <div className="bg-blue-50 p-6 rounded-lg">
-                  <h4 className="text-blue-800 font-semibold mb-3">
-                    Tips de Optimización
-                  </h4>
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <h4 className="text-blue-800 font-semibold mb-3">Ejemplo de Filtros</h4>
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <pre className="text-sm overflow-x-auto">
+{`{
+  search: "logo",
+  category: "image",
+  tags: ["banner", "principal"],
+  sortField: "created_at",
+  sortOrder: "desc",
+  page: 1,
+  limit: 12
+}`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Editar Metadatos */}
+            <div id="multimedia-editar" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Editar Metadatos</h3>
+                <button
+                  onClick={() => markSectionComplete('multimedia-editar')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('multimedia-editar')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('multimedia-editar') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('multimedia-editar') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Campos Editables</h4>
+                  <div className="space-y-4">
                     <div>
-                      <h5 className="font-medium text-blue-700 mb-2">Imágenes</h5>
-                      <ul className="list-disc list-inside space-y-2 text-blue-600">
-                        <li>Comprime sin perder calidad</li>
-                        <li>Usa formatos adecuados</li>
-                        <li>Optimiza para web</li>
-                        <li>Ajusta dimensiones</li>
+                      <h5 className="font-medium mb-2">Información Básica</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>filename:</strong> Nombre del archivo (sin extensión)</li>
+                        <li><strong>category:</strong> Cambiar categoría si es necesario</li>
+                        <li><strong>description:</strong> Descripción del archivo</li>
+                        <li><strong>alt:</strong> Texto alternativo para accesibilidad</li>
                       </ul>
                     </div>
                     <div>
-                      <h5 className="font-medium text-blue-700 mb-2">Rendimiento</h5>
-                      <ul className="list-disc list-inside space-y-2 text-blue-600">
-                        <li>Carga lazy loading</li>
-                        <li>Caché de imágenes</li>
-                        <li>CDN para distribución</li>
-                        <li>Versiones responsivas</li>
+                      <h5 className="font-medium mb-2">Organización</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>tags:</strong> Array de etiquetas para búsqueda</li>
+                        <li>Las etiquetas facilitan encontrar archivos relacionados</li>
+                        <li>Puedes asignar múltiples tags por archivo</li>
                       </ul>
                     </div>
                   </div>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Campos de Solo Lectura</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li><strong>id:</strong> Identificador único</li>
+                    <li><strong>original_name:</strong> Nombre original del archivo</li>
+                    <li><strong>file_path:</strong> Ruta en el servidor</li>
+                    <li><strong>url:</strong> URL pública del archivo</li>
+                    <li><strong>mime_type:</strong> Tipo MIME del archivo</li>
+                    <li><strong>size:</strong> Tamaño en bytes</li>
+                    <li><strong>width/height:</strong> Dimensiones (solo imágenes)</li>
+                    <li><strong>duration:</strong> Duración (solo videos)</li>
+                    <li><strong>created_at/updated_at:</strong> Fechas de gestión</li>
+                  </ul>
+                </div>
+
+                <div className="bg-purple-50 p-6 rounded-lg">
+                  <h4 className="text-purple-800 font-semibold mb-3">
+                    Mejores Prácticas
+                  </h4>
+                  <ul className="list-disc list-inside text-purple-700 space-y-2">
+                    <li>Usa nombres descriptivos que identifiquen el contenido</li>
+                    <li>Siempre incluye texto alternativo en imágenes</li>
+                    <li>Asigna tags relevantes para facilitar búsquedas</li>
+                    <li>Mantén descripciones claras y concisas</li>
+                    <li>Revisa y actualiza metadatos regularmente</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -1289,12 +1713,50 @@ const Documentation: React.FC = () => {
               <div className="space-y-6">
                 <div className="border-l-4 border-blue-500 pl-4">
                   <h4 className="text-xl font-medium mb-4">Proceso de Creación</h4>
-                  <ol className="list-decimal list-inside space-y-3">
-                    <li>Datos básicos del usuario</li>
-                    <li>Asignación de roles</li>
-                    <li>Configuración de permisos</li>
-                    <li>Envío de credenciales</li>
+                  <ol className="list-decimal list-inside space-y-4">
+                    <li>
+                      <strong>Campos requeridos:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li><strong>name:</strong> Nombre completo del usuario</li>
+                        <li><strong>email:</strong> Correo electrónico único</li>
+                        <li><strong>password:</strong> Contraseña (se enviará hash al backend)</li>
+                        <li><strong>role:</strong> 'admin' o 'editor'</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Validaciones automáticas:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>Email debe ser único en el sistema</li>
+                        <li>Contraseña debe cumplir requisitos de seguridad</li>
+                        <li>Role debe ser válido</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <strong>Estado inicial:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        <li>active: true por defecto</li>
+                        <li>created_at y updated_at se generan automáticamente</li>
+                        <li>last_login inicialmente vacío</li>
+                      </ul>
+                    </li>
                   </ol>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <h5 className="font-medium mb-2">Estructura de Usuario:</h5>
+                  <pre className="text-sm overflow-x-auto bg-gray-800 text-white p-4 rounded">
+{`{
+  "id": "user-123",
+  "name": "Juan Pérez",
+  "email": "juan@example.com",
+  "password": "[hash]",
+  "role": "editor",
+  "active": true,
+  "created_at": "2025-10-24T...",
+  "updated_at": "2025-10-24T...",
+  "last_login": null
+}`}
+                  </pre>
                 </div>
               </div>
             </div>
@@ -1302,7 +1764,7 @@ const Documentation: React.FC = () => {
             {/* Roles y Permisos */}
             <div id="usuarios-roles" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Roles y Permisos</h3>
+                <h3 className="text-2xl font-semibold">Roles y Sistema de Permisos</h3>
                 <button
                   onClick={() => markSectionComplete('usuarios-roles')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
@@ -1318,32 +1780,186 @@ const Documentation: React.FC = () => {
                 </button>
               </div>
               <div className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="border-l-4 border-purple-500 pl-4">
-                    <h4 className="text-xl font-medium mb-4">Tipos de Roles</h4>
-                    <ul className="list-disc list-inside space-y-2">
-                      <li>Administrador</li>
-                      <li>Editor</li>
-                      <li>Autor</li>
-                      <li>Colaborador</li>
-                    </ul>
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Roles Disponibles</h4>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <h5 className="font-medium text-purple-700 mb-2">Administrador (admin)</h5>
+                      <p className="text-sm text-gray-600 mb-2">Control total del sistema</p>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Gestión completa de usuarios ✓</li>
+                        <li>Crear y eliminar usuarios ✓</li>
+                        <li>Gestionar roles y permisos ✓</li>
+                        <li>Editar todo el contenido ✓</li>
+                        <li>Publicar contenido ✓</li>
+                        <li>Eliminar contenido ✓</li>
+                        <li>Acceso al admin ✓</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium text-green-700 mb-2">Editor (editor)</h5>
+                      <p className="text-sm text-gray-600 mb-2">Gestión de contenido</p>
+                      <ul className="list-disc list-inside space-y-1 text-sm">
+                        <li>Gestión completa de usuarios ✗</li>
+                        <li>Crear y eliminar usuarios ✗</li>
+                        <li>Gestionar roles y permisos ✗</li>
+                        <li>Editar todo el contenido ✓</li>
+                        <li>Publicar contenido ✓</li>
+                        <li>Eliminar contenido ✗</li>
+                        <li>Acceso al admin ✓</li>
+                      </ul>
+                    </div>
                   </div>
-                  <div className="border-l-4 border-green-500 pl-4">
-                    <h4 className="text-xl font-medium mb-4">Gestión de Permisos</h4>
-                    <ul className="list-disc list-inside space-y-2">
-                      <li>Asignar permisos</li>
-                      <li>Crear roles personalizados</li>
-                      <li>Modificar accesos</li>
-                    </ul>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <h4 className="text-xl font-medium mb-4">Matriz Completa de Permisos</h4>
+                  <table className="min-w-full bg-white border border-gray-200">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left">Permiso</th>
+                        <th className="px-4 py-2 text-center">Admin</th>
+                        <th className="px-4 py-2 text-center">Editor</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="px-4 py-2 border-t font-medium" colSpan="3">Usuarios</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canCreateUsers</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canEditUsers</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canDeleteUsers</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canViewUsers</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canManageRoles</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t font-medium" colSpan="3">Contenido</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canAccessAdmin</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canEditContent</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canPublishContent</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                      </tr>
+                      <tr>
+                        <td className="px-4 py-2 border-t">canDeleteContent</td>
+                        <td className="px-4 py-2 border-t text-center text-green-600">✓</td>
+                        <td className="px-4 py-2 border-t text-center text-red-600">✗</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h4 className="text-blue-800 font-semibold mb-3">
+                    Uso de Permisos en el Código
+                  </h4>
+                  <div className="bg-gray-50 p-4 rounded-md">
+                    <p className="text-sm text-gray-600 mb-2">Los permisos se verifican con:</p>
+                    <pre className="text-sm overflow-x-auto bg-gray-800 text-white p-4 rounded">
+{`const { hasPermission } = useAuth();
+
+if (hasPermission('canCreateUsers')) {
+  // Mostrar botón de crear usuario
+}
+
+// En el AuthContext:
+getRolePermissions(user.role)`}
+                    </pre>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Seguridad */}
+            {/* Editar y Estado */}
+            <div id="usuarios-editar" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Editar y Gestionar Estado</h3>
+                <button
+                  onClick={() => markSectionComplete('usuarios-editar')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('usuarios-editar')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('usuarios-editar') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('usuarios-editar') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Campos Editables</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li><strong>name:</strong> Actualizar nombre del usuario</li>
+                    <li><strong>email:</strong> Cambiar email (debe ser único)</li>
+                    <li><strong>password:</strong> Actualizar contraseña (opcional en edición)</li>
+                    <li><strong>role:</strong> Cambiar rol del usuario</li>
+                    <li><strong>active:</strong> Activar o desactivar cuenta</li>
+                  </ul>
+                </div>
+
+                <div className="border-l-4 border-yellow-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Toggle de Estado</h4>
+                  <div className="space-y-4">
+                    <p>Función rápida para activar/desactivar usuarios:</p>
+                    <ul className="list-disc list-inside space-y-2">
+                      <li><strong>Activo (active: true):</strong> Usuario puede iniciar sesión</li>
+                      <li><strong>Inactivo (active: false):</strong> Acceso bloqueado temporalmente</li>
+                      <li>No se eliminan datos, solo se restringe acceso</li>
+                      <li>Se puede reactivar en cualquier momento</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 p-6 rounded-lg">
+                  <h4 className="text-yellow-800 font-semibold mb-3">Filtros y Búsqueda</h4>
+                  <ul className="list-disc list-inside text-yellow-700 space-y-2">
+                    <li><strong>search:</strong> Busca en nombre y email</li>
+                    <li><strong>role:</strong> Filtra por 'admin' o 'editor'</li>
+                    <li><strong>active:</strong> Filtra por estado activo/inactivo</li>
+                    <li><strong>sortBy:</strong> name, email, created_at, updated_at</li>
+                    <li><strong>sortOrder:</strong> asc o desc</li>
+                    <li><strong>Paginación:</strong> page y limit configurables</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Seguridad y Contraseñas */}
             <div id="usuarios-seguridad" className="bg-white rounded-lg shadow-sm p-8 mb-8">
               <div className="flex justify-between items-start mb-6">
-                <h3 className="text-2xl font-semibold">Seguridad</h3>
+                <h3 className="text-2xl font-semibold">Seguridad y Contraseñas</h3>
                 <button
                   onClick={() => markSectionComplete('usuarios-seguridad')}
                   className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
@@ -1360,12 +1976,42 @@ const Documentation: React.FC = () => {
               </div>
               <div className="space-y-6">
                 <div className="border-l-4 border-red-500 pl-4">
-                  <h4 className="text-xl font-medium mb-4">Medidas de Seguridad</h4>
-                  <ul className="list-disc list-inside space-y-3">
-                    <li>Autenticación de dos factores</li>
-                    <li>Políticas de contraseñas</li>
-                    <li>Registro de actividades</li>
-                    <li>Bloqueo de cuentas</li>
+                  <h4 className="text-xl font-medium mb-4">Cambio de Contraseña</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Proceso de Cambio</h5>
+                      <ol className="list-decimal list-inside space-y-2">
+                        <li><strong>currentPassword:</strong> Contraseña actual (validación)</li>
+                        <li><strong>newPassword:</strong> Nueva contraseña</li>
+                        <li><strong>confirmPassword:</strong> Confirmación (debe coincidir)</li>
+                        <li>El backend valida la contraseña actual</li>
+                        <li>Se genera nuevo hash y se actualiza</li>
+                      </ol>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Requisitos de Seguridad</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Mínimo 8 caracteres recomendados</li>
+                        <li>Combinación de letras, números y símbolos</li>
+                        <li>No reutilizar contraseñas anteriores</li>
+                        <li>Las contraseñas nunca se almacenan en texto plano</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-red-50 p-6 rounded-lg">
+                  <h4 className="text-red-800 font-semibold mb-3">
+                    Buenas Prácticas de Seguridad
+                  </h4>
+                  <ul className="list-disc list-inside text-red-700 space-y-2">
+                    <li>Cambiar contraseñas regularmente</li>
+                    <li>Usar contraseñas únicas para cada sistema</li>
+                    <li>No compartir credenciales entre usuarios</li>
+                    <li>Cerrar sesión al terminar de trabajar</li>
+                    <li>Revisar el registro de actividades periódicamente</li>
+                    <li>Desactivar usuarios inactivos o que ya no requieren acceso</li>
+                    <li>Mantener actualizada la información de contacto</li>
                   </ul>
                 </div>
               </div>
@@ -1618,6 +2264,318 @@ const Documentation: React.FC = () => {
             </div>
           </section>
           
+          {/* Sección Menú */}
+          <section id="menu" className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-bg-200">Gestión de Menú</h2>
+            
+            {/* Estructura del Menú */}
+            <div id="menu-estructura" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Estructura del Menú</h3>
+                <button
+                  onClick={() => markSectionComplete('menu-estructura')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('menu-estructura')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('menu-estructura') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('menu-estructura') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Componentes del Menú</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Propiedades de Cada Item</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>ID único:</strong> Identificador del elemento</li>
+                        <li><strong>Título:</strong> Texto visible en el menú</li>
+                        <li><strong>Ruta (path):</strong> URL de destino</li>
+                        <li><strong>Orden:</strong> Posición en el menú</li>
+                        <li><strong>Tipo de contenido:</strong> page, blog, external, custom</li>
+                        <li><strong>Estado:</strong> Habilitado o deshabilitado</li>
+                        <li><strong>Externo:</strong> Si abre en nueva pestaña</li>
+                        <li><strong>Submenú:</strong> Array de items hijos (opcional)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <h5 className="font-medium mb-2">Ejemplo de Estructura:</h5>
+                  <pre className="text-sm overflow-x-auto bg-gray-800 text-white p-4 rounded">
+{`{
+  "id": "menu-2",
+  "title": "Sobre Nosotros",
+  "path": "/sobre-nosotros",
+  "order": 2,
+  "contentType": "page",
+  "disabled": false,
+  "external": false,
+  "submenu": [
+    {
+      "id": "submenu-1",
+      "title": "Sobre Nosotros",
+      "path": "/sobre-nosotros",
+      "order": 1
+    }
+  ]
+}`}
+                  </pre>
+                </div>
+              </div>
+            </div>
+
+            {/* Crear y Editar */}
+            <div id="menu-editar" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Crear y Editar Items</h3>
+                <button
+                  onClick={() => markSectionComplete('menu-editar')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('menu-editar')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('menu-editar') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('menu-editar') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Funciones CRUD del Menú</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Crear Nuevo Item</h5>
+                      <ol className="list-decimal list-inside space-y-2">
+                        <li>Click en "Agregar Item" o "Nueva entrada"</li>
+                        <li>Completa título y ruta</li>
+                        <li>Selecciona tipo de contenido</li>
+                        <li>Define si es externo</li>
+                        <li>Guarda el nuevo item</li>
+                      </ol>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Editar Item Existente</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Modifica título, ruta o configuración</li>
+                        <li>Los cambios se guardan en LocalStorage</li>
+                        <li>Se actualiza automáticamente en el menú del sitio</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Eliminar Item</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li>Click en el botón de eliminar</li>
+                        <li>Confirma la eliminación</li>
+                        <li>Si tiene submenú, todos los hijos se eliminan</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 p-6 rounded-lg">
+                  <h4 className="text-yellow-800 font-semibold mb-3">Nota Importante</h4>
+                  <p className="text-yellow-700">
+                    El sistema usa <strong>LocalStorage</strong> para almacenar el menú. 
+                    Si no hay menú guardado, carga los items iniciales predefinidos automáticamente.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Reordenar */}
+            <div id="menu-reordenar" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Reordenar Elementos</h3>
+                <button
+                  onClick={() => markSectionComplete('menu-reordenar')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('menu-reordenar')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('menu-reordenar') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('menu-reordenar') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Sistema de Ordenamiento</h4>
+                  <ul className="list-disc list-inside space-y-3">
+                    <li>
+                      <strong>Arrastrar y soltar:</strong> Si la interfaz lo soporta, arrastra los items
+                    </li>
+                    <li>
+                      <strong>Cambio de orden:</strong> El orden se actualiza automáticamente
+                    </li>
+                    <li>
+                      <strong>Índice basado en orden:</strong> Los items se ordenan del 1 en adelante
+                    </li>
+                    <li>
+                      <strong>Persistencia:</strong> El nuevo orden se guarda en LocalStorage
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Sección Home */}
+          <section id="home" className="mb-16">
+            <h2 className="text-3xl font-bold mb-6 text-bg-200">Gestión del Home</h2>
+            
+            {/* Hero Section */}
+            <div id="home-hero" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Sección Hero</h3>
+                <button
+                  onClick={() => markSectionComplete('home-hero')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('home-hero')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('home-hero') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('home-hero') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Configuración del Hero</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li><strong>Título:</strong> Texto principal destacado</li>
+                    <li><strong>Descripción:</strong> Subtítulo o texto secundario</li>
+                    <li><strong>Imagen de fondo:</strong> URL de la imagen principal</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Slider Section */}
+            <div id="home-slider" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Slider de Contenido</h3>
+                <button
+                  onClick={() => markSectionComplete('home-slider')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('home-slider')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('home-slider') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('home-slider') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Gestión de Slides</h4>
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="font-medium mb-2">Propiedades de cada Slide</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>ID único:</strong> Identificador del slide</li>
+                        <li><strong>Imagen:</strong> URL de la imagen del slide</li>
+                        <li><strong>Título:</strong> Título del contenido</li>
+                        <li><strong>Descripción:</strong> Texto descriptivo</li>
+                        <li><strong>Orden:</strong> Posición en el carrusel</li>
+                        <li><strong>Estado activo:</strong> Si se muestra o no</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h5 className="font-medium mb-2">Configuración Global</h5>
+                      <ul className="list-disc list-inside space-y-2">
+                        <li><strong>Autoplay:</strong> Reproducción automática</li>
+                        <li><strong>Intervalo:</strong> Tiempo entre slides (en ms)</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Secciones Especiales */}
+            <div id="home-secciones" className="bg-white rounded-lg shadow-sm p-8 mb-8">
+              <div className="flex justify-between items-start mb-6">
+                <h3 className="text-2xl font-semibold">Secciones Especiales del Home</h3>
+                <button
+                  onClick={() => markSectionComplete('home-secciones')}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 flex items-center ${
+                    completedSections.includes('home-secciones')
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-bg-100 text-white hover:bg-bg-200'
+                  }`}
+                >
+                  <FiCheckCircle className={`w-5 h-5 mr-2 ${
+                    completedSections.includes('home-secciones') ? 'text-green-500' : ''
+                  }`} />
+                  {completedSections.includes('home-secciones') ? 'Completado' : 'Marcar como completado'}
+                </button>
+              </div>
+              <div className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="border-l-4 border-purple-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Sección IA</h4>
+                    <ul className="list-disc list-inside space-y-2">
+                      <li>Título de la sección</li>
+                      <li>Descripción del contenido</li>
+                      <li>Imagen representativa</li>
+                      <li>Texto del botón</li>
+                      <li>Link de destino</li>
+                    </ul>
+                  </div>
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <h4 className="text-xl font-medium mb-4">Sección Video</h4>
+                    <ul className="list-disc list-inside space-y-2">
+                      <li>Título del video</li>
+                      <li>URL del video</li>
+                      <li>Descripción opcional</li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="border-l-4 border-red-500 pl-4">
+                  <h4 className="text-xl font-medium mb-4">Sección Contacto</h4>
+                  <ul className="list-disc list-inside space-y-2">
+                    <li>Título de la sección</li>
+                    <li>Información de contacto:
+                      <ul className="list-disc list-inside ml-6">
+                        <li>Teléfono 1</li>
+                        <li>Teléfono 2</li>
+                        <li>Email</li>
+                        <li>Horario de atención</li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-blue-50 p-6 rounded-lg">
+                  <h4 className="text-blue-800 font-semibold mb-3">Estado de Publicación</h4>
+                  <p className="text-blue-700">
+                    El Home completo tiene un estado de <strong>isPublished</strong> que controla 
+                    si todos los cambios están visibles públicamente o en modo borrador.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Pie de página */}
           <div className="mt-12 p-6 bg-gray-100 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">¿Necesitas más ayuda?</h2>
