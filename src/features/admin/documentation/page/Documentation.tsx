@@ -14,6 +14,7 @@ import {
   FiChevronUp,
   FiDownload,
 } from "react-icons/fi";
+import documentacionDocx from "../data/documentacion.docx";
 
 interface Section {
   id: string;
@@ -346,68 +347,13 @@ const Documentation: React.FC = () => {
   };
 
   const downloadDocumentation = () => {
-    // Crear el contenido HTML completo de la documentación
-    const documentContent = `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Guía del Panel - Documentación</title>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
-    h1 { color: #2563eb; font-size: 28px; margin-top: 30px; }
-    h2 { color: #1e40af; font-size: 24px; margin-top: 25px; }
-    h3 { color: #3b82f6; font-size: 20px; margin-top: 20px; }
-    h4 { color: #60a5fa; font-size: 18px; margin-top: 15px; }
-    p { margin: 10px 0; }
-    ul, ol { margin: 10px 0; padding-left: 30px; }
-    li { margin: 5px 0; }
-    .section { margin-bottom: 40px; page-break-inside: avoid; }
-    .subsection { margin-bottom: 30px; }
-    .info-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; margin: 15px 0; }
-    .warning-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; }
-    .success-box { background: #d1fae5; border-left: 4px solid #10b981; padding: 15px; margin: 15px 0; }
-  </style>
-</head>
-<body>
-  <h1>Guía del Panel de Administración</h1>
-  <p><strong>Documentación completa para usuarios principiantes</strong></p>
-  
-  ${sections.map(section => `
-    <div class="section">
-      <h2>${section.title}</h2>
-      <p>${section.description}</p>
-      ${section.subsections.map(sub => `
-        <div class="subsection">
-          <h3>${sub.title}</h3>
-          <p>${sub.description}</p>
-        </div>
-      `).join('')}
-    </div>
-  `).join('')}
-  
-  <div class="section">
-    <h2>Soporte y Ayuda</h2>
-    <p>Si necesitas ayuda adicional, no dudes en contactar al equipo de soporte.</p>
-  </div>
-</body>
-</html>
-    `;
-
-    // Crear el blob con formato compatible con Word
-    const blob = new Blob([documentContent], { 
-      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' 
-    });
-    
-    // Crear URL y descargar
-    const url = window.URL.createObjectURL(blob);
+    // Crear un enlace para descargar el archivo DOCX existente
     const link = document.createElement('a');
-    link.href = url;
-    link.download = 'Documentacion_Panel_Administracion.doc';
+    link.href = documentacionDocx;
+    link.download = 'Documentacion_Panel_Administracion.docx';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
   };
 
   useEffect(() => {

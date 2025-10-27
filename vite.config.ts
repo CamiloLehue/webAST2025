@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  assetsInclude: ['**/*.docx'], // Incluir archivos .docx como assets
   server: {
     host: "0.0.0.0", //PERMITIR CUALQUIER IP
     port: 5180, //PUERTO
